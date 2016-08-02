@@ -5,6 +5,7 @@ import java.util.List;
 
 import beast.core.Description;
 import beast.core.Input;
+import beast.core.Input.Validate;
 import beast.core.Operator;
 import beast.core.parameter.IntegerParameter;
 import beast.evolution.alignment.TaxonSet;
@@ -21,13 +22,13 @@ import speciesnetwork.NetworkNode;
 @Description("Randomly selects an internal network node and move its height using an uniform sliding window.")
 public class NodeSlider extends Operator {
     public Input<Network> speciesNetworkInput =
-            new Input<>("speciesNetwork", "The species network.", Input.Validate.REQUIRED);
+            new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
     public Input<List<Tree>> geneTreesInput =
             new Input<>("geneTree", "list of gene trees embedded in species network", new ArrayList<>());
     public Input<List<IntegerParameter>> embeddingsInput =
             new Input<>("embedding", "The matrices to embed the gene trees in the species network.", new ArrayList<>());
     public Input<TaxonSet> taxonSuperSetInput =
-            new Input<>("taxonSuperset", "Super-set of taxon sets mapping lineages to species.", Input.Validate.REQUIRED);
+            new Input<>("taxonSuperset", "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
     public Input<Double> windowSizeInput =
             new Input<>("windowSize", "The size of the sliding window, default 0.01.", 0.01);
 

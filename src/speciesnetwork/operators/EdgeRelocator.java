@@ -5,6 +5,7 @@ import java.util.List;
 
 import beast.core.Description;
 import beast.core.Input;
+import beast.core.Input.Validate;
 import beast.core.Operator;
 import beast.core.parameter.IntegerParameter;
 import beast.evolution.alignment.TaxonSet;
@@ -22,13 +23,13 @@ import speciesnetwork.NetworkNode;
         "or the destination of an edge ending with hybridization node.")
 public class EdgeRelocator extends Operator {
     public Input<Network> speciesNetworkInput =
-            new Input<>("speciesNetwork", "The species network.", Input.Validate.REQUIRED);
+            new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
     public Input<List<Tree>> geneTreesInput =
             new Input<>("geneTree", "list of gene trees embedded in species network", new ArrayList<>());
     public Input<List<IntegerParameter>> embeddingsInput =
             new Input<>("embedding", "The matrices to embed the gene trees in the species network.", new ArrayList<>());
     public Input<TaxonSet> taxonSuperSetInput =
-            new Input<>("taxonSuperset", "Super-set of taxon sets mapping lineages to species.", Input.Validate.REQUIRED);
+            new Input<>("taxonSuperset", "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
 
     private enum Direction {LEFT, RIGHT}
 
@@ -85,7 +86,7 @@ public class EdgeRelocator extends Operator {
                         candidates.add(node);
                 }
             }
-            // pick an candidate branch randomly
+            // pick a candidate branch randomly
             final NetworkNode newNode = candidates.get(Randomizer.nextInt(candidates.size()));
             final Direction attachedDirection;
             final NetworkNode newParent;
@@ -159,7 +160,7 @@ public class EdgeRelocator extends Operator {
                         candidates.add(node);  // don't forget the root branch
                 }
             }
-            // pick an candidate branch randomly
+            // pick a candidate branch randomly
             final NetworkNode newNode = candidates.get(Randomizer.nextInt(candidates.size()));
             final Direction attachedDirection;
             final NetworkNode newParent;  // newParent is null when newNode is root

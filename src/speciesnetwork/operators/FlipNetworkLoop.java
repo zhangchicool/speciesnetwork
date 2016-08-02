@@ -4,6 +4,7 @@ import java.util.*;
 
 import beast.core.Description;
 import beast.core.Input;
+import beast.core.Input.Validate;
 import beast.core.Operator;
 import beast.core.parameter.IntegerParameter;
 import beast.evolution.tree.Node;
@@ -24,11 +25,11 @@ import com.google.common.collect.Multimap;
 @Description("Flip a random gene tree lineage with all its descendants in one side of the loop to another side in the network.")
 public class FlipNetworkLoop extends Operator {
     public Input<Tree> geneTreeInput =
-            new Input<>("geneTree", "The gene tree.", Input.Validate.REQUIRED);
+            new Input<>("geneTree", "The gene tree.", Validate.REQUIRED);
     public Input<Network> speciesNetworkInput =
-            new Input<>("speciesNetwork", "The species network.", Input.Validate.REQUIRED);
+            new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
     public Input<IntegerParameter> embeddingInput =
-            new Input<>("embedding", "The matrix to embed the gene tree within the species network.", Input.Validate.REQUIRED);
+            new Input<>("embedding", "The matrix to embed the gene tree within the species network.", Validate.REQUIRED);
 
     private Multimap<NetworkNode, String> pathDirections = HashMultimap.create(); // all directions in the loop
     private Map<Node, String> lineagePathDir = new HashMap<>();  // lineage traversing direction

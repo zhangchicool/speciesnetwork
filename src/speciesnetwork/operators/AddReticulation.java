@@ -5,8 +5,10 @@ import java.util.List;
 
 import beast.core.Description;
 import beast.core.Input;
+import beast.core.Input.Validate;
 import beast.core.Operator;
 import beast.core.parameter.IntegerParameter;
+import beast.core.parameter.RealParameter;
 import beast.evolution.alignment.TaxonSet;
 import beast.evolution.tree.Tree;
 import beast.util.Randomizer;
@@ -29,8 +31,9 @@ import speciesnetwork.SanityChecks;
  * Let k be the number of branches in the current network. The probability of adding this branch is (1/k)(1/k)
  * Let m be the number of reticulation branches in the proposed network. The probability of selecting the same branch to
  * remove is (1/m).
- * The Hastings ratio is (1/m) / (1/k)(1/k)(f1)(f2)) = k^2 / (m * f1 * f2).
- * f1 = b * exp(-b * l11) if root, otherwise f1 = 1 (uniform density); f2 = b * exp(-b * l21) if root, otherwise f2 = 1.
+ * The Hastings ratio is (1/m) / (1/k)(1/k)(g1)(g2)(g3)) = k^2 / (m * g1 * g2 * g3).
+ * g1 = b * exp(-b * l11) if root, otherwise g1 = 1 (uniform density); g2 = b * exp(-b * l21) if root, otherwise g2 = 1.
+ * g3 = 1.
  *
  * @author Chi Zhang
  */
@@ -39,13 +42,13 @@ import speciesnetwork.SanityChecks;
         "or the destination of an edge ending with hybridization node.")
 public class AddReticulation extends Operator {
     public Input<Network> speciesNetworkInput =
-            new Input<>("speciesNetwork", "The species network.", Input.Validate.REQUIRED);
+            new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
     public Input<List<Tree>> geneTreesInput =
             new Input<>("geneTree", "list of gene trees embedded in species network", new ArrayList<>());
     public Input<List<IntegerParameter>> embeddingsInput =
             new Input<>("embedding", "The matrices to embed the gene trees in the species network.", new ArrayList<>());
     public Input<TaxonSet> taxonSuperSetInput =
-            new Input<>("taxonSuperset", "Super-set of taxon sets mapping lineages to species.", Input.Validate.REQUIRED);
+            new Input<>("taxonSuperset", "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
 
     private enum Direction {LEFT, RIGHT}
     final static SanityChecks sc = new SanityChecks();

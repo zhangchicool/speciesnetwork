@@ -4,11 +4,11 @@ import java.util.List;
 
 import beast.core.Description;
 import beast.core.Input;
+import beast.core.Input.Validate;
 import beast.core.StateNode;
 import beast.core.StateNodeInitialiser;
 import beast.evolution.tree.Node;
 import beast.evolution.tree.TreeInterface;
-import beast.core.Input.Validate;
 
 /**
  * Parse the network of extended Newick format.
