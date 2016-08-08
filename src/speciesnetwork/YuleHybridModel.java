@@ -37,6 +37,7 @@ public class YuleHybridModel extends Distribution {
     //      new Input<>("conditionalOnRoot", "condition on the root (otherwise: on the time of origin)", true);
 
     private BetaDistributionImpl gammaPrior;
+
     @Override
     public void initAndValidate() {
         super.initAndValidate();
@@ -68,7 +69,7 @@ public class YuleHybridModel extends Distribution {
         List<NetworkNode> nodes = network.getInternalNodes();
         Collections.sort(nodes, new heightComparator());
 
-        double logP= 0;
+        logP = 0.0;
         // calculate probability of the network
         for (int i = 0; i < nodes.size(); i++) {
             final NetworkNode node = nodes.get(i);
@@ -100,7 +101,8 @@ public class YuleHybridModel extends Distribution {
 
     @Override
     protected boolean requiresRecalculation() {
-        return super.requiresRecalculation() || diversificationInput.get().somethingIsDirty() || networkInput.get().isDirty();
+        return networkInput.get().isDirty() ||
+                diversificationInput.get().somethingIsDirty() || hybridizationInput.get().somethingIsDirty();
     }
 
     @Override

@@ -473,22 +473,16 @@ public class Network extends StateNode {
             final NetworkNode sink = storedNetworkNodes[i];
             final NetworkNode src = networkNodes[i];
             sink.height = src.height;
+            sink.inheritProb = src.inheritProb;
+            sink.leftParent = sink.rightParent = sink.leftChild = sink.rightChild = null;
             if (src.leftParent != null)
                 sink.leftParent = storedNetworkNodes[src.leftParent.getNr()];
-            else
-                sink.leftParent = null;
             if (src.rightParent != null)
                 sink.rightParent = storedNetworkNodes[src.rightParent.getNr()];
-            else
-                sink.rightParent = null;
             if (src.leftChild != null)
                 sink.leftChild = storedNetworkNodes[src.leftChild.getNr()];
-            else
-                sink.leftChild = null;
             if (src.rightChild != null)
                 sink.rightChild = storedNetworkNodes[src.rightChild.getNr()];
-            else
-                sink.rightChild = null;
         }
     }
 
