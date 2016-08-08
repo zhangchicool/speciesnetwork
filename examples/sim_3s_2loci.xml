@@ -137,11 +137,9 @@
             <operator id="WilsonBalding:gene2" spec="WilsonBalding" tree="@tree:gene2" weight="0.0"/>
         </operator>
 
-        <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" taxonSuperset="@taxonSuperset" weight="50.0">
-            <geneTree idref="tree:gene1"/>
-            <embedding idref="embedding:gene1"/>
-            <geneTree idref="tree:gene2"/>
-            <embedding idref="embedding:gene2"/>
+        <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" weight="50.0">
+            <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
         </operator>
 
         <operator id="gammaUniform" spec="speciesnetwork.operators.GammaUniform" speciesNetwork="@network:species" weight="15.0"/>

@@ -1,6 +1,5 @@
 package speciesnetwork;
 
-import static java.lang.Math.*;
 import java.util.*;
 
 import beast.core.Description;
@@ -10,14 +9,8 @@ import beast.core.Input.Validate;
 import beast.core.StateNode;
 import beast.core.StateNodeInitialiser;
 import beast.core.parameter.RealParameter;
-import beast.evolution.alignment.Alignment;
-import beast.evolution.alignment.Taxon;
-import beast.evolution.alignment.TaxonSet;
-import beast.evolution.alignment.distance.Distance;
-import beast.evolution.alignment.distance.JukesCantorDistance;
 import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
-import beast.util.ClusterTree;
 import speciesnetwork.operators.RebuildEmbedding;
 
 /**
@@ -85,7 +78,7 @@ public class StarBeastInitializer extends Tree implements StateNodeInitialiser {
 
         // initialize embedding for all gene trees
         for (RebuildEmbedding operator: rebuildEmbeddingInput.get()) {
-            if (!operator.initializeEmbedding())
+            if (operator.rebuildEmbedding(true) < 0)
                 throw new RuntimeException("Failed to build gene tree embedding!");
         }
     }
