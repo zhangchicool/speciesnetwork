@@ -212,6 +212,14 @@ public class NetworkNode {
         return children;
     }
 
+    public NetworkNode getChildByBranch(int childBranchNr) {
+        if (childBranchNumbers.contains(childBranchNr)) {
+            final int childNodeNumber = network.getNodeNumber(childBranchNr);
+            return network.nodes[childNodeNumber];
+        }
+        return null;
+    }
+
     /**
      * @return true if current node is root node
      */
@@ -251,80 +259,6 @@ public class NetworkNode {
         for (NetworkNode n: network.nodes) {
             n.touched = false;
         }
-    }
-
-    // returns total node count (leaf, internal including root) of subtree defined by this node
-    public int getNodeCount() {
-        resetAllTouched();
-        return recurseNodeCount();
-    }
-
-    private int recurseNodeCount() {
-        if (touched) return 0;
-
-        int nodeCount = 1;
-        for (NetworkNode c: children) {
-            nodeCount += c.recurseNodeCount();
-        }
-
-        touched = true;
-        return nodeCount;
-    }
-
-    public int getLeafNodeCount() {
-        resetAllTouched();
-        return recurseLeafNodeCount();
-    }
-
-    private int recurseLeafNodeCount() {
-        if (touched)
-            return 0;
-        else if (nChildren == 0)
-            return 1;
-
-        int nodeCount = 0;
-        for (NetworkNode c: children) {
-            nodeCount += c.recurseLeafNodeCount();
-        }
-
-        touched = true;
-        return nodeCount;
-    }
-
-    public int getSpeciationNodeCount() {
-        resetAllTouched();
-        return recurseSpeciationNodeCount();
-    }
-
-    private int recurseSpeciationNodeCount() {
-        if (touched) return 0;
-
-        // don't count reticulation nodes
-        int nodeCount = (nChildren == 2) ? 1 : 0;
-        for (NetworkNode c: children) {
-            nodeCount += c.recurseSpeciationNodeCount();
-        }
-
-        touched = true;
-        return nodeCount;
-    }
-
-    public int getReticulationNodeCount() {
-        resetAllTouched();
-        return recurseReticulationNodeCount();
-    }
-
-    private int recurseReticulationNodeCount() {
-        if (touched) return 0;
-
-        // only count reticulation nodes
-        int nodeCount = (nParents == 2) ? 1 : 0;
-        for (NetworkNode c: children) {
-            nodeCount += c.recurseReticulationNodeCount();
-        }
-
-        touched = true;
-        return nodeCount;
     }
 
     @Override
@@ -383,26 +317,84 @@ public class NetworkNode {
         isDirty |= Network.IS_DIRTY;
     }
 
-    public NetworkNode getChildByBranch(int childBranchNr) {
-        if (childBranchNumbers.contains(childBranchNr)) {
-            final int childNodeNumber = network.getNodeNumber(childBranchNr);
-            return network.nodes[childNodeNumber];
-        }
-        return null;
+    public String getLabel() {
+        return label;
     }
 
-    public double getSubnetworkLength() {
-        return recurseSubtreeLength(height);
+    public int getTraversalNumber() {
+        return nodeNumber - network.leafNodeCount;
     }
 
-    public double recurseSubtreeLength(final double parentHeight) {
-        double subtreeLength = parentHeight - height;
+    /**
+     * returns total node count (leaf, internal including root) of subtree defined by this node
+     */
+    public int getNodeCount() {
+        resetAllTouched();
+        return recurseNodeCount();
+    }
+    private int recurseNodeCount() {
+        if (touched) return 0;
 
+        int nodeCount = 1;
         for (NetworkNode c: children) {
-            subtreeLength += c.recurseSubtreeLength(height);
+            nodeCount += c.recurseNodeCount();
         }
 
-        return subtreeLength;
+        touched = true;
+        return nodeCount;
+    }
+
+    public int getLeafNodeCount() {
+        resetAllTouched();
+        return recurseLeafNodeCount();
+    }
+    private int recurseLeafNodeCount() {
+        if (touched)
+            return 0;
+        else if (nChildren == 0)
+            return 1;
+
+        int nodeCount = 0;
+        for (NetworkNode c: children) {
+            nodeCount += c.recurseLeafNodeCount();
+        }
+
+        touched = true;
+        return nodeCount;
+    }
+
+    public int getSpeciationNodeCount() {
+        resetAllTouched();
+        return recurseSpeciationNodeCount();
+    }
+    private int recurseSpeciationNodeCount() {
+        if (touched) return 0;
+
+        // don't count reticulation nodes
+        int nodeCount = (nChildren == 2) ? 1 : 0;
+        for (NetworkNode c: children) {
+            nodeCount += c.recurseSpeciationNodeCount();
+        }
+
+        touched = true;
+        return nodeCount;
+    }
+
+    public int getReticulationNodeCount() {
+        resetAllTouched();
+        return recurseReticulationNodeCount();
+    }
+    private int recurseReticulationNodeCount() {
+        if (touched) return 0;
+
+        // only count reticulation nodes
+        int nodeCount = (nParents == 2) ? 1 : 0;
+        for (NetworkNode c: children) {
+            nodeCount += c.recurseReticulationNodeCount();
+        }
+
+        touched = true;
+        return nodeCount;
     }
 
     public void printDeets() {
@@ -417,13 +409,5 @@ public class NetworkNode {
             System.out.println(String.format("%s: %d", "childBranchNumber", i));
         }
         System.out.println();
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public int getTraversalNumber() {
-        return nodeNumber - network.leafNodeCount;
     }
 }

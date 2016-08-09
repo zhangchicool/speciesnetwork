@@ -383,7 +383,7 @@ public class CoalescentSimulator extends Runnable {
             simulateGeneTree(c, geneTree, embedding, ploidy);
         }
 
-        snNode.setVisited();  // set visited indicator
+        snNode.setVisited(true);  // set visited indicator
 
         final Collection<Node> lineagesAtBottom = networkNodeGeneLineagesMap.get(snNode);
 

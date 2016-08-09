@@ -144,7 +144,7 @@ public class Network extends StateNode {
      * @return the index of the first reticulation node
      */
     public int getReticulationOffset() {
-        return (leafNodeCount + speciationNodeCount) - 1;
+        return leafNodeCount + speciationNodeCount - 1;
     }
 
     /**
@@ -222,7 +222,15 @@ public class Network extends StateNode {
     }
 
     public double getNetworkLength() {
-        return getRoot().getSubnetworkLength();
+        double netLength = 0;
+
+        for (NetworkNode n: nodes) {
+            for (NetworkNode p: n.parents) {
+                netLength += p.height - n.height;
+            }
+        }
+
+        return netLength;
     }
 
     public String toString() {
@@ -367,7 +375,7 @@ public class Network extends StateNode {
 
         for(NetworkNode n: nodes) {
             n.updateRelationships();
-            n.isDirty = Tree.IS_CLEAN;
+            n.isDirty = IS_CLEAN;
         }
     }
 
@@ -433,7 +441,7 @@ public class Network extends StateNode {
     }
 
     /**
-     * Returns branch number that corresponds to a node number
+     * @return (gamma) branch number that corresponds to a node number
      */
     public int getBranchNumber(final int nodeNumber) {
         final int reticulationOffset = getReticulationOffset();
@@ -445,14 +453,14 @@ public class Network extends StateNode {
     }
 
     /**
-     * Vice versa
+     * @return node number that corresponds to a branch number
      */
     public int getNodeNumber(final int branchNumber) {
         final int reticulationOffset = getReticulationOffset();
         if (branchNumber < reticulationOffset) {
             return branchNumber;
         } else {
-            return ((branchNumber - reticulationOffset) / 2) + reticulationOffset;
+            return (branchNumber - reticulationOffset) / 2 + reticulationOffset;
         }
     }
 }
