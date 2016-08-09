@@ -7,7 +7,6 @@ import beast.core.Description;
 import beast.core.Input;
 import beast.core.StateNode;
 import beast.evolution.alignment.TaxonSet;
-import beast.evolution.tree.Tree;
 import beast.util.TreeParser;
 
 /**
