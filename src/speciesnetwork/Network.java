@@ -426,12 +426,6 @@ public class Network extends StateNode {
         return false;
     }
 
-    public void resetAllTouched() {
-        for (NetworkNode n: nodes) {
-            n.touched = false;
-        }
-    }
-
     public void resetAllVisited() {
         for (NetworkNode n: nodes) {
             n.visited = false;

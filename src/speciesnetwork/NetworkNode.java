@@ -112,8 +112,8 @@ public class NetworkNode {
         df = new DecimalFormat("0.########");
     }
 
-    // instantiate a new network node with the same height, labels and metadata as a tree node
-    // this does not copy the parents or children
+    /* instantiate a new network node with the same height, labels and metadata as a tree node
+       this does not copy the parents or children */
     public NetworkNode(Node treeNode) {
         height = treeNode.getHeight();
         label = treeNode.getID();
@@ -232,25 +232,30 @@ public class NetworkNode {
         return nParents == 2;
     }
 
-    // whether the node has been visited, say by a recursive method
-    protected boolean visited = false; // this should be used in a public method
-
-    protected boolean touched = false; // this is only used inside this class
+    /**
+     * whether the node has been visited, say by a recursive method
+     */
+    protected boolean visited = false; // this should be used outside of this class
 
     /* get and (re)set the visited indicator */
     public boolean isVisited() {
         return visited;
     }
-    public void setVisited() {
-        visited = true;
+    public void setVisited(boolean v) {
+        visited = v;
     }
-    public void resetVisited() {
-        visited = false;
+
+    private boolean touched = false; // this is only used inside this class
+
+    private void resetAllTouched() {
+        for (NetworkNode n: network.nodes) {
+            n.touched = false;
+        }
     }
 
     // returns total node count (leaf, internal including root) of subtree defined by this node
     public int getNodeCount() {
-        network.resetAllTouched();
+        resetAllTouched();
         return recurseNodeCount();
     }
 
@@ -267,7 +272,7 @@ public class NetworkNode {
     }
 
     public int getLeafNodeCount() {
-        network.resetAllTouched();
+        resetAllTouched();
         return recurseLeafNodeCount();
     }
 
@@ -287,7 +292,7 @@ public class NetworkNode {
     }
 
     public int getSpeciationNodeCount() {
-        network.resetAllTouched();
+        resetAllTouched();
         return recurseSpeciationNodeCount();
     }
 
@@ -305,7 +310,7 @@ public class NetworkNode {
     }
 
     public int getReticulationNodeCount() {
-        network.resetAllTouched();
+        resetAllTouched();
         return recurseReticulationNodeCount();
     }
 
@@ -324,15 +329,15 @@ public class NetworkNode {
 
     @Override
     public String toString() {
-        network.resetAllVisited();
+        resetAllTouched();
         return buildNewick(Double.POSITIVE_INFINITY, -1, true);
     }
 
     private String buildNewick(Double parentHeight, Integer parentBranchNumber, boolean printLabels) {
         final StringBuilder subtreeString = new StringBuilder();
         // only add children to a reticulation node once
-        if (nChildren > 0 && !(visited)) {
-            visited = true;
+        if (nChildren > 0 && !(touched)) {
+            touched = true;
             subtreeString.append("(");
             int i = 0;
             for (Integer childBranchNumber: childBranchNumbers) {
