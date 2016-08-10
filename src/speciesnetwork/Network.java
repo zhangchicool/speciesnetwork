@@ -170,7 +170,7 @@ public class Network extends StateNode {
     /**
      * @return an array of all the nodes in this network
      */
-    public NetworkNode[] getNodes() {
+    public NetworkNode[] getAllNodes() {
         final NetworkNode[] nodesCopy = new NetworkNode[nodeCount];
         System.arraycopy(nodes, 0, nodesCopy, 0, nodeCount);
         return nodesCopy;

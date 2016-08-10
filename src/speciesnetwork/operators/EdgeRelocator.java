@@ -31,8 +31,6 @@ public class EdgeRelocator extends Operator {
     public Input<TaxonSet> taxonSuperSetInput =
             new Input<>("taxonSuperset", "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
 
-    private enum Direction {LEFT, RIGHT}
-
     // empty constructor to facilitate construction by XML + initAndValidate
     public EdgeRelocator() {
     }
@@ -46,147 +44,100 @@ public class EdgeRelocator extends Operator {
         Network speciesNetwork = speciesNetworkInput.get();
 
         // pick an internal node randomly
-        List<NetworkNode> intNodes = speciesNetwork.getInternalNodes();
-        final NetworkNode snNode = intNodes.get(Randomizer.nextInt(intNodes.size()));
+        final NetworkNode[] internalNodes = speciesNetwork.getInternalNodes();
+        int randomIndex = Randomizer.nextInt(internalNodes.length);
+        NetworkNode pickedNode = internalNodes[randomIndex];
+        final int pickedNodeNr = pickedNode.getNr();
 
         final double newInterval, oldInterval;  // for calculating proposal ratio
+
         // start moving
-        if (snNode.isReticulation()) {
-            // move either the left parent or the right parent branch
-            final Direction pickedDirection;
-            final NetworkNode oldParent, anotherPa, oldChild;
+        speciesNetwork.startEditing(this);
+
+        if (pickedNode.isReticulation()) {
+            // move the end of either the two parent branches
+            final int pickedBranchNr, alterBranchNr;
             if (Randomizer.nextBoolean()) {
-                pickedDirection = Direction.LEFT;
-                oldParent = snNode.getLeftParent();
-                anotherPa = snNode.getRightParent();
+                pickedBranchNr = pickedNode.gammaBranchNumber;
+                alterBranchNr = pickedNode.gammaBranchNumber + 1;
             } else {
-                pickedDirection = Direction.RIGHT;
-                oldParent = snNode.getRightParent();
-                anotherPa = snNode.getLeftParent();
+                pickedBranchNr = pickedNode.gammaBranchNumber + 1;
+                alterBranchNr = pickedNode.gammaBranchNumber;
             }
-            final double upperLimit = oldParent.getHeight();  // upper bound
-            if (snNode.getLeftChild() != null)
-                oldChild = snNode.getLeftChild();
+
+            NetworkNode pickedParent = pickedNode.getParentByBranch(pickedBranchNr);
+            if (pickedParent == null)
+                throw new RuntimeException("Developer ERROR: picked node has no parent at this branch!");
+            final double upperLimit = pickedParent.getHeight();  // upper bound
+
+            NetworkNode pickedChild = null;
+            for(Integer i: pickedNode.childBranchNumbers) {
+                pickedChild = pickedNode.getChildByBranch(i);
+            }
+            if (pickedChild == null)
+                throw new RuntimeException("Developer ERROR: picked node has no child!");
+
+            NetworkNode alterParent = pickedNode.getParentByBranch(alterBranchNr);
+            if (upperLimit > alterParent.getHeight())
+                oldInterval = alterParent.getHeight() - pickedChild.getHeight();
             else
-                oldChild = snNode.getRightChild();
-            if (upperLimit > anotherPa.getHeight())
-                oldInterval = anotherPa.getHeight() - oldChild.getHeight();
-            else
-                oldInterval = upperLimit - oldChild.getHeight();
+                oldInterval = upperLimit - pickedChild.getHeight();
 
             // look for all the candidate branches to attach to
-            List<NetworkNode> candidates = new ArrayList<>();
-            for (NetworkNode node : speciesNetwork.getAllNodesAsArray()) {
-                if (node != snNode) {
-                    NetworkNode lParent = node.getLeftParent();
-                    NetworkNode rParent = node.getRightParent();
-                    if (lParent != null && lParent != snNode && node.getHeight() < upperLimit)
-                        candidates.add(node);
-                    if (rParent != null && rParent != snNode && node.getHeight() < upperLimit)
-                        candidates.add(node);
+            List<Integer> candidateBranchNumbers = new ArrayList<>();
+            for (NetworkNode node: speciesNetwork.getAllNodes()) {
+                // do not attach to the original position
+                if (node != pickedNode && node != pickedChild && node.getHeight() < upperLimit) {
+                    candidateBranchNumbers.add(node.gammaBranchNumber);
+                    if (node.isReticulation())
+                        candidateBranchNumbers.add(node.gammaBranchNumber + 1);
                 }
             }
+
             // pick a candidate branch randomly
-            final NetworkNode newNode = candidates.get(Randomizer.nextInt(candidates.size()));
-            final Direction attachedDirection;
-            final NetworkNode newParent;
-            if (newNode.getRightParent() == null || newNode.getRightParent() == snNode) {
-                attachedDirection = Direction.LEFT;
-                newParent = newNode.getLeftParent();
-            } else if (newNode.getLeftParent() == null || newNode.getLeftParent() == snNode) {
-                attachedDirection = Direction.RIGHT;
-                newParent = newNode.getRightParent();
-            } else if (Randomizer.nextBoolean()) {
-                attachedDirection = Direction.LEFT;
-                newParent = newNode.getLeftParent();
-            } else {
-                attachedDirection = Direction.RIGHT;
-                newParent = newNode.getRightParent();
-            }
+            if (candidateBranchNumbers.size() == 0)
+                return Double.NEGATIVE_INFINITY;
+            randomIndex = Randomizer.nextInt(candidateBranchNumbers.size());
+            final int attachBranchNr = candidateBranchNumbers.get(randomIndex);
+
+            final int attachChildNr = speciesNetwork.getNodeNumber(attachBranchNr);
+            NetworkNode attachChild = speciesNetwork.getNode(attachChildNr);
+            NetworkNode attachParent = attachChild.getParentByBranch(attachBranchNr);
 
             // propose an attachment height
             final double upper;
-            if (upperLimit > newParent.getHeight())
-                upper = newParent.getHeight();
+            if (upperLimit > attachParent.getHeight())
+                upper = attachParent.getHeight();
             else
                 upper = upperLimit;
-            final double lower = newNode.getHeight();
+            final double lower = attachChild.getHeight();
             final double newHeight = lower + (upper - lower) * Randomizer.nextDouble();
-            newInterval = upper - lower;  // for calculating proposal ratio
+            newInterval = upper - lower;
 
-            // deal with the left and right relationships
+            // set new height
+            pickedNode.setHeight(newHeight);
 
+            // deal with the node relationships
+            pickedNode.deleteChild(pickedChild);
+            pickedNode.deleteParent(alterParent);
+            pickedNode.addChild(attachChild);
+            pickedNode.addParent(attachParent);
 
+            pickedChild.deleteParent(pickedNode);
+            pickedChild.addParent(alterParent);
+
+            alterParent.deleteChild(pickedNode);
+            alterParent.addChild(pickedChild);
+
+            attachChild.deleteParent(attachParent);
+            attachChild.addParent(pickedNode);
+
+            attachParent.deleteChild(attachChild);
+            attachParent.addChild(pickedNode);
         } else {
-            // move either the left child or the right child branch
-            final Direction pickedDirection;
-            final NetworkNode oldParent, anotherCh, oldChild;
-            if (Randomizer.nextBoolean()) {
-                pickedDirection = Direction.LEFT;
-                oldChild = snNode.getLeftChild();
-                anotherCh = snNode.getRightChild();
-            }
-            else {
-                pickedDirection = Direction.RIGHT;
-                oldChild = snNode.getRightChild();
-                anotherCh = snNode.getLeftChild();
-            }
-            final double lowerLimit = oldChild.getHeight();  // lower bound
-            if (snNode.getLeftParent() != null)
-                oldParent = snNode.getLeftParent();
-            else
-                oldParent = snNode.getRightParent();
-            final double oldParentHeight;
-            if (oldParent != null)
-                oldParentHeight = oldParent.getHeight();
-            else  // oldParent is null when snNode is root, set as twice of the root height
-                oldParentHeight = 2 * snNode.getHeight();
-            if (lowerLimit < anotherCh.getHeight())
-                oldInterval = oldParentHeight - anotherCh.getHeight();
-            else
-                oldInterval = oldParentHeight - lowerLimit;
-
-            // look for all the candidate branches to attach to
-            List<NetworkNode> candidates = new ArrayList<>();
-            for (NetworkNode node : speciesNetwork.getAllNodesAsArray()) {
-                if (node != snNode) {
-                    NetworkNode lParent = node.getLeftParent();
-                    NetworkNode rParent = node.getRightParent();
-                    if (lParent != null && lParent != snNode && lParent.getHeight() > lowerLimit)
-                        candidates.add(node);
-                    if (rParent != null && rParent != snNode && rParent.getHeight() > lowerLimit)
-                        candidates.add(node);
-                    if (node.isRoot())
-                        candidates.add(node);  // don't forget the root branch
-                }
-            }
-            // pick a candidate branch randomly
-            final NetworkNode newNode = candidates.get(Randomizer.nextInt(candidates.size()));
-            final Direction attachedDirection;
-            final NetworkNode newParent;  // newParent is null when newNode is root
-            if (newNode.getRightParent() == null || newNode.getRightParent() == snNode) {
-                attachedDirection = Direction.LEFT;
-                newParent = newNode.getLeftParent();
-            } else if (newNode.getLeftParent() == null || newNode.getLeftParent() == snNode) {
-                attachedDirection = Direction.RIGHT;
-                newParent = newNode.getRightParent();
-            } else if (Randomizer.nextBoolean()) {
-                attachedDirection = Direction.LEFT;
-                newParent = newNode.getLeftParent();
-            } else {
-                attachedDirection = Direction.RIGHT;
-                newParent = newNode.getRightParent();
-            }
-
-            // propose an attachment height
-
-
-
-            // deal with the left and right relationships
 
 
         }
-
 
         return 0.0; //Math.log(newInterval/oldInterval);
     }
