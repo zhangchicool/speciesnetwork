@@ -8,6 +8,7 @@ import java.util.Comparator;
 final class NodeHeightComparator implements Comparator<NetworkNode> {
     final int lessThan = -1;
     final int greaterThan = 1;
+    final int equalTo = 0;
 
     @Override
     public int compare(NetworkNode nodeA, NetworkNode nodeB) {
@@ -17,11 +18,10 @@ final class NodeHeightComparator implements Comparator<NetworkNode> {
             final int nodeNumberA = nodeA.getNr();
             final int nodeNumberB = nodeB.getNr();
             if (nodeNumberA == nodeNumberB) {
-                return 0;
+                return equalTo;
             }
             return nodeNumberA > nodeNumberB ? greaterThan : lessThan;
         }
         return heightA > heightB ? greaterThan : lessThan;
     }
 }
-
