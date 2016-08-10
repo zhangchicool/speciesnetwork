@@ -50,8 +50,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
 
     @Override
     public boolean requiresRecalculation() {
-        needsUpdate = embeddingInput.isDirty() ||
-                      geneTreeInput.isDirty() || speciesNetworkInput.isDirty();
+        needsUpdate = embeddingInput.isDirty() || geneTreeInput.isDirty() || speciesNetworkInput.isDirty();
         return needsUpdate;
     }
 
@@ -165,12 +164,12 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
         }
     }
 
-    public double[][] getSpeciesOccupancy() throws Exception {
+    public double[][] getSpeciesOccupancy() {
         if (needsUpdate) update();
         return speciesOccupancy;
     }
 
-    protected Tree getTree() {
+    protected Tree getGeneTree() {
         return geneTreeInput.get();
     }
 
@@ -191,37 +190,5 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
                 return tip;  // find you!
         }
         return null;  // looped all the tips but nothing found
-    }
-
-    /* unambiguous, so only identical nodes are considered equal
-     * if height is equal, consider distance from root (depth)
-     * if depth is equal, consider assigned node number
-     */
-    final class NodeHeightComparator implements Comparator<Node> {
-        final int lessThan = -1;
-        final int greaterThan = 1;
-
-        @Override
-        public int compare(Node nodeA, Node nodeB) {
-            final double heightA = nodeA.getHeight();
-            final double heightB = nodeB.getHeight();
-            if (heightA == heightB) {
-                final int depthA = calculateNodeDepth(nodeA);
-                final int depthB = calculateNodeDepth(nodeB);
-                if (depthA == depthB) {
-                    final int nodeNumberA = nodeA.getNr();
-                    final int nodeNumberB = nodeB.getNr();
-                    if (nodeNumberA == nodeNumberB) return 0;
-                    return nodeNumberA > nodeNumberB ? greaterThan : lessThan;
-                }
-                return depthA > depthB ? greaterThan : lessThan;
-            }
-            return heightA > heightB ? greaterThan : lessThan;
-        }
-
-        private int calculateNodeDepth(Node node) {
-            if (node.isRoot()) return 0;
-            return calculateNodeDepth(node.getParent()) - 1;
-        }
     }
 }

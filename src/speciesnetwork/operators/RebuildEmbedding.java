@@ -156,9 +156,9 @@ public class RebuildEmbedding extends Operator {
             speciesNodeHeirs.putAll(speciesNetworkNode, speciesNodeHeirs.get(c));
         }
 
-        for (NetworkNode p: speciesNetworkNode.getParents()) {
+        for (NetworkNode parentNode: speciesNetworkNode.getParents()) {
             // System.out.println(String.format("%s -> %s", speciesNetworkNode.getLabel(), p.getLabel()));
-            recurseSpeciesHeirs(p);
+            recurseSpeciesHeirs(parentNode);
         }
     }
 
