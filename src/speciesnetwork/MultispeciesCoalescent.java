@@ -53,7 +53,7 @@ public class MultispeciesCoalescent extends Distribution {
     private void buildTimes(NetworkNode node, int branchNumber, double parentHeight, double[] startTimes, double[] endTimes) {
         final double nodeHeight = node.height;
         endTimes[branchNumber] = nodeHeight;
-        startTimes[branchNumber] = nodeHeight;
+        startTimes[branchNumber] = parentHeight;
         for (int childBranchNr: node.childBranchNumbers) {
             final NetworkNode childNode = node.getChildByBranch(childBranchNr);
             buildTimes(childNode, childBranchNr, nodeHeight, startTimes, endTimes);

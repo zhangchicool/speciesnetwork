@@ -132,7 +132,8 @@ public class RebuildEmbedding extends Operator {
         for (final Node geneLeaf: geneTree.getExternalNodes()) {
             final int leafNodeNumber = geneLeaf.getNr();
             final String tipName = geneLeaf.getID();
-            final NetworkNode speciesNetworkNode = speciesNetwork.getNode(geneTipMap.get(tipName));
+            final int speciesNodeNumber = geneTipMap.get(tipName);
+            final NetworkNode speciesNetworkNode = speciesNetwork.getNode(speciesNodeNumber);
             speciesNodeHeirs.put(speciesNetworkNode, leafNodeNumber);
             recurseGeneHeirs(geneLeaf, leafNodeNumber);
         }

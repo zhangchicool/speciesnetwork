@@ -8,13 +8,11 @@ import static org.junit.Assert.assertTrue;
 
 import beast.core.State;
 import beast.core.parameter.IntegerParameter;
-import beast.core.parameter.RealParameter;
 import beast.evolution.alignment.TaxonSet;
 import beast.util.TreeParser;
 import speciesnetwork.NetworkParser;
 import speciesnetwork.GeneTreeInSpeciesNetwork;
 import speciesnetwork.MultispeciesCoalescent;
-import speciesnetwork.NetworkNode;
 import speciesnetwork.PopulationSizeModel;
 import speciesnetwork.operators.RebuildEmbedding;
 
@@ -22,7 +20,6 @@ abstract class PopulationTestHelper {
     String newickSpeciesNetwork;
     List<String> newickGeneTrees = new ArrayList<>();
     List<IntegerParameter> geneTreeEmbeddings = new ArrayList<>();
-    RealParameter gammaParameter;
 
     TaxonSet speciesSuperset;
     TreeParser speciesTree;
@@ -34,9 +31,9 @@ abstract class PopulationTestHelper {
     MultispeciesCoalescent msc;
     int nSpecies;
     int nBranches;
+    int individualsPerSpecies;
     double popSize;
     double ploidy;
-    double gamma;
     double expectedLogP;
 
     final double allowedError = 1e-6;
@@ -49,7 +46,7 @@ abstract class PopulationTestHelper {
         speciesSuperset = generateSuperset();
         initializeSpeciesNetwork();
         initializeStateNodes();
-        initializeGeneTrees(false);
+        initializeGeneTrees(true);
 
         final PopulationSizeModel populationModel = generatePopulationModel();
         populationModel.initPopSizes(nBranches);
@@ -67,8 +64,6 @@ abstract class PopulationTestHelper {
         speciesTree.initByName("newick", newickSpeciesNetwork, "IsLabelledNewick", true, "adjustTipHeights", false);
         speciesNetwork = new NetworkParser();
         speciesNetwork.initByName("tree", speciesTree);
-        final NetworkNode[] speciesNodes = speciesNetwork.getNodes();
-        for (NetworkNode n: speciesNodes) n.setGamma(gamma);
     }
 
     private void initializeStateNodes() {
@@ -78,9 +73,6 @@ abstract class PopulationTestHelper {
             IntegerParameter embedding = geneTreeEmbeddings.get(i);
             state.initByName("stateNode", embedding);
         }
-        gammaParameter = new RealParameter();
-        gammaParameter.initByName("value", String.valueOf(gamma));
-        state.initByName("stateNode", gammaParameter);
         state.initialise();
     }
 
