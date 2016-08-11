@@ -1,11 +1,6 @@
 package speciesnetwork;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
-
-import org.apache.commons.math.distribution.BetaDistributionImpl;
+import java.util.*;
 
 import beast.core.Description;
 import beast.core.Input;
@@ -13,6 +8,7 @@ import beast.core.Input.Validate;
 import beast.core.State;
 import beast.core.parameter.RealParameter;
 import beast.core.Distribution;
+import beast.math.distributions.Beta;
 
 /**
  * Pure birth model for the species network.
@@ -38,7 +34,8 @@ public class YuleHybridModel extends Distribution {
 
     final private static Comparator<NetworkNode> hc = new NodeHeightComparator();
 
-    private BetaDistributionImpl gammaPrior;
+    private Beta betaPrior;
+
     @Override
     public void initAndValidate() {
         super.initAndValidate();
@@ -55,8 +52,9 @@ public class YuleHybridModel extends Distribution {
             }
         }
 
-        final double betaShape = betaShapeInput.get().getValue();
-        gammaPrior = new BetaDistributionImpl(betaShape, betaShape);
+        betaPrior = new Beta();
+        betaPrior.alphaInput.setValue(betaShapeInput.get(), betaPrior);
+        betaPrior.betaInput.setValue(betaShapeInput.get(), betaPrior);
     }
 
     @Override
@@ -68,9 +66,7 @@ public class YuleHybridModel extends Distribution {
 
         // sort the internal nodes according to their heights
         List<NetworkNode> nodes = new ArrayList<>();
-        for (NetworkNode n: network.getInternalNodes()) {
-            nodes.add(n);
-        }
+        Collections.addAll(nodes, network.getInternalNodes());
         nodes.sort(hc);
 
         logP = 0.0;
@@ -91,8 +87,8 @@ public class YuleHybridModel extends Distribution {
             else if (i > 0)
                 logP += Math.log(lambda);
 
-            if (node.isReticulation()) logP += gammaPrior.logDensity(node.inheritProb);
-            if (!(logP > -Double.MAX_VALUE && logP < Double.MAX_VALUE)) System.out.println("???");
+            if (node.isReticulation()) logP += betaPrior.logDensity(node.inheritProb);
+            // if (!(logP > -Double.MAX_VALUE && logP < Double.MAX_VALUE)) System.out.println("???");
         }
         return logP;
     }

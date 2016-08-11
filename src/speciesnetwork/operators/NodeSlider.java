@@ -24,11 +24,8 @@ public class NodeSlider extends Operator {
     public Input<Double> windowSizeInput =
             new Input<>("windowSize", "The size of the sliding window, default 0.01.", 0.01);
 
-    int nGenes;
-
     @Override
     public void initAndValidate() {
-        nGenes = rebuildEmbeddingInput.get().size();
     }
 
     @Override
@@ -36,6 +33,8 @@ public class NodeSlider extends Operator {
         final Network speciesNetwork = speciesNetworkInput.get();
         final List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
         final double windowSize = windowSizeInput.get();
+
+        final int nGenes = rebuildEmbeddingInput.get().size();
 
         // count the number of alternative traversing choices for the current state (n0)
         int oldChoices = 0;
@@ -78,7 +77,6 @@ public class NodeSlider extends Operator {
         snNode.setHeight(newHeight);
         SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
 
-        // System.out.println(String.format("%d: %f -> %f [%f-%f]", randomNodeNumber, oldHeight, snNode.getHeight(), Math.min(100, upper), lower));
         // update the embedding in the new species network
         int newChoices = 0;
         for (int i = 0; i < nGenes; i++) {
@@ -98,11 +96,11 @@ public class NodeSlider extends Operator {
     @Override
     public List<StateNode> listStateNodes() {
         final List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
-        List<StateNode> stateNodeList = new ArrayList<>();
 
+        List<StateNode> stateNodeList = new ArrayList<>();
         stateNodeList.addAll(super.listStateNodes());
-        for (int i = 0; i < nGenes; i++) {
-            stateNodeList.addAll(reembedOps.get(i).listStateNodes());
+        for (RebuildEmbedding op: reembedOps) {
+            stateNodeList.addAll(op.listStateNodes());
         }
 
         return stateNodeList;
