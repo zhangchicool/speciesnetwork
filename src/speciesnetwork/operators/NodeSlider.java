@@ -34,15 +34,12 @@ public class NodeSlider extends Operator {
         final List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
         final double windowSize = windowSizeInput.get();
 
-        final int nGenes = rebuildEmbeddingInput.get().size();
-
         // count the number of alternative traversing choices for the current state (n0)
         int oldChoices = 0;
-        for (int i = 0; i < nGenes; i++) {
-            final RebuildEmbedding reembedOp = reembedOps.get(i);
+        for (RebuildEmbedding reembedOp: reembedOps) {
             final int nChoices = reembedOp.getNumberOfChoices();
             if (nChoices < 0)
-                throw new RuntimeException("Developer ERROR: current embedding invalid! geneTree " + i);
+                throw new RuntimeException("Developer ERROR: current embedding invalid!");
             oldChoices += nChoices;
         }
 
@@ -79,8 +76,7 @@ public class NodeSlider extends Operator {
 
         // update the embedding in the new species network
         int newChoices = 0;
-        for (int i = 0; i < nGenes; i++) {
-            final RebuildEmbedding reembedOp = reembedOps.get(i);
+        for (RebuildEmbedding reembedOp: reembedOps) {
             final int nChoices = reembedOp.initializeEmbedding();
             if (nChoices < 0)
                 return Double.NEGATIVE_INFINITY;

@@ -462,4 +462,20 @@ public class Network extends StateNode {
             return (branchNumber - reticulationOffset) / 2 + reticulationOffset;
         }
     }
+
+    /**
+     *
+     */
+    public void addReticulationBranch(NetworkNode bifurcationNode, NetworkNode reticulationNode) {
+        assert (bifurcationNode.getHeight() >= reticulationNode.getHeight());
+        //TODO
+    }
+
+    /**
+     *
+     */
+    public void deleteReticulationBranch(NetworkNode bifurcationNode, NetworkNode reticulationNode) {
+        assert (bifurcationNode.getHeight() >= reticulationNode.getHeight());
+        //TODO
+    }
 }

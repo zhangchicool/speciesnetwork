@@ -45,8 +45,19 @@ public class EdgeRelocator extends Operator {
 
     @Override
     public double proposal() {
-        Network speciesNetwork = speciesNetworkInput.get();
+        final Network speciesNetwork = speciesNetworkInput.get();
+        final List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
+
         SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
+
+        // count the number of alternative traversing choices for the current state (n0)
+        int oldChoices = 0;
+        for (RebuildEmbedding reembedOp: reembedOps) {
+            final int nChoices = reembedOp.getNumberOfChoices();
+            if (nChoices < 0)
+                throw new RuntimeException("Developer ERROR: current embedding invalid!");
+            oldChoices += nChoices;
+        }
 
         // pick an internal node randomly
         final NetworkNode[] internalNodes = speciesNetwork.getInternalNodes();
@@ -235,6 +246,19 @@ public class EdgeRelocator extends Operator {
                 speciesNetwork.swapRoot(pickedNodeNr);
             }
         }
+
+        // update the embedding in the new species network
+        int newChoices = 0;
+        for (RebuildEmbedding reembedOp: reembedOps) {
+            final int nChoices = reembedOp.initializeEmbedding();
+            if (nChoices < 0)
+                return Double.NEGATIVE_INFINITY;
+            newChoices += nChoices;
+            // System.out.println(String.format("Gene tree %d: %d choices", i, nChoices));
+            if (!reembedOp.listStateNodes().isEmpty()) // copied from JointOperator
+                reembedOp.listStateNodes().get(0).getState().checkCalculationNodesDirtiness();
+        }
+        logProposalRatio += (newChoices - oldChoices) * Math.log(2);
 
         return logProposalRatio;
     }

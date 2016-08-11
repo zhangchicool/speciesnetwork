@@ -53,182 +53,176 @@ public class AddReticulation extends Operator {
 
     @Override
     public double proposal() {
-        Network speciesNetwork = speciesNetworkInput.get();
+        final Network speciesNetwork = speciesNetworkInput.get();
+        final List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
+
         SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
 
+        // count the number of alternative traversing choices for the current state (n0)
+        int oldChoices = 0;
+        for (RebuildEmbedding reembedOp: reembedOps) {
+            final int nChoices = reembedOp.getNumberOfChoices();
+            if (nChoices < 0)
+                throw new RuntimeException("Developer ERROR: current embedding invalid!");
+            oldChoices += nChoices;
+        }
+
         // number of branches in the current network
-        final int numBranches = speciesNetwork.getBranchCount();  // k
+        final int nBranches = speciesNetwork.getBranchCount();  // k
 
         // pick two branches randomly, including the root branch
-        final int branchNr1 = Randomizer.nextInt(numBranches);
-        final int branchNr2 = Randomizer.nextInt(numBranches);  // allow picking the same branch
+        final int pickedBranchNr1 = Randomizer.nextInt(nBranches);
+        final int pickedBranchNr2 = Randomizer.nextInt(nBranches);  // allow picking the same branch
 
-        // get the node at the end of the branch, and the direction to the parent
-        NetworkNode netNode1 = null, netNode2 = null, parentNode1 = null, parentNode2 = null;
-        for (NetworkNode netNode: speciesNetwork.getAllNodesAsArray()) {
-            if (netNode.isReticulation()) {
-                if (netNode.getLeftBranchNumber() == branchNr1) {
-                    netNode1 = netNode;
-                    parentNode1 = netNode.getLeftParent();
-                } else if (netNode.getRightBranchNumber() == branchNr1) {
-                    netNode1 = netNode;
-                    parentNode1 = netNode.getRightParent();
-                }
-                if (netNode.getLeftBranchNumber() == branchNr2) {
-                    netNode2 = netNode;
-                    parentNode2 = netNode.getLeftParent();
-                } else if (netNode.getRightBranchNumber() == branchNr2) {
-                    netNode2 = netNode;
-                    parentNode2 = netNode.getRightParent();
-                }
-            } else {
-                if (netNode.getBranchNumber(0) == branchNr1) {
-                    netNode1 = netNode;
-                    if (netNode.getLeftParent() != null) {
-                        parentNode1 = netNode.getLeftParent();
-                    } else {
-                        parentNode1 = netNode.getRightParent();  // can be null if netNode is root
-                    }
-                }
-                if (netNode.getBranchNumber(0) == branchNr2) {
-                    netNode2 = netNode;
-                    if (netNode.getLeftParent() != null) {
-                        parentNode2 = netNode.getLeftParent();
-                    } else {
-                        parentNode2 = netNode.getRightParent();  // can be null if netNode is root
-                    }
-                }
-            }
-        }
-        if (netNode1 == null || netNode2 == null )
-            throw new RuntimeException("Developer ERROR: node not found!");
+        // get the nodes associated with each branch
+        final int pickedNodeNr1 = speciesNetwork.getNodeNumber(pickedBranchNr1);
+        NetworkNode pickedNode1 = speciesNetwork.getNode(pickedNodeNr1);
+        final int pickedNodeNr2 = speciesNetwork.getNodeNumber(pickedBranchNr2);
+        NetworkNode pickedNode2 = speciesNetwork.getNode(pickedNodeNr2);
+        NetworkNode pickedParent1 = pickedNode1.getParentByBranch(pickedBranchNr1);  // null if pickedNode1 is root
+        NetworkNode pickedParent2 = pickedNode2.getParentByBranch(pickedBranchNr2);  // null if pickedNode2 is root
 
-        // add a branch joining the two picked branches
         // propose the attaching position at each branch
-        final double lambda = 1;
         final double l1, l2, l11, l21;
-        double proposalRatio = 0.0;
+        double logProposalRatio = 0.0;
 
-        if (netNode1.isRoot()) {
+        if (pickedNode1.isRoot()) {
             l1 = 1;
             l11 = Randomizer.nextExponential(lambda);
-            proposalRatio += lambda * l11 - Math.log(lambda);
+            logProposalRatio += lambda * l11 - Math.log(lambda);
         } else {
-            l1 = parentNode1.getHeight() - netNode1.getHeight();
+            l1 = pickedParent1.getHeight() - pickedNode1.getHeight();
             l11 = l1 * Randomizer.nextDouble();
         }
-        if (netNode2.isRoot()) {
+        if (pickedNode2.isRoot()) {
             l2 = 1;
             l21 = Randomizer.nextExponential(lambda);
-            proposalRatio += lambda * l21 - Math.log(lambda);
+            logProposalRatio += lambda * l21 - Math.log(lambda);
         } else {
-            l2 = parentNode2.getHeight() - netNode2.getHeight();
+            l2 = pickedParent2.getHeight() - pickedNode2.getHeight();
             l21 = l2 * Randomizer.nextDouble();
         }
-        proposalRatio += Math.log(l1) + Math.log(l2);  // the Jacobian
+        logProposalRatio += Math.log(l1) + Math.log(l2);  // the Jacobian
+
+        // final double middleNodeHeight1 = pickedNode1.getHeight() + l11;
+        // final double middleNodeHeight2 = pickedNode2.getHeight() + l21;
+
+        // start moving
+        speciesNetwork.startEditing(this);
 
         // create two new nodes
-        NetworkNode middleNode1 = speciesNetwork.newNode();
-        NetworkNode middleNode2 = speciesNetwork.newNode();
-        middleNode1.setHeight(netNode1.getHeight() + l11);
-        middleNode2.setHeight(netNode2.getHeight() + l21);
+        NetworkNode middleNode1 = new NetworkNode(speciesNetwork);
+        NetworkNode middleNode2 = new NetworkNode(speciesNetwork);
 
-        // deal with the node numbers and relationships
+        // set height
+        middleNode1.setHeight(pickedNode1.getHeight() + l11);
+        middleNode2.setHeight(pickedNode2.getHeight() + l21);
+
+        // add a branch joining the two middle nodes (picked branches)
         if (middleNode1.getHeight() > middleNode2.getHeight()) {
             // middleNode1 is bifurcation and middleNode2 is reticulation
-            speciesNetwork.addSpeciationNode(middleNode1);
-            speciesNetwork.addReticulationNode(middleNode2);
+            speciesNetwork.addReticulationBranch(middleNode1, middleNode2);
 
-            if (netNode1 == netNode2 && parentNode1 == parentNode2) {
+            if (pickedNode1 == pickedNode2 && pickedParent1 == pickedParent2) {
                 // the two attaching points are on the same branch
-                middleNode1.setLeftChild(middleNode2);
-                middleNode1.setRightChild(middleNode2);
-                middleNode2.setLeftParent(middleNode1);
-                middleNode2.setRightParent(middleNode1);
-                if (netNode1.getLeftParent() == parentNode1) {
-                    middleNode1.setLeftParent(parentNode1);
-                    middleNode2.setLeftChild(netNode1);
-                } else {
-                    middleNode1.setRightParent(parentNode1);
-                    middleNode2.setRightChild(netNode1);
+                middleNode1.addChild(middleNode2);
+                middleNode1.addChild(middleNode2);
+                middleNode1.addParent(pickedParent1);
+                middleNode2.addParent(middleNode1);
+                middleNode2.addParent(middleNode1);
+                middleNode2.addChild(pickedNode1);
+                pickedNode1.deleteParent(pickedParent1);
+                pickedNode1.addParent(middleNode2);
+                if (pickedParent1 != null) {
+                    pickedParent1.deleteChild(pickedNode1);
+                    pickedParent1.addChild(middleNode1);
                 }
             } else {
                 // the two attaching points are on different branches
-                if (netNode1.getLeftParent() == parentNode1) {
-                    middleNode1.setLeftChild(netNode1);
-                    middleNode1.setLeftParent(parentNode1);
-                    middleNode1.setRightChild(middleNode2);
-                } else {
-                    middleNode1.setRightChild(netNode1);
-                    middleNode1.setRightParent(parentNode1);
-                    middleNode1.setLeftChild(middleNode2);
+                middleNode1.addChild(middleNode2);
+                middleNode1.addChild(pickedNode1);
+                middleNode1.addParent(pickedParent1);
+                middleNode2.addParent(pickedParent2);
+                middleNode2.addParent(middleNode1);
+                middleNode2.addChild(pickedNode2);
+                pickedNode1.deleteParent(pickedParent1);
+                pickedNode1.addParent(middleNode1);
+                if (pickedParent1 != null) {
+                    pickedParent1.deleteChild(pickedNode1);
+                    pickedParent1.addChild(middleNode1);
                 }
-                if (netNode2.getLeftParent() == parentNode2) {
-                    middleNode2.setLeftChild(netNode2);
-                    middleNode2.setLeftParent(parentNode2);
-                    middleNode2.setRightParent(middleNode1);
-                } else {
-                    middleNode2.setRightChild(netNode2);
-                    middleNode2.setRightParent(parentNode2);
-                    middleNode2.setLeftParent(middleNode1);
+                pickedNode2.deleteParent(pickedParent2);
+                pickedNode2.addParent(middleNode2);
+                if (pickedParent2 != null) {
+                    pickedParent2.deleteChild(pickedNode2);
+                    pickedParent2.addChild(middleNode2);
                 }
-
-                // TODO: need to solve direction conflict!
-
             }
+
+            // set inherit prob
+            middleNode2.setGamma(Randomizer.nextDouble());
+
         } else {
             // middleNode1 is reticulation and middleNode2 is bifurcation
-            speciesNetwork.addReticulationNode(middleNode1);
-            speciesNetwork.addSpeciationNode(middleNode2);
+            speciesNetwork.addReticulationBranch(middleNode2, middleNode1);
 
-            if (netNode1 == netNode2 && parentNode1 == parentNode2) {
+            if (pickedNode1 == pickedNode2 && pickedParent1 == pickedParent2) {
                 // the two attaching points are on the same branch
-                middleNode1.setLeftParent(middleNode2);
-                middleNode1.setRightParent(middleNode2);
-                middleNode2.setLeftChild(middleNode1);
-                middleNode2.setRightChild(middleNode1);
-                if (netNode1.getLeftParent() == parentNode1) {
-                    middleNode1.setLeftChild(netNode1);
-                    middleNode2.setLeftParent(parentNode1);
-                } else {
-                    middleNode1.setRightChild(netNode1);
-                    middleNode2.setRightParent(parentNode1);
+                middleNode2.addChild(middleNode1);
+                middleNode2.addChild(middleNode1);
+                middleNode2.addParent(pickedParent1);
+                middleNode1.addParent(middleNode2);
+                middleNode1.addParent(middleNode2);
+                middleNode1.addChild(pickedNode1);
+                pickedNode1.deleteParent(pickedParent1);
+                pickedNode1.addParent(middleNode1);
+                if (pickedParent1 != null) {
+                    pickedParent1.deleteChild(pickedNode1);
+                    pickedParent1.addChild(middleNode2);
                 }
             } else {
                 // the two attaching points are on different branches
-                if (netNode1.getLeftParent() == parentNode1) {
-                    middleNode1.setLeftChild(netNode1);
-                    middleNode1.setLeftParent(parentNode1);
-                    middleNode1.setRightParent(middleNode2);
-                } else {
-                    middleNode1.setRightChild(netNode1);
-                    middleNode1.setRightParent(parentNode1);
-                    middleNode1.setLeftParent(middleNode2);
+                middleNode1.addChild(pickedNode1);
+                middleNode1.addParent(pickedParent1);
+                middleNode1.addParent(middleNode2);
+                middleNode2.addParent(pickedParent2);
+                middleNode2.addChild(middleNode1);
+                middleNode2.addChild(pickedNode2);
+                pickedNode1.deleteParent(pickedParent1);
+                pickedNode1.addParent(middleNode1);
+                if (pickedParent1 != null) {
+                    pickedParent1.deleteChild(pickedNode1);
+                    pickedParent1.addChild(middleNode1);
                 }
-                if (netNode2.getLeftParent() == parentNode2) {
-                    middleNode2.setLeftChild(netNode2);
-                    middleNode2.setLeftParent(parentNode2);
-                    middleNode2.setRightChild(middleNode1);
-                } else {
-                    middleNode2.setRightChild(netNode2);
-                    middleNode2.setRightParent(parentNode2);
-                    middleNode2.setLeftChild(middleNode1);
+                pickedNode2.deleteParent(pickedParent2);
+                pickedNode2.addParent(middleNode2);
+                if (pickedParent2 != null) {
+                    pickedParent2.deleteChild(pickedNode2);
+                    pickedParent2.addChild(middleNode2);
                 }
-
-                // TODO: need to solve direction conflict!
-
             }
+
+            // set inherit prob
+            middleNode1.setGamma(Randomizer.nextDouble());
         }
 
-        // TODO: add the gamma prob.
-        final double gamma = Randomizer.nextDouble();
-
-
         // number of reticulation branches in the proposed network
-        final int numReticulationBranches = 2 * speciesNetwork.getReticulationNodeCount();  // m
+        final int nReticulationBranches = 2 * speciesNetwork.getReticulationNodeCount();  // m
+        logProposalRatio += 2 * Math.log(nBranches) - Math.log(nReticulationBranches);
 
-        proposalRatio += 2 * Math.log(numBranches) - Math.log(numReticulationBranches);
+        // update the embedding in the new species network
+        int newChoices = 0;
+        for (RebuildEmbedding reembedOp: reembedOps) {
+            final int nChoices = reembedOp.initializeEmbedding();
+            if (nChoices < 0)
+                return Double.NEGATIVE_INFINITY;
+            newChoices += nChoices;
+            // System.out.println(String.format("Gene tree %d: %d choices", i, nChoices));
+            if (!reembedOp.listStateNodes().isEmpty()) // copied from JointOperator
+                reembedOp.listStateNodes().get(0).getState().checkCalculationNodesDirtiness();
+        }
+        logProposalRatio += (newChoices - oldChoices) * Math.log(2);
 
-        return proposalRatio;
+        return logProposalRatio;
     }
 }
