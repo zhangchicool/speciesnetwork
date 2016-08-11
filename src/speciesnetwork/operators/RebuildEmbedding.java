@@ -174,8 +174,7 @@ public class RebuildEmbedding extends Operator {
             final Collection<Integer> requiredHeirs = geneNodeHeirs.get(geneTreeNode);
             final List<Integer> compatibleBranches = new ArrayList<>();
 
-            final Set<Integer> childBranchNumbers = speciesNetworkNode.childBranchNumbers;
-            for (Integer branchNumber: childBranchNumbers) {
+            for (Integer branchNumber: speciesNetworkNode.childBranchNumbers) {
                 final NetworkNode childNode = speciesNetworkNode.getChildByBranch(branchNumber);
                 if (speciesNodeHeirs.get(childNode).containsAll(requiredHeirs)) {
                     compatibleBranches.add(branchNumber);

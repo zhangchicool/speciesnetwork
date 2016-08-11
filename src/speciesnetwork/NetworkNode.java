@@ -35,7 +35,7 @@ public class NetworkNode {
     /**
      * children and parents of this node
      */
-    public Set<Integer> childBranchNumbers;
+    public List<Integer> childBranchNumbers;
     public int gammaBranchNumber;
     protected Multiset<NetworkNode> children;
     protected Multiset<NetworkNode> parents;
@@ -102,7 +102,7 @@ public class NetworkNode {
         label = null;
         inheritProb = 0.5;
         height = 0.0;
-        childBranchNumbers = new HashSet<>();
+        childBranchNumbers = new ArrayList<>();
         children = HashMultiset.create();
         parents = HashMultiset.create();
         nodeNumber = -1;

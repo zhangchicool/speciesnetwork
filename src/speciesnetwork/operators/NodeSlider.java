@@ -15,11 +15,11 @@ import beast.core.StateNode;
  * @author Chi Zhang
  */
 
-@Description("Combine a gene tree operator with RebuildEmbedding.")
+@Description("Randomly selects an internal network node and move its height using an uniform sliding window.")
 public class NodeSlider extends Operator {
     public Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Input.Validate.REQUIRED);
-    public Input<List<RebuildEmbedding>> rebuildEmbeddingsInput = new Input<>("rebuildEmbedding",
+    public Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
             "Operator which rebuilds embedding of gene tree within species network.", new ArrayList<>());
     public Input<Double> windowSizeInput =
             new Input<>("windowSize", "The size of the sliding window, default 0.01.", 0.01);
@@ -28,13 +28,13 @@ public class NodeSlider extends Operator {
 
     @Override
     public void initAndValidate() {
-        nGenes = rebuildEmbeddingsInput.get().size();
+        nGenes = rebuildEmbeddingInput.get().size();
     }
 
     @Override
     public double proposal() {
         final Network speciesNetwork = speciesNetworkInput.get();
-        final List<RebuildEmbedding> reembedOps = rebuildEmbeddingsInput.get();
+        final List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
         final double windowSize = windowSizeInput.get();
 
         // count the number of alternative traversing choices for the current state (n0)
@@ -97,7 +97,7 @@ public class NodeSlider extends Operator {
 
     @Override
     public List<StateNode> listStateNodes() {
-        final List<RebuildEmbedding> reembedOps = rebuildEmbeddingsInput.get();
+        final List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
         List<StateNode> stateNodeList = new ArrayList<>();
 
         stateNodeList.addAll(super.listStateNodes());
