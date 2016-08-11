@@ -7,10 +7,6 @@ import beast.core.Description;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.Operator;
-import beast.core.parameter.IntegerParameter;
-import beast.core.parameter.RealParameter;
-import beast.evolution.alignment.TaxonSet;
-import beast.evolution.tree.Tree;
 import beast.util.Randomizer;
 
 import speciesnetwork.Network;
@@ -35,20 +31,14 @@ import speciesnetwork.SanityChecks;
  * @author Chi Zhang
  */
 
-@Description("Relocate the source of an edge starting with speciation node, " +
-        "or the destination of an edge ending with hybridization node.")
+@Description("Delete a reticulation branch from the species network.")
 public class DeleteReticulation extends Operator {
     public Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
-    public Input<List<Tree>> geneTreesInput =
-            new Input<>("geneTree", "list of gene trees embedded in species network", new ArrayList<>());
-    public Input<List<IntegerParameter>> embeddingsInput =
-            new Input<>("embedding", "The matrices to embed the gene trees in the species network.", new ArrayList<>());
-    public Input<TaxonSet> taxonSuperSetInput =
-            new Input<>("taxonSuperset", "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
+    public Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
+            "Operator which rebuilds embedding of gene tree within species network.", new ArrayList<>());
 
-    private enum Direction {LEFT, RIGHT}
-    final static SanityChecks sc = new SanityChecks();
+    private final double lambda = 1.0;  // rate of exponential distribution
 
     // empty constructor to facilitate construction by XML + initAndValidate
     public DeleteReticulation() {
@@ -61,7 +51,7 @@ public class DeleteReticulation extends Operator {
     @Override
     public double proposal() {
         Network speciesNetwork = speciesNetworkInput.get();
-        assert sc.checkNetworkSanity(speciesNetwork.getRoot()); // species network should not be insane
+        SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
 
         List<NetworkNode> hybridNodes = speciesNetwork.getReticulationNodes();
         final int numHybridNodes = speciesNetwork.getReticulationNodeCount();
