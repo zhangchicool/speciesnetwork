@@ -99,7 +99,8 @@ public class YuleHybridModel extends Distribution {
 
     @Override
     protected boolean requiresRecalculation() {
-        return diversificationInput.get().somethingIsDirty() || networkInput.get().isDirty() || hybridizationInput.get().somethingIsDirty();
+        return networkInput.get().isDirty() ||
+                diversificationInput.get().somethingIsDirty() || hybridizationInput.get().somethingIsDirty();
     }
 
     @Override
