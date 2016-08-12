@@ -32,7 +32,6 @@
 
     <run chainLength="1000000" id="mcmc" spec="MCMC">
         <state id="state" storeEvery="1000">
-            <parameter id="gammaP" lower="0.0" upper="1.0" name="stateNode">0.7 </parameter>
             <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
                 <taxonset id="taxonSuperset" spec="TaxonSet">
                     <taxon id="A" spec="TaxonSet">
@@ -69,16 +68,14 @@
         </init>
 
         <distribution id="posterior" spec="util.CompoundDistribution">
+            <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
+                <geneTreeWithin id="geneTree:gene1" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1"/>
+                <geneTreeWithin id="geneTree:gene2" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene2" embedding="@embedding:gene2"/>
+                <!-- populationModel id="popModel" popSizes="0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 " spec="speciesnetwork.ConstantPopulation"/ -->
+                <populationModel alpha="5.0" beta="0.1" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
+            </distribution>
             <distribution id="prior" spec="util.CompoundDistribution">
-                <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
-                    <geneTreeWithin id="geneTree:gene1" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1" gamma="@gammaP"/>
-                    <geneTreeWithin id="geneTree:gene2" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene2" embedding="@embedding:gene2" gamma="@gammaP"/>
-                    <populationModel id="popModel" popSizes="0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 " spec="speciesnetwork.ConstantPopulation"/>
-                    <!-- populationModel alpha="2.0" beta="1.0" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/ -->
-                </distribution>
-                <prior id="gamma.prior" name="distribution" x="@gammaP">
-                    <Beta id="beta.distr" name="distr" alpha="1" beta="1"/>
-                </prior>
+                <distribution id="networkPrior" diversificationRate="1.0" hybridizationRate="0.1" spec="speciesnetwork.YuleHybridModel" network="@network:species" betaShape="1.0"/>
             </distribution>
             <distribution id="likelihood" spec="util.CompoundDistribution">
                 <distribution data="@gene1" id="likelihood:gene1" tree="@tree:gene1" spec="TreeLikelihood">
@@ -140,13 +137,11 @@
             <operator id="WilsonBalding:gene2" spec="WilsonBalding" tree="@tree:gene2" weight="0.0"/>
         </operator>
 
-        <operator id="gammaScaler" spec="ScaleOperator" parameter="@gammaP" scaleFactor="0.25" weight="10.0"/>
-        <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" taxonSuperset="@taxonSuperset" weight="50.0">
-            <geneTree idref="tree:gene1"/>
-            <embedding idref="embedding:gene1"/>
-            <geneTree idref="tree:gene2"/>
-            <embedding idref="embedding:gene2"/>
+        <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" weight="150.0">
+            <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
         </operator>
+        <operator id="gammaUniform" spec="speciesnetwork.operators.GammaUniform" speciesNetwork="@network:species" weight="30.0"/>
 
         <logger id="screenlog" logEvery="1000" model="@posterior">
             <log idref="posterior"/>
@@ -159,9 +154,8 @@
             <log idref="likelihood"/>
             <log idref="prior"/>
             <log idref="coalescent"/>
-            <log idref="gammaP"/>
-            <log id="TH:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeHeightLogger"/>
-            <log id="TH:gene2" tree="@tree:gene2" spec="beast.evolution.tree.TreeHeightLogger"/>
+            <log id="height:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeStatLogger"/>
+            <log id="height:gene2" tree="@tree:gene2" spec="beast.evolution.tree.TreeStatLogger"/>
         </logger>
         <logger fileName="sim_3s_2loci.xml.species.trees" id="treelog:species" logEvery="200" mode="tree">
             <log id="networkLogger:species" spec="speciesnetwork.SpeciesNetworkLogger" speciesNetwork="@network:species"/>
