@@ -46,7 +46,7 @@ abstract class PopulationTestHelper {
         speciesSuperset = generateSuperset();
         initializeSpeciesNetwork();
         initializeStateNodes();
-        initializeGeneTrees(true);
+        initializeGeneTrees(false);
 
         final PopulationSizeModel populationModel = generatePopulationModel();
         populationModel.initPopSizes(nBranches);

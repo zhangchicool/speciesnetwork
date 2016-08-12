@@ -31,7 +31,7 @@ public class NetworkParserTest {
     }
 
     @Test
-    public void testLogHR() throws Exception {
+    public void testParser() throws Exception {
         // System.out.println(testNetwork2);
         // System.out.println(networkParser.toString());
         assertEquals(testNetwork2, networkParser.toString());
