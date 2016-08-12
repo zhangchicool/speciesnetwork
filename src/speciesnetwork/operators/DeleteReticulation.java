@@ -50,109 +50,112 @@ public class DeleteReticulation extends Operator {
 
     @Override
     public double proposal() {
-        Network speciesNetwork = speciesNetworkInput.get();
+        final Network speciesNetwork = speciesNetworkInput.get();
+        final List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
+
         SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
 
-        List<NetworkNode> hybridNodes = speciesNetwork.getReticulationNodes();
-        final int numHybridNodes = speciesNetwork.getReticulationNodeCount();
-
-        //number of reticulation branches in the current network
-        final int numReticulationBranches = 2 * numHybridNodes;  // m'
-
-        // pick a reticulation branch randomly
-        final NetworkNode netNode = hybridNodes.get(Randomizer.nextInt(numHybridNodes));
-        final NetworkNode topNode;
-        if (Randomizer.nextBoolean()) {
-            topNode = netNode.getLeftParent();
-        } else {
-            topNode = netNode.getRightParent();
+        // count the number of alternative traversing choices for the current state (n0)
+        int oldChoices = 0;
+        for (RebuildEmbedding reembedOp: reembedOps) {
+            final int nChoices = reembedOp.getNumberOfChoices();
+            if (nChoices < 0)
+                throw new RuntimeException("Developer ERROR: current embedding invalid!");
+            oldChoices += nChoices;
         }
 
-        // get the child node and another parent node of netNode
-        NetworkNode childNode1, parentNode1;
-        if (netNode.getLeftChild() != null)
-            childNode1 = netNode.getLeftChild();
-        else
-            childNode1 = netNode.getRightChild();
-        if (netNode.getLeftParent() == topNode)
-            parentNode1 = netNode.getRightParent();
-        else
-            parentNode1 = netNode.getLeftParent();
+        final int nHybridNodes = speciesNetwork.getReticulationNodeCount();
 
-        // get the parent node and another child node of topNode
-        NetworkNode childNode2, parentNode2;  // parentNode2 can be null if topNode is root
-        if (topNode.getLeftParent() != null)
-            parentNode2 = topNode.getLeftParent();
-        else
-            parentNode2 = topNode.getRightParent();
-        if (topNode.getLeftChild() == netNode)
-            childNode2 = netNode.getRightChild();
-        else
-            childNode2 = netNode.getLeftChild();
+        //number of reticulation branches in the current network
+        final int nReticulationBranches = 2 * nHybridNodes;  // m'
 
-        final double lambda = 1;
+        // pick a reticulation branch randomly
+        final int hybridNodeNr = Randomizer.nextInt(nHybridNodes) + speciesNetwork.getReticulationOffset();
+        NetworkNode hybridNode = speciesNetwork.getNode(hybridNodeNr);
+        final int hybridBranchNr;
+        if (Randomizer.nextBoolean()) {
+            hybridBranchNr = hybridNode.gammaBranchNumber;
+        } else {
+            hybridBranchNr = hybridNode.gammaBranchNumber + 1;
+        }
+        // branch hybridBranchNr is connecting hybridNode and pickedParent
+        NetworkNode pickedParent = hybridNode.getParentByBranch(hybridBranchNr);
+
+        // get the child node and another parent node of hybridNode
+        final int childBranchNr1 = hybridNode.childBranchNumbers.get(0);
+        NetworkNode childNode1 = hybridNode.getChildByBranch(childBranchNr1);
+
+        NetworkNode parentNode1;
+        if (hybridBranchNr == hybridNode.gammaBranchNumber) {
+            parentNode1 = hybridNode.getParentByBranch(hybridBranchNr + 1);
+        } else {
+            parentNode1 = hybridNode.getParentByBranch(hybridBranchNr);
+        }
+
+        // get the parent node and another child node of pickedParent
+        final int childBranchNr2;
+        if (hybridBranchNr == pickedParent.childBranchNumbers.get(0)) {
+            childBranchNr2 = pickedParent.childBranchNumbers.get(1);
+        } else {
+            childBranchNr2 = pickedParent.childBranchNumbers.get(0);
+        }
+        NetworkNode childNode2 = pickedParent.getChildByBranch(childBranchNr2);
+
+        final int parentBranchNr2 = pickedParent.gammaBranchNumber;
+        NetworkNode parentNode2 = pickedParent.getParentByBranch(parentBranchNr2);  // null if pickedParent is root
+
         final double l1, l2, l11, l21;
-        double proposalRatio = 0.0;
+        double logProposalRatio = 0.0;
 
-        // delete the reticulation branch, connect childNode1 and parentNode1, and connect childNode2 and parentNode2
-        if (netNode == childNode2 && topNode == parentNode1) {
+        // work out the Jacobian
+        if (hybridNode == childNode2 && pickedParent == parentNode1) {
             // the two attaching points are on the same branch
-            if (topNode.isRoot()) {
+            if (pickedParent.isRoot()) {
                 l1 = l2 = 1;
-                l11 = netNode.getHeight() - childNode1.getHeight();
-                l21 = topNode.getHeight() - childNode1.getHeight();
-                proposalRatio += 2 * Math.log(lambda) - lambda * (l11 + l21);
+                l11 = hybridNode.getHeight() - childNode1.getHeight();
+                l21 = pickedParent.getHeight() - childNode1.getHeight();
+                logProposalRatio += 2 * Math.log(lambda) - lambda * (l11 + l21);
             } else {
                 l1 = l2 = parentNode2.getHeight() - childNode1.getHeight();
             }
-
-            if (childNode1.getLeftParent() == netNode) {
-                childNode1.setLeftParent(parentNode2);
-            } else {
-                childNode1.setRightParent(parentNode2);
-            }
-
-            // TODO: need to solve direction conflict!
         } else {
             // the two attaching points are on different branches
             l1 = parentNode1.getHeight() - childNode1.getHeight();
-            if (topNode.isRoot()) {
+            if (pickedParent.isRoot()) {
                 l2 = 1;
-                l21 = topNode.getHeight() - childNode2.getHeight();
-                proposalRatio += Math.log(lambda) - lambda * l21;
+                l21 = pickedParent.getHeight() - childNode2.getHeight();
+                logProposalRatio += Math.log(lambda) - lambda * l21;
             } else {
                 l2 = parentNode2.getHeight() - childNode2.getHeight();
             }
-
-            if (childNode1.getLeftParent() == netNode) {
-                childNode1.setLeftParent(parentNode1);
-            } else {
-                childNode1.setRightParent(parentNode1);
-            }
-
-            if (childNode2.getLeftParent() == topNode) {
-                childNode2.setLeftParent(parentNode2);
-            } else {
-                childNode2.setRightParent(parentNode2);
-            }
-
-
-            // TODO: need to solve direction conflict!
         }
-        proposalRatio += - Math.log(l1) - Math.log(l2);  // the Jacobian
+        logProposalRatio += - Math.log(l1) - Math.log(l2);  // the Jacobian
 
-        // delete the two intermediate nodes
-        speciesNetwork.deleteSpeciationNode(topNode);
-        speciesNetwork.deleteReticulationNode(netNode);
+        // start moving
+        speciesNetwork.startEditing(this);
 
-        // TODO: delete the gamma prob.
-
+        // delete the reticulation branch
+        speciesNetwork.deleteReticulationBranch(hybridBranchNr);
 
         // number of branches in the proposed network
-        final int numBranches = speciesNetwork.getBranchCount();  // k'
+        final int nBranches = speciesNetwork.getBranchCount();  // k'
+        logProposalRatio += Math.log(nReticulationBranches) - 2 * Math.log(nBranches);
 
-        proposalRatio += Math.log(numReticulationBranches) - 2 * Math.log(numBranches);
+        SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
 
-        return proposalRatio;
+        // update the embedding in the new species network
+        int newChoices = 0;
+        for (RebuildEmbedding reembedOp: reembedOps) {
+            final int nChoices = reembedOp.initializeEmbedding();
+            if (nChoices < 0)
+                return Double.NEGATIVE_INFINITY;
+            newChoices += nChoices;
+            // System.out.println(String.format("Gene tree %d: %d choices", i, nChoices));
+            if (!reembedOp.listStateNodes().isEmpty()) // copied from JointOperator
+                reembedOp.listStateNodes().get(0).getState().checkCalculationNodesDirtiness();
+        }
+        logProposalRatio += (newChoices - oldChoices) * Math.log(2);
+
+        return logProposalRatio;
     }
 }

@@ -466,16 +466,57 @@ public class Network extends StateNode {
     /**
      *
      */
-    public void addReticulationBranch(NetworkNode bifurcationNode, NetworkNode reticulationNode) {
-        assert (bifurcationNode.getHeight() >= reticulationNode.getHeight());
+    public void addReticulationBranch(NetworkNode bifurcationNode, NetworkNode reticulationNode,
+                                      int bifAttachBranchNr, int retAttachBranchNr) {
         //TODO
+//        if (middleNode1.getHeight() > middleNode2.getHeight()) {
+//            // middleNode1 is bifurcation and middleNode2 is reticulation
+//            speciesNetwork.addReticulationBranch(middleNode1, middleNode2);
+//
+//            if (pickedNode1 == pickedNode2 && pickedParent1 == pickedParent2) {
+//                // the two attaching points are on the same branch
+//                middleNode1.addChild(middleNode2);
+//                middleNode1.addChild(middleNode2);
+//                middleNode1.addParent(pickedParent1);
+//                middleNode2.addParent(middleNode1);
+//                middleNode2.addParent(middleNode1);
+//                middleNode2.addChild(pickedNode1);
+//                pickedNode1.deleteParent(pickedParent1);
+//                pickedNode1.addParent(middleNode2);
+//                if (pickedParent1 != null) {
+//                    pickedParent1.deleteChild(pickedNode1);
+//                    pickedParent1.addChild(middleNode1);
+//                }
+//            } else {
+//                // the two attaching points are on different branches
+//                middleNode1.addChild(middleNode2);
+//                middleNode1.addChild(pickedNode1);
+//                middleNode1.addParent(pickedParent1);
+//                middleNode2.addParent(pickedParent2);
+//                middleNode2.addParent(middleNode1);
+//                middleNode2.addChild(pickedNode2);
+//                pickedNode1.deleteParent(pickedParent1);
+//                pickedNode1.addParent(middleNode1);
+//                if (pickedParent1 != null) {
+//                    pickedParent1.deleteChild(pickedNode1);
+//                    pickedParent1.addChild(middleNode1);
+//                }
+//                pickedNode2.deleteParent(pickedParent2);
+//                pickedNode2.addParent(middleNode2);
+//                if (pickedParent2 != null) {
+//                    pickedParent2.deleteChild(pickedNode2);
+//                    pickedParent2.addChild(middleNode2);
+//                }
+//            }
+//        if (middleNode1.getHeight() < middleNode2)
+//            middleNode2.setGamma(Randomizer.nextDouble());
+
     }
 
     /**
      *
      */
-    public void deleteReticulationBranch(NetworkNode bifurcationNode, NetworkNode reticulationNode) {
-        assert (bifurcationNode.getHeight() >= reticulationNode.getHeight());
+    public void deleteReticulationBranch(int pickedBranchNr) {
         //TODO
     }
 }

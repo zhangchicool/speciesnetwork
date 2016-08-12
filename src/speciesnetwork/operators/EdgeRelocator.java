@@ -247,6 +247,8 @@ public class EdgeRelocator extends Operator {
             }
         }
 
+        SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
+
         // update the embedding in the new species network
         int newChoices = 0;
         for (RebuildEmbedding reembedOp: reembedOps) {

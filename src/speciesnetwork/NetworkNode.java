@@ -277,6 +277,13 @@ public class NetworkNode {
     }
 
     /**
+     * @return true if current node is reticulation node
+     */
+    public boolean isSpeciation() {
+        return nChildren == 2;
+    }
+
+    /**
      * whether the node has been visited, say by a recursive method
      */
     protected boolean visited = false; // this should be used outside of this class
