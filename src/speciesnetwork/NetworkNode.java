@@ -35,7 +35,8 @@ public class NetworkNode {
     /**
      * children and parents of this node
      */
-    public Set<Integer> childBranchNumbers;
+    public List<Integer> childBranchNumbers;
+    public int gammaBranchNumber;
     protected Multiset<NetworkNode> children;
     protected Multiset<NetworkNode> parents;
 
@@ -43,7 +44,6 @@ public class NetworkNode {
      * counts of children and parents of this node
      */
     protected int nodeNumber;
-    protected int gammaBranchNumber;
     protected int nParents;
     protected int nChildren;
 
@@ -68,8 +68,8 @@ public class NetworkNode {
         }
 
         gammaBranchNumber = network.getBranchNumber(nodeNumber);
-        parents = getParents();
-        children = getChildren();
+        parents = updateParents();
+        children = updateChildren();
         nParents = parents.size();
         nChildren = children.size();
     }
@@ -102,7 +102,7 @@ public class NetworkNode {
         label = null;
         inheritProb = 0.5;
         height = 0.0;
-        childBranchNumbers = new HashSet<>();
+        childBranchNumbers = new ArrayList<>();
         children = HashMultiset.create();
         parents = HashMultiset.create();
         nodeNumber = -1;
@@ -187,6 +187,14 @@ public class NetworkNode {
     }
 
     public Multiset<NetworkNode> getParents() {
+        return parents;
+    }
+
+    public Multiset<NetworkNode> getChildren() {
+        return children;
+    }
+
+    public Multiset<NetworkNode> updateParents() {
         final Multiset<NetworkNode> parents = HashMultiset.create();
 
         for (NetworkNode n: network.nodes) {
@@ -200,7 +208,7 @@ public class NetworkNode {
         return parents;
     }
 
-    public Multiset<NetworkNode> getChildren() {
+    public Multiset<NetworkNode> updateChildren() {
         final Multiset<NetworkNode> children = HashMultiset.create();
 
         for (Integer i: childBranchNumbers) {
@@ -212,12 +220,40 @@ public class NetworkNode {
         return children;
     }
 
+    public NetworkNode getParentByBranch(int branchNr) {
+        for (NetworkNode p: parents) {
+            if (p.childBranchNumbers.contains(branchNr))
+                return p;
+        }
+        return null;
+    }
+
     public NetworkNode getChildByBranch(int childBranchNr) {
         if (childBranchNumbers.contains(childBranchNr)) {
             final int childNodeNumber = network.getNodeNumber(childBranchNr);
             return network.nodes[childNodeNumber];
         }
         return null;
+    }
+
+    public boolean addParent(NetworkNode parent) {
+        //TODO
+        return true;
+    }
+
+    public boolean deleteParent(NetworkNode parent) {
+        //TODO
+        return true;
+    }
+
+    public boolean addChild(NetworkNode child) {
+        //TODO
+        return true;
+    }
+
+    public boolean deleteChild(NetworkNode child) {
+        //TODO
+        return true;
     }
 
     /**
@@ -238,6 +274,13 @@ public class NetworkNode {
      */
     public boolean isReticulation() {
         return nParents == 2;
+    }
+
+    /**
+     * @return true if current node is reticulation node
+     */
+    public boolean isSpeciation() {
+        return nChildren == 2;
     }
 
     /**

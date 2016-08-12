@@ -7,7 +7,7 @@ import com.google.common.collect.Multiset;
 import beast.evolution.tree.Node;
 
 public final class SanityChecks {
-    protected boolean checkTreeSanity(Node node) {
+    public static void checkTreeSanity(Node node) {
         final List<Node> children = node.getChildren();
         final int nChildren = children.size();
 
@@ -24,8 +24,6 @@ public final class SanityChecks {
         } else {
             assert nChildren == 2;
         }
-
-        return true;
     }
 
     public static void checkNetworkSanity(NetworkNode node) {
