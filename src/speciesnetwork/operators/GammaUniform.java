@@ -2,6 +2,7 @@ package speciesnetwork.operators;
 
 import beast.core.Description;
 import beast.core.Input;
+import beast.core.Input.Validate;
 import beast.core.Operator;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
@@ -9,12 +10,10 @@ import speciesnetwork.NetworkNode;
 
 @Description("Changes the value of gamma by uniformly selecting a value in its range.")
 public class GammaUniform extends Operator {
-    public Input<Network> speciesNetworkInput = new Input<>("speciesNetwork", "The species network.", Input.Validate.REQUIRED);
+    public Input<Network> speciesNetworkInput = new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
 
     @Override
     public void initAndValidate() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override

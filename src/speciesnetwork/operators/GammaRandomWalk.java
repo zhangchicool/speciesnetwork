@@ -2,6 +2,7 @@ package speciesnetwork.operators;
 
 import beast.core.Description;
 import beast.core.Input;
+import beast.core.Input.Validate;
 import beast.core.Operator;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
@@ -9,13 +10,11 @@ import speciesnetwork.NetworkNode;
 
 @Description("Changes the value of gamma by applying a random walk to the logit of gamma.")
 public class GammaRandomWalk extends Operator {
-    public Input<Network> speciesNetworkInput = new Input<>("speciesNetwork", "The species network.", Input.Validate.REQUIRED);
+    public Input<Network> speciesNetworkInput = new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
     public Input<Double> windowSizeInput = new Input<>("windowSize", "The size of the sliding window, default 1.0.", 1.0);
 
     @Override
     public void initAndValidate() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
