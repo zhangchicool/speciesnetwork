@@ -236,26 +236,6 @@ public class NetworkNode {
         return null;
     }
 
-    public boolean addParent(NetworkNode parent) {
-        //TODO
-        return true;
-    }
-
-    public boolean deleteParent(NetworkNode parent) {
-        //TODO
-        return true;
-    }
-
-    public boolean addChild(NetworkNode child) {
-        //TODO
-        return true;
-    }
-
-    public boolean deleteChild(NetworkNode child) {
-        //TODO
-        return true;
-    }
-
     /**
      * @return true if current node is root node
      */
