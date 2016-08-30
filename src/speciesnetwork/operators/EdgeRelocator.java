@@ -19,7 +19,6 @@ import speciesnetwork.SanityChecks;
  * If reticulation node: move the top of either the two child branches.
  * Propose a destination branch randomly from all possible branches, and attach the picked branch to the new position.
  *
- * TODO: narrow move that doesn't change the height
  * @author Chi Zhang
  */
 
@@ -30,11 +29,11 @@ public class EdgeRelocator extends Operator {
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
     public Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
             "Operator which rebuilds embedding of gene tree within species network.", new ArrayList<>());
-    public Input<Boolean> isNarrowInput =
-            new Input<>("isNarrow", "If true, do not change the node height.", false);
+    public Input<Boolean> isWideInput =
+            new Input<>("isWide", "If true, change the node height.", false);
 
     private final double lambda = 1.0;  // rate of exponential distribution
-    private final boolean isNarrow = isNarrowInput.get();
+    private final boolean isWide = isWideInput.get();
 
     // empty constructor to facilitate construction by XML + initAndValidate
     public EdgeRelocator() {
@@ -91,19 +90,7 @@ public class EdgeRelocator extends Operator {
 
             // look for all the candidate branches to attach to
             List<Integer> candidateBranchNumbers = new ArrayList<>();
-            if (isNarrow) {
-                for (NetworkNode node : speciesNetwork.getAllNodes()) {
-                    // do not attach to the original position
-                    if (node != pickedNode && node != pickedChild && node.getHeight() < upperLimit) {
-                        NetworkNode gParent = node.getParentByBranch(node.gammaBranchNumber);
-                        NetworkNode oParent = node.getParentByBranch(node.gammaBranchNumber + 1);
-                        if (gParent.getHeight() > pickedNode.getHeight())
-                            candidateBranchNumbers.add(node.gammaBranchNumber);
-                        if (node.isReticulation() && oParent.getHeight() > pickedNode.getHeight())
-                            candidateBranchNumbers.add(node.gammaBranchNumber + 1);
-                    }
-                }
-            } else {
+            if (isWide) {
                 for (NetworkNode node : speciesNetwork.getAllNodes()) {
                     // do not attach to the original position
                     if (node != pickedNode && node != pickedChild && node.getHeight() < upperLimit) {
@@ -117,6 +104,18 @@ public class EdgeRelocator extends Operator {
                     logProposalRatio -= Math.log(otherParent.getHeight() - pickedChild.getHeight());
                 else
                     logProposalRatio -= Math.log(upperLimit - pickedChild.getHeight());
+            } else {
+                for (NetworkNode node : speciesNetwork.getAllNodes()) {
+                    // do not attach to the original position
+                    if (node != pickedNode && node != pickedChild && node.getHeight() < upperLimit) {
+                        NetworkNode gParent = node.getParentByBranch(node.gammaBranchNumber);
+                        NetworkNode oParent = node.getParentByBranch(node.gammaBranchNumber + 1);
+                        if (gParent.getHeight() > pickedNode.getHeight())
+                            candidateBranchNumbers.add(node.gammaBranchNumber);
+                        if (node.isReticulation() && oParent.getHeight() > pickedNode.getHeight())
+                            candidateBranchNumbers.add(node.gammaBranchNumber + 1);
+                    }
+                }
             }
 
             // pick a candidate branch randomly
@@ -129,7 +128,7 @@ public class EdgeRelocator extends Operator {
             NetworkNode attachChild = speciesNetwork.getNode(attachChildNr);
             NetworkNode attachParent = attachChild.getParentByBranch(attachBranchNr);
 
-            if (!isNarrow) {
+            if (isWide) {
                 final double upper;
                 if (upperLimit > attachParent.getHeight())
                     upper = attachParent.getHeight();
@@ -180,18 +179,7 @@ public class EdgeRelocator extends Operator {
 
             // look for all the candidate branches to attach to
             List<Integer> candidateBranchNumbers = new ArrayList<>();
-            if (isNarrow) {
-                for (NetworkNode node : speciesNetwork.getAllNodes()) {
-                    // do not attach to the original position
-                    if (node != pickedNode && node.getHeight() > lowerLimit) {
-                        for (int childBrNr : node.childBranchNumbers) {
-                            NetworkNode gChild = node.getChildByBranch(childBrNr);
-                            if (gChild != pickedNode && gChild.getHeight() < pickedNode.getHeight())
-                                candidateBranchNumbers.add(childBrNr);
-                        }
-                    }
-                }
-            } else {
+            if (isWide) {
                 for (NetworkNode node : speciesNetwork.getAllNodes()) {
                     // do not attach to the original position
                     if (node != pickedNode && node.getHeight() > lowerLimit) {
@@ -213,6 +201,17 @@ public class EdgeRelocator extends Operator {
                     else
                         return Double.NEGATIVE_INFINITY;
                 }
+            } else {
+                for (NetworkNode node : speciesNetwork.getAllNodes()) {
+                    // do not attach to the original position
+                    if (node != pickedNode && node.getHeight() > lowerLimit) {
+                        for (int childBrNr : node.childBranchNumbers) {
+                            NetworkNode gChild = node.getChildByBranch(childBrNr);
+                            if (gChild != pickedNode && gChild.getHeight() < pickedNode.getHeight())
+                                candidateBranchNumbers.add(childBrNr);
+                        }
+                    }
+                }
             }
 
             // pick a candidate branch randomly
@@ -225,7 +224,7 @@ public class EdgeRelocator extends Operator {
             NetworkNode attachChild = speciesNetwork.getNode(attachChildNr);
             NetworkNode attachParent = attachChild.getParentByBranch(attachBranchNr);
 
-            if (!isNarrow) {
+            if (isWide) {
                 final double newHeight;
                 // propose an attachment height
                 if (attachParent != null) {
