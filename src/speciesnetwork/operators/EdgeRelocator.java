@@ -32,7 +32,7 @@ public class EdgeRelocator extends Operator {
     public Input<Boolean> isWideInput =
             new Input<>("isWide", "If true, change the node height.", false);
 
-    private final double lambda = 1.0;  // rate of exponential distribution
+    private final double lambda = 100.0;  // rate of exponential distribution
     private final boolean isWide = isWideInput.get();
 
     // empty constructor to facilitate construction by XML + initAndValidate

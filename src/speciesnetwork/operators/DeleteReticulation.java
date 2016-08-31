@@ -38,7 +38,7 @@ public class DeleteReticulation extends Operator {
     public Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
             "Operator which rebuilds embedding of gene tree within species network.", new ArrayList<>());
 
-    private final double lambda = 1.0;  // rate of exponential distribution
+    private final double lambda = 100.0;  // rate of exponential distribution
 
     // empty constructor to facilitate construction by XML + initAndValidate
     public DeleteReticulation() {
@@ -55,6 +55,12 @@ public class DeleteReticulation extends Operator {
 
         SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
 
+        final int nHybridNodes = speciesNetwork.getReticulationNodeCount();
+        if (nHybridNodes == 0)  // there is no reticulation branch to delete
+            return Double.NEGATIVE_INFINITY;
+        //number of reticulation branches in the current network
+        final int nReticulationBranches = 2 * nHybridNodes;  // m'
+
         // count the number of alternative traversing choices for the current state (n0)
         int oldChoices = 0;
         for (RebuildEmbedding reembedOp: reembedOps) {
@@ -63,11 +69,6 @@ public class DeleteReticulation extends Operator {
                 throw new RuntimeException("Developer ERROR: current embedding invalid!");
             oldChoices += nChoices;
         }
-
-        final int nHybridNodes = speciesNetwork.getReticulationNodeCount();
-
-        //number of reticulation branches in the current network
-        final int nReticulationBranches = 2 * nHybridNodes;  // m'
 
         // pick a reticulation branch randomly
         final int hybridNodeNr = Randomizer.nextInt(nHybridNodes) + speciesNetwork.getReticulationOffset();
@@ -84,13 +85,13 @@ public class DeleteReticulation extends Operator {
         // get the child node and another parent node of hybridNode
         final int childBranchNr1 = hybridNode.childBranchNumbers.get(0);
         NetworkNode childNode1 = hybridNode.getChildByBranch(childBranchNr1);
-
-        NetworkNode parentNode1;
+        final int parentBranchNr1;
         if (hybridBranchNr == hybridNode.gammaBranchNumber) {
-            parentNode1 = hybridNode.getParentByBranch(hybridBranchNr + 1);
+            parentBranchNr1 = hybridBranchNr + 1;
         } else {
-            parentNode1 = hybridNode.getParentByBranch(hybridBranchNr);
+            parentBranchNr1 = hybridBranchNr;
         }
+        NetworkNode parentNode1 = hybridNode.getParentByBranch(parentBranchNr1);
 
         // get the parent node and another child node of pickedParent
         final int childBranchNr2;
@@ -100,7 +101,6 @@ public class DeleteReticulation extends Operator {
             childBranchNr2 = pickedParent.childBranchNumbers.get(0);
         }
         NetworkNode childNode2 = pickedParent.getChildByBranch(childBranchNr2);
-
         final int parentBranchNr2 = pickedParent.gammaBranchNumber;
         NetworkNode parentNode2 = pickedParent.getParentByBranch(parentBranchNr2);  // null if pickedParent is root
 
@@ -137,11 +137,11 @@ public class DeleteReticulation extends Operator {
         // delete the reticulation branch
         speciesNetwork.deleteReticulationBranch(hybridBranchNr);
 
+        SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
+
         // number of branches in the proposed network
         final int nBranches = speciesNetwork.getBranchCount();  // k'
         logProposalRatio += Math.log(nReticulationBranches) - 2 * Math.log(nBranches);
-
-        SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
 
         // update the embedding in the new species network
         int newChoices = 0;
