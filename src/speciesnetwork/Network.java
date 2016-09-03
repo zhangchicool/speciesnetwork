@@ -177,7 +177,7 @@ public class Network extends StateNode {
     }
 
     /**
-     * @return a list of leaf nodes contained in this network
+     * @return an array of leaf nodes in this network
      */
     public NetworkNode[] getLeafNodes() {
         final NetworkNode[] leafNodes = new NetworkNode[leafNodeCount];
@@ -186,7 +186,7 @@ public class Network extends StateNode {
     }
 
     /**
-     * @return a list of internal nodes contained in this network
+     * @return an array of internal nodes in this network
      */
     public NetworkNode[] getInternalNodes() {
         final int internalNodeCount = speciationNodeCount + reticulationNodeCount;
@@ -196,7 +196,7 @@ public class Network extends StateNode {
     }
 
     /**
-     * @return a list of reticulation nodes contained in this network
+     * @return an array of reticulation nodes in this network
      */
     public NetworkNode[] getReticulationNodes() {
         final int reticulationOffset = getReticulationOffset();
@@ -476,13 +476,64 @@ public class Network extends StateNode {
         NetworkNode parentNode1 = pickedNode1.getParentByBranch(retAttachBranchNr);  // null if pickedNode1 is root
         NetworkNode parentNode2 = pickedNode2.getParentByBranch(bifAttachBranchNr);  // null if pickedNode2 is root
 
+        // add the two nodes to the network node array
+        NetworkNode[] tempNodes = new NetworkNode[nodeCount+2];
+        System.arraycopy(nodes, 0, tempNodes, 0, leafNodeCount+speciationNodeCount);
+        System.arraycopy(nodes, leafNodeCount+speciationNodeCount, tempNodes, leafNodeCount+speciationNodeCount+1, reticulationNodeCount);
+        if (parentNode2 != null) {
+            tempNodes[leafNodeCount+speciationNodeCount] = bifurcationNode;
+            tempNodes[nodeCount] = reticulationNode;
+            tempNodes[nodeCount+1] = nodes[nodeCount-1];
+        } else {
+            tempNodes[leafNodeCount+speciationNodeCount] = nodes[nodeCount-1];
+            tempNodes[nodeCount] = reticulationNode;
+            tempNodes[nodeCount+1] = bifurcationNode;  // new root
+        }
+        nodes = tempNodes;
+        nodeCount += 2;
+        speciationNodeCount += 1;
+        reticulationNodeCount += 1;
+
+        // update child branch numbers
+        for (NetworkNode node: nodes) {
+            for (Integer nr: node.childBranchNumbers) {
+                if (nr >= leafNodeCount+speciationNodeCount-1) {
+                    node.childBranchNumbers.remove(nr);
+                    node.childBranchNumbers.add(nr+1);
+                    if (retAttachBranchNr == nr) retAttachBranchNr++;
+                    if (bifAttachBranchNr == nr) bifAttachBranchNr++;
+                }
+            }
+        }
         if (pickedNode1 == pickedNode2 && parentNode1 == parentNode2) {
             // the two nodes are on the same branch
-
+            bifurcationNode.childBranchNumbers.add(nodeCount+reticulationNodeCount-2);
+            bifurcationNode.childBranchNumbers.add(nodeCount+reticulationNodeCount-3);
+            if (parentNode2 != null) {
+                reticulationNode.childBranchNumbers.add(retAttachBranchNr);
+                parentNode2.childBranchNumbers.remove(bifAttachBranchNr);
+                parentNode2.childBranchNumbers.add(leafNodeCount+speciationNodeCount-1);
+            } else {
+                reticulationNode.childBranchNumbers.add(leafNodeCount+speciationNodeCount-1);
+            }
         } else {
-            
+            reticulationNode.childBranchNumbers.add(retAttachBranchNr);
+            parentNode1.childBranchNumbers.remove(retAttachBranchNr);
+            parentNode1.childBranchNumbers.add(nodeCount+reticulationNodeCount-3);
+            bifurcationNode.childBranchNumbers.add(nodeCount+reticulationNodeCount-2);
+            if (parentNode2 != null) {
+                bifurcationNode.childBranchNumbers.add(bifAttachBranchNr);
+                parentNode2.childBranchNumbers.remove(bifAttachBranchNr);
+                parentNode2.childBranchNumbers.add(leafNodeCount+speciationNodeCount-1);
+            } else {
+                bifurcationNode.childBranchNumbers.add(leafNodeCount+speciationNodeCount-1);
+            }
         }
 
+        // update relationships
+        for (NetworkNode node: nodes) {
+            node.updateRelationships();
+        }
     }
 
     /**

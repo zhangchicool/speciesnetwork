@@ -6,10 +6,6 @@ import java.util.Comparator;
 // if height is equal, consider distance from root (depth)
 // if depth is equal, consider assigned node number
 final class NodeHeightComparator implements Comparator<NetworkNode> {
-    final int lessThan = -1;
-    final int greaterThan = 1;
-    final int equalTo = 0;
-
     @Override
     public int compare(NetworkNode nodeA, NetworkNode nodeB) {
         final double heightA = nodeA.getHeight();
@@ -18,10 +14,10 @@ final class NodeHeightComparator implements Comparator<NetworkNode> {
             final int nodeNumberA = nodeA.getNr();
             final int nodeNumberB = nodeB.getNr();
             if (nodeNumberA == nodeNumberB) {
-                return equalTo;
+                return 0;
             }
-            return nodeNumberA > nodeNumberB ? greaterThan : lessThan;
+            return nodeNumberA > nodeNumberB ? 1 : -1;
         }
-        return heightA > heightB ? greaterThan : lessThan;
+        return heightA > heightB ? 1 : -1;
     }
 }
