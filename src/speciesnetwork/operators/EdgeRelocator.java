@@ -63,7 +63,6 @@ public class EdgeRelocator extends Operator {
         final NetworkNode[] internalNodes = speciesNetwork.getInternalNodes();
         int randomIndex = Randomizer.nextInt(internalNodes.length);
         NetworkNode pickedNode = internalNodes[randomIndex];
-        final int pickedNodeNr = pickedNode.getNr();
 
         // start moving
         speciesNetwork.startEditing(this);
@@ -150,7 +149,6 @@ public class EdgeRelocator extends Operator {
             attachParent.childBranchNumbers.add(otherParentBrNr);
             pickedNode.childBranchNumbers.remove(pickedChildBrNr);
             pickedNode.childBranchNumbers.add(attachBranchNr);
-
             otherParent.updateChildren();
             pickedChild.updateParents();
             attachParent.updateChildren();
@@ -241,36 +239,44 @@ public class EdgeRelocator extends Operator {
                     newHeight = attachChild.getHeight() + length;
                     logProposalRatio -= Math.log(lambda) - lambda * (length);
                 }
-
                 // set new height
                 pickedNode.setHeight(newHeight);
             }
 
             // deal with the node relationships
-            if (pickedParent != null) {
+            if (pickedParent != null && attachParent != null) {
                 pickedParent.childBranchNumbers.remove(pickedParentBrNr);
                 pickedParent.childBranchNumbers.add(otherChildBrNr);
-                pickedParent.updateChildren();
-            }
-            if (attachParent != null) {
                 attachParent.childBranchNumbers.remove(attachBranchNr);
                 attachParent.childBranchNumbers.add(pickedParentBrNr);
+                pickedNode.childBranchNumbers.remove(otherChildBrNr);
+                pickedNode.childBranchNumbers.add(attachBranchNr);
+                pickedParent.updateChildren();
+                otherChild.updateParents();
                 attachParent.updateChildren();
-            }
-            pickedNode.childBranchNumbers.remove(otherChildBrNr);
-            pickedNode.childBranchNumbers.add(attachBranchNr);
-
-            otherChild.updateParents();
-            attachChild.updateParents();
-            pickedNode.updateParents();
-            pickedNode.updateChildren();
-
-            // swap root
-            if (pickedParent == null && attachParent != null) {
-                speciesNetwork.swapRoot(attachParent.getNr());
-            }
-            else if (pickedParent != null && attachParent == null) {
-                speciesNetwork.swapRoot(pickedParent.getNr());
+                attachChild.updateParents();
+                pickedNode.updateParents();
+                pickedNode.updateChildren();
+            } else if (attachParent != null) {  // pickedParent == null
+                attachParent.childBranchNumbers.remove(attachBranchNr);
+                attachParent.childBranchNumbers.add(otherChildBrNr);
+                pickedNode.childBranchNumbers.remove(otherChildBrNr);
+                pickedNode.childBranchNumbers.add(attachBranchNr);
+                speciesNetwork.swapRoot(otherChild.getNr());
+                otherChild.updateRelationships();
+                pickedNode.updateRelationships();
+                attachParent.updateChildren();
+                attachChild.updateParents();
+            } else if (pickedParent != null) {  // attachParent == null
+                pickedParent.childBranchNumbers.remove(pickedParentBrNr);
+                pickedParent.childBranchNumbers.add(otherChildBrNr);
+                pickedNode.childBranchNumbers.remove(otherChildBrNr);
+                pickedNode.childBranchNumbers.add(pickedParentBrNr);
+                speciesNetwork.swapRoot(pickedNode.getNr());
+                attachChild.updateRelationships();
+                pickedNode.updateRelationships();
+                pickedParent.updateChildren();
+                otherChild.updateParents();
             }
         }
 

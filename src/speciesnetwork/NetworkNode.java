@@ -54,7 +54,7 @@ public class NetworkNode {
 
     private DecimalFormat df;
 
-    protected void updateRelationships() {
+    public void updateRelationships() {
         nodeNumber = -1;
         for (int i = 0; i < network.nodes.length; i++) {
             if (network.nodes[i] == this) {
