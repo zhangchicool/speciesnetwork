@@ -287,10 +287,17 @@ public class NetworkNode {
     @Override
     public String toString() {
         resetAllTouched();
-        return buildNewick(Double.POSITIVE_INFINITY, -1, true);
+        NetworkNode parent = getParentByBranch(gammaBranchNumber);
+        final double parentHeight;
+        if (parent == null) {
+            parentHeight = Double.POSITIVE_INFINITY;
+        } else {
+            parentHeight = parent.getHeight();
+        }
+        return buildNewick(parentHeight, gammaBranchNumber, true);
     }
 
-    private String buildNewick(Double parentHeight, Integer parentBranchNumber, boolean printLabels) {
+    private String buildNewick(Double parentHeight, Integer branchNumber, boolean printLabels) {
         final StringBuilder subtreeString = new StringBuilder();
         // only add children to a reticulation node once
         if (nChildren > 0 && !(touched)) {
@@ -314,12 +321,11 @@ public class NetworkNode {
 
         // add inheritance probabilities to reticulation nodes
         if (nParents == 2) {
-            subtreeString.append("[&gamma=");
-
-            if (parentBranchNumber == gammaBranchNumber) subtreeString.append(df.format(inheritProb));
-            else subtreeString.append(df.format(1.0 - inheritProb));
-
-            subtreeString.append("]");
+            if (branchNumber == gammaBranchNumber) {
+                subtreeString.append("[&gamma=");
+                subtreeString.append(df.format(inheritProb));
+                subtreeString.append("]");
+            }  // else subtreeString.append(df.format(1.0 - inheritProb));
         }
 
         if (parentHeight < Double.POSITIVE_INFINITY) {

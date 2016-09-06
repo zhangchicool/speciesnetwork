@@ -77,7 +77,7 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
         final int matchingNodeNr = getNodeNumber(nodeLabel);
         if (matchingNodeNr < 0) {
             int newNodeNumber;
-            double inheritProb = 0.5;
+            double inheritProb = 1.0;
 
             if (treeNode.isRoot()) {
                 newNodeNumber = nodeCount - 1;

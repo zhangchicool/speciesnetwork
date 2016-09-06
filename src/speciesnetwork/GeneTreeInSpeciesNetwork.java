@@ -169,10 +169,6 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
         return speciesOccupancy;
     }
 
-    protected Tree getGeneTree() {
-        return geneTreeInput.get();
-    }
-
     /**
      * @return the first tip node which is descendant of
      * @param gTreeNode
