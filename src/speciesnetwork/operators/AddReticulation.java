@@ -41,7 +41,7 @@ public class AddReticulation extends Operator {
     public Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
             "Operator which rebuilds embedding of gene tree within species network.", new ArrayList<>());
 
-    private final double lambda = 1.0;  // rate of exponential distribution
+    private final double lambda = 100.0;  // rate of exponential distribution
 
     // empty constructor to facilitate construction by XML + initAndValidate
     public AddReticulation() {
@@ -119,19 +119,19 @@ public class AddReticulation extends Operator {
         middleNode2.setHeight(pickedNode2.getHeight() + l21);
 
         // add a branch joining the two middle nodes (picked branches)
-        if (middleNode1.getHeight() > middleNode2.getHeight()) {
+        if (middleNode1.getHeight() < middleNode2.getHeight()) {
             speciesNetwork.addReticulationBranch(middleNode1, middleNode2, pickedBranchNr1, pickedBranchNr2);
-            middleNode2.setGamma(Randomizer.nextDouble());
+            middleNode1.setGamma(Randomizer.nextDouble());
         } else {
             speciesNetwork.addReticulationBranch(middleNode2, middleNode1, pickedBranchNr2, pickedBranchNr1);
-            middleNode1.setGamma(Randomizer.nextDouble());
+            middleNode2.setGamma(Randomizer.nextDouble());
         }
+
+        SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
 
         // number of reticulation branches in the proposed network
         final int nReticulationBranches = 2 * speciesNetwork.getReticulationNodeCount();  // m
         logProposalRatio += 2 * Math.log(nBranches) - Math.log(nReticulationBranches);
-
-        SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
 
         // update the embedding in the new species network
         int newChoices = 0;
