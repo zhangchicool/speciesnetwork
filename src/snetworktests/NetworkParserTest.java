@@ -15,7 +15,7 @@ public class NetworkParserTest {
 
     final String testNetwork1 = "((A:0.2,(B:0.1)#H1[&gamma=0.9]:0.1)S1:0.3,(C:0.3,#H1:0.2)S2:0.2)R";
 
-    final String testNetwork2 = "((((A:0.1)#H1[&gamma=0.5]:0.1)#H2[&gamma=0.5]:0.3,((#H2:0.1,(#H1:0.1)#H3[&gamma=0.5]:0.1)S1:0.1)#H4[&gamma=0.5]:0.1)S2:0.1,(#H4:0.1,#H3:0.3)S3:0.1)R";
+    final String testNetwork2 = "((((A:0.1)#H1[&gamma=0.9]:0.1)#H2[&gamma=0.8]:0.3,((#H2:0.1,(#H1:0.1)#H3[&gamma=0.7]:0.1)S1:0.1)#H4[&gamma=0.6]:0.1)S2:0.1,(#H4:0.1,#H3:0.3)S3:0.1)R";
 
     public NetworkParserTest() {
         treeParser = new TreeParser();
