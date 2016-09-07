@@ -72,7 +72,6 @@ public class Network extends StateNode {
         for (NetworkNode n: nodes) {
             n.height = n.height * scale;
         }
-
         return speciationNodeCount + reticulationNodeCount;
     }
 
@@ -82,12 +81,13 @@ public class Network extends StateNode {
         leafNodeCount = taxa.size();
         speciationNodeCount = leafNodeCount - 1;
         reticulationNodeCount = 0;
-        nodeCount = leafNodeCount + speciationNodeCount;
+        nodeCount = leafNodeCount * 2;
         nodes = new NetworkNode[nodeCount];
 
         int leftNr = 0;
         nodes[leftNr] = new NetworkNode(this);
         NetworkNode left = nodes[leftNr];
+        left.height = 0.0;
         left.label = taxa.get(leftNr);
         for (int rightNr = 1; rightNr < leafNodeCount; rightNr++) {
             nodes[rightNr] = new NetworkNode(this);
@@ -100,18 +100,24 @@ public class Network extends StateNode {
             parent.height = minInternalHeight + rightNr * step;
             parent.childBranchNumbers.add(rightNr);
             parent.childBranchNumbers.add(leftNr);
-            left = parent;
+            // left = parent;
             leftNr = parentNr;
         }
+
+        // node of origin
+        nodes[nodeCount - 1] = new NetworkNode(this);
+        final NetworkNode origin = nodes[nodeCount - 1];
+        origin.childBranchNumbers.add(leftNr);
     }
 
-    public NetworkNode getRoot() {
+    public NetworkNode getOrigin() {
         return nodes[nodeCount - 1];
     }
 
-    public void swapRoot(final int replacementNodeNumber) {
-        final int rootNodeNumber = nodeCount - 1;
-        swapNodes(replacementNodeNumber, rootNodeNumber);
+    public NetworkNode getRoot() {
+        NetworkNode origin = getOrigin();
+        int childBrNr = origin.childBranchNumbers.get(0);
+        return origin.getChildByBranch(childBrNr);
     }
 
     public void swapNodes(final int nodeI, final int nodeJ) {
@@ -157,11 +163,11 @@ public class Network extends StateNode {
      * @return the number of branches at the given time
      */
     public int getBranchCount(double time) {
-        int nB = 1;
-        for (NetworkNode node : nodes) {
-            if (node.getHeight() > time) {
-                if (node.isReticulation()) nB--;
-                else nB++;
+        int nB = 0;
+        for (NetworkNode node: nodes) {
+            for (NetworkNode child: node.getChildren()) {
+                if (node.getHeight() > time && child.getHeight() <= time)
+                    nB++;
             }
         }
         return nB;
@@ -171,6 +177,7 @@ public class Network extends StateNode {
      * @return an array of all the nodes in this network
      */
     public NetworkNode[] getAllNodes() {
+        // Q2HO: why not return nodes directly?
         final NetworkNode[] nodesCopy = new NetworkNode[nodeCount];
         System.arraycopy(nodes, 0, nodesCopy, 0, nodeCount);
         return nodesCopy;
@@ -186,6 +193,7 @@ public class Network extends StateNode {
     }
 
     /**
+     * speciation and reticulation nodes, do not include origin node
      * @return an array of internal nodes in this network
      */
     public NetworkNode[] getInternalNodes() {
@@ -216,19 +224,16 @@ public class Network extends StateNode {
                 if (n.label.equals(query)) return i;
             }
         }
-
         return -1; // no match
     }
 
     public double getNetworkLength() {
         double netLength = 0;
-
         for (NetworkNode n: nodes) {
             for (NetworkNode p: n.parents) {
                 netLength += p.height - n.height;
             }
         }
-
         return netLength;
     }
 
@@ -293,7 +298,6 @@ public class Network extends StateNode {
             dst.nodes[i] = new NetworkNode(dst);
             dst.nodes[i].copyFrom(src.nodes[i]);
         }
-
         dst.updateRelationships();
     }
 
@@ -308,7 +312,6 @@ public class Network extends StateNode {
         for (int i = 0; i < nodeCount; i++) {
             nodes[i].copyFrom(src.nodes[i]);
         }
-
         updateRelationships();
     }
 

@@ -237,11 +237,12 @@ public class NetworkNode {
     }
 
     /**
-     * @return true if current node is root node
+     * @return true if current node is origin node
      */
-    public boolean isRoot() {
+    public boolean isOrigin() {
         return nParents == 0;
     }
+
     /**
      * @return true if current node is leaf node
      */
