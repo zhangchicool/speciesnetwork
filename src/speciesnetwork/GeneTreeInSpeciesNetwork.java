@@ -118,7 +118,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
 
         final Node geneTreeRoot = geneTree.getRoot();
         final NetworkNode speciesNetworkRoot = speciesNetwork.getRoot();
-        final int speciesRootBranchNumber = speciesBranchCount - 1;
+        final int speciesRootBranchNumber = speciesNetworkRoot.gammaBranchNumber;
         try {
             recurseCoalescentEvents(geneTreeRoot, speciesNetworkRoot, speciesRootBranchNumber, Double.POSITIVE_INFINITY);
         } catch (Exception e) {

@@ -93,9 +93,9 @@ public class NetworkNode {
         initProps();
     }
 
-    public NetworkNode(Network n) {
+    public NetworkNode(Network sNetwork) {
         initProps();
-        network = n;
+        network = sNetwork;
     }
 
     private void initProps() {

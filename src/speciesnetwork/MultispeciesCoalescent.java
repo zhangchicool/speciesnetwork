@@ -65,18 +65,18 @@ public class MultispeciesCoalescent extends Distribution {
         final Network speciesNetwork = speciesNetworkInput.get();
         final NetworkNode speciesRoot = speciesNetwork.getRoot();
         SanityChecks.checkNetworkSanity(speciesRoot); // species network should not be insane
-        final int speciesBranchCount = speciesNetwork.getBranchCount();
-        final int rootBranchNr = speciesBranchCount - 1;
 
+        final int speciesBranchCount = speciesNetwork.getBranchCount();
         double[] speciesStartTimes = new double[speciesBranchCount]; // the earlier date (rootward end)
         double[] speciesEndTimes = new double[speciesBranchCount]; // the later date (tipward end)
 
+        final int rootBranchNr = speciesRoot.gammaBranchNumber;
         buildTimes(speciesRoot, rootBranchNr, Double.POSITIVE_INFINITY, speciesStartTimes, speciesEndTimes);
 
         allLineageCounts.clear();
         allEventCounts.clear();
         allCoalescentTimes.clear();
-        for (int i = 0; i <= rootBranchNr; i++) {
+        for (int i = 0; i < speciesBranchCount; i++) {
             allLineageCounts.add(new int[nGeneTrees]);
             allEventCounts.add(new int[nGeneTrees]);
             allCoalescentTimes.add(new ArrayList<>());
@@ -89,7 +89,7 @@ public class MultispeciesCoalescent extends Distribution {
             final GeneTreeInSpeciesNetwork geneTree = geneTrees.get(j);
             geneTree.computeCoalescentTimes();
             logP += geneTree.logGammaSum;
-            for (int i = 0; i <= rootBranchNr; i++) { // for each species network branch "i"
+            for (int i = 0; i < speciesBranchCount; i++) { // for each species network branch "i"
                 final List<Double> timesView = geneTree.coalescentTimes.get(i);
                 final int geneBranchEventCount = timesView.size();
                 final Double[] geneBranchCoalescentTimes = new Double[geneBranchEventCount];
@@ -110,7 +110,7 @@ public class MultispeciesCoalescent extends Distribution {
         }
 
         final PopulationSizeModel populationModel = populationModelInput.get();
-        for (int i = 0; i <= rootBranchNr; i++) {
+        for (int i = 0; i < speciesBranchCount; i++) {
             final List<Double[]> branchCoalescentTimes = allCoalescentTimes.get(i);
             final int[] branchLineageCounts = allLineageCounts.get(i);
             final int[] branchEventCounts = allEventCounts.get(i);
