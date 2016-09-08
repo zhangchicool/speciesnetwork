@@ -94,6 +94,8 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
             } else if (nodeLabel != null && nodeLabel.startsWith("#H")) {
                 if (treeNode.getMetaDataNames().contains("gamma"))
                     inheritProb = (Double) treeNode.getMetaData("gamma");
+                else
+                    inheritProb = 0.5;
                 newNodeNumber = nextReticulationNr;
                 nextReticulationNr++;
             } else if (treeNode.isLeaf()) {

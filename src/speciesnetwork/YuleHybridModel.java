@@ -66,7 +66,7 @@ public class YuleHybridModel extends Distribution {
 
         // sort the internal nodes according to their heights
         List<NetworkNode> nodes = new ArrayList<>();
-        Collections.addAll(nodes, network.getInternalNodes());
+        Collections.addAll(nodes, network.getInternalNodesWithOrigin());
         nodes.sort(hc);
 
         logP = 0.0;

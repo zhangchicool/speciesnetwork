@@ -156,7 +156,7 @@ public class Network extends StateNode {
      * @return get the total number of branches in the tree
      */
     public int getBranchCount() {
-        return nodeCount + reticulationNodeCount;
+        return nodeCount + reticulationNodeCount - 1;
     }
 
     /**
@@ -212,8 +212,7 @@ public class Network extends StateNode {
     public NetworkNode[] getInternalNodesWithOrigin() {
         final int internalNodeCount = speciationNodeCount + reticulationNodeCount;
         final NetworkNode[] internalNodes = new NetworkNode[internalNodeCount + 1];
-        System.arraycopy(nodes, leafNodeCount, internalNodes, 0, internalNodeCount);
-        internalNodes[internalNodeCount] = getOrigin();
+        System.arraycopy(nodes, leafNodeCount, internalNodes, 0, internalNodeCount + 1);
         return internalNodes;
     }
 
