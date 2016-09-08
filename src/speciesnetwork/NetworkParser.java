@@ -19,6 +19,8 @@ import beast.core.Input.Validate;
 public class NetworkParser extends Network implements StateNodeInitialiser {
     final public Input<Network> networkInput = new Input<>("initial", "Network to initialize.");
     final public Input<Tree> treeInput = new Input<>("tree", "Tree initialized from extended newick string", Validate.REQUIRED);
+    public final Input<Boolean> adjustTipHeightsInput =
+            new Input<>("adjustTipHeights", "flag to indicate if tipHeights shall be adjusted. Default=true.", true);
 
     private int nextLeafNr;
     private int nextSpeciationNr;
@@ -40,7 +42,7 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
             } else {
                 if (n.isLeaf()) {
                     leafNodeCount++;
-                } else {
+                } else if (!n.isRoot()) {
                     speciationNodeCount++;
                 }
             }
@@ -48,7 +50,7 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
 
         assert hybridNodeCount % 2 == 0;
         reticulationNodeCount = hybridNodeCount / 2;
-        nodeCount = leafNodeCount + speciationNodeCount + reticulationNodeCount;
+        nodeCount = leafNodeCount + speciationNodeCount + reticulationNodeCount + 1;
         nodes = new NetworkNode[nodeCount];
         for (int i = 0; i < nodeCount; i++) {
             nodes[i] = new NetworkNode(this); 
@@ -56,13 +58,21 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
 
         nextLeafNr = 0;
         nextSpeciationNr = leafNodeCount;
-        nextReticulationNr = (leafNodeCount + speciationNodeCount) - 1;
+        nextReticulationNr = leafNodeCount + speciationNodeCount;
 
         // Step (2) is to recursively copy the tree to the network
         rebuildNetwork(treeRoot);
 
         // Update the cached parents and children for each node
         updateRelationships();
+
+        // Adjust network tip height to ZERO
+        if (adjustTipHeightsInput.get()) {
+            // all nodes should be at zero height if no date-trait is available
+            for (NetworkNode tip: getLeafNodes()) {
+                tip.setHeight(0.0);
+            }
+        }
 
         super.initAndValidate();
     }

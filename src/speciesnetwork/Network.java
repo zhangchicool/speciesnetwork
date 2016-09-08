@@ -149,7 +149,7 @@ public class Network extends StateNode {
      * @return the index of the first reticulation node
      */
     public int getReticulationOffset() {
-        return leafNodeCount + speciationNodeCount - 1;
+        return leafNodeCount + speciationNodeCount;
     }
 
     /**
@@ -252,7 +252,7 @@ public class Network extends StateNode {
     }
 
     public String toString() {
-        return getRoot().toString();
+        return getOrigin().toString();
     }
 
     @Override

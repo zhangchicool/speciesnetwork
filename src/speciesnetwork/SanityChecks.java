@@ -36,15 +36,13 @@ public final class SanityChecks {
         assert nChildren <= 2;
         assert nParents <= 2;
 
-        if (node.getHeight() == 0.0) {
-            assert nChildren == 0;
+        if (nChildren == 0) {
             assert nParents == 1;
+            assert node.getHeight() == 0.0;
+        } else if (nParents == 0 || nParents == 2) {
+            assert nChildren == 1;
         } else {
-            if (nParents == 0 || nParents == 2) {
-                assert nChildren == 1;
-            } else {
-                assert nChildren == 2;
-            }
+            assert nChildren == 2;
         }
 
         for (NetworkNode child: children) {
