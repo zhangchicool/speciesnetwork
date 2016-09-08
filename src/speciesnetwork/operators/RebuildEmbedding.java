@@ -181,7 +181,6 @@ public class RebuildEmbedding extends Operator {
                     compatibleBranches.add(branchNumber);
                 }
             }
-
             if (compatibleBranches.size() == 0) {
                 return -1; // for a valid embedding, should never go here
             } else if (compatibleBranches.size() > 1) {
@@ -198,7 +197,7 @@ public class RebuildEmbedding extends Operator {
             }
 
             final NetworkNode nextSpecies = speciesNetworkNode.getChildByBranch(nextBranchNumber);
-            if (nextSpecies == null) System.out.println("!!! " + nextBranchNumber);
+            // if (nextSpecies == null) System.out.println("!!! " + nextBranchNumber);
             final int moreChoices = recurseRebuild(geneTreeNode, nextSpecies, rebuild);
             if (moreChoices < 0) return -1;
 

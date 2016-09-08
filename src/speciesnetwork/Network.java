@@ -415,7 +415,7 @@ public class Network extends StateNode {
     public void log(int sample, PrintStream out) {
         Network network = (Network) getCurrent();
         out.print("tree STATE_" + sample + " = ");
-        final String newick = network.getRoot().toString();
+        final String newick = network.getOrigin().toString();
         out.print(newick);
         out.print(";");
     }
