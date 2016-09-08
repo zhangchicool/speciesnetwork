@@ -67,7 +67,10 @@
       </distribution>
     </distribution>
 
-    <operator id="rebuildEmbedding:gene1" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1" weight="10.0"/>
+    <!-- operator id="rebuildEmbedding:gene1" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1" weight="10.0"/ -->
+    <operator id="scaleAndRebuild:gene1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@reEmbed:gene1" weight="10.0">
+      <operator id="scale:gene1" scaleFactor="0.1" spec="ScaleOperator" tree="@tree:gene1" weight="0.0"/>
+    </operator>
 
     <logger id="screenlog" logEvery="1000" model="@posterior">
       <log idref="posterior"/>
