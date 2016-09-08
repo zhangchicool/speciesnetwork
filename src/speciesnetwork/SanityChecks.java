@@ -40,7 +40,7 @@ public final class SanityChecks {
             assert nChildren == 0;
             assert nParents == 1;
         } else {
-            if (nParents == 2) {
+            if (nParents == 0 || nParents == 2) {
                 assert nChildren == 1;
             } else {
                 assert nChildren == 2;

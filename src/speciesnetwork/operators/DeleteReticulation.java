@@ -38,8 +38,6 @@ public class DeleteReticulation extends Operator {
     public Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
             "Operator which rebuilds embedding of gene tree within species network.", new ArrayList<>());
 
-    private final double lambda = 100.0;  // rate of exponential distribution
-
     // empty constructor to facilitate construction by XML + initAndValidate
     public DeleteReticulation() {
     }
@@ -53,7 +51,7 @@ public class DeleteReticulation extends Operator {
         final Network speciesNetwork = speciesNetworkInput.get();
         final List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
 
-        SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
+        SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
         final int nHybridNodes = speciesNetwork.getReticulationNodeCount();
         if (nHybridNodes == 0)  // there is no reticulation branch to delete
@@ -102,32 +100,19 @@ public class DeleteReticulation extends Operator {
         }
         NetworkNode childNode2 = pickedParent.getChildByBranch(childBranchNr2);
         final int parentBranchNr2 = pickedParent.gammaBranchNumber;
-        NetworkNode parentNode2 = pickedParent.getParentByBranch(parentBranchNr2);  // null if pickedParent is root
+        NetworkNode parentNode2 = pickedParent.getParentByBranch(parentBranchNr2);
 
-        final double l1, l2, l11, l21;
         double logProposalRatio = 0.0;
 
         // work out the Jacobian
+        final double l1, l2;
         if (hybridNode == childNode2 && pickedParent == parentNode1) {
             // the two attaching points are on the same branch
-            if (pickedParent.isRoot()) {
-                l1 = l2 = 1;
-                l11 = hybridNode.getHeight() - childNode1.getHeight();
-                l21 = pickedParent.getHeight() - childNode1.getHeight();
-                logProposalRatio += 2 * Math.log(lambda) - lambda * (l11 + l21);
-            } else {
-                l1 = l2 = parentNode2.getHeight() - childNode1.getHeight();
-            }
+            l1 = l2 = parentNode2.getHeight() - childNode1.getHeight();
         } else {
             // the two attaching points are on different branches
             l1 = parentNode1.getHeight() - childNode1.getHeight();
-            if (pickedParent.isRoot()) {
-                l2 = 1;
-                l21 = pickedParent.getHeight() - childNode2.getHeight();
-                logProposalRatio += Math.log(lambda) - lambda * l21;
-            } else {
-                l2 = parentNode2.getHeight() - childNode2.getHeight();
-            }
+            l2 = parentNode2.getHeight() - childNode2.getHeight();
         }
         logProposalRatio += - Math.log(l1) - Math.log(l2);  // the Jacobian
 
@@ -137,7 +122,7 @@ public class DeleteReticulation extends Operator {
         // delete the reticulation branch
         speciesNetwork.deleteReticulationBranch(hybridBranchNr);
 
-        SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
+        SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
         // number of branches in the proposed network
         final int nBranches = speciesNetwork.getBranchCount();  // k'

@@ -32,7 +32,6 @@ public class EdgeRelocator extends Operator {
     public Input<Boolean> isWideInput =
             new Input<>("isWide", "If true, change the node height.", false);
 
-    private final double lambda = 100.0;  // rate of exponential distribution
     private final boolean isWide = isWideInput.get();
 
     // empty constructor to facilitate construction by XML + initAndValidate
@@ -48,7 +47,7 @@ public class EdgeRelocator extends Operator {
         final Network speciesNetwork = speciesNetworkInput.get();
         final List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
 
-        SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
+        SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
         // count the number of alternative traversing choices for the current state (n0)
         int oldChoices = 0;
@@ -90,7 +89,7 @@ public class EdgeRelocator extends Operator {
             // look for all the candidate branches to attach to
             List<Integer> candidateBranchNumbers = new ArrayList<>();
             if (isWide) {
-                for (NetworkNode node : speciesNetwork.getAllNodes()) {
+                for (NetworkNode node : speciesNetwork.getAllNodesExceptOrigin()) {
                     // do not attach to the original position
                     if (node != pickedNode && node != pickedChild && node.getHeight() < upperLimit) {
                         candidateBranchNumbers.add(node.gammaBranchNumber);
@@ -98,13 +97,12 @@ public class EdgeRelocator extends Operator {
                             candidateBranchNumbers.add(node.gammaBranchNumber + 1);
                     }
                 }
-
                 if (upperLimit > otherParent.getHeight())
                     logProposalRatio -= Math.log(otherParent.getHeight() - pickedChild.getHeight());
                 else
                     logProposalRatio -= Math.log(upperLimit - pickedChild.getHeight());
             } else {
-                for (NetworkNode node : speciesNetwork.getAllNodes()) {
+                for (NetworkNode node : speciesNetwork.getAllNodesExceptOrigin()) {
                     // do not attach to the original position
                     if (node != pickedNode && node != pickedChild && node.getHeight() < upperLimit) {
                         NetworkNode gParent = node.getParentByBranch(node.gammaBranchNumber);
@@ -178,7 +176,7 @@ public class EdgeRelocator extends Operator {
             // look for all the candidate branches to attach to
             List<Integer> candidateBranchNumbers = new ArrayList<>();
             if (isWide) {
-                for (NetworkNode node : speciesNetwork.getAllNodes()) {
+                for (NetworkNode node : speciesNetwork.getAllNodesExceptOrigin()) {
                     // do not attach to the original position
                     if (node != pickedNode && node.getHeight() > lowerLimit) {
                         for (int childBrNr : node.childBranchNumbers) {
@@ -187,20 +185,12 @@ public class EdgeRelocator extends Operator {
                         }
                     }
                 }
-
-                if (pickedParent != null) {
-                    if (lowerLimit < otherChild.getHeight())
-                        logProposalRatio -= Math.log(pickedParent.getHeight() - otherChild.getHeight());
-                    else
-                        logProposalRatio -= Math.log(pickedParent.getHeight() - lowerLimit);
-                } else {  // pickedParent is null when pickedNode is root
-                    if (lowerLimit < otherChild.getHeight())
-                        logProposalRatio += Math.log(lambda) - lambda * (pickedNode.getHeight() - otherChild.getHeight());
-                    else
-                        return Double.NEGATIVE_INFINITY;
-                }
+                if (lowerLimit < otherChild.getHeight())
+                    logProposalRatio -= Math.log(pickedParent.getHeight() - otherChild.getHeight());
+                else
+                    logProposalRatio -= Math.log(pickedParent.getHeight() - lowerLimit);
             } else {
-                for (NetworkNode node : speciesNetwork.getAllNodes()) {
+                for (NetworkNode node : speciesNetwork.getAllNodesExceptOrigin()) {
                     // do not attach to the original position
                     if (node != pickedNode && node.getHeight() > lowerLimit) {
                         for (int childBrNr : node.childBranchNumbers) {
@@ -225,62 +215,34 @@ public class EdgeRelocator extends Operator {
             if (isWide) {
                 final double newHeight;
                 // propose an attachment height
-                if (attachParent != null) {
-                    final double lower;
-                    if (lowerLimit < attachChild.getHeight())
-                        lower = attachChild.getHeight();
-                    else
-                        lower = lowerLimit;
-                    final double upper = attachParent.getHeight();
-                    newHeight = lower + (upper - lower) * Randomizer.nextDouble();
-                    logProposalRatio += Math.log(upper - lower);
-                } else {  // attachParent is null when attachChild is root
-                    final double length = Randomizer.nextExponential(lambda);
-                    newHeight = attachChild.getHeight() + length;
-                    logProposalRatio -= Math.log(lambda) - lambda * (length);
-                }
+                final double lower;
+                if (lowerLimit < attachChild.getHeight())
+                    lower = attachChild.getHeight();
+                else
+                    lower = lowerLimit;
+                final double upper = attachParent.getHeight();
+                newHeight = lower + (upper - lower) * Randomizer.nextDouble();
+                logProposalRatio += Math.log(upper - lower);
                 // set new height
                 pickedNode.setHeight(newHeight);
             }
 
             // deal with the node relationships
-            if (pickedParent != null && attachParent != null) {
-                pickedParent.childBranchNumbers.remove(pickedParentBrNr);
-                pickedParent.childBranchNumbers.add(otherChildBrNr);
-                attachParent.childBranchNumbers.remove(attachBranchNr);
-                attachParent.childBranchNumbers.add(pickedParentBrNr);
-                pickedNode.childBranchNumbers.remove(otherChildBrNr);
-                pickedNode.childBranchNumbers.add(attachBranchNr);
-                pickedParent.updateChildren();
-                otherChild.updateParents();
-                attachParent.updateChildren();
-                attachChild.updateParents();
-                pickedNode.updateParents();
-                pickedNode.updateChildren();
-            } else if (attachParent != null) {  // pickedParent == null
-                attachParent.childBranchNumbers.remove(attachBranchNr);
-                attachParent.childBranchNumbers.add(otherChildBrNr);
-                pickedNode.childBranchNumbers.remove(otherChildBrNr);
-                pickedNode.childBranchNumbers.add(attachBranchNr);
-                speciesNetwork.swapRoot(otherChild.getNr());
-                otherChild.updateRelationships();
-                pickedNode.updateRelationships();
-                attachParent.updateChildren();
-                attachChild.updateParents();
-            } else if (pickedParent != null) {  // attachParent == null
-                pickedParent.childBranchNumbers.remove(pickedParentBrNr);
-                pickedParent.childBranchNumbers.add(otherChildBrNr);
-                pickedNode.childBranchNumbers.remove(otherChildBrNr);
-                pickedNode.childBranchNumbers.add(pickedParentBrNr);
-                speciesNetwork.swapRoot(pickedNode.getNr());
-                attachChild.updateRelationships();
-                pickedNode.updateRelationships();
-                pickedParent.updateChildren();
-                otherChild.updateParents();
-            }
+            pickedParent.childBranchNumbers.remove(pickedParentBrNr);
+            pickedParent.childBranchNumbers.add(otherChildBrNr);
+            attachParent.childBranchNumbers.remove(attachBranchNr);
+            attachParent.childBranchNumbers.add(pickedParentBrNr);
+            pickedNode.childBranchNumbers.remove(otherChildBrNr);
+            pickedNode.childBranchNumbers.add(attachBranchNr);
+            pickedParent.updateChildren();
+            otherChild.updateParents();
+            attachParent.updateChildren();
+            attachChild.updateParents();
+            pickedNode.updateParents();
+            pickedNode.updateChildren();
         }
 
-        SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
+        SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
         // update the embedding in the new species network
         int newChoices = 0;

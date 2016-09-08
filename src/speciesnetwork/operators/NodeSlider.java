@@ -43,8 +43,8 @@ public class NodeSlider extends Operator {
             oldChoices += nChoices;
         }
 
-        // pick an internal node randomly
-        final NetworkNode[] internalNodes = speciesNetwork.getInternalNodes();
+        // pick an internal node randomly, including origin
+        final NetworkNode[] internalNodes = speciesNetwork.getInternalNodesWithOrigin();
         final int randomIndex = Randomizer.nextInt(internalNodes.length);
         NetworkNode snNode = internalNodes[randomIndex];
 
@@ -72,7 +72,7 @@ public class NodeSlider extends Operator {
         // update the new node height
         speciesNetwork.startEditing(this);
         snNode.setHeight(newHeight);
-        SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
+        SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
         // update the embedding in the new species network
         int newChoices = 0;

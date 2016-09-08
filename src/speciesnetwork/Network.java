@@ -183,6 +183,12 @@ public class Network extends StateNode {
         return nodesCopy;
     }
 
+    public NetworkNode[] getAllNodesExceptOrigin() {
+        final NetworkNode[] nodesCopy = new NetworkNode[nodeCount - 1];
+        System.arraycopy(nodes, 0, nodesCopy, 0, nodeCount - 1);
+        return nodesCopy;
+    }
+
     /**
      * @return an array of leaf nodes in this network
      */
@@ -200,6 +206,14 @@ public class Network extends StateNode {
         final int internalNodeCount = speciationNodeCount + reticulationNodeCount;
         final NetworkNode[] internalNodes = new NetworkNode[internalNodeCount];
         System.arraycopy(nodes, leafNodeCount, internalNodes, 0, internalNodeCount);
+        return internalNodes;
+    }
+
+    public NetworkNode[] getInternalNodesWithOrigin() {
+        final int internalNodeCount = speciationNodeCount + reticulationNodeCount;
+        final NetworkNode[] internalNodes = new NetworkNode[internalNodeCount + 1];
+        System.arraycopy(nodes, leafNodeCount, internalNodes, 0, internalNodeCount);
+        internalNodes[internalNodeCount] = getOrigin();
         return internalNodes;
     }
 
@@ -476,22 +490,15 @@ public class Network extends StateNode {
         NetworkNode pickedNode1 = getNode(pickedNodeNr1);
         final int pickedNodeNr2 = getNodeNumber(bifAttachBranchNr);
         NetworkNode pickedNode2 = getNode(pickedNodeNr2);
-        NetworkNode parentNode1 = pickedNode1.getParentByBranch(retAttachBranchNr);  // null if pickedNode1 is root
-        NetworkNode parentNode2 = pickedNode2.getParentByBranch(bifAttachBranchNr);  // null if pickedNode2 is root
+        NetworkNode parentNode1 = pickedNode1.getParentByBranch(retAttachBranchNr);
+        NetworkNode parentNode2 = pickedNode2.getParentByBranch(bifAttachBranchNr);
 
         // add the two nodes to the network node array
         NetworkNode[] tempNodes = new NetworkNode[nodeCount+2];
         System.arraycopy(nodes, 0, tempNodes, 0, leafNodeCount+speciationNodeCount);
-        System.arraycopy(nodes, leafNodeCount+speciationNodeCount, tempNodes, leafNodeCount+speciationNodeCount+1, reticulationNodeCount);
-        if (parentNode2 != null) {
-            tempNodes[leafNodeCount+speciationNodeCount] = bifurcationNode;
-            tempNodes[nodeCount] = reticulationNode;
-            tempNodes[nodeCount+1] = nodes[nodeCount-1];
-        } else {
-            tempNodes[leafNodeCount+speciationNodeCount] = nodes[nodeCount-1];
-            tempNodes[nodeCount] = reticulationNode;
-            tempNodes[nodeCount+1] = bifurcationNode;  // new root
-        }
+        System.arraycopy(nodes, leafNodeCount+speciationNodeCount, tempNodes, leafNodeCount+speciationNodeCount+2, reticulationNodeCount+1);
+        tempNodes[leafNodeCount+speciationNodeCount] = bifurcationNode;
+        tempNodes[leafNodeCount+speciationNodeCount+1] = reticulationNode;
         nodes = tempNodes;
         nodeCount += 2;
         speciationNodeCount += 1;
@@ -502,35 +509,27 @@ public class Network extends StateNode {
             for (Integer nr: node.childBranchNumbers) {
                 if (nr >= leafNodeCount+speciationNodeCount-1) {
                     node.childBranchNumbers.remove(nr);
-                    node.childBranchNumbers.add(nr+1);
-                    if (retAttachBranchNr == nr) retAttachBranchNr++;
-                    if (bifAttachBranchNr == nr) bifAttachBranchNr++;
+                    node.childBranchNumbers.add(nr+3);
+                    if (retAttachBranchNr == nr) retAttachBranchNr += 3;
+                    if (bifAttachBranchNr == nr) bifAttachBranchNr += 3;
                 }
             }
         }
         if (pickedNode1 == pickedNode2 && parentNode1 == parentNode2) {
             // the two nodes are on the same branch
-            bifurcationNode.childBranchNumbers.add(nodeCount+reticulationNodeCount-2);
-            bifurcationNode.childBranchNumbers.add(nodeCount+reticulationNodeCount-3);
-            if (parentNode2 != null) {
-                reticulationNode.childBranchNumbers.add(retAttachBranchNr);
-                parentNode2.childBranchNumbers.remove(bifAttachBranchNr);
-                parentNode2.childBranchNumbers.add(leafNodeCount+speciationNodeCount-1);
-            } else {
-                reticulationNode.childBranchNumbers.add(leafNodeCount+speciationNodeCount-1);
-            }
+            bifurcationNode.childBranchNumbers.add(leafNodeCount+speciationNodeCount);
+            bifurcationNode.childBranchNumbers.add(leafNodeCount+speciationNodeCount+1);
+            reticulationNode.childBranchNumbers.add(retAttachBranchNr);
+            parentNode2.childBranchNumbers.remove(bifAttachBranchNr);
+            parentNode2.childBranchNumbers.add(leafNodeCount+speciationNodeCount-1);
         } else {
             reticulationNode.childBranchNumbers.add(retAttachBranchNr);
             parentNode1.childBranchNumbers.remove(retAttachBranchNr);
-            parentNode1.childBranchNumbers.add(nodeCount+reticulationNodeCount-3);
-            bifurcationNode.childBranchNumbers.add(nodeCount+reticulationNodeCount-2);
-            if (parentNode2 != null) {
-                bifurcationNode.childBranchNumbers.add(bifAttachBranchNr);
-                parentNode2.childBranchNumbers.remove(bifAttachBranchNr);
-                parentNode2.childBranchNumbers.add(leafNodeCount+speciationNodeCount-1);
-            } else {
-                bifurcationNode.childBranchNumbers.add(leafNodeCount+speciationNodeCount-1);
-            }
+            parentNode1.childBranchNumbers.add(leafNodeCount+speciationNodeCount);
+            bifurcationNode.childBranchNumbers.add(leafNodeCount+speciationNodeCount+1);
+            bifurcationNode.childBranchNumbers.add(bifAttachBranchNr);
+            parentNode2.childBranchNumbers.remove(bifAttachBranchNr);
+            parentNode2.childBranchNumbers.add(leafNodeCount+speciationNodeCount-1);
         }
 
         // update relationships
@@ -571,45 +570,26 @@ public class Network extends StateNode {
         }
         NetworkNode childNode2 = pickedParent.getChildByBranch(childBranchNr2);
         final int parentBranchNr2 = pickedParent.gammaBranchNumber;
-        NetworkNode parentNode2 = pickedParent.getParentByBranch(parentBranchNr2);  // null if pickedParent is root
+        NetworkNode parentNode2 = pickedParent.getParentByBranch(parentBranchNr2);
 
         // update children parents relationship
         NetworkNode[] tempNodes = new NetworkNode[nodeCount-2];
-        final int bifNodeNr;
-        if (parentNode2 != null) {
-            if (hybridNode == childNode2 && pickedParent == parentNode1) {
-                // the two nodes are on the same branch
-                parentNode2.childBranchNumbers.remove(parentBranchNr2);
-                parentNode2.childBranchNumbers.add(childBranchNr1);
-            } else {
-                parentNode1.childBranchNumbers.remove(parentBranchNr1);
-                parentNode1.childBranchNumbers.add(childBranchNr1);
-                parentNode2.childBranchNumbers.remove(parentBranchNr2);
-                parentNode2.childBranchNumbers.add(childBranchNr2);
-            }
-            bifNodeNr = pickedParentNr;
 
-            // remove the two nodes from the network
-            System.arraycopy(nodes, 0, tempNodes, 0, bifNodeNr);
-            System.arraycopy(nodes, bifNodeNr+1, tempNodes, bifNodeNr, hybridNodeNr-bifNodeNr-1);
-            System.arraycopy(nodes, hybridNodeNr+1, tempNodes, hybridNodeNr-1, nodeCount-hybridNodeNr-1);
-        } else {  // pickedParent is root
-            if (hybridNode == childNode2 && pickedParent == parentNode1) {
-                // the two nodes are on the root branch
-                bifNodeNr = childNode1.nodeNumber;
-            } else {
-                parentNode1.childBranchNumbers.remove(parentBranchNr1);
-                parentNode1.childBranchNumbers.add(childBranchNr1);
-                bifNodeNr = childNode2.nodeNumber;
-            }
-
-            // remove the two nodes from the network
-            System.arraycopy(nodes, 0, tempNodes, 0, bifNodeNr);
-            System.arraycopy(nodes, bifNodeNr+1, tempNodes, bifNodeNr, hybridNodeNr-bifNodeNr-1);
-            System.arraycopy(nodes, hybridNodeNr+1, tempNodes, hybridNodeNr-1, nodeCount-hybridNodeNr-2);
-            tempNodes[nodeCount-3] = nodes[bifNodeNr];
+        if (hybridNode == childNode2 && pickedParent == parentNode1) {
+            // the two nodes are on the same branch
+            parentNode2.childBranchNumbers.remove(parentBranchNr2);
+            parentNode2.childBranchNumbers.add(childBranchNr1);
+        } else {
+            parentNode1.childBranchNumbers.remove(parentBranchNr1);
+            parentNode1.childBranchNumbers.add(childBranchNr1);
+            parentNode2.childBranchNumbers.remove(parentBranchNr2);
+            parentNode2.childBranchNumbers.add(childBranchNr2);
         }
 
+        // remove the two nodes from the network
+        System.arraycopy(nodes, 0, tempNodes, 0, pickedParentNr);
+        System.arraycopy(nodes, pickedParentNr+1, tempNodes, pickedParentNr, hybridNodeNr-pickedParentNr-1);
+        System.arraycopy(nodes, hybridNodeNr+1, tempNodes, hybridNodeNr-1, nodeCount-hybridNodeNr-1);
         nodes = tempNodes;
         nodeCount -= 2;
         speciationNodeCount -= 1;
@@ -618,7 +598,7 @@ public class Network extends StateNode {
         // update child branch numbers
         for (NetworkNode node: nodes) {
             for (Integer nr: node.childBranchNumbers) {
-                if (nr > bifNodeNr && nr < hybridNodeNr) {
+                if (nr > pickedParentNr && nr < hybridNodeNr) {
                     node.childBranchNumbers.remove(nr);
                     node.childBranchNumbers.add(nr-1);
                 } else if (nr > hybridNodeNr) {

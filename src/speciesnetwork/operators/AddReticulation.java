@@ -41,8 +41,6 @@ public class AddReticulation extends Operator {
     public Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
             "Operator which rebuilds embedding of gene tree within species network.", new ArrayList<>());
 
-    private final double lambda = 100.0;  // rate of exponential distribution
-
     // empty constructor to facilitate construction by XML + initAndValidate
     public AddReticulation() {
     }
@@ -56,7 +54,7 @@ public class AddReticulation extends Operator {
         final Network speciesNetwork = speciesNetworkInput.get();
         final List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
 
-        SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
+        SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
         // count the number of alternative traversing choices for the current state (n0)
         int oldChoices = 0;
@@ -79,33 +77,19 @@ public class AddReticulation extends Operator {
         NetworkNode pickedNode1 = speciesNetwork.getNode(pickedNodeNr1);
         final int pickedNodeNr2 = speciesNetwork.getNodeNumber(pickedBranchNr2);
         NetworkNode pickedNode2 = speciesNetwork.getNode(pickedNodeNr2);
-        NetworkNode pickedParent1 = pickedNode1.getParentByBranch(pickedBranchNr1);  // null if pickedNode1 is root
-        NetworkNode pickedParent2 = pickedNode2.getParentByBranch(pickedBranchNr2);  // null if pickedNode2 is root
+        NetworkNode pickedParent1 = pickedNode1.getParentByBranch(pickedBranchNr1);
+        NetworkNode pickedParent2 = pickedNode2.getParentByBranch(pickedBranchNr2);
+
+        double logProposalRatio = 0.0;
 
         // propose the attaching position at each branch
         final double l1, l2, l11, l21;
-        double logProposalRatio = 0.0;
+        l1 = pickedParent1.getHeight() - pickedNode1.getHeight();
+        l11 = l1 * Randomizer.nextDouble();
+        l2 = pickedParent2.getHeight() - pickedNode2.getHeight();
+        l21 = l2 * Randomizer.nextDouble();
 
-        if (pickedNode1.isRoot()) {
-            l1 = 1;
-            l11 = Randomizer.nextExponential(lambda);
-            logProposalRatio += lambda * l11 - Math.log(lambda);
-        } else {
-            l1 = pickedParent1.getHeight() - pickedNode1.getHeight();
-            l11 = l1 * Randomizer.nextDouble();
-        }
-        if (pickedNode2.isRoot()) {
-            l2 = 1;
-            l21 = Randomizer.nextExponential(lambda);
-            logProposalRatio += lambda * l21 - Math.log(lambda);
-        } else {
-            l2 = pickedParent2.getHeight() - pickedNode2.getHeight();
-            l21 = l2 * Randomizer.nextDouble();
-        }
         logProposalRatio += Math.log(l1) + Math.log(l2);  // the Jacobian
-
-        // final double middleNodeHeight1 = pickedNode1.getHeight() + l11;
-        // final double middleNodeHeight2 = pickedNode2.getHeight() + l21;
 
         // start moving
         speciesNetwork.startEditing(this);
@@ -127,7 +111,7 @@ public class AddReticulation extends Operator {
             middleNode2.setGamma(Randomizer.nextDouble());
         }
 
-        SanityChecks.checkNetworkSanity(speciesNetwork.getRoot());
+        SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
         // number of reticulation branches in the proposed network
         final int nReticulationBranches = 2 * speciesNetwork.getReticulationNodeCount();  // m
