@@ -3711,7 +3711,7 @@ name="alignment">
 <map name="OneOnX" >beast.math.distributions.OneOnX</map>
 
 
-<init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false" newick="((W:0.02,#H1:0.005)S1:0.03,((P:0.015)#H1:0.005,L:0.02)S2:0.03)R"/>
+<init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false" newick="(((W:0.02,#H1:0.005)S1:0.03,((P:0.015)#H1:0.005,L:0.02)S2:0.03)R:0.02)"/>
 
 <run id="mcmc" spec="MCMC" chainLength="10000000">
     <state id="state" storeEvery="5000">

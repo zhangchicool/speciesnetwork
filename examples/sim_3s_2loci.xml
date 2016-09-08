@@ -28,7 +28,7 @@
     <map name="OneOnX">beast.math.distributions.OneOnX</map>
     <map name="prior">beast.math.distributions.Prior</map>
 
-    <init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false" newick="((C:0.03,#H1:0.02)S2:0.02,((B:0.01)#H1:0.01,A:0.02)S1:0.03)R"/>
+    <init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false" newick="(((A:0.2,#H1[&amp;gamma=0.5]:0.1)S1:0.3,((B:0.1)#H1:0.2,C:0.3)S2:0.2)R:0.1)"/>
 
     <run chainLength="1000000" id="mcmc" spec="MCMC">
         <state id="state" storeEvery="1000">
