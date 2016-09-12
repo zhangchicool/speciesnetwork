@@ -17,7 +17,7 @@
     <sequence id="gene2_c2" taxon="c2" totalcount="4" value="-"/>
   </data>
 
-  <init spec='beast.util.TreeParser' id='tree:species' IsLabelledNewick="true" adjustTipHeights="false" newick="((C:0.03,#H1:0.02)S2:0.02,((B:0.01)#H1:0.01,A:0.02)S1:0.03)R"/>
+  <init spec='beast.util.TreeParser' id='tree:species' IsLabelledNewick="true" adjustTipHeights="false" newick="(((A:0.2,(B:0.1)#H1[&amp;gamma=0.5]:0.1)S1:0.3,(#H1:0.2,C:0.3)S2:0.2)R:0.1)"/>
   <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@tree:species">
     <taxonset id="taxonSuperset" spec="TaxonSet">
       <taxon id="A" spec="TaxonSet">
@@ -34,7 +34,6 @@
       </taxon>
     </taxonset>
   </stateNode>
-  <parameter id="gammaP" lower="0.0" upper="1.0" estimate="false" name="stateNode">0.7</parameter>  <!-- H1 S1 -->
   <parameter id="popSizes" estimate="false" name="stateNode">0.01</parameter>
 
   <siteModel id="siteModel:gene1" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
@@ -58,7 +57,7 @@
       <stateNode id="embedding:gene2" spec="parameter.IntegerParameter">-1</stateNode>
     </state>
 
-    <speciesNetwork idref="network:species"/> <gamma idref="gammaP"/> <popSizes idref="popSizes"/>
+    <speciesNetwork idref="network:species"/> <popSizes idref="popSizes"/>
     <geneTree idref="tree:gene1"/> <embedding idref="embedding:gene1"/>
     <geneTree idref="tree:gene2"/> <embedding idref="embedding:gene2"/>
     <sequenceSimulator id="seqgen:gene1" spec="beast.app.seqgen.SequenceSimulator" data="@gene1" tree="@tree:gene1" siteModel="@siteModel:gene1" sequencelength="200"/>

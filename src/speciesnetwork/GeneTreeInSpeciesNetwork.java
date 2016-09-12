@@ -34,7 +34,6 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
 
     private boolean needsUpdate;
     private IntegerParameter embedding;
-    private int speciesLeafNodeCount;
 
     // the coalescent times of this gene tree for all species branches
     protected ListMultimap<Integer, Double> coalescentTimes = ArrayListMultimap.create();
@@ -101,7 +100,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
         }
     }
 
-    void update() {
+    private void update() {
         final Network speciesNetwork = speciesNetworkInput.get();
         final TreeInterface geneTree = geneTreeInput.get();
         embedding = embeddingInput.get();
@@ -110,7 +109,6 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
         final int geneTreeNodeCount = geneTree.getNodeCount();
         final int speciesBranchCount = speciesNetwork.getBranchCount();
         speciesOccupancy = new double[geneTreeNodeCount][speciesBranchCount];
-        speciesLeafNodeCount = speciesNetwork.getLeafNodeCount();
 
         // reset coalescent arrays as these values need to be recomputed after any changes to the species or gene tree
         coalescentLineageCounts.clear();
@@ -138,7 +136,6 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
         if (geneNodeHeight < speciesNodeHeight) {
             speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] += lastHeight - speciesNodeHeight;
             coalescentLineageCounts.add(speciesBranchNumber);
-            final int traversalNodeNumber = speciesNetworkNode.getNr() - speciesLeafNodeCount;
             if (speciesNetworkNode.isReticulation()) {
                 final double gammaP = speciesNetworkNode.inheritProb;
                 if (speciesBranchNumber == speciesNetworkNode.gammaBranchNumber) {
@@ -148,6 +145,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
                 }
             }
             // traversal direction forward in time
+            final int traversalNodeNumber = speciesNetworkNode.getTraversalNumber();
             final int nextSpeciesBranchNumber = embedding.getMatrixValue(traversalNodeNumber, geneTreeNodeNumber);
             final NetworkNode nextSpeciesNode = speciesNetworkNode.getChildByBranch(nextSpeciesBranchNumber);
             recurseCoalescentEvents(geneTreeNode, nextSpeciesNode, nextSpeciesBranchNumber, speciesNodeHeight);

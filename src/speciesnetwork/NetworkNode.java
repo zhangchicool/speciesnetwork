@@ -273,6 +273,7 @@ public class NetworkNode {
     public boolean isVisited() {
         return visited;
     }
+
     public void setVisited(boolean v) {
         visited = v;
     }
@@ -285,8 +286,7 @@ public class NetworkNode {
         }
     }
 
-    @Override
-    public String toString() {
+    public String toString(boolean inXML) {
         resetAllTouched();
         NetworkNode parent = getParentByBranch(gammaBranchNumber);
         final double parentHeight;
@@ -295,13 +295,17 @@ public class NetworkNode {
         } else {
             parentHeight = parent.getHeight();
         }
-        return buildNewick(parentHeight, gammaBranchNumber, true);
+        return buildNewick(parentHeight, gammaBranchNumber, inXML);
     }
 
-    private String buildNewick(Double parentHeight, Integer branchNumber, boolean printLabels) {
+    public String toString() {
+        return toString(false);
+    }
+
+    private String buildNewick(Double parentHeight, Integer branchNumber, boolean inXML) {
         final StringBuilder subtreeString = new StringBuilder();
         // only add children to a reticulation node once
-        if (nChildren > 0 && !(touched)) {
+        if (nChildren > 0 && !touched) {
             touched = true;
             subtreeString.append("(");
             int i = 0;
@@ -309,24 +313,25 @@ public class NetworkNode {
                 if (i > 0) subtreeString.append(",");
                 final int childNodeNumber = network.getNodeNumber(childBranchNumber);
                 NetworkNode childNode = network.nodes[childNodeNumber];
-                subtreeString.append(childNode.buildNewick(height, childBranchNumber, printLabels));
+                subtreeString.append(childNode.buildNewick(height, childBranchNumber, inXML));
                 i++;
             }
             subtreeString.append(")");
         }
 
-        if (label != null) {
-            if (printLabels) subtreeString.append(label);
-            else subtreeString.append(nodeNumber);
-        }
+        if (label != null)
+            subtreeString.append(label);
+        // else
+        //  subtreeString.append(nodeNumber);
 
         // add inheritance probabilities to reticulation nodes
-        if (nParents == 2) {
-            if (branchNumber == gammaBranchNumber) {
+        if (nParents == 2 && branchNumber == gammaBranchNumber) {
+            if (inXML)
+                subtreeString.append("[&amp;gamma=");
+            else
                 subtreeString.append("[&gamma=");
-                subtreeString.append(df.format(inheritProb));
-                subtreeString.append("]");
-            }  // else subtreeString.append(df.format(1.0 - inheritProb));
+            subtreeString.append(df.format(inheritProb));
+            subtreeString.append("]");
         }
 
         if (parentHeight < Double.POSITIVE_INFINITY) {

@@ -173,6 +173,10 @@ public class Network extends StateNode {
         return nB;
     }
 
+    public int getTraversalNodeCount() {
+        return speciationNodeCount + reticulationNodeCount;
+    }
+
     /**
      * @return an array of all the nodes in this network
      */
@@ -250,6 +254,7 @@ public class Network extends StateNode {
         return netLength;
     }
 
+    @Override
     public String toString() {
         return getOrigin().toString();
     }
@@ -414,7 +419,7 @@ public class Network extends StateNode {
     public void log(int sample, PrintStream out) {
         Network network = (Network) getCurrent();
         out.print("tree STATE_" + sample + " = ");
-        final String newick = network.getOrigin().toString();
+        final String newick = network.toString();
         out.print(newick);
         out.print(";");
     }

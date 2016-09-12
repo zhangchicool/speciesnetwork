@@ -111,7 +111,7 @@ public class RebuildEmbedding extends Operator {
 
     private void resetEmbedding() {
         // nothing traverses through species leaf nodes
-        final int traversalNodeCount = speciesNetwork.getNodeCount() - speciesNetwork.getLeafNodeCount();
+        final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
         final int geneNodeCount = geneTree.getNodeCount();
 
         embedding.setDimension(traversalNodeCount * geneNodeCount);
@@ -221,7 +221,7 @@ public class RebuildEmbedding extends Operator {
         speciesNetwork = speciesNetworkInput.get();
         geneTree = geneTreeInput.get();
         StringBuffer embedStr = new StringBuffer();
-        final int nTraversalNodes = speciesNetwork.getNodeCount() - speciesNetwork.getLeafNodeCount();
+        final int nTraversalNodes = speciesNetwork.getTraversalNodeCount();
         final int nGeneNodes = geneTree.getNodeCount();
         for (int i = 0; i < nTraversalNodes; i++) {
             final int speciesNodeNumber = i + speciesNetwork.getLeafNodeCount();
