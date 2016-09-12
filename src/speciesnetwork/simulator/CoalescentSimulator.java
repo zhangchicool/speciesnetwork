@@ -3,6 +3,9 @@ package speciesnetwork.simulator;
 import java.io.*;
 import java.util.*;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 import beast.app.seqgen.*;
 import beast.core.Description;
 import beast.core.Input;
@@ -16,9 +19,6 @@ import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
 import beast.util.Randomizer;
 import speciesnetwork.*;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 
 /**
  * @author Chi Zhang
@@ -84,6 +84,9 @@ public class CoalescentSimulator extends Runnable {
 
     @Override
     public void run() throws IOException {
+        // simulate species network
+        // simulateSpeciesNetwork();
+
         // check correctness of parameter dimensions
         final int speciesBranchCount = speciesNetwork.getBranchCount();
         if (popSizes.getDimension() != speciesBranchCount)
@@ -129,12 +132,10 @@ public class CoalescentSimulator extends Runnable {
             }
 
             // reset visited indicator
-            NetworkNode networkRoot = speciesNetwork.getRoot();
             speciesNetwork.resetAllVisited();
-
             // simulate the gene tree
             nodeIndex = 0;
-            simulateGeneTree(networkRoot, geneTree, embedding, ploidies.getValue(ig));
+            simulateGeneTree(speciesNetwork.getRoot(), geneTree, embedding, ploidies.getValue(ig));
 
             // simulate alignment on the gene tree
             if (seqSimulators.size() > ig) {
