@@ -368,20 +368,18 @@ public class CoalescentSimulator extends Runnable {
     }
 
     private void writeGeneTrees(String outputFileName) throws IOException {
-        PrintStream out;  // where to print
         if (outputFileName == null) {
-            out = System.out;
+            for (int i = 0; i < nrOfGeneTrees; i++) {
+                Tree geneTree = geneTrees.get(i);
+                System.out.println(geneTree.getRoot().toNewick());
+            }
         } else {
-            String msg = "Writing";
-            if (new File(outputFileName).exists())
-                msg = "Warning: Overwriting";
-            System.err.println(msg + " file " + outputFileName);
-            out = new PrintStream(outputFileName);
-        }
-
-        for (int i = 0; i < nrOfGeneTrees; i++) {
-            Tree geneTree = geneTrees.get(i);
-            out.println(geneTree.getRoot().toNewick());
+            FileWriter fw = new FileWriter(outputFileName, true);
+            for (int i = 0; i < nrOfGeneTrees; i++) {
+                Tree geneTree = geneTrees.get(i);
+                fw.write(geneTree.getRoot().toNewick() + "\n");
+            }
+            fw.close();
         }
     }
 

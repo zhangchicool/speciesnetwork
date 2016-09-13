@@ -34,18 +34,17 @@
     </siteModel>
     <branchRateModel clock.rate="1.0" id="clock:gene1" spec="beast.evolution.branchratemodel.StrictClockModel"/>
 
-    <run id="coalSimulator" outputFileName="sim_3S_1L.trees" spec="speciesnetwork.simulator.CoalescentSimulator" iterations="100">
+    <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="sim_3S_1L.trees" iterations="100">
+        <speciesNetwork idref="network:species"/>
+        <popSizes idref="popSizes"/>
+        <taxonSuperset idref="taxonSuperset"/>
+        <geneTree idref="tree:gene1"/>
+        <embedding idref="embedding:gene1"/>
         <state id="state">
             <tree id="tree:gene1" name="stateNode">
                 <taxonset alignment="@gene1" id="taxonset:gene1" spec="TaxonSet"/>
             </tree>
             <stateNode id="embedding:gene1" spec="parameter.IntegerParameter">-1</stateNode>
         </state>
-
-        <speciesNetwork idref="network:species"/>
-        <popSizes idref="popSizes"/>
-        <taxonSuperset idref="taxonSuperset"/>
-        <geneTree idref="tree:gene1"/>
-        <embedding idref="embedding:gene1"/>
     </run>
 </beast>
