@@ -149,7 +149,7 @@
             <log idref="prior"/>
             <log idref="coalescent"/>
         </logger>
-        <logger fileName="sim_3s_2loci.xml.trace.log" id="tracelog" logEvery="200" model="@posterior" sort="smart">
+        <logger fileName="sim_3S_2L.xml.trace.log" id="tracelog" logEvery="200" model="@posterior" sort="smart">
             <log idref="posterior"/>
             <log idref="likelihood"/>
             <log idref="prior"/>
@@ -157,19 +157,19 @@
             <log id="height:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeStatLogger"/>
             <log id="height:gene2" tree="@tree:gene2" spec="beast.evolution.tree.TreeStatLogger"/>
         </logger>
-        <logger fileName="sim_3s_2loci.xml.species.trees" id="treelog:species" logEvery="200" mode="tree">
+        <logger fileName="sim_3S_2L.xml.species.trees" id="treelog:species" logEvery="200" mode="tree">
             <log id="networkLogger:species" spec="speciesnetwork.SpeciesNetworkLogger" speciesNetwork="@network:species"/>
         </logger>
-        <logger fileName="sim_3s_2loci.xml.gene1.log" id="embedlog:gene1" logEvery="200" sort="smart">
+        <logger fileName="sim_3S_2L.xml.gene1.log" id="embedlog:gene1" logEvery="200" sort="smart">
             <log idref="embedding:gene1"/>
         </logger>
-        <logger fileName="sim_3s_2loci.xml.gene1.trees" id="treelog:gene1" logEvery="200" mode="tree">
+        <logger fileName="sim_3S_2L.xml.gene1.trees" id="treelog:gene1" logEvery="200" mode="tree">
             <log id="treeLogger:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeWithMetaDataLogger"/>
         </logger>
-        <logger fileName="sim_3s_2loci.xml.gene2.log" id="embedlog:gene2" logEvery="200" sort="smart">
+        <logger fileName="sim_3S_2L.xml.gene2.log" id="embedlog:gene2" logEvery="200" sort="smart">
             <log idref="embedding:gene2"/>
         </logger>
-        <logger fileName="sim_3s_2loci.xml.gene2.trees" id="treelog:gene2" logEvery="200" mode="tree">
+        <logger fileName="sim_3S_2L.xml.gene2.trees" id="treelog:gene2" logEvery="200" mode="tree">
             <log id="treeLogger:gene2" tree="@tree:gene2" spec="beast.evolution.tree.TreeWithMetaDataLogger"/>
         </logger>
     </run>

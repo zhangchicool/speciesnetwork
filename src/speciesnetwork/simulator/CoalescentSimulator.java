@@ -57,21 +57,15 @@ public class CoalescentSimulator extends Runnable {
 
     private int nrOfGeneTrees;
     private Multimap<NetworkNode, Node> networkNodeGeneLineagesMap = HashMultimap.create();
-    private int nodeIndex;  //node index number
+    private int nodeIndex;  // gene tree internal node index
 
     private List<SequenceSimulator> seqSimulators;
     private List<Alignment> alignments = new ArrayList<>();
 
     @Override
     public void initAndValidate() {
-        speciesNetwork = speciesNetworkInput.get();
-        popSizes = popSizesInput.get();
-        ploidies = ploidiesInput.get();
         geneTrees = geneTreesInput.get();
         embeddings = embeddingsInput.get();
-
-        seqSimulators = seqSimulatorsInput.get();
-
         // sanity check
         if (geneTrees == null || embeddings == null || geneTrees.size() != embeddings.size())
             throw new RuntimeException("Check gene tree and embedding input!");
@@ -84,71 +78,85 @@ public class CoalescentSimulator extends Runnable {
 
     @Override
     public void run() throws IOException {
-        // simulate species network
-        // simulateSpeciesNetwork();
-
-        // check correctness of parameter dimensions
-        final int speciesBranchCount = speciesNetwork.getBranchCount();
-        if (popSizes.getDimension() != speciesBranchCount)
-            popSizes.setDimension(speciesBranchCount);
-        if (ploidies == null) ploidies = new RealParameter("2.0");
+        speciesNetwork = speciesNetworkInput.get();
+        popSizes = popSizesInput.get();
+        ploidies = ploidiesInput.get();
+        if (ploidies == null) ploidies = new RealParameter("2.0");  // default
         ploidies.setDimension(nrOfGeneTrees);
+        seqSimulators = seqSimulatorsInput.get();
 
-        final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
-        // simulate each gene tree and alignment
-        for (int ig = 0; ig < nrOfGeneTrees; ig++) {
-            Tree geneTree = geneTrees.get(ig);
-            IntegerParameter embedding = embeddings.get(ig);
+        final int nrOfIterations;
+        if (iterationsInput.get() == null)
+            nrOfIterations = 1;
+        else
+            nrOfIterations = iterationsInput.get();
+        for (int iteration = 0; iteration < nrOfIterations; iteration++) {
+            // simulate species network
+            // simulateSpeciesNetwork();
 
-            // initialize embedding matrix to -1 (no traversal)
-            final int geneNodeCount = geneTree.getNodeCount();
-            embedding.setDimension(traversalNodeCount * geneNodeCount);
-            embedding.setMinorDimension(geneNodeCount);
-            for (int i = 0; i < traversalNodeCount; i++)
-                for (int j = 0; j < geneNodeCount; j++)
-                    embedding.setMatrixValue(i, j, -1);
+            // set popSizes dimension
+            final int speciesBranchCount = speciesNetwork.getBranchCount();
+            popSizes.setDimension(speciesBranchCount);
 
-            networkNodeGeneLineagesMap.clear();
-            // generate map of tip names to tip nodes
-            final Map<String, NetworkNode> speciesNodeMap = new HashMap<>();
-            for (NetworkNode leafNode : speciesNetwork.getLeafNodes()) {
-                final String speciesName = leafNode.getLabel();
-                speciesNodeMap.put(speciesName, leafNode);
-            }
-            final Map<String, Node> geneNodeMap = new HashMap<>();
-            for (Node leafNode : geneTree.getExternalNodes()) {
-                final String geneName = leafNode.getID();
-                geneNodeMap.put(geneName, leafNode);
-            }
-            // multimap of species network tip node to gene tree tip nodes
-            final TaxonSet taxonSuperSet = taxonSuperSetInput.get();
-            for (Taxon speciesTip : taxonSuperSet.taxonsetInput.get()) {
-                final NetworkNode speciesNode = speciesNodeMap.get(speciesTip.getID());
-                final TaxonSet speciesTaxonSet = (TaxonSet) speciesTip;
-                for (Taxon geneTip : speciesTaxonSet.taxonsetInput.get()) {
-                    final Node geneNode = geneNodeMap.get(geneTip.getID());
-                    networkNodeGeneLineagesMap.put(speciesNode, geneNode);
+            final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
+            // simulate each gene tree and alignment
+            for (int ig = 0; ig < nrOfGeneTrees; ig++) {
+                Tree geneTree = geneTrees.get(ig);
+                IntegerParameter embedding = embeddings.get(ig);
+
+                // initialize embedding matrix to -1 (no traversal)
+                final int geneNodeCount = geneTree.getNodeCount();
+                embedding.setDimension(traversalNodeCount * geneNodeCount);
+                embedding.setMinorDimension(geneNodeCount);
+                for (int i = 0; i < traversalNodeCount; i++)
+                    for (int j = 0; j < geneNodeCount; j++)
+                        embedding.setMatrixValue(i, j, -1);
+
+                networkNodeGeneLineagesMap.clear();
+                // generate map of tip names to tip nodes
+                final Map<String, NetworkNode> speciesNodeMap = new HashMap<>();
+                for (NetworkNode leafNode : speciesNetwork.getLeafNodes()) {
+                    final String speciesName = leafNode.getLabel();
+                    speciesNodeMap.put(speciesName, leafNode);
+                }
+                final Map<String, Node> geneNodeMap = new HashMap<>();
+                for (Node leafNode : geneTree.getExternalNodes()) {
+                    final String geneName = leafNode.getID();
+                    geneNodeMap.put(geneName, leafNode);
+                }
+                // multimap of species network tip node to gene tree tip nodes
+                final TaxonSet taxonSuperSet = taxonSuperSetInput.get();
+                for (Taxon speciesTip : taxonSuperSet.taxonsetInput.get()) {
+                    final NetworkNode speciesNode = speciesNodeMap.get(speciesTip.getID());
+                    final TaxonSet speciesTaxonSet = (TaxonSet) speciesTip;
+                    for (Taxon geneTip : speciesTaxonSet.taxonsetInput.get()) {
+                        final Node geneNode = geneNodeMap.get(geneTip.getID());
+                        networkNodeGeneLineagesMap.put(speciesNode, geneNode);
+                    }
+                }
+
+                // reset visited indicator
+                speciesNetwork.resetAllVisited();
+                // simulate the gene tree
+                nodeIndex = 0;
+                simulateGeneTree(speciesNetwork.getRoot(), geneTree, embedding, ploidies.getValue(ig));
+
+                // simulate alignment on the gene tree
+                if (seqSimulators.size() > ig) {
+                    alignments.add(seqSimulators.get(ig).simulate());
                 }
             }
 
-            // reset visited indicator
-            speciesNetwork.resetAllVisited();
-            // simulate the gene tree
-            nodeIndex = 0;
-            simulateGeneTree(speciesNetwork.getRoot(), geneTree, embedding, ploidies.getValue(ig));
-
-            // simulate alignment on the gene tree
-            if (seqSimulators.size() > ig) {
-                alignments.add(seqSimulators.get(ig).simulate());
+            String outFileName = outputFileNameInput.get();
+            if (nrOfIterations == 1) {
+                writeXMLOutput(outFileName);  // generate an XML file for a single iteration
+            } else {
+                writeGeneTrees(outFileName);  // otherwise, only output the gene trees
             }
         }
-
-        // output
-        writeXMLOutput();
     }
 
-    private void writeXMLOutput() throws IOException {
-        String outputFileName = outputFileNameInput.get();
+    private void writeXMLOutput(String outputFileName) throws IOException {
         PrintStream out;  // where to print
         if (outputFileName == null) {
             out = System.out;
@@ -357,6 +365,24 @@ public class CoalescentSimulator extends Runnable {
         }
         out.println("    </run>");  // end of MCMC
         out.println("</beast>");
+    }
+
+    private void writeGeneTrees(String outputFileName) throws IOException {
+        PrintStream out;  // where to print
+        if (outputFileName == null) {
+            out = System.out;
+        } else {
+            String msg = "Writing";
+            if (new File(outputFileName).exists())
+                msg = "Warning: Overwriting";
+            System.err.println(msg + " file " + outputFileName);
+            out = new PrintStream(outputFileName);
+        }
+
+        for (int i = 0; i < nrOfGeneTrees; i++) {
+            Tree geneTree = geneTrees.get(i);
+            out.println(geneTree.getRoot().toNewick());
+        }
     }
 
     // recursively simulate lineages coalescent in each population

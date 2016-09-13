@@ -8,6 +8,14 @@
         <sequence id="gene1_c1" taxon="c1" totalcount="4" value="-"/>
         <sequence id="gene1_c2" taxon="c2" totalcount="4" value="-"/>
     </data>
+    <data id="gene2" name="alignment">
+        <sequence id="gene2_a1" taxon="a1" totalcount="4" value="-"/>
+        <sequence id="gene2_a2" taxon="a2" totalcount="4" value="-"/>
+        <sequence id="gene2_b1" taxon="b1" totalcount="4" value="-"/>
+        <sequence id="gene2_b2" taxon="b2" totalcount="4" value="-"/>
+        <sequence id="gene2_c1" taxon="c1" totalcount="4" value="-"/>
+        <sequence id="gene2_c2" taxon="c2" totalcount="4" value="-"/>
+    </data>
 
     <init spec='beast.util.TreeParser' id='tree:species' IsLabelledNewick="true" adjustTipHeights="false"
           newick="(((A:0.2,(B:0.1)#H1[&amp;gamma=0.5]:0.1)S1:0.3,(#H1:0.2,C:0.3)S2:0.2)R:0.1)"/>
@@ -32,20 +40,30 @@
     <siteModel id="siteModel:gene1" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
         <substModel id="jc:gene1" spec="JukesCantor"/>
     </siteModel>
+    <siteModel id="siteModel:gene2" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
+        <substModel id="jc:gene2" spec="JukesCantor"/>
+    </siteModel>
     <branchRateModel clock.rate="1.0" id="clock:gene1" spec="beast.evolution.branchratemodel.StrictClockModel"/>
+    <branchRateModel clock.rate="1.0" id="clock:gene2" spec="beast.evolution.branchratemodel.StrictClockModel"/>
 
-    <run id="coalSimulator" outputFileName="sim_3S_1L.trees" spec="speciesnetwork.simulator.CoalescentSimulator" iterations="100">
+    <run id="coalSimulator" outputFileName="sim_3S_2L.xml" spec="speciesnetwork.simulator.CoalescentSimulator" iterations="1">
         <state id="state">
             <tree id="tree:gene1" name="stateNode">
                 <taxonset alignment="@gene1" id="taxonset:gene1" spec="TaxonSet"/>
             </tree>
+            <tree id="tree:gene2" name="stateNode">
+                <taxonset alignment="@gene2" id="taxonset:gene2" spec="TaxonSet"/>
+            </tree>
             <stateNode id="embedding:gene1" spec="parameter.IntegerParameter">-1</stateNode>
+            <stateNode id="embedding:gene2" spec="parameter.IntegerParameter">-1</stateNode>
         </state>
 
         <speciesNetwork idref="network:species"/>
         <popSizes idref="popSizes"/>
         <taxonSuperset idref="taxonSuperset"/>
-        <geneTree idref="tree:gene1"/>
-        <embedding idref="embedding:gene1"/>
+        <geneTree idref="tree:gene1"/> <embedding idref="embedding:gene1"/>
+        <geneTree idref="tree:gene2"/> <embedding idref="embedding:gene2"/>
+        <sequenceSimulator id="seqgen:gene1" spec="beast.app.seqgen.SequenceSimulator" data="@gene1" tree="@tree:gene1" siteModel="@siteModel:gene1" sequencelength="200"/>
+        <sequenceSimulator id="seqgen:gene2" spec="beast.app.seqgen.SequenceSimulator" data="@gene2" tree="@tree:gene2" siteModel="@siteModel:gene2" sequencelength="200"/>
     </run>
 </beast>
