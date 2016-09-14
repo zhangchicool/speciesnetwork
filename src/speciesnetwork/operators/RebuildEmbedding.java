@@ -173,31 +173,30 @@ public class RebuildEmbedding extends Operator {
             final int traversalNodeNumber = speciesNetworkNode.getTraversalNumber();
             final int geneTreeNodeNumber = geneTreeNode.getNr();
             final Collection<Integer> requiredHeirs = geneNodeHeirs.get(geneTreeNode);
-            final List<Integer> compatibleBranches = new ArrayList<>();
+            final List<Integer> compatibleSpeciesBranches = new ArrayList<>();
 
             for (Integer branchNumber: speciesNetworkNode.childBranchNumbers) {
-                final NetworkNode childNode = speciesNetworkNode.getChildByBranch(branchNumber);
-                if (speciesNodeHeirs.get(childNode).containsAll(requiredHeirs)) {
-                    compatibleBranches.add(branchNumber);
+                final NetworkNode childSpeciesNode = speciesNetworkNode.getChildByBranch(branchNumber);
+                if (speciesNodeHeirs.get(childSpeciesNode).containsAll(requiredHeirs)) {
+                    compatibleSpeciesBranches.add(branchNumber);
                 }
             }
-            if (compatibleBranches.size() == 0) {
+            if (compatibleSpeciesBranches.size() == 0) {
                 return -1; // for a valid embedding, should never go here
-            } else if (compatibleBranches.size() > 1) {
+            } else if (compatibleSpeciesBranches.size() > 1) {
                 nChoices++;
             }
 
-            Integer nextBranchNumber;
+            Integer nextSpeciesBranchNumber;
             if (rebuild) {
-                final int nextBranchIndex = Randomizer.nextInt(compatibleBranches.size());
-                nextBranchNumber = compatibleBranches.get(nextBranchIndex);
-                embedding.setMatrixValue(traversalNodeNumber, geneTreeNodeNumber, nextBranchNumber);
+                final int nextBranchIndex = Randomizer.nextInt(compatibleSpeciesBranches.size());
+                nextSpeciesBranchNumber = compatibleSpeciesBranches.get(nextBranchIndex);
+                embedding.setMatrixValue(traversalNodeNumber, geneTreeNodeNumber, nextSpeciesBranchNumber);
             } else {
-                nextBranchNumber = embedding.getMatrixValue(traversalNodeNumber, geneTreeNodeNumber);
+                nextSpeciesBranchNumber = embedding.getMatrixValue(traversalNodeNumber, geneTreeNodeNumber);
             }
-
-            final NetworkNode nextSpecies = speciesNetworkNode.getChildByBranch(nextBranchNumber);
-            // if (nextSpecies == null) System.out.println("!!! " + nextBranchNumber);
+            assert (nextSpeciesBranchNumber >= 0);
+            final NetworkNode nextSpecies = speciesNetworkNode.getChildByBranch(nextSpeciesBranchNumber);
             final int moreChoices = recurseRebuild(geneTreeNode, nextSpecies, rebuild);
             if (moreChoices < 0) return -1;
 
@@ -208,7 +207,6 @@ public class RebuildEmbedding extends Operator {
             // embed both gene tree children
             final int leftChoices = recurseRebuild(geneTreeNode.getLeft(), speciesNetworkNode, rebuild);
             if (leftChoices < 0) return -1;
-
             final int rightChoices = recurseRebuild(geneTreeNode.getRight(), speciesNetworkNode, rebuild);
             if (rightChoices < 0) return -1;
 

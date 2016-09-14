@@ -147,6 +147,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
             // traversal direction forward in time
             final int traversalNodeNumber = speciesNetworkNode.getTraversalNumber();
             final int nextSpeciesBranchNumber = embedding.getMatrixValue(traversalNodeNumber, geneTreeNodeNumber);
+            assert (nextSpeciesBranchNumber >= 0);
             final NetworkNode nextSpeciesNode = speciesNetworkNode.getChildByBranch(nextSpeciesBranchNumber);
             recurseCoalescentEvents(geneTreeNode, nextSpeciesNode, nextSpeciesBranchNumber, speciesNodeHeight);
         } else if (geneTreeNode.isLeaf()) { // assumes tip node heights are always zero
