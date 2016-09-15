@@ -43,7 +43,7 @@ public class GammaProbRndWalk extends Operator {
 
         final double logProposalRatio;
         final double newGamma;                                                       // r'
-        if (newLogOdds >= 0.0) {
+        if (newLogOdds >= 0.0) {  // to avoid numerical error, assuming logOddsShift is in (-1, 1)
             newGamma = 1.0 / (1.0 + Math.exp(-newLogOdds));
             logProposalRatio = logOddsShift +
                     2 * (Math.log(Math.exp(-currentLogOdds) + 1.0) - Math.log(Math.exp(-currentLogOdds) + Math.exp(logOddsShift)));
