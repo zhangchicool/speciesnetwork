@@ -4043,7 +4043,8 @@
             </taxonset>
         </tree>
         <stateNode id="embedding:lpw_4cl" spec="parameter.IntegerParameter">-1</stateNode>
-        
+        <parameter id="clockRate.c:lpw_4cl" name="stateNode">1.0</parameter>
+
         <tree id="tree.t:lpw_sb16" name="stateNode">
             <taxonset id="taxonset.lpw_sb16" spec="TaxonSet">
                 <alignment idref="lpw_sb16"/>
@@ -4202,12 +4203,13 @@
         </distribution>
         <distribution id="prior" spec="util.CompoundDistribution">
             <distribution id="YuleModel:species" spec="speciesnetwork.YuleHybridModel" network="@network:species" diversificationRate="1.0" hybridizationRate="0.1" betaShape="1.0"/>
-            <prior id="ClockPrior.c:lpw_ebs" name="distribution" x="@clockRate.c:lpw_ebs">
+            <prior id="ClockPrior.c:lpw_4cl" name="distribution" x="@clockRate.c:lpw_4cl">
                 <Gamma id="Gamma.0" name="distr">
                     <parameter id="RealParameter.0" estimate="false" name="alpha">2.0</parameter>
                     <parameter id="RealParameter.01" estimate="false" name="beta">0.5</parameter>
                 </Gamma>
             </prior>
+            <prior id="ClockPrior.c:lpw_ebs" name="distribution" x="@clockRate.c:lpw_ebs" distr="@Gamma.0"/>
             <prior id="ClockPrior.c:lpw_gi" name="distribution" x="@clockRate.c:lpw_gi" distr="@Gamma.0"/>
             <prior id="ClockPrior.c:lpw_m002" name="distribution" x="@clockRate.c:lpw_m002" distr="@Gamma.0"/>
             <prior id="ClockPrior.c:lpw_m7d1" name="distribution" x="@clockRate.c:lpw_m7d1" distr="@Gamma.0"/>
@@ -4258,9 +4260,7 @@
                         <frequencies id="estimatedFreqs.s:lpw_4cl" spec="Frequencies" frequencies="@freqParameter.s:lpw_4cl"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel id="StrictClock.c:lpw_4cl" spec="beast.evolution.branchratemodel.StrictClockModel">
-                    <parameter id="clockRate.c:lpw_4cl" estimate="false" name="clock.rate">1.0</parameter>
-                </branchRateModel>
+                <branchRateModel id="StrictClock.c:lpw_4cl" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:lpw_4cl"/>
             </distribution>
             <distribution id="treeLikelihood.lpw_ebs" spec="TreeLikelihood" data="@lpw_ebs" tree="@tree.t:lpw_ebs">
                 <siteModel id="SiteModel.s:lpw_ebs" spec="SiteModel" gammaCategoryCount="4" shape="@gammaShape.s:lpw_ebs">
@@ -4380,6 +4380,8 @@
 	</operator>
 
 	<operator id="gammaUniform" spec="speciesnetwork.operators.GammaUniform" speciesNetwork="@network:species" weight="40.0"/>
+
+    <operator id="StrictClockRateScaler.c:lpw_4cl" spec="ScaleOperator" parameter="@clockRate.c:lpw_4cl" scaleFactor="0.75" weight="3.0"/>
 
 	<operator id="scaleAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="3.0">
 		<operator id="scale:lpw_4cl" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_4cl" weight="0.0"/>
@@ -4643,6 +4645,10 @@
 		<operator id="WilsonBalding:lpw_sb29" spec="WilsonBalding" tree="@tree.t:lpw_sb29" weight="0.0"/>
 	</operator>
 
+    <operator id="strictClockUpDownOperator.c:lpw_4cl" spec="UpDownOperator" scaleFactor="0.75" weight="3.0">
+        <up idref="clockRate.c:lpw_4cl"/>
+        <down idref="tree.t:lpw_4cl"/>
+    </operator>
     <operator id="strictClockUpDownOperator.c:lpw_ebs" spec="UpDownOperator" scaleFactor="0.75" weight="3.0">
         <up idref="clockRate.c:lpw_ebs"/>
         <down idref="tree.t:lpw_ebs"/>
@@ -4684,6 +4690,7 @@
         <down idref="tree.t:lpw_xy1420"/>
     </operator>
     <operator id="allClockTreeUpDownOperator" spec="UpDownOperator" scaleFactor="0.75" weight="10">
+        <up idref="clockRate.c:lpw_4cl"/>
         <up idref="clockRate.c:lpw_sb16"/>
         <up idref="clockRate.c:lpw_sb62"/>
         <up idref="clockRate.c:lpw_xy1420"/>
@@ -4811,6 +4818,7 @@
         <!-- log id="TreeHeight.Species" spec="beast.evolution.tree.TreeHeightLogger" tree="@tree.t:Species"/ -->
         <log idref="treeLikelihood.lpw_4cl"/>
         <log id="TreeHeight.t:lpw_4cl" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:lpw_4cl"/>
+        <log idref="clockRate.c:lpw_4cl"/>
         <log idref="treeLikelihood.lpw_sb16"/>
         <log id="TreeHeight.t:lpw_sb16" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:lpw_sb16"/>
         <log idref="clockRate.c:lpw_sb16"/>
