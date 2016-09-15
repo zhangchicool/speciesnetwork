@@ -60,7 +60,7 @@
 
         <init spec="beast.util.TreeParser" id="newick:gene1" initial="@tree:gene1" taxa="@gene1" IsLabelledNewick="true" newick="(((a1:0.006460839570412511,a2:0.006460839570412511):0.2086959526267543,(b2:0.032450230037189214,b1:0.032450230037189214):0.1827065621599776):0.3722785210275286,(c2:0.01873805240400737,c1:0.01873805240400737):0.568697260820688):0.0"/>
         <init spec="beast.util.TreeParser" id="newick:gene2" initial="@tree:gene2" taxa="@gene2" IsLabelledNewick="true" newick="(((c1:0.015902647005114748,c2:0.015902647005114748):0.2842463617124391,(b2:7.986804249968934E-5,b1:7.986804249968934E-5):0.30006914067505414):0.23354245386790468,(a2:0.006041792518489899,a1:0.006041792518489899):0.5276496700669686):0.0"/>
-        <init estimate="false" id="initializer" method="random" spec="speciesnetwork.StarBeastInitializer" speciesNetwork="@network:species">
+        <init estimate="false" id="initializer" method="point" spec="speciesnetwork.StarBeastInitializer" speciesNetwork="@network:species">
             <geneTree idref="tree:gene1"/>
             <rebuildEmbedding id="rebuildEmbedding:gene1" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1" weight="0.0"/>
             <geneTree idref="tree:gene2"/>
@@ -142,6 +142,7 @@
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
         </operator>
         <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="30.0"/>
+        <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="10.0"/>
 
         <logger id="screenlog" logEvery="1000" model="@posterior">
             <log idref="posterior"/>

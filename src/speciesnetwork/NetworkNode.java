@@ -302,7 +302,7 @@ public class NetworkNode {
         return toString(false);
     }
 
-    private String buildNewick(Double parentHeight, Integer branchNumber, boolean inXML) {
+    private String buildNewick(double parentHeight, Integer branchNumber, boolean inXML) {
         final StringBuilder subtreeString = new StringBuilder();
         // only add children to a reticulation node once
         if (nChildren > 0 && !touched) {
@@ -343,11 +343,11 @@ public class NetworkNode {
         return subtreeString.toString();
     }
 
-    public Double getGammaProb() {
+    public double getGammaProb() {
         return inheritProb;
     }
 
-    public void setGammaProb(final Double newGamma) {
+    public void setGammaProb(final double newGamma) {
         inheritProb = newGamma;
         isDirty |= Network.IS_DIRTY;
     }
