@@ -141,7 +141,7 @@
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
         </operator>
-        <operator id="gammaUniform" spec="speciesnetwork.operators.GammaUniform" speciesNetwork="@network:species" weight="30.0"/>
+        <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="30.0"/>
 
         <logger id="screenlog" logEvery="1000" model="@posterior">
             <log idref="posterior"/>

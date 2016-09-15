@@ -343,11 +343,11 @@ public class NetworkNode {
         return subtreeString.toString();
     }
 
-    public Double getGamma() {
+    public Double getGammaProb() {
         return inheritProb;
     }
 
-    public void setGamma(final Double newGamma) {
+    public void setGammaProb(final Double newGamma) {
         inheritProb = newGamma;
         isDirty |= Network.IS_DIRTY;
     }

@@ -9,7 +9,7 @@ import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 
 @Description("Changes the value of gamma by uniformly selecting a value in its range.")
-public class GammaUniform extends Operator {
+public class GammaProbUniform extends Operator {
     public Input<Network> speciesNetworkInput = new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
 
     @Override
@@ -26,7 +26,7 @@ public class GammaUniform extends Operator {
         final NetworkNode randomNode = speciesNetwork.getNode(randomNodeIndex);
 
         final Double newGamma = Randomizer.nextDouble();
-        randomNode.setGamma(newGamma);
+        randomNode.setGammaProb(newGamma);
 
         return 0.0;
     }

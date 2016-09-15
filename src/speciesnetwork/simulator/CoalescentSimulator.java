@@ -326,7 +326,7 @@ public class CoalescentSimulator extends Runnable {
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i + 1) + "\"/>");
         }
         out.println("        </operator>");
-        out.println("        <operator id=\"gammaUniform\" spec=\"speciesnetwork.operators.GammaUniform\" " +
+        out.println("        <operator id=\"gammaProbUniform\" spec=\"speciesnetwork.operators.GammaProbUniform\" " +
                                 "speciesNetwork=\"@network:species\" weight=\"30.0\"/>");
         // print loggers
         out.println("");
@@ -400,7 +400,7 @@ public class CoalescentSimulator extends Runnable {
             final Collection<Node> lineagesAtLBottom = new HashSet<>();
             final Collection<Node> lineagesAtRBottom = new HashSet<>();
             for (Node lineage : lineagesAtBottom) {
-                if (Randomizer.nextDouble() < snNode.getGamma())
+                if (Randomizer.nextDouble() < snNode.getGammaProb())
                     lineagesAtLBottom.add(lineage);
                 else
                     lineagesAtRBottom.add(lineage);

@@ -105,10 +105,10 @@ public class AddReticulation extends Operator {
         // add a branch joining the two middle nodes (picked branches)
         if (middleNode1.getHeight() < middleNode2.getHeight()) {
             speciesNetwork.addReticulationBranch(middleNode1, middleNode2, pickedBranchNr1, pickedBranchNr2);
-            middleNode1.setGamma(Randomizer.nextDouble());
+            middleNode1.setGammaProb(Randomizer.nextDouble());
         } else {
             speciesNetwork.addReticulationBranch(middleNode2, middleNode1, pickedBranchNr2, pickedBranchNr1);
-            middleNode2.setGamma(Randomizer.nextDouble());
+            middleNode2.setGammaProb(Randomizer.nextDouble());
         }
 
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
