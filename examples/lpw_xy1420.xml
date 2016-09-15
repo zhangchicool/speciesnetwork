@@ -722,34 +722,12 @@
                     <parameter estimate="false" id="RealParameter.0" name="alpha">2.0</parameter>
                     <parameter estimate="false" id="RealParameter.01" name="beta">0.5</parameter>
                 </Gamma>
-            <Exponential id="Exponential.0" name="distr">
-                    <parameter id="RealParameter.020" lower="0.0" name="mean" upper="0.0">1.0</parameter>
-                </Exponential>
-            <LogNormal id="LogNormalDistributionModel.0" name="distr">
-                    <parameter estimate="false" id="RealParameter.021" name="M">1.0</parameter>
-                    <parameter estimate="false" id="RealParameter.022" name="S">1.25</parameter>
-                </LogNormal>
             </prior>
-            <prior id="GammaShapePrior.s:lpw_xy1420" name="distribution" x="@gammaShape.s:lpw_xy1420"><Gamma id="Gamma.0" name="distr">
-                    <parameter estimate="false" id="RealParameter.0" name="alpha">2.0</parameter>
-                    <parameter estimate="false" id="RealParameter.01" name="beta">0.5</parameter>
-                </Gamma>
-            <Exponential id="Exponential.0" name="distr">
+            <prior id="GammaShapePrior.s:lpw_xy1420" name="distribution" x="@gammaShape.s:lpw_xy1420"><Exponential id="Exponential.0" name="distr">
                     <parameter id="RealParameter.020" lower="0.0" name="mean" upper="0.0">1.0</parameter>
                 </Exponential>
-            <LogNormal id="LogNormalDistributionModel.0" name="distr">
-                    <parameter estimate="false" id="RealParameter.021" name="M">1.0</parameter>
-                    <parameter estimate="false" id="RealParameter.022" name="S">1.25</parameter>
-                </LogNormal>
             </prior>
-            <prior id="KappaPrior.s:lpw_xy1420" name="distribution" x="@kappa.s:lpw_xy1420"><Gamma id="Gamma.0" name="distr">
-                    <parameter estimate="false" id="RealParameter.0" name="alpha">2.0</parameter>
-                    <parameter estimate="false" id="RealParameter.01" name="beta">0.5</parameter>
-                </Gamma>
-            <Exponential id="Exponential.0" name="distr">
-                    <parameter id="RealParameter.020" lower="0.0" name="mean" upper="0.0">1.0</parameter>
-                </Exponential>
-            <LogNormal id="LogNormalDistributionModel.0" name="distr">
+            <prior id="KappaPrior.s:lpw_xy1420" name="distribution" x="@kappa.s:lpw_xy1420"><LogNormal id="LogNormalDistributionModel.0" name="distr">
                     <parameter estimate="false" id="RealParameter.021" name="M">1.0</parameter>
                     <parameter estimate="false" id="RealParameter.022" name="S">1.25</parameter>
                 </LogNormal>
