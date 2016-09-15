@@ -4815,7 +4815,7 @@
         <log idref="coalescent"/>
     </logger>
 
-    <logger id="tracelog" fileName="lpw.trace.log" logEvery="5000" model="@posterior" sort="smart">
+    <logger id="tracelog" fileName="lpw_fixednet.trace.log" logEvery="5000" model="@posterior" sort="smart">
         <log idref="posterior"/>
         <log idref="likelihood"/>
         <log idref="prior"/>
@@ -4889,51 +4889,51 @@
         <log idref="freqParameter.s:lpw_gi"/>
     </logger>
 
-	<logger fileName="lpw.species.trees" id="treelog:species" logEvery="5000" mode="tree">
+	<logger id="treelog.t:species" fileName="lpw_fixednet.species.trees" logEvery="5000" mode="tree">
 		<log id="networkLogger:species" spec="speciesnetwork.SpeciesNetworkLogger" speciesNetwork="@network:species"/>
 	</logger>
 
-    <logger id="treelog.t:lpw_sb16" fileName="$(tree).trees" logEvery="5000" mode="tree">
+    <logger id="treelog.t:lpw_sb16" fileName="lpw_fixednet.lpw_sb16.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_sb16" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_sb16"/>
     </logger>
 
-    <logger id="treelog.t:lpw_sb62" fileName="$(tree).trees" logEvery="5000" mode="tree">
+    <logger id="treelog.t:lpw_sb62" fileName="lpw_fixednet.lpw_sb62.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_sb62" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_sb62"/>
     </logger>
 
-    <logger id="treelog.t:lpw_xy1420" fileName="$(tree).trees" logEvery="5000" mode="tree">
+    <logger id="treelog.t:lpw_xy1420" fileName="lpw_fixednet.lpw_xy1420.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_xy1420" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_xy1420"/>
     </logger>
 
-    <logger id="treelog.t:lpw_se1390" fileName="$(tree).trees" logEvery="5000" mode="tree">
+    <logger id="treelog.t:lpw_se1390" fileName="lpw_fixednet.lpw_se1390.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_se1390" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_se1390"/>
     </logger>
 
-    <logger id="treelog.t:lpw_se1364" fileName="$(tree).trees" logEvery="5000" mode="tree">
+    <logger id="treelog.t:lpw_se1364" fileName="lpw_fixednet.lpw_se1364.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_se1364" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_se1364"/>
     </logger>
 
-    <logger id="treelog.t:lpw_gi" fileName="$(tree).trees" logEvery="5000" mode="tree">
+    <logger id="treelog.t:lpw_gi" fileName="lpw_fixednet.lpw_gi.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_gi" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_gi"/>
     </logger>
 
-    <logger id="treelog.t:lpw_ebs" fileName="$(tree).trees" logEvery="5000" mode="tree">
+    <logger id="treelog.t:lpw_ebs" fileName="lpw_fixednet.lpw_ebs.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_ebs" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_ebs"/>
     </logger>
 
-    <logger id="treelog.t:lpw_m002" fileName="$(tree).trees" logEvery="5000" mode="tree">
+    <logger id="treelog.t:lpw_m002" fileName="lpw_fixednet.lpw_m002.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_m002" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_m002"/>
     </logger>
 
-    <logger id="treelog.t:lpw_4cl" fileName="$(tree).trees" logEvery="5000" mode="tree">
+    <logger id="treelog.t:lpw_4cl" fileName="lpw_fixednet.lpw_4cl.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_4cl" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_4cl"/>
     </logger>
 
-    <logger id="treelog.t:lpw_m7d1" fileName="$(tree).trees" logEvery="5000" mode="tree">
+    <logger id="treelog.t:lpw_m7d1" fileName="lpw_fixednet.lpw_m7d1.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_m7d1" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_m7d1"/>
     </logger>
 
-    <logger id="treelog.t:lpw_sb29" fileName="$(tree).trees" logEvery="5000" mode="tree">
+    <logger id="treelog.t:lpw_sb29" fileName="lpw_fixednet.lpw_sb29.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_sb29" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_sb29"/>
     </logger>
 
