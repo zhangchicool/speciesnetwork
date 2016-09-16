@@ -21,6 +21,8 @@ public class JointReembedding extends Operator {
 
     @Override
     public void initAndValidate() {
+        if (rebuildEmbeddingInput.get().size() == 0)
+            throw new RuntimeException("No RebuildEmbedding operator!");
     }
 
     @Override
@@ -62,9 +64,10 @@ public class JointReembedding extends Operator {
     @Override
     public List<StateNode> listStateNodes() {
         List<StateNode> stateNodeList = new ArrayList<>();
-        List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
 
-        stateNodeList.addAll(treeOperatorInput.get().listStateNodes());
+        Operator treeOp = treeOperatorInput.get();
+        List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
+        stateNodeList.addAll(treeOp.listStateNodes());
         for (RebuildEmbedding reembedOp: reembedOps)
             stateNodeList.addAll(reembedOp.listStateNodes());
 

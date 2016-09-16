@@ -26,6 +26,8 @@ public class NodeSlider extends Operator {
 
     @Override
     public void initAndValidate() {
+        if (rebuildEmbeddingInput.get().size() == 0)
+            throw new RuntimeException("No RebuildEmbedding operator!");
     }
 
     @Override
@@ -81,7 +83,6 @@ public class NodeSlider extends Operator {
             if (nChoices < 0)
                 return Double.NEGATIVE_INFINITY;
             newChoices += nChoices;
-            // System.out.println(String.format("Gene tree %d: %d choices", i, nChoices));
             if (!reembedOp.listStateNodes().isEmpty()) // copied from JointOperator
                 reembedOp.listStateNodes().get(0).getState().checkCalculationNodesDirtiness();
         }

@@ -1,20 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <beast namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" version="2.0">
     <data id="gene1" name="alignment">
-        <sequence taxon="a1" value="CGTTGTAGCACGCTCGACTGGACATAATCACAGGTGTGCCGACGGGCAGTAGGCGAGGTCCAATGACAAAGCTGGTAAGAGTAGAGTTAAGAAGTATCCATTGATCGCAACAGTCCACTATTGCGCTCCGGACTCTGTTCTACCCCCCGAAGGCGTATGAAAGTTGAAAAAACGATCCGTCCTTCAACATTACCCGGGAA"/>
-        <sequence taxon="a2" value="CGTTGTAGCACGCTCGACTGGACATAATCACAGGTGTGCCGACGGGCAGTAGGCGAGGTCCAATGACAAAGCTGGTAAGAGTAGAGTTAAAAAGTATCCATTAATCGCAACAGTCCACTATTGCGCTCCGGACTCTGTACTACCCCCCGAAGGCGTATGAAAGTTGAAAAAACGATCCGTCCTTCAACATTACCCGGGAA"/>
-        <sequence taxon="b2" value="CCTTGCGGGCAACCCTTATGGACATCATCGGGGATACGCCGACGGGCAGAGGTCGAGGCACCCTAACATCGTTGGTAAGAGTAGAGTTCAGCCGTATCCACTGAAAGCAATAGTCCTCTATTCTGTTCCGGACCCTTTTCACCACGCTAATCGCGTTGGAACGGCAAAAACAGGATCAGCCCATCAACATTCCATGCGAA"/>
-        <sequence taxon="b1" value="CCTTGCGGGCAACCCTTATGGACACCATCGGGGATACGCCGACAGGCAGATGTCGAGGCACACTAACATCGTTGGTAAGAGTGGAGTTCAGCCGTATCCAATGAAATCAATAGTCCTCTATTTTGTTCCGGACCCCTTTCACCACGCTAATCGCGTTGGAAAGGCAAAAACAGGATCAGCCCGTCAACAATCCCTGCGAA"/>
-        <sequence taxon="c2" value="CGTAGCAGCCAACTCTTTCGCCCGACATAGTCGATATTCGTCCAAAAAGAAGGCATAGGACTATTACGCAGAGTGTTTAAGTAAGCTTAAACGCTAACGTATGGTCGGATGTCTCCGTCAGAATTTTTGGCACCGTTTATATTTAGGCTATAACATAGAAAAGTGGCAGAAAGGTTAGACCTCGTTCATAGAATAGGAAA"/>
-        <sequence taxon="c1" value="CGTAGCAGCCAACTCTTTCCCCCGCCATAGTCGATATTCGTCCGAAAAGAAGGCATAGGACTATTACGCAGAGTGTTTAAGTAAGGTTAAACGCTAACGTATGGTCGGATGTCTCCGTCAGAATTTTTGGCACCGTTTATATTTCGGCTATAACATAGAAAAGTGGCAGAAAGGTTAGACCTCGTTCATAGACTAGGAAA"/>
+        <sequence taxon="c1" value="ACTCCGGTGGCATGAGCAGATTGTTAACTTCTACGCATAATGATGAAGGTTCGGCCCATCTCAACGGCTCAGTATTTAGATAACATTGTAGGGCTGCTTATAAGAGTATGGGGGACAAGTTCCGAAGCGCGTAGTATCAGTACGACTCTAGGGGTAACTTACGTCTTCCTCGGTTTTTTTCATAATTAATATTTGACTCC"/>
+        <sequence taxon="c2" value="ACTCCGGTGGCATGAGCAGATTGTTAACTTCTACGCATAATGATGAAGGTTCGGCCCATCTCAACGGCTCAGTATTTAGATAACATTGTAGGGCTGCTTATAAGAGTATGGGGGACAAGTTCCGAAGCGCGTAGTATCAGTACGACTCTAGGGGTAACTTACGTCTTCCTCGATTTTTTTCATAATTAATATTTGACTCC"/>
+        <sequence taxon="b2" value="ACTCCGGTGGTATGAGCAGATTGTTACCTTCTACGCATAATGACGAAGGTTCGGCCCAGCTCAACAGCTCAGTAGTTTGAAAACATTGTGAGGCTGCATATAAGAGTATGGGGGACAAGTTCCGAAGCGCGTCGTATCAGTACGAACCCCGGAGTAACTTAGGACTTCCCCCGTTTTTTTTATAATTAATATTTGACTCT"/>
+        <sequence taxon="a2" value="ACTCCGGTGGTATGAGCCAATTGTTAACTTCTACGCATAATGATGAAGGGGCGGCCCATCTCAATGGTGCAGTAGTTAGATAACATTGTCGGGCTGCGTATAATAGTATGGGGGACAGGTTCCGAAGCGCGTCGTATCCGTACGAACCACGGAGGAGCGTAGCACTTTCTCCGTTTTTTTTATAATTAATATTTGACTCC"/>
+        <sequence taxon="a1" value="ACTCCGGTGGTATGAGCCAATTGTTAACTTCTACGCATAATGATGAAGGGGCGGCCCATCTCAATGGTGCAGTAGTTAGATAACATTGTCGGGCTGCTTATAATAGTATGGGGGACATGTTCCGAAGCGCGTCGTATCAGTACGAACCACGGAGGAGCTTAGCACTTTCTCCGTTTTTTTTATAATAAATATTTGACTCC"/>
+        <sequence taxon="b1" value="ACTCCGGTGGTATGAGCCAATTGTTAACTTCTACGCATAATGATGAAGATGCGGCCCACCTCAACGGTCCAGTAGTTAGATAACATTGTCGGGCTGCTTATAAGAGTATGGGGGACAGGTTCCGAAGCGCATCGTATCAGTACGAACCACGGAGGAGCTTAGCACTTTTTCCGTTTTTTTTATAATTAATATTTGACTCC"/>
     </data>
     <data id="gene2" name="alignment">
-        <sequence taxon="c1" value="GTATCAAGCCGGGTGGGTCAGTTATCAATCACATTGGAGCAGGCATCCGAGGGGCTGACGAACGCCACTATTTATAAGCACTTCGTAAGCCTCACGGTGCTGTGCTTTCGATTATAGAACCCCACTCTATGTAAAATCCGGATTCGAGAGAGTGCGACTAATAAGGAGACGCGATCAGCGCTTAGCCTGCTTACTATAAT"/>
-        <sequence taxon="c2" value="GTATCAAGCCGGGCGGGTCAGTTATCAACAACATTGGAGCAGGCATCCGAGGGGCTGACGAACGCCACTATTTATAAGTACTTCGTAAGCCTCACGGTGCTGTGCTTTCGATTATAGAACCCCACTCTATGTTAGATCCGGATTCGAGAGAGTGCGACTAATAAGGAGACGCGATCAGCTATTAGCCTGCTTACTATAAT"/>
-        <sequence taxon="b2" value="GGTGCGAGCCGTGTAGGTCAGTACGTAACGATATTGGCGGACTCGTGCAAGGGGCCGTCTAGCGCGAGTAATTATAGCGACTTCCTAGTTATCGCCATGGCATGTTTTCGCAAATCGATCCCCCCTCTCTGTGAAGGGTCAATGCGAGGGATTACGAATGCTAACGAGACGGGCCCTTTGAGTAGGCCGTTTATATACAT"/>
-        <sequence taxon="b1" value="GGTGCGAGCCGTGTAGGTCAGTACGTAACGATATTGGCGGACTCGTGCAAGGGGCCGTCTAGCGCGAGTAATTATAGCGACTTCCTAGTTATCGCCATGGCATGTTTTCGCAAATCGATCCCCCCTCTCTGTGAAGGGTCAATGCGAGGGATTACGAATGCTAACGAGACGGGCCCTTTGAGTAGGCCGTTTATATACAT"/>
-        <sequence taxon="a2" value="CATAAGACGTGTACCATTGACAACTCTCCAGTCTTGGCAATTACTCACGACGGTAATGCGTGAGCGAATGGTTAAAGCGAGGTAATATGTCTGACGAGATGATATGCATTCGGATACCACCACGCTCAATCGTCAGTGGCGATTCCTGCCAGAGCCCAGACGCTTGAAAAGGACTGACCTGATACCCTGCTTGAACAGAT"/>
-        <sequence taxon="a1" value="CATAAGACGTGTATCATTGACAACTCTCCAGTCTTGGCAATGACTCACGACGGTAATGCGTGAGCGAATGGTTAAAGCGAGGTAATATGTATGACGAGATGATATGCATTCGGATACCACCACGCTCAATCGTCAGTGGCGATTCCTGCCAGAGCCCAGACGCTTGAAAAGGACTGACCTGATACCCTGCTTGAACAGAT"/>
+        <sequence taxon="b1" value="TCGCATTACGTCGCGTGCTCTCTGAGCTCGATAAGATTGGGCCCTATAGGACTAGTCCTAAGAAGCCCGCTCGAGTGAATCCTATTGTGCAACCAGTGTCACTATAGTTCAGTAATCGGCCAAGTCGACTCCCAGTGACGTGGCTTTTTTGGACTATTCCCGGACACCTTCCGGCCCCGACGAAAATTTCTACACACGAT"/>
+        <sequence taxon="a1" value="TCGCCTTACGTCGCGTGCTCTCTGAGCTAGATAAGATTGGGCCCTAAAGGACTAGTCCTGAGAAGCCCGATCGAATGAATCCTTTTGCGCAATCAGTGTCACTATAGTTCAGTAAACGGCCAAGTCGACCCCCAGCGACGTTGCTTTTCTGGACTATTCCCGGACACCTTCCGGCGCCGTCGATTATTTCTTCGCACGAT"/>
+        <sequence taxon="b2" value="TCGCAGTACGTCGCGTGGTCTCTGAGCTAGATAAGATTGGGCCCTAAAGGACAAGTCCTGATAAGCCCGATCGAATGCATCCTATTACGCAACCATTGTCACTACAGTTCAGTAATCGGCCGAGTCGACTCCCAGTGACGTGGCTTTTCTGGACTTTTCCCGGACACCTTCCGGCCCCGTCGAGAATTTCTACGCACGAT"/>
+        <sequence taxon="a2" value="TCGCATTACGTCGCGTGGTCTCTGAGCTAGATAAGATTGGGCCCTAAAGGACTAGTCCTGAGAAGCCCGATCGAATGAATCCTATTGCGCAACCAGTGTCACTACAGTTCAGTAATCGGCCGAGTCGACTCCCAGTGACGTGGCTTTTCTGGACTATTCCCGGACACCTTCCAGCCCCGTCGAGAATTTCTACGCACGAT"/>
+        <sequence taxon="c2" value="TCCCATCACGTGGCGTGCTCTCTGAGCTTGATAAGATTGGGCCCTATATGACTAGTCCTAAGAAGCCCTATCGAATGAATCCTATTGCGCAACCAGTGTCACTATAATTCAGTAATCGGCCAATTCGACTCCCAGTGGCGTGGCTTTACTGGACTATTCCCGGACACCTTCTCGCCCCGTCGAGAATTTTTACACACGAT"/>
+        <sequence taxon="c1" value="TCCCATCACGTGGCGTGCTCTCTGAGCTTGATAAGATTGGGCCCTATATGACTAGTCCTAAGAAGCCCTATCGAATGAATCCTATTGCGCAACCAGTGTCACTATAATTCAGTAATCGGCCAATTCGACTCCCAGTGGCGTGGCTTTACTGGACTATTCCCGGACACCTTCTCGCCCCGTCGAGAATTTTTACACACGAT"/>
     </data>
 
     <map name="Uniform">beast.math.distributions.Uniform</map>
@@ -28,7 +28,7 @@
     <map name="OneOnX">beast.math.distributions.OneOnX</map>
     <map name="prior">beast.math.distributions.Prior</map>
 
-    <init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false" newick="(((A:0.2,(B:0.1)#H1[&amp;gamma=0.5]:0.1)S1:0.3,(#H1:0.2,C:0.3)S2:0.2)R:0.1)"/>
+    <init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false" newick="(((A:0.02,(B:0.01)#H1[&amp;gamma=0.7]:0.01)S1:0.03,(#H1:0.02,C:0.03)S2:0.02)R:0.01)"/>
 
     <run chainLength="1000000" id="mcmc" spec="MCMC">
         <state id="state" storeEvery="1000">
@@ -56,10 +56,11 @@
                 <taxonset alignment="@gene2" id="taxonset:gene2" spec="TaxonSet"/>
             </tree>
             <stateNode id="embedding:gene2" spec="parameter.IntegerParameter" dimension="44" minordimension="11">-1</stateNode>
+            <parameter id="clockRate.c:gene2" name="stateNode">1.0</parameter>
         </state>
 
-        <init spec="beast.util.TreeParser" id="newick:gene1" initial="@tree:gene1" taxa="@gene1" IsLabelledNewick="true" newick="(((a1:0.006460839570412511,a2:0.006460839570412511):0.2086959526267543,(b2:0.032450230037189214,b1:0.032450230037189214):0.1827065621599776):0.3722785210275286,(c2:0.01873805240400737,c1:0.01873805240400737):0.568697260820688):0.0"/>
-        <init spec="beast.util.TreeParser" id="newick:gene2" initial="@tree:gene2" taxa="@gene2" IsLabelledNewick="true" newick="(((c1:0.015902647005114748,c2:0.015902647005114748):0.2842463617124391,(b2:7.986804249968934E-5,b1:7.986804249968934E-5):0.30006914067505414):0.23354245386790468,(a2:0.006041792518489899,a1:0.006041792518489899):0.5276496700669686):0.0"/>
+        <init spec="beast.util.TreeParser" id="newick:gene1" initial="@tree:gene1" taxa="@gene1" IsLabelledNewick="true" newick="(((c1:0.001852659839901769,c2:0.001852659839901769):0.051300585974549624,b2:0.05315324581445139):0.025012604585526198,((a2:0.014748676812204597,a1:0.014748676812204597):0.0228429903067683,b1:0.037591667118972896):0.04057418328100469):0.0"/>
+        <init spec="beast.util.TreeParser" id="newick:gene2" initial="@tree:gene2" taxa="@gene2" IsLabelledNewick="true" newick="((b1:0.05025759878295651,(a1:0.030126269957407317,(b2:0.020701647093906973,a2:0.020701647093906973):0.009424622863500345):0.020131328825549195):0.005167188125197883,(c2:0.0034073562021300187,c1:0.0034073562021300187):0.052017430706024374):0.0"/>
         <init estimate="false" id="initializer" method="point" spec="speciesnetwork.StarBeastInitializer" speciesNetwork="@network:species">
             <geneTree idref="tree:gene1"/>
             <rebuildEmbedding id="rebuildEmbedding:gene1" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1" weight="0.0"/>
@@ -76,6 +77,12 @@
                     <populationModel alpha="4.0" beta="0.04" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
                 </distribution>
                 <distribution id="networkPrior" diversificationRate="1.0" hybridizationRate="0.1" spec="speciesnetwork.YuleHybridModel" network="@network:species" betaShape="1.0"/>
+                <prior id="clockPrior.c:gene2" name="distribution" x="@clockRate.c:gene2">
+                    <Gamma id="Gamma.0" name="distr">
+                        <parameter id="RealParameter.0" estimate="false" name="alpha">2.0</parameter>
+                        <parameter id="RealParameter.01" estimate="false" name="beta">0.5</parameter>
+                    </Gamma>
+                </prior>
             </distribution>
             <distribution id="likelihood" spec="util.CompoundDistribution">
                 <distribution data="@gene1" id="likelihood:gene1" tree="@tree:gene1" spec="TreeLikelihood">
@@ -88,7 +95,7 @@
                     <siteModel id="siteModel:gene2" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
                         <substModel id="jc:gene2" spec="JukesCantor"/>
                     </siteModel>
-                    <branchRateModel clock.rate="1.0" id="clock:gene2" spec="beast.evolution.branchratemodel.StrictClockModel"/>
+                    <branchRateModel clock.rate="@clockRate.c:gene2" id="clock:gene2" spec="beast.evolution.branchratemodel.StrictClockModel"/>
                 </distribution>
             </distribution>
         </distribution>
@@ -137,11 +144,23 @@
             <operator id="WilsonBalding:gene2" spec="WilsonBalding" tree="@tree:gene2" weight="0.0"/>
         </operator>
 
+        <operator id="StrictClockRateScaler.c:gene2" spec="ScaleOperator" parameter="@clockRate.c:gene2" scaleFactor="0.5" weight="3.0"/>
+
+        <operator id="allClockTreeUpDownAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="10.0">
+            <operator id="allClockTreeUpDownOperator" spec="UpDownOperator" scaleFactor="0.75" weight="0.0">
+                <up idref="clockRate.c:gene2"/>
+                <down idref="tree:gene1"/>
+                <down idref="tree:gene2"/>
+            </operator>
+            <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
+        </operator>
+
         <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" weight="150.0">
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
         </operator>
-        <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="30.0"/>
+        <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="20.0"/>
         <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="10.0"/>
 
         <logger id="screenlog" logEvery="1000" model="@posterior">
@@ -157,6 +176,7 @@
             <log idref="coalescent"/>
             <log id="height:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeStatLogger"/>
             <log id="height:gene2" tree="@tree:gene2" spec="beast.evolution.tree.TreeStatLogger"/>
+            <log idref="clockRate.c:gene2"/>
         </logger>
         <logger fileName="sim_3S_2L.xml.species.trees" id="treelog:species" logEvery="200" mode="tree">
             <log id="networkLogger:species" spec="speciesnetwork.SpeciesNetworkLogger" speciesNetwork="@network:species"/>
