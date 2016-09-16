@@ -14,8 +14,8 @@ import beast.core.StateNode;
 
 @Description("Combine a gene tree operator with RebuildEmbedding.")
 public class JointReembedding extends Operator {
-    public Input<Operator> treeOperatorInput = new Input<>("operator",
-            "Tree operator to combine into RebuildEmbedding.", Validate.REQUIRED);
+    public Input<Operator> operatorInput = new Input<>("operator",
+            "Tree/Network operator to combine into RebuildEmbedding.", Validate.REQUIRED);
     public Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
             "Operator which rebuilds embedding of gene tree within species network.", new ArrayList<>());
 
@@ -27,7 +27,7 @@ public class JointReembedding extends Operator {
 
     @Override
     public double proposal() {
-        Operator treeOp = treeOperatorInput.get();
+        Operator operator = operatorInput.get();
         List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
 
         // count the number of alternative traversing choices for the current state (n0)
@@ -40,12 +40,12 @@ public class JointReembedding extends Operator {
         }
 
         // first make the operation
-        double logHR = treeOp.proposal();
+        double logHR = operator.proposal();
         if (logHR == Double.NEGATIVE_INFINITY)
             return Double.NEGATIVE_INFINITY;
         // Update calculation nodes as subsequent operators may depend on state nodes made dirty by this operation.
-        if (!treeOp.listStateNodes().isEmpty())  // copied from JointOperator
-            treeOp.listStateNodes().get(0).getState().checkCalculationNodesDirtiness();
+        if (!operator.listStateNodes().isEmpty())  // copied from JointOperator
+            operator.listStateNodes().get(0).getState().checkCalculationNodesDirtiness();
 
         // then rebuild the embedding
         int newChoices = 0;
@@ -63,14 +63,13 @@ public class JointReembedding extends Operator {
 
     @Override
     public List<StateNode> listStateNodes() {
-        List<StateNode> stateNodeList = new ArrayList<>();
+        List<StateNode> stateNodes = new ArrayList<>();
 
-        Operator treeOp = treeOperatorInput.get();
+        stateNodes.addAll(operatorInput.get().listStateNodes());
         List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
-        stateNodeList.addAll(treeOp.listStateNodes());
         for (RebuildEmbedding reembedOp: reembedOps)
-            stateNodeList.addAll(reembedOp.listStateNodes());
+            stateNodes.addAll(reembedOp.listStateNodes());
 
-        return stateNodeList;
+        return stateNodes;
     }
 }

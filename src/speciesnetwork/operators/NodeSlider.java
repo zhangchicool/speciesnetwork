@@ -19,31 +19,17 @@ import beast.core.StateNode;
 public class NodeSlider extends Operator {
     public Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Input.Validate.REQUIRED);
-    public Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
-            "Operator which rebuilds embedding of gene tree within species network.", new ArrayList<>());
     public Input<Double> windowSizeInput =
             new Input<>("windowSize", "The size of the sliding window, default 0.01.", 0.01);
 
     @Override
     public void initAndValidate() {
-        if (rebuildEmbeddingInput.get().size() == 0)
-            throw new RuntimeException("No RebuildEmbedding operator!");
     }
 
     @Override
     public double proposal() {
         final Network speciesNetwork = speciesNetworkInput.get();
-        final List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
         final double windowSize = windowSizeInput.get();
-
-        // count the number of alternative traversing choices for the current state (n0)
-        int oldChoices = 0;
-        for (RebuildEmbedding reembedOp: reembedOps) {
-            final int nChoices = reembedOp.getNumberOfChoices();
-            if (nChoices < 0)
-                throw new RuntimeException("Developer ERROR: current embedding invalid!");
-            oldChoices += nChoices;
-        }
 
         // pick an internal node randomly, including origin
         final NetworkNode[] internalNodes = speciesNetwork.getInternalNodesWithOrigin();
@@ -76,30 +62,6 @@ public class NodeSlider extends Operator {
         snNode.setHeight(newHeight);
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
-        // update the embedding in the new species network
-        int newChoices = 0;
-        for (RebuildEmbedding reembedOp: reembedOps) {
-            final int nChoices = reembedOp.initializeEmbedding();
-            if (nChoices < 0)
-                return Double.NEGATIVE_INFINITY;
-            newChoices += nChoices;
-            if (!reembedOp.listStateNodes().isEmpty()) // copied from JointOperator
-                reembedOp.listStateNodes().get(0).getState().checkCalculationNodesDirtiness();
-        }
-
-        return (newChoices - oldChoices) * Math.log(2);
-    }
-
-    @Override
-    public List<StateNode> listStateNodes() {
-        final List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
-
-        List<StateNode> stateNodeList = new ArrayList<>();
-        stateNodeList.addAll(super.listStateNodes());
-        for (RebuildEmbedding op: reembedOps) {
-            stateNodeList.addAll(op.listStateNodes());
-        }
-
-        return stateNodeList;
+        return 0.0;
     }
 }
