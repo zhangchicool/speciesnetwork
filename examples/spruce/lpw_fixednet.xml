@@ -4186,19 +4186,19 @@
     </init>
 
     <distribution id="posterior" spec="util.CompoundDistribution">
-		<distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
-			<populationModel alpha="5.0" beta="0.05" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
-			<geneTreeWithin id="geneTree:lpw_4cl" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_4cl" embedding="@embedding:lpw_4cl"/>
-			<geneTreeWithin id="geneTree:lpw_ebs" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_ebs" embedding="@embedding:lpw_ebs"/>
-			<geneTreeWithin id="geneTree:lpw_gi" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_gi" embedding="@embedding:lpw_gi"/>
-			<geneTreeWithin id="geneTree:lpw_m002" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_m002" embedding="@embedding:lpw_m002"/>
-			<geneTreeWithin id="geneTree:lpw_m7d1" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_m7d1" embedding="@embedding:lpw_m7d1"/>
-			<geneTreeWithin id="geneTree:lpw_sb16" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_sb16" embedding="@embedding:lpw_sb16"/>
-			<geneTreeWithin id="geneTree:lpw_sb29" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_sb29" embedding="@embedding:lpw_sb29"/>
-			<geneTreeWithin id="geneTree:lpw_sb62" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_sb62" embedding="@embedding:lpw_sb62"/>
-			<geneTreeWithin id="geneTree:lpw_se1364" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_se1364" embedding="@embedding:lpw_se1364"/>
-			<geneTreeWithin id="geneTree:lpw_se1390" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_se1390" embedding="@embedding:lpw_se1390"/>
-			<geneTreeWithin id="geneTree:lpw_xy1420" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_xy1420" embedding="@embedding:lpw_xy1420"/>
+        <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
+            <populationModel alpha="5.0" beta="0.05" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
+            <geneTreeWithin id="geneTree:lpw_4cl" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_4cl" embedding="@embedding:lpw_4cl"/>
+            <geneTreeWithin id="geneTree:lpw_ebs" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_ebs" embedding="@embedding:lpw_ebs"/>
+            <geneTreeWithin id="geneTree:lpw_gi" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_gi" embedding="@embedding:lpw_gi"/>
+            <geneTreeWithin id="geneTree:lpw_m002" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_m002" embedding="@embedding:lpw_m002"/>
+            <geneTreeWithin id="geneTree:lpw_m7d1" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_m7d1" embedding="@embedding:lpw_m7d1"/>
+            <geneTreeWithin id="geneTree:lpw_sb16" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_sb16" embedding="@embedding:lpw_sb16"/>
+            <geneTreeWithin id="geneTree:lpw_sb29" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_sb29" embedding="@embedding:lpw_sb29"/>
+            <geneTreeWithin id="geneTree:lpw_sb62" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_sb62" embedding="@embedding:lpw_sb62"/>
+            <geneTreeWithin id="geneTree:lpw_se1364" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_se1364" embedding="@embedding:lpw_se1364"/>
+            <geneTreeWithin id="geneTree:lpw_se1390" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_se1390" embedding="@embedding:lpw_se1390"/>
+            <geneTreeWithin id="geneTree:lpw_xy1420" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_xy1420" embedding="@embedding:lpw_xy1420"/>
         </distribution>
         <distribution id="prior" spec="util.CompoundDistribution">
             <distribution id="YuleModel:species" spec="speciesnetwork.YuleHybridModel" network="@network:species" diversificationRate="1.0" hybridizationRate="0.1" betaShape="1.0"/>
@@ -4378,272 +4378,272 @@
         <rebuildEmbedding idref="rebuildEmbedding:lpw_se1364"/>
         <rebuildEmbedding idref="rebuildEmbedding:lpw_se1390"/>
         <rebuildEmbedding idref="rebuildEmbedding:lpw_xy1420"/>
-	</operator>
+    </operator>
 
-	<operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="30.0"/>
+    <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="30.0"/>
     <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="15.0"/>
 
-	<operator id="scaleAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="3.0">
-		<operator id="scale:lpw_4cl" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_4cl" weight="0.0"/>
-	</operator>
-	<operator id="scaleRootAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="3.0">
-		<operator id="scaleRoot:lpw_4cl" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_4cl" weight="0.0"/>
-	</operator>
-	<operator id="uniformAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="30.0">
-		<operator id="uniform:lpw_4cl" spec="Uniform" tree="@tree.t:lpw_4cl" weight="0.0"/>
-	</operator>
-	<operator id="subSlideAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="15.0">
-		<operator id="subSlide:lpw_4cl" spec="SubtreeSlide" tree="@tree.t:lpw_4cl" weight="0.0"/>
-	</operator>
-	<operator id="narrowAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="15.0">
-		<operator id="narrow:lpw_4cl" spec="Exchange" tree="@tree.t:lpw_4cl" weight="0.0"/>
-	</operator>
-	<operator id="wideAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="3.0">
-		<operator id="wide:lpw_4cl" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_4cl" weight="0.0"/>
-	</operator>
-	<operator id="WBAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="3.0">
-		<operator id="WilsonBalding:lpw_4cl" spec="WilsonBalding" tree="@tree.t:lpw_4cl" weight="0.0"/>
-	</operator>
+    <operator id="scaleAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="3.0">
+        <operator id="scale:lpw_4cl" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_4cl" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="3.0">
+        <operator id="scaleRoot:lpw_4cl" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_4cl" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="30.0">
+        <operator id="uniform:lpw_4cl" spec="Uniform" tree="@tree.t:lpw_4cl" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="15.0">
+        <operator id="subSlide:lpw_4cl" spec="SubtreeSlide" tree="@tree.t:lpw_4cl" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="15.0">
+        <operator id="narrow:lpw_4cl" spec="Exchange" tree="@tree.t:lpw_4cl" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="3.0">
+        <operator id="wide:lpw_4cl" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_4cl" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="3.0">
+        <operator id="WilsonBalding:lpw_4cl" spec="WilsonBalding" tree="@tree.t:lpw_4cl" weight="0.0"/>
+    </operator>
 
     <operator id="StrictClockRateScaler.c:lpw_sb16" spec="ScaleOperator" parameter="@clockRate.c:lpw_sb16" scaleFactor="0.75" weight="3.0"/>
 
-	<operator id="scaleAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="3.0">
-		<operator id="scale:lpw_sb16" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_sb16" weight="0.0"/>
-	</operator>
-	<operator id="scaleRootAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="3.0">
-		<operator id="scaleRoot:lpw_sb16" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_sb16" weight="0.0"/>
-	</operator>
-	<operator id="uniformAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="30.0">
-		<operator id="uniform:lpw_sb16" spec="Uniform" tree="@tree.t:lpw_sb16" weight="0.0"/>
-	</operator>
-	<operator id="subSlideAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="15.0">
-		<operator id="subSlide:lpw_sb16" spec="SubtreeSlide" tree="@tree.t:lpw_sb16" weight="0.0"/>
-	</operator>
-	<operator id="narrowAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="15.0">
-		<operator id="narrow:lpw_sb16" spec="Exchange" tree="@tree.t:lpw_sb16" weight="0.0"/>
-	</operator>
-	<operator id="wideAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="3.0">
-		<operator id="wide:lpw_sb16" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_sb16" weight="0.0"/>
-	</operator>
-	<operator id="WBAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="3.0">
-		<operator id="WilsonBalding:lpw_sb16" spec="WilsonBalding" tree="@tree.t:lpw_sb16" weight="0.0"/>
-	</operator>
+    <operator id="scaleAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="3.0">
+        <operator id="scale:lpw_sb16" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_sb16" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="3.0">
+        <operator id="scaleRoot:lpw_sb16" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_sb16" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="30.0">
+        <operator id="uniform:lpw_sb16" spec="Uniform" tree="@tree.t:lpw_sb16" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="15.0">
+        <operator id="subSlide:lpw_sb16" spec="SubtreeSlide" tree="@tree.t:lpw_sb16" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="15.0">
+        <operator id="narrow:lpw_sb16" spec="Exchange" tree="@tree.t:lpw_sb16" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="3.0">
+        <operator id="wide:lpw_sb16" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_sb16" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="3.0">
+        <operator id="WilsonBalding:lpw_sb16" spec="WilsonBalding" tree="@tree.t:lpw_sb16" weight="0.0"/>
+    </operator>
 
     <operator id="StrictClockRateScaler.c:lpw_sb62" spec="ScaleOperator" parameter="@clockRate.c:lpw_sb62" scaleFactor="0.75" weight="3.0"/>
 
-	<operator id="scaleAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="3.0">
-		<operator id="scale:lpw_sb62" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_sb62" weight="0.0"/>
-	</operator>
-	<operator id="scaleRootAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="3.0">
-		<operator id="scaleRoot:lpw_sb62" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_sb62" weight="0.0"/>
-	</operator>
-	<operator id="uniformAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="30.0">
-		<operator id="uniform:lpw_sb62" spec="Uniform" tree="@tree.t:lpw_sb62" weight="0.0"/>
-	</operator>
-	<operator id="subSlideAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="15.0">
-		<operator id="subSlide:lpw_sb62" spec="SubtreeSlide" tree="@tree.t:lpw_sb62" weight="0.0"/>
-	</operator>
-	<operator id="narrowAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="15.0">
-		<operator id="narrow:lpw_sb62" spec="Exchange" tree="@tree.t:lpw_sb62" weight="0.0"/>
-	</operator>
-	<operator id="wideAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="3.0">
-		<operator id="wide:lpw_sb62" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_sb62" weight="0.0"/>
-	</operator>
-	<operator id="WBAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="3.0">
-		<operator id="WilsonBalding:lpw_sb62" spec="WilsonBalding" tree="@tree.t:lpw_sb62" weight="0.0"/>
-	</operator>
+    <operator id="scaleAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="3.0">
+        <operator id="scale:lpw_sb62" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_sb62" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="3.0">
+        <operator id="scaleRoot:lpw_sb62" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_sb62" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="30.0">
+        <operator id="uniform:lpw_sb62" spec="Uniform" tree="@tree.t:lpw_sb62" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="15.0">
+        <operator id="subSlide:lpw_sb62" spec="SubtreeSlide" tree="@tree.t:lpw_sb62" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="15.0">
+        <operator id="narrow:lpw_sb62" spec="Exchange" tree="@tree.t:lpw_sb62" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="3.0">
+        <operator id="wide:lpw_sb62" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_sb62" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="3.0">
+        <operator id="WilsonBalding:lpw_sb62" spec="WilsonBalding" tree="@tree.t:lpw_sb62" weight="0.0"/>
+    </operator>
 
     <operator id="StrictClockRateScaler.c:lpw_xy1420" spec="ScaleOperator" parameter="@clockRate.c:lpw_xy1420" scaleFactor="0.75" weight="3.0"/>
 
-	<operator id="scaleAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="3.0">
-		<operator id="scale:lpw_xy1420" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_xy1420" weight="0.0"/>
-	</operator>
-	<operator id="scaleRootAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="3.0">
-		<operator id="scaleRoot:lpw_xy1420" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_xy1420" weight="0.0"/>
-	</operator>
-	<operator id="uniformAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="30.0">
-		<operator id="uniform:lpw_xy1420" spec="Uniform" tree="@tree.t:lpw_xy1420" weight="0.0"/>
-	</operator>
-	<operator id="subSlideAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="15.0">
-		<operator id="subSlide:lpw_xy1420" spec="SubtreeSlide" tree="@tree.t:lpw_xy1420" weight="0.0"/>
-	</operator>
-	<operator id="narrowAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="15.0">
-		<operator id="narrow:lpw_xy1420" spec="Exchange" tree="@tree.t:lpw_xy1420" weight="0.0"/>
-	</operator>
-	<operator id="wideAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="3.0">
-		<operator id="wide:lpw_xy1420" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_xy1420" weight="0.0"/>
-	</operator>
-	<operator id="WBAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="3.0">
-		<operator id="WilsonBalding:lpw_xy1420" spec="WilsonBalding" tree="@tree.t:lpw_xy1420" weight="0.0"/>
-	</operator>
+    <operator id="scaleAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="3.0">
+        <operator id="scale:lpw_xy1420" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_xy1420" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="3.0">
+        <operator id="scaleRoot:lpw_xy1420" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_xy1420" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="30.0">
+        <operator id="uniform:lpw_xy1420" spec="Uniform" tree="@tree.t:lpw_xy1420" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="15.0">
+        <operator id="subSlide:lpw_xy1420" spec="SubtreeSlide" tree="@tree.t:lpw_xy1420" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="15.0">
+        <operator id="narrow:lpw_xy1420" spec="Exchange" tree="@tree.t:lpw_xy1420" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="3.0">
+        <operator id="wide:lpw_xy1420" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_xy1420" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="3.0">
+        <operator id="WilsonBalding:lpw_xy1420" spec="WilsonBalding" tree="@tree.t:lpw_xy1420" weight="0.0"/>
+    </operator>
 
     <operator id="StrictClockRateScaler.c:lpw_se1390" spec="ScaleOperator" parameter="@clockRate.c:lpw_se1390" scaleFactor="0.75" weight="3.0"/>
 
-	<operator id="scaleAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="3.0">
-		<operator id="scale:lpw_se1390" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_se1390" weight="0.0"/>
-	</operator>
-	<operator id="scaleRootAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="3.0">
-		<operator id="scaleRoot:lpw_se1390" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_se1390" weight="0.0"/>
-	</operator>
-	<operator id="uniformAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="30.0">
-		<operator id="uniform:lpw_se1390" spec="Uniform" tree="@tree.t:lpw_se1390" weight="0.0"/>
-	</operator>
-	<operator id="subSlideAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="15.0">
-		<operator id="subSlide:lpw_se1390" spec="SubtreeSlide" tree="@tree.t:lpw_se1390" weight="0.0"/>
-	</operator>
-	<operator id="narrowAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="15.0">
-		<operator id="narrow:lpw_se1390" spec="Exchange" tree="@tree.t:lpw_se1390" weight="0.0"/>
-	</operator>
-	<operator id="wideAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="3.0">
-		<operator id="wide:lpw_se1390" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_se1390" weight="0.0"/>
-	</operator>
-	<operator id="WBAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="3.0">
-		<operator id="WilsonBalding:lpw_se1390" spec="WilsonBalding" tree="@tree.t:lpw_se1390" weight="0.0"/>
-	</operator>
+    <operator id="scaleAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="3.0">
+        <operator id="scale:lpw_se1390" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_se1390" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="3.0">
+        <operator id="scaleRoot:lpw_se1390" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_se1390" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="30.0">
+        <operator id="uniform:lpw_se1390" spec="Uniform" tree="@tree.t:lpw_se1390" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="15.0">
+        <operator id="subSlide:lpw_se1390" spec="SubtreeSlide" tree="@tree.t:lpw_se1390" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="15.0">
+        <operator id="narrow:lpw_se1390" spec="Exchange" tree="@tree.t:lpw_se1390" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="3.0">
+        <operator id="wide:lpw_se1390" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_se1390" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="3.0">
+        <operator id="WilsonBalding:lpw_se1390" spec="WilsonBalding" tree="@tree.t:lpw_se1390" weight="0.0"/>
+    </operator>
 
     <operator id="StrictClockRateScaler.c:lpw_se1364" spec="ScaleOperator" parameter="@clockRate.c:lpw_se1364" scaleFactor="0.75" weight="3.0"/>
 
-	<operator id="scaleAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="3.0">
-		<operator id="scale:lpw_se1364" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_se1364" weight="0.0"/>
-	</operator>
-	<operator id="scaleRootAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="3.0">
-		<operator id="scaleRoot:lpw_se1364" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_se1364" weight="0.0"/>
-	</operator>
-	<operator id="uniformAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="30.0">
-		<operator id="uniform:lpw_se1364" spec="Uniform" tree="@tree.t:lpw_se1364" weight="0.0"/>
-	</operator>
-	<operator id="subSlideAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="15.0">
-		<operator id="subSlide:lpw_se1364" spec="SubtreeSlide" tree="@tree.t:lpw_se1364" weight="0.0"/>
-	</operator>
-	<operator id="narrowAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="15.0">
-		<operator id="narrow:lpw_se1364" spec="Exchange" tree="@tree.t:lpw_se1364" weight="0.0"/>
-	</operator>
-	<operator id="wideAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="3.0">
-		<operator id="wide:lpw_se1364" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_se1364" weight="0.0"/>
-	</operator>
-	<operator id="WBAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="3.0">
-		<operator id="WilsonBalding:lpw_se1364" spec="WilsonBalding" tree="@tree.t:lpw_se1364" weight="0.0"/>
-	</operator>
+    <operator id="scaleAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="3.0">
+        <operator id="scale:lpw_se1364" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_se1364" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="3.0">
+        <operator id="scaleRoot:lpw_se1364" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_se1364" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="30.0">
+        <operator id="uniform:lpw_se1364" spec="Uniform" tree="@tree.t:lpw_se1364" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="15.0">
+        <operator id="subSlide:lpw_se1364" spec="SubtreeSlide" tree="@tree.t:lpw_se1364" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="15.0">
+        <operator id="narrow:lpw_se1364" spec="Exchange" tree="@tree.t:lpw_se1364" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="3.0">
+        <operator id="wide:lpw_se1364" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_se1364" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="3.0">
+        <operator id="WilsonBalding:lpw_se1364" spec="WilsonBalding" tree="@tree.t:lpw_se1364" weight="0.0"/>
+    </operator>
 
     <operator id="StrictClockRateScaler.c:lpw_gi" spec="ScaleOperator" parameter="@clockRate.c:lpw_gi" scaleFactor="0.75" weight="3.0"/>
 
-	<operator id="scaleAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="3.0">
-		<operator id="scale:lpw_gi" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_gi" weight="0.0"/>
-	</operator>
-	<operator id="scaleRootAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="3.0">
-		<operator id="scaleRoot:lpw_gi" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_gi" weight="0.0"/>
-	</operator>
-	<operator id="uniformAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="30.0">
-		<operator id="uniform:lpw_gi" spec="Uniform" tree="@tree.t:lpw_gi" weight="0.0"/>
-	</operator>
-	<operator id="subSlideAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="15.0">
-		<operator id="subSlide:lpw_gi" spec="SubtreeSlide" tree="@tree.t:lpw_gi" weight="0.0"/>
-	</operator>
-	<operator id="narrowAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="15.0">
-		<operator id="narrow:lpw_gi" spec="Exchange" tree="@tree.t:lpw_gi" weight="0.0"/>
-	</operator>
-	<operator id="wideAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="3.0">
-		<operator id="wide:lpw_gi" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_gi" weight="0.0"/>
-	</operator>
-	<operator id="WBAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="3.0">
-		<operator id="WilsonBalding:lpw_gi" spec="WilsonBalding" tree="@tree.t:lpw_gi" weight="0.0"/>
-	</operator>
+    <operator id="scaleAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="3.0">
+        <operator id="scale:lpw_gi" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_gi" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="3.0">
+        <operator id="scaleRoot:lpw_gi" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_gi" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="30.0">
+        <operator id="uniform:lpw_gi" spec="Uniform" tree="@tree.t:lpw_gi" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="15.0">
+        <operator id="subSlide:lpw_gi" spec="SubtreeSlide" tree="@tree.t:lpw_gi" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="15.0">
+        <operator id="narrow:lpw_gi" spec="Exchange" tree="@tree.t:lpw_gi" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="3.0">
+        <operator id="wide:lpw_gi" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_gi" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="3.0">
+        <operator id="WilsonBalding:lpw_gi" spec="WilsonBalding" tree="@tree.t:lpw_gi" weight="0.0"/>
+    </operator>
 
     <operator id="StrictClockRateScaler.c:lpw_ebs" spec="ScaleOperator" parameter="@clockRate.c:lpw_ebs" scaleFactor="0.75" weight="3.0"/>
 
-	<operator id="scaleAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="3.0">
-		<operator id="scale:lpw_ebs" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_ebs" weight="0.0"/>
-	</operator>
-	<operator id="scaleRootAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="3.0">
-		<operator id="scaleRoot:lpw_ebs" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_ebs" weight="0.0"/>
-	</operator>
-	<operator id="uniformAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="30.0">
-		<operator id="uniform:lpw_ebs" spec="Uniform" tree="@tree.t:lpw_ebs" weight="0.0"/>
-	</operator>
-	<operator id="subSlideAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="15.0">
-		<operator id="subSlide:lpw_ebs" spec="SubtreeSlide" tree="@tree.t:lpw_ebs" weight="0.0"/>
-	</operator>
-	<operator id="narrowAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="15.0">
-		<operator id="narrow:lpw_ebs" spec="Exchange" tree="@tree.t:lpw_ebs" weight="0.0"/>
-	</operator>
-	<operator id="wideAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="3.0">
-		<operator id="wide:lpw_ebs" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_ebs" weight="0.0"/>
-	</operator>
-	<operator id="WBAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="3.0">
-		<operator id="WilsonBalding:lpw_ebs" spec="WilsonBalding" tree="@tree.t:lpw_ebs" weight="0.0"/>
-	</operator>
+    <operator id="scaleAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="3.0">
+        <operator id="scale:lpw_ebs" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_ebs" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="3.0">
+        <operator id="scaleRoot:lpw_ebs" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_ebs" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="30.0">
+        <operator id="uniform:lpw_ebs" spec="Uniform" tree="@tree.t:lpw_ebs" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="15.0">
+        <operator id="subSlide:lpw_ebs" spec="SubtreeSlide" tree="@tree.t:lpw_ebs" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="15.0">
+        <operator id="narrow:lpw_ebs" spec="Exchange" tree="@tree.t:lpw_ebs" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="3.0">
+        <operator id="wide:lpw_ebs" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_ebs" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="3.0">
+        <operator id="WilsonBalding:lpw_ebs" spec="WilsonBalding" tree="@tree.t:lpw_ebs" weight="0.0"/>
+    </operator>
 
     <operator id="StrictClockRateScaler.c:lpw_m002" spec="ScaleOperator" parameter="@clockRate.c:lpw_m002" scaleFactor="0.75" weight="3.0"/>
 
-	<operator id="scaleAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="3.0">
-		<operator id="scale:lpw_m002" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_m002" weight="0.0"/>
-	</operator>
-	<operator id="scaleRootAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="3.0">
-		<operator id="scaleRoot:lpw_m002" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_m002" weight="0.0"/>
-	</operator>
-	<operator id="uniformAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="30.0">
-		<operator id="uniform:lpw_m002" spec="Uniform" tree="@tree.t:lpw_m002" weight="0.0"/>
-	</operator>
-	<operator id="subSlideAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="15.0">
-		<operator id="subSlide:lpw_m002" spec="SubtreeSlide" tree="@tree.t:lpw_m002" weight="0.0"/>
-	</operator>
-	<operator id="narrowAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="15.0">
-		<operator id="narrow:lpw_m002" spec="Exchange" tree="@tree.t:lpw_m002" weight="0.0"/>
-	</operator>
-	<operator id="wideAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="3.0">
-		<operator id="wide:lpw_m002" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_m002" weight="0.0"/>
-	</operator>
-	<operator id="WBAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="3.0">
-		<operator id="WilsonBalding:lpw_m002" spec="WilsonBalding" tree="@tree.t:lpw_m002" weight="0.0"/>
-	</operator>
+    <operator id="scaleAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="3.0">
+        <operator id="scale:lpw_m002" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_m002" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="3.0">
+        <operator id="scaleRoot:lpw_m002" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_m002" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="30.0">
+        <operator id="uniform:lpw_m002" spec="Uniform" tree="@tree.t:lpw_m002" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="15.0">
+        <operator id="subSlide:lpw_m002" spec="SubtreeSlide" tree="@tree.t:lpw_m002" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="15.0">
+        <operator id="narrow:lpw_m002" spec="Exchange" tree="@tree.t:lpw_m002" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="3.0">
+        <operator id="wide:lpw_m002" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_m002" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="3.0">
+        <operator id="WilsonBalding:lpw_m002" spec="WilsonBalding" tree="@tree.t:lpw_m002" weight="0.0"/>
+    </operator>
 
     <operator id="StrictClockRateScaler.c:lpw_m7d1" spec="ScaleOperator" parameter="@clockRate.c:lpw_m7d1" scaleFactor="0.75" weight="3.0"/>
 
-	<operator id="scaleAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="3.0">
-		<operator id="scale:lpw_m7d1" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_m7d1" weight="0.0"/>
-	</operator>
-	<operator id="scaleRootAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="3.0">
-		<operator id="scaleRoot:lpw_m7d1" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_m7d1" weight="0.0"/>
-	</operator>
-	<operator id="uniformAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="30.0">
-		<operator id="uniform:lpw_m7d1" spec="Uniform" tree="@tree.t:lpw_m7d1" weight="0.0"/>
-	</operator>
-	<operator id="subSlideAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="15.0">
-		<operator id="subSlide:lpw_m7d1" spec="SubtreeSlide" tree="@tree.t:lpw_m7d1" weight="0.0"/>
-	</operator>
-	<operator id="narrowAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="15.0">
-		<operator id="narrow:lpw_m7d1" spec="Exchange" tree="@tree.t:lpw_m7d1" weight="0.0"/>
-	</operator>
-	<operator id="wideAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="3.0">
-		<operator id="wide:lpw_m7d1" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_m7d1" weight="0.0"/>
-	</operator>
-	<operator id="WBAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="3.0">
-		<operator id="WilsonBalding:lpw_m7d1" spec="WilsonBalding" tree="@tree.t:lpw_m7d1" weight="0.0"/>
-	</operator>
+    <operator id="scaleAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="3.0">
+        <operator id="scale:lpw_m7d1" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_m7d1" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="3.0">
+        <operator id="scaleRoot:lpw_m7d1" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_m7d1" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="30.0">
+        <operator id="uniform:lpw_m7d1" spec="Uniform" tree="@tree.t:lpw_m7d1" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="15.0">
+        <operator id="subSlide:lpw_m7d1" spec="SubtreeSlide" tree="@tree.t:lpw_m7d1" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="15.0">
+        <operator id="narrow:lpw_m7d1" spec="Exchange" tree="@tree.t:lpw_m7d1" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="3.0">
+        <operator id="wide:lpw_m7d1" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_m7d1" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="3.0">
+        <operator id="WilsonBalding:lpw_m7d1" spec="WilsonBalding" tree="@tree.t:lpw_m7d1" weight="0.0"/>
+    </operator>
 
     <operator id="StrictClockRateScaler.c:lpw_sb29" spec="ScaleOperator" parameter="@clockRate.c:lpw_sb29" scaleFactor="0.75" weight="3.0"/>
 
-	<operator id="scaleAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="3.0">
-		<operator id="scale:lpw_sb29" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_sb29" weight="0.0"/>
-	</operator>
-	<operator id="scaleRootAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="3.0">
-		<operator id="scaleRoot:lpw_sb29" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_sb29" weight="0.0"/>
-	</operator>
-	<operator id="uniformAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="30.0">
-		<operator id="uniform:lpw_sb29" spec="Uniform" tree="@tree.t:lpw_sb29" weight="0.0"/>
-	</operator>
-	<operator id="subSlideAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="15.0">
-		<operator id="subSlide:lpw_sb29" spec="SubtreeSlide" tree="@tree.t:lpw_sb29" weight="0.0"/>
-	</operator>
-	<operator id="narrowAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="15.0">
-		<operator id="narrow:lpw_sb29" spec="Exchange" tree="@tree.t:lpw_sb29" weight="0.0"/>
-	</operator>
-	<operator id="wideAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="3.0">
-		<operator id="wide:lpw_sb29" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_sb29" weight="0.0"/>
-	</operator>
-	<operator id="WBAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="3.0">
-		<operator id="WilsonBalding:lpw_sb29" spec="WilsonBalding" tree="@tree.t:lpw_sb29" weight="0.0"/>
-	</operator>
+    <operator id="scaleAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="3.0">
+        <operator id="scale:lpw_sb29" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_sb29" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="3.0">
+        <operator id="scaleRoot:lpw_sb29" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_sb29" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="30.0">
+        <operator id="uniform:lpw_sb29" spec="Uniform" tree="@tree.t:lpw_sb29" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="15.0">
+        <operator id="subSlide:lpw_sb29" spec="SubtreeSlide" tree="@tree.t:lpw_sb29" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="15.0">
+        <operator id="narrow:lpw_sb29" spec="Exchange" tree="@tree.t:lpw_sb29" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="3.0">
+        <operator id="wide:lpw_sb29" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_sb29" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="3.0">
+        <operator id="WilsonBalding:lpw_sb29" spec="WilsonBalding" tree="@tree.t:lpw_sb29" weight="0.0"/>
+    </operator>
 
     <!-- operator id="strictClockUpDownOperator.c:lpw_ebs" spec="UpDownOperator" scaleFactor="0.75" weight="3.0">
         <up idref="clockRate.c:lpw_ebs"/>
@@ -4891,9 +4891,9 @@
         <log idref="freqParameter.s:lpw_gi"/>
     </logger>
 
-	<logger id="treelog.t:species" fileName="lpw_fixednet.species.trees" logEvery="5000" mode="tree">
-		<log id="networkLogger:species" spec="speciesnetwork.SpeciesNetworkLogger" speciesNetwork="@network:species"/>
-	</logger>
+    <logger id="treelog.t:species" fileName="lpw_fixednet.species.trees" logEvery="5000" mode="tree">
+        <log id="networkLogger:species" spec="speciesnetwork.SpeciesNetworkLogger" speciesNetwork="@network:species"/>
+    </logger>
 
     <logger id="treelog.t:lpw_sb16" fileName="lpw_fixednet.lpw_sb16.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_sb16" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_sb16"/>
