@@ -10,7 +10,7 @@
     </data>
 
     <init spec='beast.util.TreeParser' id='tree:species' IsLabelledNewick="true" adjustTipHeights="false"
-          newick="(((A:0.2,(B:0.1)#H1[&amp;gamma=0.5]:0.1)S1:0.3,(#H1:0.2,C:0.3)S2:0.2)R:0.1)"/>
+          newick="(((A:0.02,(B:0.01)#H1[&amp;gamma=0.7]:0.01)S1:0.03,(#H1:0.02,C:0.03)S2:0.02)R:0.01)"/>
     <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@tree:species">
         <taxonset id="taxonSuperset" spec="TaxonSet">
             <taxon id="A" spec="TaxonSet">
@@ -28,11 +28,6 @@
         </taxonset>
     </stateNode>
     <parameter id="popSizes" estimate="false" name="stateNode">0.01</parameter>
-
-    <siteModel id="siteModel:gene1" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
-        <substModel id="jc:gene1" spec="JukesCantor"/>
-    </siteModel>
-    <branchRateModel clock.rate="1.0" id="clock:gene1" spec="beast.evolution.branchratemodel.StrictClockModel"/>
 
     <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="sim_3S_1L.trees" iterations="100">
         <speciesNetwork idref="network:species"/>

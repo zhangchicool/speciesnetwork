@@ -43,8 +43,6 @@
     <siteModel id="siteModel:gene2" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
         <substModel id="jc:gene2" spec="JukesCantor"/>
     </siteModel>
-    <branchRateModel clock.rate="1.0" id="clock:gene1" spec="beast.evolution.branchratemodel.StrictClockModel"/>
-    <branchRateModel clock.rate="1.0" id="clock:gene2" spec="beast.evolution.branchratemodel.StrictClockModel"/>
 
     <run id="coalSimulator" outputFileName="sim_3S_2L.xml" spec="speciesnetwork.simulator.CoalescentSimulator" iterations="1">
         <state id="state">
