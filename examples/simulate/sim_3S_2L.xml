@@ -147,7 +147,7 @@
         <operator id="StrictClockRateScaler.c:gene2" spec="ScaleOperator" parameter="@clockRate.c:gene2" scaleFactor="0.5" weight="3.0"/>
 
         <operator id="allClockTreeUpDownAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="10.0">
-            <operator id="allClockTreeUpDownOperator" spec="UpDownOperator" scaleFactor="0.75" weight="0.0">
+            <operator id="allClockTreeUpDown" spec="UpDownOperator" scaleFactor="0.75" weight="0.0">
                 <up idref="clockRate.c:gene2"/>
                 <down idref="tree:gene1"/>
                 <down idref="tree:gene2"/>
@@ -156,7 +156,8 @@
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
         </operator>
 
-        <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" weight="150.0">
+        <operator id="speciesNodeSliderAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="150.0">
+            <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" weight="0.0"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
         </operator>

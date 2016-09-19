@@ -3692,7 +3692,7 @@
 <init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false"
       newick="(((W:0.02,#H1:0.005)S1:0.03,((P:0.015)#H1:0.005,L:0.02)S2:0.03)R:0.02)"/>
 
-<run id="mcmc" spec="MCMC" chainLength="40000000">
+<run id="mcmc" spec="MCMC" chainLength="100000">
     <state id="state" storeEvery="5000">
         <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
             <taxonset id="taxonSuperset" spec="TaxonSet">
@@ -4365,7 +4365,8 @@
         </distribution>
     </distribution>
 
-	<operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" weight="200.0">
+    <operator id="speciesNodeSliderAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="200.0">
+        <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" weight="0.0"/>
         <rebuildEmbedding idref="rebuildEmbedding:lpw_4cl"/>
         <rebuildEmbedding idref="rebuildEmbedding:lpw_ebs"/>
         <rebuildEmbedding idref="rebuildEmbedding:lpw_gi"/>
@@ -4379,7 +4380,8 @@
         <rebuildEmbedding idref="rebuildEmbedding:lpw_xy1420"/>
 	</operator>
 
-	<operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="40.0"/>
+	<operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="30.0"/>
+    <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="15.0"/>
 
 	<operator id="scaleAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="3.0">
 		<operator id="scale:lpw_4cl" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_4cl" weight="0.0"/>
@@ -4684,7 +4686,7 @@
         <down idref="tree.t:lpw_xy1420"/>
     </operator -->
     <operator id="allClockTreeUpDownAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="10.0">
-        <operator id="allClockTreeUpDownOperator" spec="UpDownOperator" scaleFactor="0.75" weight="0.0">
+        <operator id="allClockTreeUpDown" spec="UpDownOperator" scaleFactor="0.75" weight="0.0">
             <up idref="clockRate.c:lpw_sb16"/>
             <up idref="clockRate.c:lpw_sb62"/>
             <up idref="clockRate.c:lpw_xy1420"/>

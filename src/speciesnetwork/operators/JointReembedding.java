@@ -44,18 +44,17 @@ public class JointReembedding extends Operator {
         if (logHR == Double.NEGATIVE_INFINITY)
             return Double.NEGATIVE_INFINITY;
         // Update calculation nodes as subsequent operators may depend on state nodes made dirty by this operation.
-        if (!operator.listStateNodes().isEmpty())  // copied from JointOperator
-            operator.listStateNodes().get(0).getState().checkCalculationNodesDirtiness();
+        // if (!operator.listStateNodes().isEmpty())  // copied from JointOperator
+        //   operator.listStateNodes().get(0).getState().checkCalculationNodesDirtiness();
 
         // then rebuild the embedding
+        // and count the number of alternative traversing choices for the new state (n1)
         int newChoices = 0;
         for (RebuildEmbedding reembedOp: reembedOps) {
             final int nChoices = reembedOp.initializeEmbedding();
             if (nChoices < 0)
                 return Double.NEGATIVE_INFINITY;
             newChoices += nChoices;
-            if (!reembedOp.listStateNodes().isEmpty()) // copied from JointOperator
-                reembedOp.listStateNodes().get(0).getState().checkCalculationNodesDirtiness();
         }
 
         return logHR + (newChoices - oldChoices) * Math.log(2);
