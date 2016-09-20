@@ -12,6 +12,9 @@ import beast.core.Operator;
 import beast.core.StateNode;
 
 /**
+ * Randomly pick an internal network node including origin.
+ * Change its height using a sliding window with reflection.
+ *
  * @author Chi Zhang
  */
 

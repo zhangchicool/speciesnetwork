@@ -27,12 +27,10 @@ import speciesnetwork.SanityChecks;
 public class EdgeRelocator extends Operator {
     public Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
-    public Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
-            "Operator which rebuilds embedding of gene tree within species network.", new ArrayList<>());
     public Input<Boolean> isWideInput =
             new Input<>("isWide", "If true, change the node height.", false);
 
-    private final boolean isWide = isWideInput.get();
+    private boolean isWide;
 
     // empty constructor to facilitate construction by XML + initAndValidate
     public EdgeRelocator() {
@@ -40,23 +38,13 @@ public class EdgeRelocator extends Operator {
 
     @Override
     public void initAndValidate() {
+        isWide = isWideInput.get();
     }
 
     @Override
     public double proposal() {
         final Network speciesNetwork = speciesNetworkInput.get();
-        final List<RebuildEmbedding> reembedOps = rebuildEmbeddingInput.get();
-
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
-
-        // count the number of alternative traversing choices for the current state (n0)
-        int oldChoices = 0;
-        for (RebuildEmbedding reembedOp: reembedOps) {
-            final int nChoices = reembedOp.getNumberOfChoices();
-            if (nChoices < 0)
-                throw new RuntimeException("Developer ERROR: current embedding invalid!");
-            oldChoices += nChoices;
-        }
 
         // pick an internal node randomly
         final NetworkNode[] internalNodes = speciesNetwork.getInternalNodes();
@@ -69,7 +57,7 @@ public class EdgeRelocator extends Operator {
         double logProposalRatio = 0.0;
         if (pickedNode.isReticulation()) {
             // move the end of either the two parent branches
-            final int pickedParentBrNr, otherParentBrNr;
+            final Integer pickedParentBrNr, otherParentBrNr;
             if (Randomizer.nextBoolean()) {
                 pickedParentBrNr = pickedNode.gammaBranchNumber;
                 otherParentBrNr = pickedNode.gammaBranchNumber + 1;
@@ -78,13 +66,12 @@ public class EdgeRelocator extends Operator {
                 otherParentBrNr = pickedNode.gammaBranchNumber;
             }
 
+            NetworkNode otherParent = pickedNode.getParentByBranch(otherParentBrNr);
             NetworkNode pickedParent = pickedNode.getParentByBranch(pickedParentBrNr);
             final double upperLimit = pickedParent.getHeight();  // upper bound
 
-            final int pickedChildBrNr = pickedNode.childBranchNumbers.get(0);
+            final Integer pickedChildBrNr = pickedNode.childBranchNumbers.get(0);
             NetworkNode pickedChild = pickedNode.getChildByBranch(pickedChildBrNr);
-
-            NetworkNode otherParent = pickedNode.getParentByBranch(otherParentBrNr);
 
             // look for all the candidate branches to attach to
             List<Integer> candidateBranchNumbers = new ArrayList<>();
@@ -104,7 +91,7 @@ public class EdgeRelocator extends Operator {
             } else {
                 for (NetworkNode node : speciesNetwork.getAllNodesExceptOrigin()) {
                     // do not attach to the original position
-                    if (node != pickedNode && node != pickedChild && node.getHeight() < upperLimit) {
+                    if (node != pickedNode && node != pickedChild && node.getHeight() < pickedNode.getHeight()) {
                         NetworkNode gParent = node.getParentByBranch(node.gammaBranchNumber);
                         NetworkNode oParent = node.getParentByBranch(node.gammaBranchNumber + 1);
                         if (gParent.getHeight() > pickedNode.getHeight())
@@ -119,9 +106,9 @@ public class EdgeRelocator extends Operator {
             if (candidateBranchNumbers.size() == 0)
                 return Double.NEGATIVE_INFINITY;
             randomIndex = Randomizer.nextInt(candidateBranchNumbers.size());
-            final int attachBranchNr = candidateBranchNumbers.get(randomIndex);
+            final Integer attachBranchNr = candidateBranchNumbers.get(randomIndex);
 
-            final int attachChildNr = speciesNetwork.getNodeNumber(attachBranchNr);
+            final Integer attachChildNr = speciesNetwork.getNodeNumber(attachBranchNr);
             NetworkNode attachChild = speciesNetwork.getNode(attachChildNr);
             NetworkNode attachParent = attachChild.getParentByBranch(attachBranchNr);
 
@@ -147,16 +134,15 @@ public class EdgeRelocator extends Operator {
             attachParent.childBranchNumbers.add(otherParentBrNr);
             pickedNode.childBranchNumbers.remove(pickedChildBrNr);
             pickedNode.childBranchNumbers.add(attachBranchNr);
-            otherParent.updateChildren();
-            pickedChild.updateParents();
-            attachParent.updateChildren();
-            attachChild.updateParents();
-            pickedNode.updateParents();
-            pickedNode.updateChildren();
+            otherParent.updateRelationships();
+            pickedChild.updateRelationships();
+            attachParent.updateRelationships();
+            attachChild.updateRelationships();
+            pickedNode.updateRelationships();
 
         } else {
             // move the top of either the two child branches
-            final int pickedChildBrNr, otherChildBrNr;
+            final Integer pickedChildBrNr, otherChildBrNr;
             if (Randomizer.nextBoolean()) {
                 pickedChildBrNr = pickedNode.childBranchNumbers.get(0);
                 otherChildBrNr = pickedNode.childBranchNumbers.get(1);
@@ -165,12 +151,11 @@ public class EdgeRelocator extends Operator {
                 otherChildBrNr = pickedNode.childBranchNumbers.get(0);
             }
 
+            NetworkNode otherChild = pickedNode.getChildByBranch(otherChildBrNr);
             NetworkNode pickedChild = pickedNode.getChildByBranch(pickedChildBrNr);
             final double lowerLimit = pickedChild.getHeight();  // lower bound
 
-            NetworkNode otherChild = pickedNode.getChildByBranch(otherChildBrNr);
-
-            final int pickedParentBrNr = pickedNode.gammaBranchNumber;
+            final Integer pickedParentBrNr = pickedNode.gammaBranchNumber;
             NetworkNode pickedParent = pickedNode.getParentByBranch(pickedParentBrNr);
 
             // look for all the candidate branches to attach to
@@ -179,7 +164,7 @@ public class EdgeRelocator extends Operator {
                 for (NetworkNode node : speciesNetwork.getAllNodesExceptOrigin()) {
                     // do not attach to the original position
                     if (node != pickedNode && node.getHeight() > lowerLimit) {
-                        for (int childBrNr : node.childBranchNumbers) {
+                        for (Integer childBrNr : node.childBranchNumbers) {
                             if (node.getChildByBranch(childBrNr) != pickedNode)
                                 candidateBranchNumbers.add(childBrNr);
                         }
@@ -190,10 +175,10 @@ public class EdgeRelocator extends Operator {
                 else
                     logProposalRatio -= Math.log(pickedParent.getHeight() - lowerLimit);
             } else {
-                for (NetworkNode node : speciesNetwork.getAllNodesExceptOrigin()) {
+                for (NetworkNode node : speciesNetwork.getInternalNodes()) {
                     // do not attach to the original position
-                    if (node != pickedNode && node.getHeight() > lowerLimit) {
-                        for (int childBrNr : node.childBranchNumbers) {
+                    if (node != pickedNode && node.getHeight() > pickedNode.getHeight()) {
+                        for (Integer childBrNr : node.childBranchNumbers) {
                             NetworkNode gChild = node.getChildByBranch(childBrNr);
                             if (gChild != pickedNode && gChild.getHeight() < pickedNode.getHeight())
                                 candidateBranchNumbers.add(childBrNr);
@@ -206,9 +191,9 @@ public class EdgeRelocator extends Operator {
             if (candidateBranchNumbers.size() == 0)
                 return Double.NEGATIVE_INFINITY;
             randomIndex = Randomizer.nextInt(candidateBranchNumbers.size());
-            final int attachBranchNr = candidateBranchNumbers.get(randomIndex);
+            final Integer attachBranchNr = candidateBranchNumbers.get(randomIndex);
 
-            final int attachChildNr = speciesNetwork.getNodeNumber(attachBranchNr);
+            final Integer attachChildNr = speciesNetwork.getNodeNumber(attachBranchNr);
             NetworkNode attachChild = speciesNetwork.getNode(attachChildNr);
             NetworkNode attachParent = attachChild.getParentByBranch(attachBranchNr);
 
@@ -234,28 +219,14 @@ public class EdgeRelocator extends Operator {
             attachParent.childBranchNumbers.add(pickedParentBrNr);
             pickedNode.childBranchNumbers.remove(otherChildBrNr);
             pickedNode.childBranchNumbers.add(attachBranchNr);
-            pickedParent.updateChildren();
-            otherChild.updateParents();
-            attachParent.updateChildren();
-            attachChild.updateParents();
-            pickedNode.updateParents();
-            pickedNode.updateChildren();
+            pickedParent.updateRelationships();
+            otherChild.updateRelationships();
+            attachParent.updateRelationships();
+            attachChild.updateRelationships();
+            pickedNode.updateRelationships();
         }
 
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
-
-        // update the embedding in the new species network
-        int newChoices = 0;
-        for (RebuildEmbedding reembedOp: reembedOps) {
-            final int nChoices = reembedOp.initializeEmbedding();
-            if (nChoices < 0)
-                return Double.NEGATIVE_INFINITY;
-            newChoices += nChoices;
-            // System.out.println(String.format("Gene tree %d: %d choices", i, nChoices));
-            if (!reembedOp.listStateNodes().isEmpty()) // copied from JointOperator
-                reembedOp.listStateNodes().get(0).getState().checkCalculationNodesDirtiness();
-        }
-        logProposalRatio += (newChoices - oldChoices) * Math.log(2);
 
         return logProposalRatio;
     }

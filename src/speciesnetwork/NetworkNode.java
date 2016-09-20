@@ -194,7 +194,7 @@ public class NetworkNode {
         return children;
     }
 
-    public Multiset<NetworkNode> updateParents() {
+    protected Multiset<NetworkNode> updateParents() {
         final Multiset<NetworkNode> parents = HashMultiset.create();
 
         for (NetworkNode n: network.nodes) {
@@ -208,7 +208,7 @@ public class NetworkNode {
         return parents;
     }
 
-    public Multiset<NetworkNode> updateChildren() {
+    protected Multiset<NetworkNode> updateChildren() {
         final Multiset<NetworkNode> children = HashMultiset.create();
 
         for (Integer i: childBranchNumbers) {
