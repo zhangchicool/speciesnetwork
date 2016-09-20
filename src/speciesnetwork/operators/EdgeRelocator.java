@@ -123,7 +123,6 @@ public class EdgeRelocator extends Operator {
                 final double newHeight = lower + (upper - lower) * Randomizer.nextDouble();
                 // set new height
                 pickedNode.setHeight(newHeight);
-
                 logProposalRatio += Math.log(upper - lower);
             }
 
@@ -161,7 +160,7 @@ public class EdgeRelocator extends Operator {
             // look for all the candidate branches to attach to
             List<Integer> candidateBranchNumbers = new ArrayList<>();
             if (isWide) {
-                for (NetworkNode node : speciesNetwork.getAllNodesExceptOrigin()) {
+                for (NetworkNode node : speciesNetwork.getInternalNodesWithOrigin()) {
                     // do not attach to the original position
                     if (node != pickedNode && node.getHeight() > lowerLimit) {
                         for (Integer childBrNr : node.childBranchNumbers) {
@@ -198,7 +197,6 @@ public class EdgeRelocator extends Operator {
             NetworkNode attachParent = attachChild.getParentByBranch(attachBranchNr);
 
             if (isWide) {
-                final double newHeight;
                 // propose an attachment height
                 final double lower;
                 if (lowerLimit < attachChild.getHeight())
@@ -206,10 +204,10 @@ public class EdgeRelocator extends Operator {
                 else
                     lower = lowerLimit;
                 final double upper = attachParent.getHeight();
-                newHeight = lower + (upper - lower) * Randomizer.nextDouble();
-                logProposalRatio += Math.log(upper - lower);
+                final double newHeight = lower + (upper - lower) * Randomizer.nextDouble();
                 // set new height
                 pickedNode.setHeight(newHeight);
+                logProposalRatio += Math.log(upper - lower);
             }
 
             // deal with the node relationships

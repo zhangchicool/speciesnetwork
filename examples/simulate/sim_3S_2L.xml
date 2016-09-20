@@ -156,13 +156,20 @@
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
         </operator>
 
-        <operator id="speciesNodeSliderAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="150.0">
+        <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="20.0"/>
+        <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="10.0"/>
+
+        <operator id="speciesNodeSliderAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
             <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" weight="0.0"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
         </operator>
-        <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="20.0"/>
-        <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="10.0"/>
+
+        <operator id="speciesEdgeRelocateAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="50.0">
+            <operator id="edgeRelocator" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="false" weight="0.0"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
+        </operator>
 
         <logger id="screenlog" logEvery="1000" model="@posterior">
             <log idref="posterior"/>
