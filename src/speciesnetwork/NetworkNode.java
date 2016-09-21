@@ -356,6 +356,10 @@ public class NetworkNode {
         return label;
     }
 
+    public void setLabel(String newLabel) {
+         label = newLabel;
+    }
+
     public int getTraversalNumber() {
         return nodeNumber - network.leafNodeCount;
     }

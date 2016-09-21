@@ -1,6 +1,7 @@
 package speciesnetwork;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import beast.core.Description;
@@ -495,33 +496,42 @@ public class Network extends StateNode {
         NetworkNode parentNode1 = pickedNode1.getParentByBranch(retAttachBranchNr);
         NetworkNode parentNode2 = pickedNode2.getParentByBranch(bifAttachBranchNr);
 
-        // add the two nodes to the network node array
+        // increase the existing reticulation branch numbers by 3
+        Integer oldRetBranchNr = retAttachBranchNr;
+        Integer oldBifBranchNr = bifAttachBranchNr;
+        for (NetworkNode node: getInternalNodes()) {
+            List<Integer> newBranchNrs = new ArrayList<>();
+            for (Integer bNr: node.childBranchNumbers) {
+                if (bNr >= leafNodeCount+speciationNodeCount) {
+                    newBranchNrs.add(bNr + 3);
+                    if (bNr.equals(oldRetBranchNr)) retAttachBranchNr += 3;
+                    if (bNr.equals(oldBifBranchNr)) bifAttachBranchNr += 3;
+                } else {
+                    newBranchNrs.add(bNr);
+                }
+            }
+            node.childBranchNumbers = newBranchNrs;
+        }
+
+        // add the two nodes to the network node array, between the speciation and reticulation nodes
         NetworkNode[] tempNodes = new NetworkNode[nodeCount+2];
         System.arraycopy(nodes, 0, tempNodes, 0, leafNodeCount+speciationNodeCount);
         System.arraycopy(nodes, leafNodeCount+speciationNodeCount, tempNodes, leafNodeCount+speciationNodeCount+2, reticulationNodeCount+1);
         tempNodes[leafNodeCount+speciationNodeCount] = bifurcationNode;
         tempNodes[leafNodeCount+speciationNodeCount+1] = reticulationNode;
         nodes = tempNodes;
+        // update the node counts
         nodeCount += 2;
         speciationNodeCount += 1;
         reticulationNodeCount += 1;
+        reticulationNode.setLabel("#H" + reticulationNodeCount);
+        // bifurcationNode.setLabel("S" + speciationNodeCount);
 
-        // update child branch numbers
-        for (NetworkNode node: nodes) {
-            for (Integer nr: node.childBranchNumbers) {
-                if (nr >= leafNodeCount+speciationNodeCount-1) {
-                    node.childBranchNumbers.remove(nr);
-                    node.childBranchNumbers.add(nr+3);
-                    if (retAttachBranchNr == nr) retAttachBranchNr += 3;
-                    if (bifAttachBranchNr == nr) bifAttachBranchNr += 3;
-                }
-            }
-        }
         if (pickedNode1 == pickedNode2 && parentNode1 == parentNode2) {
             // the two nodes are on the same branch
+            reticulationNode.childBranchNumbers.add(retAttachBranchNr);
             bifurcationNode.childBranchNumbers.add(leafNodeCount+speciationNodeCount);
             bifurcationNode.childBranchNumbers.add(leafNodeCount+speciationNodeCount+1);
-            reticulationNode.childBranchNumbers.add(retAttachBranchNr);
             parentNode2.childBranchNumbers.remove(bifAttachBranchNr);
             parentNode2.childBranchNumbers.add(leafNodeCount+speciationNodeCount-1);
         } else {
@@ -535,9 +545,7 @@ public class Network extends StateNode {
         }
 
         // update relationships
-        for (NetworkNode node: nodes) {
-            node.updateRelationships();
-        }
+        updateRelationships();
     }
 
     /**

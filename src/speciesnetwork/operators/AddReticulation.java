@@ -81,7 +81,6 @@ public class AddReticulation extends Operator {
         // create two new nodes
         NetworkNode middleNode1 = new NetworkNode(speciesNetwork);
         NetworkNode middleNode2 = new NetworkNode(speciesNetwork);
-
         // set height
         middleNode1.setHeight(pickedNode1.getHeight() + l11);
         middleNode2.setHeight(pickedNode2.getHeight() + l21);
