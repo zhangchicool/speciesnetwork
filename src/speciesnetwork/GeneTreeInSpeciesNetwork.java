@@ -116,7 +116,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
 
         final Node geneTreeRoot = geneTree.getRoot();
         final NetworkNode speciesNetworkRoot = speciesNetwork.getRoot();
-        final int speciesRootBranchNumber = speciesNetworkRoot.gammaBranchNumber;
+        final Integer speciesRootBranchNumber = speciesNetworkRoot.gammaBranchNumber;
         try {
             recurseCoalescentEvents(geneTreeRoot, speciesNetworkRoot, speciesRootBranchNumber, Double.POSITIVE_INFINITY);
         } catch (Exception e) {
@@ -127,7 +127,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
 
     // forward in time recursion, unlike StarBEAST 2
     private void recurseCoalescentEvents(final Node geneTreeNode, final NetworkNode speciesNetworkNode,
-                                         final int speciesBranchNumber, final double lastHeight) throws Exception {
+                                         final Integer speciesBranchNumber, final double lastHeight) throws Exception {
         final double geneNodeHeight = geneTreeNode.getHeight();
         final double speciesNodeHeight = speciesNetworkNode.getHeight();
         final int geneTreeNodeNumber = geneTreeNode.getNr();
@@ -138,7 +138,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
             coalescentLineageCounts.add(speciesBranchNumber);
             if (speciesNetworkNode.isReticulation()) {
                 final double gammaP = speciesNetworkNode.inheritProb;
-                if (speciesBranchNumber == speciesNetworkNode.gammaBranchNumber) {
+                if (speciesNetworkNode.gammaBranchNumber.equals(speciesBranchNumber)) {
                     logGammaSum += Math.log(gammaP);
                 } else {
                     logGammaSum += Math.log(1.0 - gammaP);
@@ -146,7 +146,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
             }
             // traversal direction forward in time
             final int traversalNodeNumber = speciesNetworkNode.getTraversalNumber();
-            final int nextSpeciesBranchNumber = embedding.getMatrixValue(traversalNodeNumber, geneTreeNodeNumber);
+            final Integer nextSpeciesBranchNumber = embedding.getMatrixValue(traversalNodeNumber, geneTreeNodeNumber);
             assert (nextSpeciesBranchNumber >= 0);
             final NetworkNode nextSpeciesNode = speciesNetworkNode.getChildByBranch(nextSpeciesBranchNumber);
             recurseCoalescentEvents(geneTreeNode, nextSpeciesNode, nextSpeciesBranchNumber, speciesNodeHeight);

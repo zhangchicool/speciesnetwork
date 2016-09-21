@@ -36,7 +36,7 @@ public class NetworkNode {
      * children and parents of this node
      */
     public List<Integer> childBranchNumbers;
-    public int gammaBranchNumber;
+    public Integer gammaBranchNumber;
     protected Multiset<NetworkNode> children;
     protected Multiset<NetworkNode> parents;
 
@@ -221,9 +221,9 @@ public class NetworkNode {
     }
 
     public NetworkNode getParentByBranch(int branchNr) {
-        for (NetworkNode p: parents) {
-            if (p.childBranchNumbers.contains(branchNr))
-                return p;
+        for (NetworkNode parent: parents) {
+            if (parent.childBranchNumbers.contains(branchNr))
+                return parent;
         }
         return null;
     }
@@ -325,7 +325,7 @@ public class NetworkNode {
         //  subtreeString.append(nodeNumber);
 
         // add inheritance probabilities to reticulation nodes
-        if (nParents == 2 && branchNumber == gammaBranchNumber) {
+        if (nParents == 2 && gammaBranchNumber.equals(branchNumber)) {
             if (inXML)
                 subtreeString.append("[&amp;gamma=");
             else

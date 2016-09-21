@@ -62,17 +62,9 @@ public class Network extends StateNode {
     }
 
     public void updateRelationships() {
-        for (NetworkNode n: nodes) {
-            n.updateRelationships();
+        for (NetworkNode node: nodes) {
+            node.updateRelationships();
         }
-    }
-
-    @Override
-    public int scale(final double scale) {
-        for (NetworkNode n: nodes) {
-            n.height = n.height * scale;
-        }
-        return speciationNodeCount + reticulationNodeCount;
     }
 
     private void makeCaterpillar(final double minInternalHeight, final double step) {
@@ -152,11 +144,15 @@ public class Network extends StateNode {
         return leafNodeCount + speciationNodeCount;
     }
 
+    public int getTraversalNodeCount() {
+        return speciationNodeCount + reticulationNodeCount;
+    }
+
     /**
      * @return get the total number of branches in the tree
      */
     public int getBranchCount() {
-        return nodeCount + reticulationNodeCount - 1;
+        return reticulationNodeCount + nodeCount - 1;
     }
 
     /**
@@ -173,8 +169,8 @@ public class Network extends StateNode {
         return nB;
     }
 
-    public int getTraversalNodeCount() {
-        return speciationNodeCount + reticulationNodeCount;
+    public NetworkNode getNode(final int nodeI) {
+        return nodes[nodeI];
     }
 
     /**
@@ -230,8 +226,34 @@ public class Network extends StateNode {
         return reticulationNodes;
     }
 
-    public NetworkNode getNode(final int nodeI) {
-        return nodes[nodeI];
+    public void resetAllVisited() {
+        for (NetworkNode node: nodes) {
+            node.visited = false;
+        }
+    }
+
+    /**
+     * @return (gamma) branch number that corresponds to a node number
+     */
+    public Integer getBranchNumber(final int nodeNumber) {
+        final int reticulationOffset = getReticulationOffset();
+        if (nodeNumber < reticulationOffset) {
+            return nodeNumber;
+        } else {
+            return (nodeNumber * 2) - reticulationOffset;
+        }
+    }
+
+    /**
+     * @return node number that corresponds to a branch number
+     */
+    public int getNodeNumber(final Integer branchNumber) {
+        final int reticulationOffset = getReticulationOffset();
+        if (branchNumber < reticulationOffset) {
+            return branchNumber;
+        } else {
+            return (branchNumber - reticulationOffset) / 2 + reticulationOffset;
+        }
     }
 
     public int getNodeNumber(final String query) {
@@ -246,17 +268,19 @@ public class Network extends StateNode {
 
     public double getNetworkLength() {
         double netLength = 0;
-        for (NetworkNode n: nodes) {
-            for (NetworkNode p: n.parents) {
-                netLength += p.height - n.height;
+        for (NetworkNode node: nodes) {
+            for (NetworkNode parent: node.parents) {
+                netLength += parent.height - node.height;
             }
         }
         return netLength;
     }
 
-    @Override
-    public String toString() {
-        return getOrigin().toString();
+    public boolean isDirty() {
+        for (NetworkNode node: nodes) {
+            if (node.isDirty != IS_CLEAN) return true;
+        }
+        return false;
     }
 
     @Override
@@ -271,6 +295,19 @@ public class Network extends StateNode {
                 node.isDirty = IS_FILTHY;
             }
         }
+    }
+
+    @Override
+    public int scale(final double scale) {
+        for (NetworkNode node: nodes) {
+            node.height *= scale;
+        }
+        return speciationNodeCount + reticulationNodeCount;
+    }
+
+    @Override
+    public String toString() {
+        return getOrigin().toString();
     }
 
     /**
@@ -302,7 +339,7 @@ public class Network extends StateNode {
         copyNetwork(src, this);
     }
 
-    protected static void copyNetwork(Network src, Network dst) {
+    private static void copyNetwork(Network src, Network dst) {
         final int copyNodeCount = src.nodeCount;
 
         dst.setID(src.getID());
@@ -393,9 +430,9 @@ public class Network extends StateNode {
 
         hasStartedEditing = false;
 
-        for(NetworkNode n: nodes) {
-            n.updateRelationships();
-            n.isDirty = IS_CLEAN;
+        for(NetworkNode node: nodes) {
+            node.updateRelationships();
+            node.isDirty = IS_CLEAN;
         }
     }
 
@@ -447,53 +484,14 @@ public class Network extends StateNode {
         return nodes[nodeI].height;
     }
 
-    public boolean isDirty() {
-        for (NetworkNode n: nodes) {
-            if (n.isDirty != IS_CLEAN) return true;
-        }
-        return false;
-    }
-
-    public void resetAllVisited() {
-        for (NetworkNode n: nodes) {
-            n.visited = false;
-        }
-    }
-
-    /**
-     * @return (gamma) branch number that corresponds to a node number
-     */
-    public int getBranchNumber(final int nodeNumber) {
-        final int reticulationOffset = getReticulationOffset();
-        if (nodeNumber < reticulationOffset) {
-            return nodeNumber;
-        } else {
-            return (nodeNumber * 2) - reticulationOffset;
-        }
-    }
-
-    /**
-     * @return node number that corresponds to a branch number
-     */
-    public int getNodeNumber(final int branchNumber) {
-        final int reticulationOffset = getReticulationOffset();
-        if (branchNumber < reticulationOffset) {
-            return branchNumber;
-        } else {
-            return (branchNumber - reticulationOffset) / 2 + reticulationOffset;
-        }
-    }
-
     /**
      * add a reticulation branch to the species network
      */
     public void addReticulationBranch(NetworkNode reticulationNode, NetworkNode bifurcationNode,
-                                      int retAttachBranchNr, int bifAttachBranchNr) {
+                                      Integer retAttachBranchNr, Integer bifAttachBranchNr) {
 
-        final int pickedNodeNr1 = getNodeNumber(retAttachBranchNr);
-        NetworkNode pickedNode1 = getNode(pickedNodeNr1);
-        final int pickedNodeNr2 = getNodeNumber(bifAttachBranchNr);
-        NetworkNode pickedNode2 = getNode(pickedNodeNr2);
+        NetworkNode pickedNode1 = getNode(getNodeNumber(retAttachBranchNr));
+        NetworkNode pickedNode2 = getNode(getNodeNumber(bifAttachBranchNr));
         NetworkNode parentNode1 = pickedNode1.getParentByBranch(retAttachBranchNr);
         NetworkNode parentNode2 = pickedNode2.getParentByBranch(bifAttachBranchNr);
 
@@ -546,7 +544,7 @@ public class Network extends StateNode {
      * delete a reticulation branch from the species network
      * @param hybridBranchNr reticulation branch number
      */
-    public void deleteReticulationBranch(int hybridBranchNr) {
+    public void deleteReticulationBranch(Integer hybridBranchNr) {
         final int hybridNodeNr = getNodeNumber(hybridBranchNr);
         NetworkNode hybridNode = getNode(hybridNodeNr);
 
@@ -555,10 +553,10 @@ public class Network extends StateNode {
         final int pickedParentNr = pickedParent.getNr();
 
         // get the child node and another parent node of hybridNode
-        final int childBranchNr1 = hybridNode.childBranchNumbers.get(0);
+        final Integer childBranchNr1 = hybridNode.childBranchNumbers.get(0);
         NetworkNode childNode1 = hybridNode.getChildByBranch(childBranchNr1);
-        final int parentBranchNr1;
-        if (hybridBranchNr == hybridNode.gammaBranchNumber) {
+        final Integer parentBranchNr1;
+        if (hybridNode.gammaBranchNumber.equals(hybridBranchNr)) {
             parentBranchNr1 = hybridBranchNr + 1;
         } else {
             parentBranchNr1 = hybridBranchNr;
@@ -566,14 +564,14 @@ public class Network extends StateNode {
         NetworkNode parentNode1 = hybridNode.getParentByBranch(parentBranchNr1);
 
         // get the parent node and another child node of pickedParent
-        final int childBranchNr2;
-        if (hybridBranchNr == pickedParent.childBranchNumbers.get(0)) {
+        final Integer childBranchNr2;
+        if (pickedParent.childBranchNumbers.get(0).equals(hybridBranchNr)) {
             childBranchNr2 = pickedParent.childBranchNumbers.get(1);
         } else {
             childBranchNr2 = pickedParent.childBranchNumbers.get(0);
         }
         NetworkNode childNode2 = pickedParent.getChildByBranch(childBranchNr2);
-        final int parentBranchNr2 = pickedParent.gammaBranchNumber;
+        final Integer parentBranchNr2 = pickedParent.gammaBranchNumber;
         NetworkNode parentNode2 = pickedParent.getParentByBranch(parentBranchNr2);
 
         // update children parents relationship

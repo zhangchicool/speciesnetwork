@@ -50,7 +50,7 @@ public class MultispeciesCoalescent extends Distribution {
         populationModel.initPopSizes(speciesBranchCount);
     }
 
-    private void buildTimes(NetworkNode node, int branchNumber, double parentHeight, double[] startTimes, double[] endTimes) {
+    private void buildTimes(NetworkNode node, Integer branchNumber, double parentHeight, double[] startTimes, double[] endTimes) {
         final double nodeHeight = node.height;
         endTimes[branchNumber] = nodeHeight;
         startTimes[branchNumber] = parentHeight;
@@ -70,7 +70,7 @@ public class MultispeciesCoalescent extends Distribution {
         double[] speciesEndTimes = new double[speciesBranchCount]; // the later date (tipward end)
 
         final NetworkNode speciesRoot = speciesNetwork.getRoot();
-        final int rootBranchNr = speciesRoot.gammaBranchNumber;
+        final Integer rootBranchNr = speciesRoot.gammaBranchNumber;
         buildTimes(speciesRoot, rootBranchNr, Double.POSITIVE_INFINITY, speciesStartTimes, speciesEndTimes);
 
         allLineageCounts.clear();

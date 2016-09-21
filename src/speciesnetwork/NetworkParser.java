@@ -78,7 +78,7 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
     }
 
     private Integer rebuildNetwork(final Node treeNode) {
-        int branchNumber;
+        Integer branchNumber;
         NetworkNode newNode;
 
         final String nodeLabel = treeNode.getID();
@@ -87,15 +87,13 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
         final int matchingNodeNr = getNodeNumber(nodeLabel);
         if (matchingNodeNr < 0) {
             int newNodeNumber;
-            double inheritProb = 1.0;
+            double inheritProb = 0.5;
 
             if (treeNode.isRoot()) {
                 newNodeNumber = nodeCount - 1;
             } else if (nodeLabel != null && nodeLabel.startsWith("#H")) {
                 if (treeNode.getMetaDataNames().contains("gamma"))
                     inheritProb = (Double) treeNode.getMetaData("gamma");
-                else
-                    inheritProb = 0.5;
                 newNodeNumber = nextReticulationNr;
                 nextReticulationNr++;
             } else if (treeNode.isLeaf()) {
@@ -121,7 +119,7 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
         }
 
         for (Node c: treeNode.getChildren()) {
-            final int childBranchNumber = rebuildNetwork(c);
+            final Integer childBranchNumber = rebuildNetwork(c);
             newNode.childBranchNumbers.add(childBranchNumber);
         }
 
