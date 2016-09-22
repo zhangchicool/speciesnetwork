@@ -19,14 +19,15 @@ public class GammaProbUniform extends Operator {
     @Override
     public double proposal() {
         final Network speciesNetwork = speciesNetworkInput.get();
-        speciesNetwork.startEditing(this);
 
         final int nReticulations = speciesNetwork.getReticulationNodeCount();
         if (nReticulations == 0)  // no reticulation
             return Double.NEGATIVE_INFINITY;
 
-        final int randomNodeIndex = Randomizer.nextInt(nReticulations) + speciesNetwork.getReticulationOffset();
-        final NetworkNode randomNode = speciesNetwork.getNode(randomNodeIndex);
+        speciesNetwork.startEditing(this);
+
+        final int randomIndex = Randomizer.nextInt(nReticulations) + speciesNetwork.getReticulationOffset();
+        final NetworkNode randomNode = speciesNetwork.getNode(randomIndex);
 
         final Double newGamma = Randomizer.nextDouble();
         randomNode.setGammaProb(newGamma);

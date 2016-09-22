@@ -30,14 +30,14 @@ public class GammaProbRndWalk extends Operator {
         final Network speciesNetwork = speciesNetworkInput.get();
         final double windowSize = windowSizeInput.get();
 
-        speciesNetwork.startEditing(this);
-
         final int nReticulations = speciesNetwork.getReticulationNodeCount();
         if (nReticulations == 0)  // no reticulation
             return Double.NEGATIVE_INFINITY;
 
-        final int randomNodeIndex = Randomizer.nextInt(nReticulations) + speciesNetwork.getReticulationOffset();
-        final NetworkNode randomNode = speciesNetwork.getNode(randomNodeIndex);
+        speciesNetwork.startEditing(this);
+
+        final int randomIndex = Randomizer.nextInt(nReticulations) + speciesNetwork.getReticulationOffset();
+        final NetworkNode randomNode = speciesNetwork.getNode(randomIndex);
 
         final double currentGamma = randomNode.getGammaProb();                       // r
         final double currentLogOdds = Math.log(currentGamma / (1.0 - currentGamma)); // y
@@ -55,7 +55,6 @@ public class GammaProbRndWalk extends Operator {
             logProposalRatio = logOddsShift +
                     2 * (Math.log(1.0 + Math.exp(currentLogOdds)) - Math.log(1.0 + Math.exp(newLogOdds)));
         }
-
         randomNode.setGammaProb(newGamma);
 
         return logProposalRatio;
