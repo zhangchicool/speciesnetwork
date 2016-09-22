@@ -50,7 +50,7 @@ public class NetworkNode {
     /**
      * status of this node after an operation is performed on the state
      */
-    int isDirty;
+    protected int isDirty;
 
     private DecimalFormat df;
 
@@ -160,8 +160,8 @@ public class NetworkNode {
     public void setHeight(final double height) {
         this.height = height;
         isDirty |= Network.IS_DIRTY;
-        for (NetworkNode c: children) {
-            c.isDirty |= Network.IS_DIRTY;
+        for (NetworkNode child: children) {
+            child.isDirty |= Network.IS_DIRTY;
         }
     }
 
@@ -375,8 +375,8 @@ public class NetworkNode {
         if (touched) return 0;
 
         int nodeCount = 1;
-        for (NetworkNode c: children) {
-            nodeCount += c.recurseNodeCount();
+        for (NetworkNode child: children) {
+            nodeCount += child.recurseNodeCount();
         }
 
         touched = true;
@@ -394,8 +394,8 @@ public class NetworkNode {
             return 1;
 
         int nodeCount = 0;
-        for (NetworkNode c: children) {
-            nodeCount += c.recurseLeafNodeCount();
+        for (NetworkNode child: children) {
+            nodeCount += child.recurseLeafNodeCount();
         }
 
         touched = true;
@@ -411,8 +411,8 @@ public class NetworkNode {
 
         // don't count reticulation nodes
         int nodeCount = (nChildren == 2) ? 1 : 0;
-        for (NetworkNode c: children) {
-            nodeCount += c.recurseSpeciationNodeCount();
+        for (NetworkNode child: children) {
+            nodeCount += child.recurseSpeciationNodeCount();
         }
 
         touched = true;
@@ -428,8 +428,8 @@ public class NetworkNode {
 
         // only count reticulation nodes
         int nodeCount = (nParents == 2) ? 1 : 0;
-        for (NetworkNode c: children) {
-            nodeCount += c.recurseReticulationNodeCount();
+        for (NetworkNode child: children) {
+            nodeCount += child.recurseReticulationNodeCount();
         }
 
         touched = true;

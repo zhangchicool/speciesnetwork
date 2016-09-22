@@ -55,9 +55,11 @@ public class DeleteReticulation extends Operator {
         // pick a reticulation branch randomly
         final Integer hybridBranchNr = Randomizer.nextInt(nReticulationBranches) + speciesNetwork.getReticulationOffset();
         final int hybridNodeNr = speciesNetwork.getNodeNumber(hybridBranchNr);
-        NetworkNode hybridNode = speciesNetwork.getNode(hybridNodeNr);
         // branch hybridBranchNr is connecting hybridNode and pickedParent
+        NetworkNode hybridNode = speciesNetwork.getNode(hybridNodeNr);
         NetworkNode pickedParent = hybridNode.getParentByBranch(hybridBranchNr);
+        if (pickedParent.isReticulation())  // cannot delete a branch connecting two reticulation nodes
+            return Double.NEGATIVE_INFINITY;
 
         // get the child node and another parent node of hybridNode
         final Integer childBranchNr1 = hybridNode.childBranchNumbers.get(0);
