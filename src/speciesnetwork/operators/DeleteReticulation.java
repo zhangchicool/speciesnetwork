@@ -14,15 +14,17 @@ import speciesnetwork.NetworkNode;
 import speciesnetwork.SanityChecks;
 
 /**
- * This proposal delete a reticulation branch from the species network. If there is no reticulation, this is aborted.
- * The two branches at each connecting point are joined, resulting branches with length l1 and l2 respectively.
- * The gamma prob r is removed. The Jacobian is 1 / (l1 * l2).
+ * This proposal delete a reticulation branch from the species network. If there is no reticulation, or if the branch
+ * is connecting two reticulation nodes, this is aborted. The two branches at each connecting point are joined,
+ * resulting branches with length l1 and l2 respectively. The gamma prob r is removed.
+ * The Jacobian is 1 / (l1 * l2).
  *
  * The AddReticulation and DeleteReticulation are chosen with equal prob.
  * Let m' be the number of reticulation branches in the current network. The probability of selecting the this branch to
  * remove is (1/m').
  * Let k' be the number of branches in the proposed network. The probability of adding this branch is (1/k')(1/k')
  * The Hastings ratio is (1/k')(1/k')(g1)(g2)(g3) / (1/m') = m' / k'^2, with g1 = g2 = g3 = 1 (uniform density).
+ *
  * See also AddReticulation.
  *
  * @author Chi Zhang
@@ -66,9 +68,9 @@ public class DeleteReticulation extends Operator {
         NetworkNode childNode1 = hybridNode.getChildByBranch(childBranchNr1);
         final Integer parentBranchNr1;
         if (hybridNode.gammaBranchNumber.equals(hybridBranchNr)) {
-            parentBranchNr1 = hybridBranchNr + 1;
+            parentBranchNr1 = hybridNode.gammaBranchNumber + 1;
         } else {
-            parentBranchNr1 = hybridBranchNr;
+            parentBranchNr1 = hybridNode.gammaBranchNumber;
         }
         NetworkNode parentNode1 = hybridNode.getParentByBranch(parentBranchNr1);
 

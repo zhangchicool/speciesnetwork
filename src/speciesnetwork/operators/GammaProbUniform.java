@@ -22,6 +22,9 @@ public class GammaProbUniform extends Operator {
         speciesNetwork.startEditing(this);
 
         final int nReticulations = speciesNetwork.getReticulationNodeCount();
+        if (nReticulations == 0)  // no reticulation
+            return Double.NEGATIVE_INFINITY;
+
         final int randomNodeIndex = Randomizer.nextInt(nReticulations) + speciesNetwork.getReticulationOffset();
         final NetworkNode randomNode = speciesNetwork.getNode(randomNodeIndex);
 

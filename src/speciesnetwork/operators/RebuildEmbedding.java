@@ -97,6 +97,7 @@ public class RebuildEmbedding extends Operator {
         embedding = embeddingInput.get();
         getNodeHeirs();
         // rebuild the embedding
+        embedding.startEditing(this);
         resetEmbedding();
         return recurseRebuild(geneTree.getRoot(), speciesNetwork.getRoot(), true);
     }

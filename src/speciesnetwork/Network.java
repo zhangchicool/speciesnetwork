@@ -526,7 +526,7 @@ public class Network extends StateNode {
         reticulationNode.setLabel("#H" + reticulationNodeCount);
         // bifurcationNode.setLabel("S" + speciationNodeCount);
 
-        if (pickedNode1 == pickedNode2 && parentNode1 == parentNode2) {
+        if (retAttachBranchNr.equals(bifAttachBranchNr)) {
             // the two nodes are on the same branch
             reticulationNode.childBranchNumbers.add(retAttachBranchNr);
             bifurcationNode.childBranchNumbers.add(leafNodeCount+speciationNodeCount);
@@ -564,9 +564,9 @@ public class Network extends StateNode {
         // NetworkNode childNode1 = hybridNode.getChildByBranch(childBranchNr1);
         final Integer parentBranchNr1;
         if (hybridNode.gammaBranchNumber.equals(hybridBranchNr)) {
-            parentBranchNr1 = hybridBranchNr + 1;
+            parentBranchNr1 = hybridNode.gammaBranchNumber + 1;
         } else {
-            parentBranchNr1 = hybridBranchNr;
+            parentBranchNr1 = hybridNode.gammaBranchNumber;
         }
         NetworkNode parentNode1 = hybridNode.getParentByBranch(parentBranchNr1);
 

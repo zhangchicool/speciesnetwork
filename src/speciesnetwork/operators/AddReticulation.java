@@ -18,7 +18,8 @@ import speciesnetwork.SanityChecks;
  * The same branch can be picked twice (and forms a loop to that branch). The cutting proportion of each picked branch by
  * the connecting point, w1 and w2 ~ Uniform(0,1). Let l11 = l1 * w1, l12 = l1 * (1-w1), l21 = l2 * w2, l22 = l2 * (1-w2)
  * The direction of the new branch is determined by the two connecting points, the higher is speciation node, and the
- * lower is reticulation node. The gamma prob r = w3 ~ Uniform(0,1). The Jacobian is l1 * l2.
+ * lower is reticulation node. The gamma prob r = w3 ~ Uniform(0,1).
+ * The Jacobian is l1 * l2.
  *
  * The AddReticulation and DeleteReticulation are chosen with equal prob. If there is no reticulation in the network,
  * the DeleteReticulation move is aborted.
@@ -26,6 +27,7 @@ import speciesnetwork.SanityChecks;
  * Let m be the number of reticulation branches in the proposed network. The probability of selecting the same branch to
  * remove is (1/m).
  * The Hastings ratio is (1/m) / [(1/k)(1/k)(g1)(g2)(g3)] = k^2 / m, with g1 = g2 = g3 = 1 (uniform density).
+ *
  * See also DeleteReticulation.
  *
  * @author Chi Zhang

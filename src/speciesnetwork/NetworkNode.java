@@ -72,6 +72,8 @@ public class NetworkNode {
         children = updateChildren();
         nParents = parents.size();
         nChildren = children.size();
+
+        isDirty |= Network.IS_DIRTY;
     }
 
     /**
