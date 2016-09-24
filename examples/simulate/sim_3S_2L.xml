@@ -76,7 +76,7 @@
                     <!-- populationModel id="popModel" popSizes="0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 " spec="speciesnetwork.ConstantPopulation"/ -->
                     <populationModel alpha="4.0" beta="0.04" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
                 </distribution>
-                <distribution id="networkPrior" diversificationRate="1.0" hybridizationRate="1.0" spec="speciesnetwork.YuleHybridModel" network="@network:species" betaShape="1.0"/>
+                <distribution id="networkPrior" speciationRate="1.0" hybridizationRate="1.0" spec="speciesnetwork.YuleHybridModel" network="@network:species" betaShape="1.0"/>
                 <prior id="clockPrior.c:gene2" name="distribution" x="@clockRate.c:gene2">
                     <Gamma id="Gamma.0" name="distr">
                         <parameter id="RealParameter.0" estimate="false" name="alpha">2.0</parameter>

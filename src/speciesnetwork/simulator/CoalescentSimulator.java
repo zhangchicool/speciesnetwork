@@ -265,7 +265,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("                    <populationModel alpha=\"4.0\" beta=\"0.04\" id=\"popModel\" " +
                                                     "spec=\"speciesnetwork.ConstantPopulationIO\"/>");
         out.println("                </distribution>");
-        out.println("                <distribution id=\"networkPrior\" diversificationRate=\"1.0\" hybridizationRate=\"0.1\" " +
+        out.println("                <distribution id=\"networkPrior\" speciationRate=\"1.0\" hybridizationRate=\"0.5\" " +
                     "spec=\"speciesnetwork.YuleHybridModel\" network=\"@network:species\" betaShape=\"1.0\"/>");
         out.println("            </distribution>");
         out.println("            <distribution id=\"likelihood\" spec=\"util.CompoundDistribution\">");  // likelihood

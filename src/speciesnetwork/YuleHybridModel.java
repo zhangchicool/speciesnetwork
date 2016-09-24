@@ -19,8 +19,8 @@ import beast.math.distributions.Beta;
 public class YuleHybridModel extends Distribution {
     public Input<Network> networkInput =
             new Input<>("network", "The species network.", Validate.REQUIRED);
-    final public Input<RealParameter> diversificationInput =
-            new Input<>("diversificationRate", "Speciation rate, lambda.");
+    final public Input<RealParameter> speciationInput =
+            new Input<>("speciationRate", "Speciation rate, lambda.");
     final public Input<RealParameter> hybridizationInput =
             new Input<>("hybridizationRate", "Hybridization rate, nu.");
     public Input<RealParameter> netDiversification =
@@ -42,15 +42,15 @@ public class YuleHybridModel extends Distribution {
 
     @Override
     public void initAndValidate() {
-        if (diversificationInput.get() != null && hybridizationInput.get() != null) {
-            lambda = diversificationInput.get().getValue();
+        if (speciationInput.get() != null && hybridizationInput.get() != null) {
+            lambda = speciationInput.get().getValue();
             nu = hybridizationInput.get().getValue();
         }
         else if (netDiversification.get() != null && turnOver.get() != null) {
             lambda = netDiversification.get().getValue() / (1 - turnOver.get().getValue());
             nu = lambda * turnOver.get().getValue();
         } else {
-            throw new RuntimeException("Either specify diversificationRate and netDiversification " +
+            throw new RuntimeException("Either specify speciationRate and hybridizationRate " +
                                         "OR specify netDiversification and turnOver.");
         }
         // rho = rhoProbInput.get() == null ? 1.0 : rhoProbInput.get().getValue();
@@ -110,7 +110,7 @@ public class YuleHybridModel extends Distribution {
     @Override
     protected boolean requiresRecalculation() {
         return networkInput.get().isDirty() ||
-                diversificationInput.get().somethingIsDirty() ||
+                speciationInput.get().somethingIsDirty() ||
                 hybridizationInput.get().somethingIsDirty() ||
                 netDiversification.get().somethingIsDirty() ||
                 turnOver.get().somethingIsDirty();

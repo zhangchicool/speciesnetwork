@@ -4201,7 +4201,7 @@
             <geneTreeWithin id="geneTree:lpw_xy1420" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_xy1420" embedding="@embedding:lpw_xy1420"/>
         </distribution>
         <distribution id="prior" spec="util.CompoundDistribution">
-            <distribution id="YuleModel:species" spec="speciesnetwork.YuleHybridModel" network="@network:species" diversificationRate="1.0" hybridizationRate="0.1" betaShape="1.0"/>
+            <distribution id="YuleModel:species" spec="speciesnetwork.YuleHybridModel" network="@network:species" speciationRate="1.0" hybridizationRate="0.5" betaShape="1.0"/>
             <prior id="ClockPrior.c:lpw_ebs" name="distribution" x="@clockRate.c:lpw_ebs">
                 <Gamma id="Gamma.0" name="distr">
                     <parameter id="RealParameter.0" estimate="false" name="alpha">2.0</parameter>
