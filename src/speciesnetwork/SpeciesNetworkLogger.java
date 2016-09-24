@@ -43,7 +43,6 @@ public class SpeciesNetworkLogger extends BEASTObject implements Loggable {
         if (parameterInput.get().size() == 0 && clockModelInput.get() == null && populationModelInput.get() == null) {
             someMetaDataNeedsLogging = false;
             return;
-            //throw new IllegalArgumentException("At least one of the metadata and branchratemodel inputs must be defined");
         }
         someMetaDataNeedsLogging = true;
         // without substitution model, reporting substitutions == reporting branch lengths 

@@ -20,9 +20,12 @@ public class YuleHybridModel extends Distribution {
     public Input<Network> networkInput =
             new Input<>("network", "The species network.", Validate.REQUIRED);
     final public Input<RealParameter> diversificationInput =
-            new Input<>("diversificationRate", "Speciation rate, lambda.", Validate.REQUIRED);
+            new Input<>("diversificationRate", "Speciation rate, lambda.");
     final public Input<RealParameter> hybridizationInput =
-            new Input<>("hybridizationRate", "Hybridization rate, nu.", Validate.REQUIRED);
+            new Input<>("hybridizationRate", "Hybridization rate, nu.");
+    public Input<RealParameter> netDiversification =
+            new Input<RealParameter>("netDiversification", "Net diversification rate: lambda-nu");
+    public Input<RealParameter> turnOver = new Input<RealParameter>("turnOver", "Turn over rate: nu/lambda");
     final public Input<RealParameter> rhoProbInput =
             new Input<>("rho", "Sampling prob. of extant species, rho.");
     final public Input<RealParameter> betaShapeInput =
@@ -34,11 +37,23 @@ public class YuleHybridModel extends Distribution {
 
     final private static Comparator<NetworkNode> hc = new NodeHeightComparator();
 
+    private double lambda, nu;
     private Beta betaPrior;
 
     @Override
     public void initAndValidate() {
-        super.initAndValidate();
+        if (diversificationInput.get() != null && hybridizationInput.get() != null) {
+            lambda = diversificationInput.get().getValue();
+            nu = hybridizationInput.get().getValue();
+        }
+        else if (netDiversification.get() != null && turnOver.get() != null) {
+            lambda = netDiversification.get().getValue() / (1 - turnOver.get().getValue());
+            nu = lambda * turnOver.get().getValue();
+        } else {
+            throw new RuntimeException("Either specify diversificationRate and netDiversification " +
+                                        "OR specify netDiversification and turnOver.");
+        }
+        // rho = rhoProbInput.get() == null ? 1.0 : rhoProbInput.get().getValue();
 
         // make sure that all tips are at the same height,
         // otherwise this Yule Model is not appropriate
@@ -47,22 +62,21 @@ public class YuleHybridModel extends Distribution {
         for (int i = 1; i < network.leafNodeCount; i++) {
             final double height = network.nodes[i].height;
             if (Math.abs(firstHeight - height) > 1e-8) {
-                System.err.println("WARNING: Yule Model cannot handle dated tips.");
-                break;
+                throw new RuntimeException("Yule Model cannot handle dated tips!");
+                // break;
             }
         }
 
         betaPrior = new Beta();
         betaPrior.alphaInput.setValue(betaShapeInput.get(), betaPrior);
         betaPrior.betaInput.setValue(betaShapeInput.get(), betaPrior);
+
+        // super.initAndValidate();
     }
 
     @Override
     public double calculateLogP() {
         final Network network = networkInput.get();
-        final double lambda = diversificationInput.get().getValue();
-        final double nu = hybridizationInput.get().getValue();
-        // final double rho = rhoProbInput.get() == null ? 1.0 : rhoProbInput.get().getValue();
 
         // sort the internal nodes according to their heights
         List<NetworkNode> nodes = new ArrayList<>();
