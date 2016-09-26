@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beast namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" version="2.0">
+    <data id="gene1" name="alignment">
+        <sequence id="gene1_a1" taxon="a1" totalcount="4" value="-"/>
+        <sequence id="gene1_a2" taxon="a2" totalcount="4" value="-"/>
+        <sequence id="gene1_b1" taxon="b1" totalcount="4" value="-"/>
+        <sequence id="gene1_b2" taxon="b2" totalcount="4" value="-"/>
+        <sequence id="gene1_c1" taxon="c1" totalcount="4" value="-"/>
+        <sequence id="gene1_c2" taxon="c2" totalcount="4" value="-"/>
+    </data>
+    <data id="gene2" name="alignment">
+        <sequence id="gene2_a1" taxon="a1" totalcount="4" value="-"/>
+        <sequence id="gene2_a2" taxon="a2" totalcount="4" value="-"/>
+        <sequence id="gene2_b1" taxon="b1" totalcount="4" value="-"/>
+        <sequence id="gene2_b2" taxon="b2" totalcount="4" value="-"/>
+        <sequence id="gene2_c1" taxon="c1" totalcount="4" value="-"/>
+        <sequence id="gene2_c2" taxon="c2" totalcount="4" value="-"/>
+    </data>
+    <data id="gene3" name="alignment">
+        <sequence id="gene3_a1" taxon="a1" totalcount="4" value="-"/>
+        <sequence id="gene3_a2" taxon="a2" totalcount="4" value="-"/>
+        <sequence id="gene3_b1" taxon="b1" totalcount="4" value="-"/>
+        <sequence id="gene3_b2" taxon="b2" totalcount="4" value="-"/>
+        <sequence id="gene3_c1" taxon="c1" totalcount="4" value="-"/>
+        <sequence id="gene3_c2" taxon="c2" totalcount="4" value="-"/>
+    </data>
+
+    <init spec='beast.util.TreeParser' id='tree:species' IsLabelledNewick="true" adjustTipHeights="false"
+          newick="(((A:0.02,(B:0.01)#H1[&amp;gamma=0.7]:0.01)S1:0.03,(#H1:0.02,C:0.03)S2:0.02)R:0.01)"/>
+    <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@tree:species">
+        <taxonset id="taxonSuperset" spec="TaxonSet">
+            <taxon id="A" spec="TaxonSet">
+                <taxon id="a1" spec="Taxon"/>
+                <taxon id="a2" spec="Taxon"/>
+            </taxon>
+            <taxon id="B" spec="TaxonSet">
+                <taxon id="b1" spec="Taxon"/>
+                <taxon id="b2" spec="Taxon"/>
+            </taxon>
+            <taxon id="C" spec="TaxonSet">
+                <taxon id="c1" spec="Taxon"/>
+                <taxon id="c2" spec="Taxon"/>
+            </taxon>
+        </taxonset>
+    </stateNode>
+    <parameter id="popSizes" estimate="false" name="stateNode">0.01</parameter>
+
+    <siteModel id="siteModel:gene1" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
+        <substModel id="jc:gene1" spec="JukesCantor"/>
+    </siteModel>
+    <siteModel id="siteModel:gene2" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
+        <substModel id="jc:gene2" spec="JukesCantor"/>
+    </siteModel>
+    <siteModel id="siteModel:gene3" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
+        <substModel id="jc:gene3" spec="JukesCantor"/>
+    </siteModel>
+
+    <run id="coalSimulator" outputFileName="sim_3S_3L.xml" spec="speciesnetwork.simulator.CoalescentSimulator" iterations="1">
+        <state id="state">
+            <tree id="tree:gene1" name="stateNode">
+                <taxonset alignment="@gene1" id="taxonset:gene1" spec="TaxonSet"/>
+            </tree>
+            <tree id="tree:gene2" name="stateNode">
+                <taxonset alignment="@gene2" id="taxonset:gene2" spec="TaxonSet"/>
+            </tree>
+            <tree id="tree:gene3" name="stateNode">
+                <taxonset alignment="@gene3" id="taxonset:gene3" spec="TaxonSet"/>
+            </tree>
+            <stateNode id="embedding:gene1" spec="parameter.IntegerParameter">-1</stateNode>
+            <stateNode id="embedding:gene2" spec="parameter.IntegerParameter">-1</stateNode>
+            <stateNode id="embedding:gene3" spec="parameter.IntegerParameter">-1</stateNode>
+        </state>
+
+        <speciesNetwork idref="network:species"/>
+        <popSizes idref="popSizes"/>
+        <taxonSuperset idref="taxonSuperset"/>
+        <geneTree idref="tree:gene1"/> <embedding idref="embedding:gene1"/>
+        <geneTree idref="tree:gene2"/> <embedding idref="embedding:gene2"/>
+        <geneTree idref="tree:gene3"/> <embedding idref="embedding:gene3"/>
+        <sequenceSimulator id="seqgen:gene1" spec="beast.app.seqgen.SequenceSimulator" data="@gene1" tree="@tree:gene1" siteModel="@siteModel:gene1" sequencelength="200"/>
+        <sequenceSimulator id="seqgen:gene2" spec="beast.app.seqgen.SequenceSimulator" data="@gene2" tree="@tree:gene2" siteModel="@siteModel:gene2" sequencelength="200"/>
+        <sequenceSimulator id="seqgen:gene3" spec="beast.app.seqgen.SequenceSimulator" data="@gene3" tree="@tree:gene3" siteModel="@siteModel:gene3" sequencelength="200"/>
+    </run>
+</beast>

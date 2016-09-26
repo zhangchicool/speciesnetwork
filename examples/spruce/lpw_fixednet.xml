@@ -4365,24 +4365,6 @@
         </distribution>
     </distribution>
 
-    <operator id="speciesNodeSliderAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="200.0">
-        <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" weight="0.0"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_4cl"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_ebs"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_gi"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_m002"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_m7d1"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb16"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb29"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb62"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1364"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1390"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_xy1420"/>
-    </operator>
-
-    <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="30.0"/>
-    <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="15.0"/>
-
     <operator id="scaleAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="3.0">
         <operator id="scale:lpw_4cl" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_4cl" weight="0.0"/>
     </operator>
@@ -4722,90 +4704,132 @@
         <rebuildEmbedding idref="rebuildEmbedding:lpw_xy1420"/>
     </operator>
 
-    <operator id="gammaShapeScaler.s:lpw_4cl" spec="ScaleOperator" parameter="@gammaShape.s:lpw_4cl" scaleFactor="0.5" weight="0.5"/>
+    <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="30.0"/>
+    <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="15.0"/>
 
+    <operator id="speciesNodeSliderAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="200.0">
+        <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" weight="0.0"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_4cl"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_ebs"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_gi"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_m002"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_m7d1"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb16"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb29"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb62"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1364"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1390"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_xy1420"/>
+    </operator>
+
+    <operator id="speciesEdgeRelocateAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+        <operator id="edgeRelocator" spec="speciesnetwork.operators.EdgeRelocator" isWide="false" speciesNetwork="@network:species" weight="0.0"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_4cl"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_ebs"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_gi"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_m002"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_m7d1"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb16"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb29"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb62"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1364"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1390"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_xy1420"/>
+    </operator>
+
+    <operator id="speciesAddHybridAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+        <operator id="addReticulation" spec="speciesnetwork.operators.AddReticulation" speciesNetwork="@network:species" weight="0.0"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_4cl"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_ebs"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_gi"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_m002"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_m7d1"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb16"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb29"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb62"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1364"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1390"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_xy1420"/>
+    </operator>
+
+    <operator id="speciesDeleteHybridAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+        <operator id="deleteReticulation" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@network:species" weight="0.0"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_4cl"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_ebs"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_gi"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_m002"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_m7d1"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb16"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb29"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb62"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1364"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1390"/>
+        <rebuildEmbedding idref="rebuildEmbedding:lpw_xy1420"/>
+    </operator>
+
+    <operator id="gammaShapeScaler.s:lpw_4cl" spec="ScaleOperator" parameter="@gammaShape.s:lpw_4cl" scaleFactor="0.5" weight="0.5"/>
     <operator id="KappaScaler.s:lpw_4cl" spec="ScaleOperator" parameter="@kappa.s:lpw_4cl" scaleFactor="0.5" weight="0.1"/>
 
     <operator id="KappaScaler.s:lpw_ebs" spec="ScaleOperator" parameter="@kappa.s:lpw_ebs" scaleFactor="0.5" weight="0.1"/>
-
     <operator id="gammaShapeScaler.s:lpw_ebs" spec="ScaleOperator" parameter="@gammaShape.s:lpw_ebs" scaleFactor="0.5" weight="0.5"/>
 
     <operator id="KappaScaler.s:lpw_gi" spec="ScaleOperator" parameter="@kappa.s:lpw_gi" scaleFactor="0.5" weight="0.1"/>
-
     <operator id="gammaShapeScaler.s:lpw_gi" spec="ScaleOperator" parameter="@gammaShape.s:lpw_gi" scaleFactor="0.5" weight="0.5"/>
 
     <operator id="KappaScaler.s:lpw_m002" spec="ScaleOperator" parameter="@kappa.s:lpw_m002" scaleFactor="0.5" weight="0.1"/>
-
     <operator id="gammaShapeScaler.s:lpw_m002" spec="ScaleOperator" parameter="@gammaShape.s:lpw_m002" scaleFactor="0.5" weight="0.5"/>
 
     <operator id="KappaScaler.s:lpw_m7d1" spec="ScaleOperator" parameter="@kappa.s:lpw_m7d1" scaleFactor="0.5" weight="0.1"/>
-
     <operator id="gammaShapeScaler.s:lpw_m7d1" spec="ScaleOperator" parameter="@gammaShape.s:lpw_m7d1" scaleFactor="0.5" weight="0.5"/>
 
     <operator id="KappaScaler.s:lpw_sb16" spec="ScaleOperator" parameter="@kappa.s:lpw_sb16" scaleFactor="0.5" weight="0.1"/>
-
     <operator id="gammaShapeScaler.s:lpw_sb16" spec="ScaleOperator" parameter="@gammaShape.s:lpw_sb16" scaleFactor="0.5" weight="0.5"/>
 
     <operator id="KappaScaler.s:lpw_sb29" spec="ScaleOperator" parameter="@kappa.s:lpw_sb29" scaleFactor="0.5" weight="0.1"/>
-
     <operator id="gammaShapeScaler.s:lpw_sb29" spec="ScaleOperator" parameter="@gammaShape.s:lpw_sb29" scaleFactor="0.5" weight="0.5"/>
 
     <operator id="KappaScaler.s:lpw_sb62" spec="ScaleOperator" parameter="@kappa.s:lpw_sb62" scaleFactor="0.5" weight="0.1"/>
-
     <operator id="gammaShapeScaler.s:lpw_sb62" spec="ScaleOperator" parameter="@gammaShape.s:lpw_sb62" scaleFactor="0.5" weight="0.5"/>
 
     <operator id="KappaScaler.s:lpw_se1364" spec="ScaleOperator" parameter="@kappa.s:lpw_se1364" scaleFactor="0.5" weight="0.1"/>
-
     <operator id="gammaShapeScaler.s:lpw_se1364" spec="ScaleOperator" parameter="@gammaShape.s:lpw_se1364" scaleFactor="0.5" weight="0.5"/>
 
     <operator id="KappaScaler.s:lpw_se1390" spec="ScaleOperator" parameter="@kappa.s:lpw_se1390" scaleFactor="0.5" weight="0.1"/>
-
     <operator id="gammaShapeScaler.s:lpw_se1390" spec="ScaleOperator" parameter="@gammaShape.s:lpw_se1390" scaleFactor="0.5" weight="0.5"/>
 
     <operator id="KappaScaler.s:lpw_xy1420" spec="ScaleOperator" parameter="@kappa.s:lpw_xy1420" scaleFactor="0.5" weight="0.1"/>
-
     <operator id="gammaShapeScaler.s:lpw_xy1420" spec="ScaleOperator" parameter="@gammaShape.s:lpw_xy1420" scaleFactor="0.5" weight="0.5"/>
 
     <operator id="FrequenciesExchanger.s:lpw_m7d1" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
         <parameter idref="freqParameter.s:lpw_m7d1"/>
     </operator>
-
     <operator id="FrequenciesExchanger.s:lpw_se1364" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
         <parameter idref="freqParameter.s:lpw_se1364"/>
     </operator>
-
     <operator id="FrequenciesExchanger.s:lpw_4cl" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
         <parameter idref="freqParameter.s:lpw_4cl"/>
     </operator>
-
     <operator id="FrequenciesExchanger.s:lpw_xy1420" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
         <parameter idref="freqParameter.s:lpw_xy1420"/>
     </operator>
-
     <operator id="FrequenciesExchanger.s:lpw_m002" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
         <parameter idref="freqParameter.s:lpw_m002"/>
     </operator>
-
     <operator id="FrequenciesExchanger.s:lpw_ebs" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
         <parameter idref="freqParameter.s:lpw_ebs"/>
     </operator>
-
     <operator id="FrequenciesExchanger.s:lpw_sb16" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
         <parameter idref="freqParameter.s:lpw_sb16"/>
     </operator>
-
     <operator id="FrequenciesExchanger.s:lpw_sb29" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
         <parameter idref="freqParameter.s:lpw_sb29"/>
     </operator>
-
     <operator id="FrequenciesExchanger.s:lpw_sb62" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
         <parameter idref="freqParameter.s:lpw_sb62"/>
     </operator>
-
     <operator id="FrequenciesExchanger.s:lpw_se1390" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
         <parameter idref="freqParameter.s:lpw_se1390"/>
     </operator>
-
     <operator id="FrequenciesExchanger.s:lpw_gi" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
         <parameter idref="freqParameter.s:lpw_gi"/>
     </operator>
@@ -4894,47 +4918,36 @@
     <logger id="treelog.t:species" fileName="lpw_fixednet.species.trees" logEvery="5000" mode="tree">
         <log id="networkLogger:species" spec="speciesnetwork.SpeciesNetworkLogger" speciesNetwork="@network:species"/>
     </logger>
-
     <logger id="treelog.t:lpw_sb16" fileName="lpw_fixednet.lpw_sb16.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_sb16" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_sb16"/>
     </logger>
-
     <logger id="treelog.t:lpw_sb62" fileName="lpw_fixednet.lpw_sb62.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_sb62" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_sb62"/>
     </logger>
-
     <logger id="treelog.t:lpw_xy1420" fileName="lpw_fixednet.lpw_xy1420.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_xy1420" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_xy1420"/>
     </logger>
-
     <logger id="treelog.t:lpw_se1390" fileName="lpw_fixednet.lpw_se1390.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_se1390" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_se1390"/>
     </logger>
-
     <logger id="treelog.t:lpw_se1364" fileName="lpw_fixednet.lpw_se1364.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_se1364" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_se1364"/>
     </logger>
-
     <logger id="treelog.t:lpw_gi" fileName="lpw_fixednet.lpw_gi.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_gi" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_gi"/>
     </logger>
-
     <logger id="treelog.t:lpw_ebs" fileName="lpw_fixednet.lpw_ebs.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_ebs" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_ebs"/>
     </logger>
-
     <logger id="treelog.t:lpw_m002" fileName="lpw_fixednet.lpw_m002.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_m002" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_m002"/>
     </logger>
-
     <logger id="treelog.t:lpw_4cl" fileName="lpw_fixednet.lpw_4cl.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_4cl" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_4cl"/>
     </logger>
-
     <logger id="treelog.t:lpw_m7d1" fileName="lpw_fixednet.lpw_m7d1.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_m7d1" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_m7d1"/>
     </logger>
-
     <logger id="treelog.t:lpw_sb29" fileName="lpw_fixednet.lpw_sb29.trees" logEvery="5000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:lpw_sb29" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_sb29"/>
     </logger>
