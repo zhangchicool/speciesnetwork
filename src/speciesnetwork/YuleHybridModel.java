@@ -15,27 +15,27 @@ import beast.math.distributions.Beta;
  * @author Chi Zhang
  */
 
-@Description("Pure birth model (i.e. no deaths) with hybridization")  // speciation times
+@Description("Pure birth model (i.e. no death) with hybridization")
 public class YuleHybridModel extends Distribution {
     public Input<Network> networkInput =
             new Input<>("network", "The species network.", Validate.REQUIRED);
-    final public Input<RealParameter> speciationInput =
+    public Input<RealParameter> speciationInput =
             new Input<>("speciationRate", "Speciation rate, lambda.");
-    final public Input<RealParameter> hybridizationInput =
+    public Input<RealParameter> hybridizationInput =
             new Input<>("hybridizationRate", "Hybridization rate, nu.");
     public Input<RealParameter> netDiversification =
             new Input<RealParameter>("netDiversification", "Net diversification rate: lambda-nu");
     public Input<RealParameter> turnOver = new Input<RealParameter>("turnOver", "Turn over rate: nu/lambda");
-    final public Input<RealParameter> rhoProbInput =
+    public Input<RealParameter> rhoProbInput =
             new Input<>("rho", "Sampling prob. of extant species, rho.");
-    final public Input<RealParameter> betaShapeInput =
+    public Input<RealParameter> betaShapeInput =
             new Input<>("betaShape", "Shape of the symmetric beta prior distribution on gammas.", Validate.REQUIRED);
-    // final public Input<RealParameter> originHeightInput =
+    // public Input<RealParameter> originHeightInput =
     //      new Input<>("originHeight", "the height of the point of origin of the process");
     // public Input<Boolean> conditionalOnRootInput =
     //      new Input<>("conditionalOnRoot", "condition on the root (otherwise: on the time of origin)", true);
 
-    final private static Comparator<NetworkNode> hc = new NodeHeightComparator();
+    private static Comparator<NetworkNode> hc = new NodeHeightComparator();
 
     private double lambda, nu;
     private Beta betaPrior;
@@ -55,23 +55,19 @@ public class YuleHybridModel extends Distribution {
         }
         // rho = rhoProbInput.get() == null ? 1.0 : rhoProbInput.get().getValue();
 
-        // make sure that all tips are at the same height,
-        // otherwise this Yule Model is not appropriate
+        // make sure that all tips are at the same height, otherwise this Yule Model is not appropriate
         final Network network = networkInput.get();
         final double firstHeight = network.nodes[0].height;
         for (int i = 1; i < network.leafNodeCount; i++) {
             final double height = network.nodes[i].height;
             if (Math.abs(firstHeight - height) > 1e-8) {
                 throw new RuntimeException("Yule Model cannot handle dated tips!");
-                // break;
             }
         }
 
         betaPrior = new Beta();
         betaPrior.alphaInput.setValue(betaShapeInput.get(), betaPrior);
         betaPrior.betaInput.setValue(betaShapeInput.get(), betaPrior);
-
-        // super.initAndValidate();
     }
 
     @Override
@@ -79,8 +75,7 @@ public class YuleHybridModel extends Distribution {
         final Network network = networkInput.get();
 
         // sort the internal nodes according to their heights
-        List<NetworkNode> nodes = new ArrayList<>();
-        Collections.addAll(nodes, network.getInternalNodesWithOrigin());
+        List<NetworkNode> nodes = Arrays.asList(network.getInternalNodesWithOrigin());
         nodes.sort(hc);
 
         logP = 0.0;
@@ -102,7 +97,6 @@ public class YuleHybridModel extends Distribution {
                 logP += Math.log(lambda);
 
             if (node.isReticulation()) logP += betaPrior.logDensity(node.inheritProb);
-            // if (!(logP > -Double.MAX_VALUE && logP < Double.MAX_VALUE)) System.out.println("???");
         }
         return logP;
     }

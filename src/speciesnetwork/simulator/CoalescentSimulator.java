@@ -50,7 +50,7 @@ public class CoalescentSimulator extends Runnable {
     final public Input<Integer> iterationsInput =
             new Input<>("iterations","Number of iterations to simulate (default is 1).");
     final public Input<Boolean> networkOperatorInput =
-            new Input<>("networkOperator", "whether or not to write network operators?", false);
+            new Input<>("networkOperator", "whether or not to write network topology operators?", false);
 
     private Network speciesNetwork;
     private RealParameter popSizes;
@@ -365,11 +365,12 @@ public class CoalescentSimulator extends Runnable {
             out.println("        </operator>\n");
         }
         // species network operators
-        if (!networkOperatorInput.get())  out.println("        <!--");
         out.println("        <operator id=\"gammaProbUniform\" spec=\"speciesnetwork.operators.GammaProbUniform\" " +
                                 "speciesNetwork=\"@network:species\" weight=\"20.0\"/>");
         out.println("        <operator id=\"gammaProbRndWalk\" spec=\"speciesnetwork.operators.GammaProbRndWalk\" " +
                                 "speciesNetwork=\"@network:species\" weight=\"10.0\"/>\n");
+        // whether or not to write network topology operators
+        if (!networkOperatorInput.get())  out.println("        <!--");
         out.println("        <operator id=\"speciesNodeSliderAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"100.0\">");
         out.println("            <operator id=\"nodeSlider\" spec=\"speciesnetwork.operators.NodeSlider\" " +
                                             "speciesNetwork=\"@network:species\" weight=\"0.0\"/>");
