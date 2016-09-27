@@ -4258,9 +4258,7 @@
                         <frequencies id="estimatedFreqs.s:lpw_4cl" spec="Frequencies" frequencies="@freqParameter.s:lpw_4cl"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel id="StrictClock.c:lpw_4cl" spec="beast.evolution.branchratemodel.StrictClockModel">
-                    <parameter id="clockRate.c:lpw_4cl" estimate="false" name="clock.rate">1.0</parameter>
-                </branchRateModel>
+                <branchRateModel id="StrictClock.c:lpw_4cl" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="1.0"/>
             </distribution>
             <distribution id="treeLikelihood.lpw_ebs" spec="TreeLikelihood" data="@lpw_ebs" tree="@tree.t:lpw_ebs">
                 <siteModel id="SiteModel.s:lpw_ebs" spec="SiteModel" gammaCategoryCount="4" shape="@gammaShape.s:lpw_ebs">
