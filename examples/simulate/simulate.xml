@@ -29,16 +29,16 @@
     </stateNode>
 
     <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="sim_3S_1L.trees" iterations="100">
-        <speciesNetwork idref="network:species"/>
-        <parameter id="pop.sizes" name="popSizes">0.01</parameter>
-        <taxonSuperset idref="taxonSuperset"/>
-        <geneTree idref="tree:gene1"/>
-        <embedding idref="embedding:gene1"/>
         <state id="state">
             <tree id="tree:gene1" name="stateNode">
                 <taxonset alignment="@gene1" id="taxonset:gene1" spec="TaxonSet"/>
             </tree>
             <stateNode id="embedding:gene1" spec="parameter.IntegerParameter">-1</stateNode>
         </state>
+        <speciesNetwork idref="network:species"/>
+        <parameter id="pop.sizes" name="popSizes">0.01</parameter>
+        <taxonSuperset idref="taxonSuperset"/>
+        <geneTree idref="tree:gene1"/>
+        <embedding idref="embedding:gene1"/>
     </run>
 </beast>
