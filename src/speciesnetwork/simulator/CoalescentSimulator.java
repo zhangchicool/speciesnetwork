@@ -26,6 +26,9 @@ import speciesnetwork.*;
 
 @Description("Simulate gene trees given a species network (multispecies coalescent).")
 public class CoalescentSimulator extends Runnable {
+    final public Input<State> startStateInput =
+            new Input<>("state", "elements of the state space", Validate.REQUIRED);
+
     final public Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "Species network for embedding the gene tree.", Validate.REQUIRED);
     final public Input<RealParameter> popSizesInput =
@@ -39,15 +42,15 @@ public class CoalescentSimulator extends Runnable {
             new Input<>("embedding", "Map of gene tree traversal within the species network.", new ArrayList<>());
     final public Input<RealParameter> ploidiesInput =
             new Input<>("ploidy", "Ploidy (copy number) for each gene (default is 2).");
-    final public Input<State> startStateInput =
-            new Input<>("state", "elements of the state space", Validate.REQUIRED);
-
     final public Input<List<SequenceSimulator>> seqSimulatorsInput =
             new Input<>("sequenceSimulator", "Sequence simulator.", new ArrayList<>());
+
     final public Input<String> outputFileNameInput =
             new Input<>("outputFileName", "If provided, write to this file rather than to standard out.");
-
-    final public Input<Integer> iterationsInput = new Input<>("iterations","Number of iterations to simulate.");
+    final public Input<Integer> iterationsInput =
+            new Input<>("iterations","Number of iterations to simulate (default is 1).");
+    final public Input<Boolean> networkOperatorInput =
+            new Input<>("networkOperator", "whether or not to write network operators?", false);
 
     private Network speciesNetwork;
     private RealParameter popSizes;
@@ -348,19 +351,21 @@ public class CoalescentSimulator extends Runnable {
                         "parameter=\"@clockRate:gene" + (i+1) + "\" scaleFactor=\"0.5\" weight=\"3.0\"/>");
             out.println("");
         }
-        out.println("        <operator id=\"allClockTreeUpDownAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"10.0\">");
-        out.println("            <operator id=\"allClockTreeUpDown\" spec=\"UpDownOperator\" scaleFactor=\"0.75\" weight=\"0.0\">");
-        for (int i = 0; i < nrOfGeneTrees; i++) {
-            if (i > 0)
-                out.println("                <up idref=\"clockRate:gene" + (i+1) + "\"/>");
-            out.println("                <down idref=\"tree:gene" + (i+1) + "\"/>");
+        if (nrOfGeneTrees > 1) {
+            out.println("        <operator id=\"allClockTreeUpDownAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"10\">");
+            out.println("            <operator id=\"allClockTreeUpDown\" spec=\"UpDownOperator\" scaleFactor=\"0.75\" weight=\"0.0\">");
+            for (int i = 0; i < nrOfGeneTrees; i++) {
+                out.println("                <down idref=\"tree:gene" + (i + 1) + "\"/>");
+                if (i > 0) out.println("                <up idref=\"clockRate:gene" + (i + 1) + "\"/>");
+            }
+            out.println("            </operator>");
+            for (int i = 0; i < nrOfGeneTrees; i++) {
+                out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i + 1) + "\"/>");
+            }
+            out.println("        </operator>\n");
         }
-        out.println("            </operator>");
-        for (int i = 0; i < nrOfGeneTrees; i++) {
-            out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
-        }
-        out.println("        </operator>\n");
         // species network operators
+        if (!networkOperatorInput.get())  out.println("        <!--");
         out.println("        <operator id=\"gammaProbUniform\" spec=\"speciesnetwork.operators.GammaProbUniform\" " +
                                 "speciesNetwork=\"@network:species\" weight=\"20.0\"/>");
         out.println("        <operator id=\"gammaProbRndWalk\" spec=\"speciesnetwork.operators.GammaProbRndWalk\" " +
@@ -393,6 +398,7 @@ public class CoalescentSimulator extends Runnable {
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         }
         out.println("        </operator>");
+        if (!networkOperatorInput.get())  out.println("        -->");
         // print loggers
         out.println("");
         out.println("        <logger id=\"screenlog\" logEvery=\"1000\" model=\"@posterior\">");
