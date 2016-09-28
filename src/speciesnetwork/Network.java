@@ -524,7 +524,7 @@ public class Network extends StateNode {
         speciationNodeCount += 1;
         reticulationNodeCount += 1;
         reticulationNode.setLabel("#H" + reticulationNodeCount);
-        // bifurcationNode.setLabel("S" + speciationNodeCount);
+        bifurcationNode.setLabel("S" + speciationNodeCount);
 
         if (retAttachBranchNr.equals(bifAttachBranchNr)) {
             // the two nodes are on the same branch
@@ -619,7 +619,10 @@ public class Network extends StateNode {
             node.childBranchNumbers = newBranchNrs;
         }
 
-        // update the hybrid node labels
+        // update the speciation and reticulation node labels
+        for (int i = 0; i < speciationNodeCount; i++) {
+            nodes[leafNodeCount + i].setLabel("S" + (i+1));
+        }
         for (int i = 0; i < reticulationNodeCount; i++) {
             nodes[leafNodeCount + speciationNodeCount + i].setLabel("#H" + (i+1));
         }
