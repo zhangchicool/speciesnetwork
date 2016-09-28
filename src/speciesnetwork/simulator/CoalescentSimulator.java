@@ -239,7 +239,7 @@ public class CoalescentSimulator extends Runnable {
                     "newick=\"" + geneTree.getRoot().toNewick() + "\"/>");
         }
         // starbeast initializer
-        out.println("        <init estimate=\"false\" id=\"initializer\" method=\"random\" " +
+        out.println("        <init estimate=\"false\" id=\"initializer\" method=\"point\" " +
                                 "spec=\"speciesnetwork.StarBeastInitializer\" speciesNetwork=\"@network:species\">");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
@@ -399,7 +399,7 @@ public class CoalescentSimulator extends Runnable {
         if (!networkOperatorInput.get())  out.println("        -->");
         // print loggers
         out.println("");
-        out.println("        <logger id=\"screenlog\" logEvery=\"2000\" model=\"@posterior\">");
+        out.println("        <logger id=\"screenlog\" logEvery=\"20000\" model=\"@posterior\">");
         out.println("            <log idref=\"posterior\"/>");
         out.println("            <log idref=\"likelihood\"/>");
         out.println("            <log idref=\"prior\"/>");
