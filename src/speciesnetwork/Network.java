@@ -19,7 +19,7 @@ import beast.util.TreeParser;
 
 @Description("Network representing reticulate evolution of species")
 public class Network extends StateNode {
-    final public Input<TaxonSet> taxonSetInput =
+    public final Input<TaxonSet> taxonSetInput =
             new Input<>("taxonset", "Set of taxa at the leafs of the network.");
 
     /**

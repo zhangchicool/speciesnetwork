@@ -14,9 +14,9 @@ import beast.core.StateNode;
 
 @Description("Combine a gene tree operator with RebuildEmbedding.")
 public class JointReembedding extends Operator {
-    public Input<Operator> operatorInput = new Input<>("operator",
+    public final Input<Operator> operatorInput = new Input<>("operator",
             "Tree/Network operator to combine into RebuildEmbedding.", Validate.REQUIRED);
-    public Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
+    public final Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
             "Operator which rebuilds embedding of gene tree within species network.", new ArrayList<>());
 
     @Override

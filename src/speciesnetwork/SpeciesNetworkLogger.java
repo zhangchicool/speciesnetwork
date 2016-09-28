@@ -17,21 +17,19 @@ import beast.evolution.branchratemodel.BranchRateModel;
 
 @Description("Based on the TreeWithMetaDataLogger class, but with support for population sizes")
 public class SpeciesNetworkLogger extends BEASTObject implements Loggable {
-    final public Input<Network> speciesNetworkInput =
+    public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network to be logged.", Validate.REQUIRED);
-    final public Input<List<GeneTreeInSpeciesNetwork>> geneTreesInput =
-            new Input<>("geneTrees", "Gene trees within the species network.", new ArrayList<>());
-    final public Input<PopulationSizeModel> populationModelInput =
-            new Input<>("populationmodel", "population sizes to be logged with branches of the tree");
+    public final Input<PopulationSizeModel> populationModelInput =
+            new Input<>("populationmodel", "Population sizes to be logged with branches of the tree");
     // TODO: make this input a list of valuables
-    final public Input<List<Function>> parameterInput =
+    public final Input<List<Function>> parameterInput =
             new Input<>("metadata", "meta data to be logged with the tree nodes",new ArrayList<>());
-    final public Input<BranchRateModel> clockModelInput =
-            new Input<>("branchratemodel", "rate to be logged with branches of the tree");
-    final public Input<Boolean> substitutionsInput =
-            new Input<>("substitutions", "report branch lengths as substitutions (branch length times clock rate for the branch)", false);
-    final public Input<Integer> decimalPlacesInput =
-            new Input<>("dp", "the number of decimal places to use writing branch lengths and rates, use -1 for full precision (default = full precision)", -1);
+    public final Input<BranchRateModel> clockModelInput =
+            new Input<>("branchratemodel", "Rate to be logged with branches of the tree");
+    public final Input<Boolean> substitutionsInput = new Input<>("substitutions",
+            "Report branch lengths as substitutions (branch length times clock rate, default false)", false);
+    public final Input<Integer> decimalPlacesInput = new Input<>("dp",
+            "The number of decimal places to use writing branch lengths and rates (default -1 for full precision)", -1);
 
     boolean someMetaDataNeedsLogging;
     boolean substitutions = false;

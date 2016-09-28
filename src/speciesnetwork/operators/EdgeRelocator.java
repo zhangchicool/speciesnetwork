@@ -25,10 +25,10 @@ import speciesnetwork.SanityChecks;
 @Description("Relocate the source of an edge starting with speciation node, " +
              "or the destination of an edge ending with hybridization node.")
 public class EdgeRelocator extends Operator {
-    public Input<Network> speciesNetworkInput =
+    public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
-    public Input<Boolean> isWideInput =
-            new Input<>("isWide", "If true, change the node height.", false);
+    public final Input<Boolean> isWideInput =
+            new Input<>("isWide", "If true, change the node height (default is false).", false);
 
     private boolean isWide;
 

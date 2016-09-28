@@ -19,11 +19,11 @@ import beast.core.State;
 
 @Description("Calculates probability of gene trees conditioned on a species tree (the multi-species coalescent).")
 public class MultispeciesCoalescent extends Distribution {
-    public Input<Network> speciesNetworkInput =
+    public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
-    public Input<List<GeneTreeInSpeciesNetwork>> geneTreeWrapperInput =
+    public final Input<List<GeneTreeInSpeciesNetwork>> geneTreeWrapperInput =
             new Input<>("geneTreeWithin", "Gene trees within the species network.", new ArrayList<>());
-    public Input<PopulationSizeModel> populationModelInput =
+    public final Input<PopulationSizeModel> populationModelInput =
             new Input<>("populationModel", "The species network population model.", Validate.REQUIRED);
 
     private int nGeneTrees;

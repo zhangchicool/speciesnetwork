@@ -22,13 +22,13 @@ import beast.evolution.tree.TreeInterface;
  */
 
 public class GeneTreeInSpeciesNetwork extends CalculationNode {
-    public Input<Network> speciesNetworkInput =
+    public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "Species network for embedding the gene tree.", Validate.REQUIRED);
-    public Input<Tree> geneTreeInput =
+    public final Input<Tree> geneTreeInput =
             new Input<>("geneTree", "Gene tree embedded in the species network.", Validate.REQUIRED);
-    public Input<IntegerParameter> embeddingInput =
+    public final Input<IntegerParameter> embeddingInput =
             new Input<>("embedding", "Map of gene tree traversal within the species network.", Validate.REQUIRED);
-    public Input<Double> ploidyInput =
+    public final Input<Double> ploidyInput =
             new Input<>("ploidy", "Ploidy (copy number) for this gene (default is 2).", 2.0);
     protected double ploidy;
 

@@ -10,7 +10,8 @@ import speciesnetwork.NetworkNode;
 
 @Description("Changes the value of gamma by uniformly selecting a value in its range.")
 public class GammaProbUniform extends Operator {
-    public Input<Network> speciesNetworkInput = new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
+    public final Input<Network> speciesNetworkInput =
+            new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
 
     @Override
     public void initAndValidate() {

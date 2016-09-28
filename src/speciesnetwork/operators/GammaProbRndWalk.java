@@ -10,8 +10,10 @@ import speciesnetwork.NetworkNode;
 
 @Description("Changes the value of gamma by applying a random walk to the logit of gamma.")
 public class GammaProbRndWalk extends Operator {
-    public Input<Network> speciesNetworkInput = new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
-    public Input<Double> windowSizeInput = new Input<>("windowSize", "The size of the sliding window, default 1.0.", 1.0);
+    public final Input<Network> speciesNetworkInput =
+            new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
+    public final Input<Double> windowSizeInput =
+            new Input<>("windowSize", "The size of the sliding window (default is 1).", 1.0);
 
     @Override
     public void initAndValidate() {

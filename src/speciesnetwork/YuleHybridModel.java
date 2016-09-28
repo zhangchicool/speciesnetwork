@@ -17,22 +17,22 @@ import beast.math.distributions.Beta;
 
 @Description("Pure birth model (i.e. no death) with hybridization")
 public class YuleHybridModel extends Distribution {
-    public Input<Network> networkInput =
+    public final Input<Network> networkInput =
             new Input<>("network", "The species network.", Validate.REQUIRED);
-    public Input<RealParameter> speciationInput =
+    public final Input<RealParameter> speciationInput =
             new Input<>("speciationRate", "Speciation rate, lambda.");
-    public Input<RealParameter> hybridizationInput =
+    public final Input<RealParameter> hybridizationInput =
             new Input<>("hybridizationRate", "Hybridization rate, nu.");
-    public Input<RealParameter> netDiversification =
+    public final Input<RealParameter> netDiversification =
             new Input<RealParameter>("netDiversification", "Net diversification rate: lambda-nu");
-    public Input<RealParameter> turnOver = new Input<RealParameter>("turnOver", "Turn over rate: nu/lambda");
-    public Input<RealParameter> rhoProbInput =
+    public final Input<RealParameter> turnOver = new Input<RealParameter>("turnOver", "Turn over rate: nu/lambda");
+    public final Input<RealParameter> rhoProbInput =
             new Input<>("rho", "Sampling prob. of extant species, rho.");
-    public Input<RealParameter> betaShapeInput =
+    public final Input<RealParameter> betaShapeInput =
             new Input<>("betaShape", "Shape of the symmetric beta prior distribution on gammas.", Validate.REQUIRED);
-    // public Input<RealParameter> originHeightInput =
+    // public final Input<RealParameter> originHeightInput =
     //      new Input<>("originHeight", "the height of the point of origin of the process");
-    // public Input<Boolean> conditionalOnRootInput =
+    // public final Input<Boolean> conditionalOnRootInput =
     //      new Input<>("conditionalOnRoot", "condition on the root (otherwise: on the time of origin)", true);
 
     private static Comparator<NetworkNode> hc = new NodeHeightComparator();

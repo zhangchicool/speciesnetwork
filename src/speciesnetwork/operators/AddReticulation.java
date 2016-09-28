@@ -35,7 +35,7 @@ import speciesnetwork.SanityChecks;
 
 @Description("Add a reticulation branch to the species network.")
 public class AddReticulation extends Operator {
-    public Input<Network> speciesNetworkInput =
+    public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
 
     // empty constructor to facilitate construction by XML + initAndValidate

@@ -17,10 +17,11 @@ import beast.core.Input.Validate;
 
 @Description("Parse the network of extended Newick format.")
 public class NetworkParser extends Network implements StateNodeInitialiser {
-    final public Input<Network> networkInput = new Input<>("initial", "Network to initialize.");
-    final public Input<Tree> treeInput = new Input<>("tree", "Tree initialized from extended newick string", Validate.REQUIRED);
+    public final Input<Network> networkInput = new Input<>("initial", "Network to initialize.");
+    public final Input<Tree> treeInput =
+            new Input<>("tree", "Tree initialized from extended newick string", Validate.REQUIRED);
     public final Input<Boolean> adjustTipHeightsInput =
-            new Input<>("adjustTipHeights", "flag to indicate if tipHeights shall be adjusted. Default=true.", true);
+            new Input<>("adjustTipHeights", "Whether tipHeights shall be adjusted (default is true).", true);
 
     private int nextLeafNr;
     private int nextSpeciationNr;
@@ -39,12 +40,10 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
         for (Node n: tree.getNodesAsArray()) {
             if (n.getID() != null && n.getID().startsWith("#H")) {
                 hybridNodeCount++;
-            } else {
-                if (n.isLeaf()) {
-                    leafNodeCount++;
-                } else if (!n.isRoot()) {
-                    speciationNodeCount++;
-                }
+            } else if (n.isLeaf()) {
+                leafNodeCount++;
+            } else if (!n.isRoot()) {
+                speciationNodeCount++;
             }
         }
 
@@ -66,7 +65,7 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
         // Update the cached parents and children for each node
         updateRelationships();
 
-        // Adjust network tip height to ZERO
+        // Step (3) adjust network tip height to ZERO
         if (adjustTipHeightsInput.get()) {
             // all nodes should be at zero height if no date-trait is available
             for (NetworkNode tip: getLeafNodes()) {
@@ -83,7 +82,6 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
 
         final String nodeLabel = treeNode.getID();
         final double nodeHeight = treeNode.getHeight();
-
         final int matchingNodeNr = getNodeNumber(nodeLabel);
         if (matchingNodeNr < 0) {
             int newNodeNumber;

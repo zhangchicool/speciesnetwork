@@ -26,31 +26,31 @@ import speciesnetwork.*;
 
 @Description("Simulate gene trees given a species network (multispecies coalescent).")
 public class CoalescentSimulator extends Runnable {
-    final public Input<State> startStateInput =
+    public final Input<State> startStateInput =
             new Input<>("state", "elements of the state space", Validate.REQUIRED);
 
-    final public Input<Network> speciesNetworkInput =
+    public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "Species network for embedding the gene tree.", Validate.REQUIRED);
-    final public Input<RealParameter> popSizesInput =
+    public final Input<RealParameter> popSizesInput =
             new Input<>("popSizes", "Constant per-branch population sizes.", Validate.REQUIRED);
-    final public Input<TaxonSet> taxonSuperSetInput =
+    public final Input<TaxonSet> taxonSuperSetInput =
             new Input<>("taxonSuperset", "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
 
-    final public Input<List<Tree>> geneTreesInput =
+    public final Input<List<Tree>> geneTreesInput =
             new Input<>("geneTree", "Gene tree embedded in the species network.", new ArrayList<>());
-    final public Input<List<IntegerParameter>> embeddingsInput =
+    public final Input<List<IntegerParameter>> embeddingsInput =
             new Input<>("embedding", "Map of gene tree traversal within the species network.", new ArrayList<>());
-    final public Input<RealParameter> ploidiesInput =
+    public final Input<RealParameter> ploidiesInput =
             new Input<>("ploidy", "Ploidy (copy number) for each gene (default is 2).");
-    final public Input<List<SequenceSimulator>> seqSimulatorsInput =
+    public final Input<List<SequenceSimulator>> seqSimulatorsInput =
             new Input<>("sequenceSimulator", "Sequence simulator.", new ArrayList<>());
 
-    final public Input<String> outputFileNameInput =
+    public final Input<String> outputFileNameInput =
             new Input<>("outputFileName", "If provided, write to this file rather than to standard out.");
-    final public Input<Integer> iterationsInput =
+    public final Input<Integer> iterationsInput =
             new Input<>("iterations","Number of iterations to simulate (default is 1).");
-    final public Input<Boolean> networkOperatorInput =
-            new Input<>("networkOperator", "whether or not to write network topology operators?", false);
+    public final Input<Boolean> networkOperatorInput =
+            new Input<>("networkOperator", "Whether to write network topology operators (default false).", false);
 
     private Network speciesNetwork;
     private RealParameter popSizes;

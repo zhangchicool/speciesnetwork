@@ -25,12 +25,13 @@ import com.google.common.collect.Multimap;
 
 @Description("Rebuild the embedding of a gene tree in the species network.")
 public class RebuildEmbedding extends Operator {
-    public Input<Network> speciesNetworkInput = new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
-    public Input<Tree> geneTreeInput = new Input<>("geneTree", "The gene tree.", Validate.REQUIRED);
-    public Input<TaxonSet> taxonSuperSetInput =
+    public final Input<Network> speciesNetworkInput =
+            new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
+    public final Input<Tree> geneTreeInput = new Input<>("geneTree", "The gene tree.", Validate.REQUIRED);
+    public final Input<TaxonSet> taxonSuperSetInput =
             new Input<>("taxonSuperset", "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
-    public Input<IntegerParameter> embeddingInput =
-            new Input<>("embedding", "The matrix to embed the gene tree within the species network.", Validate.REQUIRED);
+    public final Input<IntegerParameter> embeddingInput = new Input<>("embedding",
+            "The matrix to embed the gene tree within the species network.", Validate.REQUIRED);
 
     // map of gene tree tip names to species network tip number  // do not map to nodes directly as the value may change
     private Map<String, Integer> geneTipMap;

@@ -12,7 +12,8 @@ import beast.core.parameter.RealParameter;
  */
 
 public class ConstantPopulation extends PopulationSizeModel {
-    public Input<RealParameter> popSizesInput = new Input<>("popSizes", "Constant per-branch population sizes.", Validate.REQUIRED);
+    public final Input<RealParameter> popSizesInput =
+            new Input<>("popSizes", "Constant per-branch population sizes.", Validate.REQUIRED);
 
     @Override
     public void initAndValidate() {

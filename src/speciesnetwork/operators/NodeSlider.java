@@ -20,10 +20,10 @@ import beast.core.StateNode;
 
 @Description("Randomly selects an internal network node and move its height using an uniform sliding window.")
 public class NodeSlider extends Operator {
-    public Input<Network> speciesNetworkInput =
+    public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Input.Validate.REQUIRED);
-    public Input<Double> windowSizeInput =
-            new Input<>("windowSize", "The size of the sliding window, default 0.01.", 0.01);
+    public final Input<Double> windowSizeInput =
+            new Input<>("windowSize", "The size of the sliding window (default is 0.01).", 0.01);
 
     @Override
     public void initAndValidate() {

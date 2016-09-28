@@ -21,7 +21,7 @@ import speciesnetwork.operators.RebuildEmbedding;
 @Description("Set a starting point for a *BEAST analysis from gene alignment data.")
 public class StarBeastInitializer extends Tree implements StateNodeInitialiser {
 
-    static enum Method {
+    private enum Method {
         POINT("point"),
         RANDOM("random");
 
@@ -36,25 +36,21 @@ public class StarBeastInitializer extends Tree implements StateNodeInitialiser {
 
         private final String ename;
     }
-    final public Input<Method> initMethod = new Input<>("method", "Initialise either with a totally random state" +
-            "or a point estimate based on alignments data (default point-estimate)", Method.POINT, Method.values());
-    final public Input<Network> speciesNetworkInput
+    public final Input<Method> initMethod = new Input<>("method", "Initialise either with a totally random state" +
+            "or a point estimate based on alignments data (default point)", Method.POINT, Method.values());
+    public final Input<Network> speciesNetworkInput
             = new Input<>("speciesNetwork", "Species network to initialize.");
-    final public Input<RealParameter> gammaInput
-            = new Input<>("gamma", "Inheritance probabilities.");
-    final public Input<PopulationSizeModel> populationModelInput =
-            new Input<>("populationModel", "The species network population size model.");
-    final public Input<List<Tree>> geneTreesInput =
+    public final Input<List<Tree>> geneTreesInput =
             new Input<>("geneTree", "Gene tree to initialize.", new ArrayList<>());
-    final public Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
+    public final Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
             "Operator which rebuilds embedding of gene trees within species network.", new ArrayList<>());
-    final public Input<YuleHybridModel> hybridYuleInput = new Input<>("hybridYule",
+    public final Input<YuleHybridModel> hybridYuleInput = new Input<>("hybridYule",
             "The species network (with hybridization) to initialize.", Validate.XOR, speciesNetworkInput);
-    final public Input<RealParameter> birthRateInput =
+    public final Input<RealParameter> birthRateInput =
             new Input<>("birthRate", "Network prior birth rate to initialize.");
-    final public Input<RealParameter> hybridRateInput =
+    public final Input<RealParameter> hybridRateInput =
             new Input<>("hybridRate", "Network hybridization rate to initialize.");
-    final public Input<Function> clockRateInput =
+    public final Input<Function> clockRateInput =
             new Input<>("baseRate", "Main clock rate used to scale trees (default 1).");
 
     @Override
