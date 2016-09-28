@@ -94,9 +94,6 @@ public class CoalescentSimulator extends Runnable {
         else
             nrOfIterations = iterationsInput.get();
         for (int iteration = 0; iteration < nrOfIterations; iteration++) {
-            // simulate species network
-            // simulateSpeciesNetwork();
-
             // set popSizes dimension
             final int speciesBranchCount = speciesNetwork.getBranchCount();
             popSizes.setDimension(speciesBranchCount);
@@ -205,7 +202,7 @@ public class CoalescentSimulator extends Runnable {
         // print initial species network
         out.println("    <init spec=\"beast.util.TreeParser\" id=\"newick:species\" IsLabelledNewick=\"true\" " +
                             "adjustTipHeights=\"false\" newick=\"" + speciesNetwork.getOrigin().toString(true) + "\"/>\n");
-        out.println("    <run chainLength=\"1000000\" id=\"mcmc\" spec=\"MCMC\">");  // MCMC block
+        out.println("    <run chainLength=\"2000000\" id=\"mcmc\" spec=\"MCMC\">");  // MCMC block
         out.println("        <state id=\"state\" storeEvery=\"1000\">");  // states
         // print state nodes
         out.println("            <stateNode id=\"network:species\" spec=\"speciesnetwork.NetworkParser\" tree=\"@newick:species\">");
@@ -347,12 +344,12 @@ public class CoalescentSimulator extends Runnable {
                                                             "tree=\"@tree:gene" + (i+1) + "\" weight=\"0.0\"/>");
             out.println("        </operator>");
             if (i > 0)
-                out.println("        <operator id=\"strictClockRateScaler:gene" + (i+1) + "\" spec=\"ScaleOperator\" " +
-                        "parameter=\"@clockRate:gene" + (i+1) + "\" scaleFactor=\"0.5\" weight=\"3.0\"/>");
+                out.println("        <!-- operator id=\"strictClockRateScaler:gene" + (i+1) + "\" spec=\"ScaleOperator\" " +
+                        "parameter=\"@clockRate:gene" + (i+1) + "\" scaleFactor=\"0.5\" weight=\"3.0\"/ -->");
             out.println("");
         }
         if (nrOfGeneTrees > 1) {
-            out.println("        <operator id=\"allClockTreeUpDownAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"10\">");
+            out.println("        <!-- operator id=\"allClockTreeUpDownAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"10\">");
             out.println("            <operator id=\"allClockTreeUpDown\" spec=\"UpDownOperator\" scaleFactor=\"0.75\" weight=\"0.0\">");
             for (int i = 0; i < nrOfGeneTrees; i++) {
                 out.println("                <down idref=\"tree:gene" + (i + 1) + "\"/>");
@@ -362,7 +359,7 @@ public class CoalescentSimulator extends Runnable {
             for (int i = 0; i < nrOfGeneTrees; i++) {
                 out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i + 1) + "\"/>");
             }
-            out.println("        </operator>\n");
+            out.println("        </operator -->\n");
         }
         // species network operators
         out.println("        <operator id=\"gammaProbUniform\" spec=\"speciesnetwork.operators.GammaProbUniform\" " +
@@ -402,14 +399,14 @@ public class CoalescentSimulator extends Runnable {
         if (!networkOperatorInput.get())  out.println("        -->");
         // print loggers
         out.println("");
-        out.println("        <logger id=\"screenlog\" logEvery=\"1000\" model=\"@posterior\">");
+        out.println("        <logger id=\"screenlog\" logEvery=\"2000\" model=\"@posterior\">");
         out.println("            <log idref=\"posterior\"/>");
         out.println("            <log idref=\"likelihood\"/>");
         out.println("            <log idref=\"prior\"/>");
         out.println("            <log idref=\"coalescent\"/>");
         out.println("        </logger>");
         out.println("        <logger fileName=\"" + outputFileName + ".trace.log\" id=\"tracelog\" " +
-                            "logEvery=\"200\" model=\"@posterior\" sort=\"smart\">");
+                            "logEvery=\"1000\" model=\"@posterior\" sort=\"smart\">");
         out.println("            <log idref=\"posterior\"/>");
         out.println("            <log idref=\"likelihood\"/>");
         out.println("            <log idref=\"prior\"/>");
@@ -422,17 +419,17 @@ public class CoalescentSimulator extends Runnable {
         }
         out.println("        </logger>");
         out.println("        <logger fileName=\"" + outputFileName + ".species.trees\" id=\"treelog:species\" " +
-                             "logEvery=\"200\" mode=\"tree\">");
+                             "logEvery=\"1000\" mode=\"tree\">");
         out.println("            <log id=\"networkLogger:species\" spec=\"speciesnetwork.SpeciesNetworkLogger\" " +
                                     "speciesNetwork=\"@network:species\"/>");
         out.println("        </logger>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("        <logger fileName=\"" + outputFileName + ".gene" + (i+1) + ".log\" " +
-                                    "id=\"embedlog:gene" + (i+1) + "\" logEvery=\"200\" sort=\"smart\">");
+                                    "id=\"embedlog:gene" + (i+1) + "\" logEvery=\"1000\" sort=\"smart\">");
             out.println("            <log idref=\"embedding:gene" + (i+1) + "\"/>");
             out.println("        </logger>");
             out.println("        <logger fileName=\"" + outputFileName + ".gene" + (i+1) + ".trees\" " +
-                                    "id=\"treelog:gene" + (i+1) + "\" logEvery=\"200\" mode=\"tree\">");
+                                    "id=\"treelog:gene" + (i+1) + "\" logEvery=\"1000\" mode=\"tree\">");
             out.println("            <log id=\"treeLogger:gene" + (i+1) + "\" tree=\"@tree:gene" + (i+1) + "\" " +
                                         "spec=\"beast.evolution.tree.TreeWithMetaDataLogger\"/>");
             out.println("        </logger>");
