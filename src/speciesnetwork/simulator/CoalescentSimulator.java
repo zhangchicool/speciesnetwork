@@ -448,7 +448,7 @@ public class CoalescentSimulator extends Runnable {
             FileWriter fw = new FileWriter(outputFileName, true);
             for (int i = 0; i < nrOfGeneTrees; i++) {
                 Tree geneTree = geneTrees.get(i);
-                fw.write(geneTree.getRoot().toNewick() + "\n");
+                fw.write(geneTree.getRoot().toNewick() + ";\n");
             }
             fw.close();
         }
