@@ -13,7 +13,7 @@ public class GammaProbRndWalk extends Operator {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
     public final Input<Double> windowSizeInput =
-            new Input<>("windowSize", "The size of the sliding window (default is 1).", 1.0);
+            new Input<>("windowSize", "The size of the sliding window (default is 2).", 2.0);
 
     @Override
     public void initAndValidate() {
