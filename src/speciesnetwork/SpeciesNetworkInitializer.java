@@ -18,12 +18,13 @@ import speciesnetwork.operators.RebuildEmbedding;
  * @author Chi Zhang
  */
 
-@Description("Set a starting point for a *BEAST analysis from gene alignment data.")
-public class StarBeastInitializer extends Tree implements StateNodeInitialiser {
+@Description("Set a starting point for a species-network analysis.")
+public class SpeciesNetworkInitializer extends Tree implements StateNodeInitialiser {
 
     private enum Method {
-        POINT("point"),
-        RANDOM("random");
+        POINT("point"),   // point estimate from the sequences
+        RANDOM("random"), // random starting trees (caterpillar)
+        USER("user");     // user defined starting state
 
         Method(final String name) {
             this.ename = name;
@@ -69,6 +70,9 @@ public class StarBeastInitializer extends Tree implements StateNodeInitialiser {
             case RANDOM:
                 randomInit();
                 break;
+            case USER:
+                userStates();
+                break;
         }
 
         // initialize embedding for all gene trees
@@ -78,26 +82,26 @@ public class StarBeastInitializer extends Tree implements StateNodeInitialiser {
         }
     }
 
-    private void pointInit() {
-        // TODO: initialize parameters using point estimates
+    private void userStates() {
+        // initialize parameters using user defined starting state
+        // nothing to do here at this moment
     }
 
     private void randomInit() {
         final Network sNetwork = speciesNetworkInput.get();
-
-        // initialize population sizes to equal average branch length
-        // final double speciesNetworkLength = sNetwork.getNetworkLength();
-        // final int nSpeciesBranches = sNetwork.getBranchCount();
-        // final double averageBranchLength = speciesNetworkLength / (nSpeciesBranches - 1);
-        // final PopulationSizeModel populationModel = populationModelInput.get();
-        // populationModel.initPopSizes(averageBranchLength);
-
+        // initialize caterpillar species tree
         // do not scale the species network at the moment!
         final double rootHeight = sNetwork.getRoot().getHeight();
+
+        // initialize caterpillar gene trees
         final List<Tree> geneTrees = geneTreesInput.get();
         for (final Tree gtree : geneTrees) {
-            gtree.makeCaterpillar(2*rootHeight, 2*rootHeight/gtree.getInternalNodeCount(), true);
+            gtree.makeCaterpillar(rootHeight, rootHeight/gtree.getInternalNodeCount(), true);
         }
+    }
+
+    private void pointInit() {
+        // TODO: initialize parameters using point estimates
     }
 
     @Override

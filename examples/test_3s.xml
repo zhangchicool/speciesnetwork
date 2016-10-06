@@ -20,7 +20,8 @@
   <map name="OneOnX">beast.math.distributions.OneOnX</map>
   <map name="prior">beast.math.distributions.Prior</map>
 
-  <init spec='beast.util.TreeParser' id='newick:species' IsLabelledNewick="true" adjustTipHeights="false" newick="(((A:0.2,#H1[&amp;gamma=0.4]:0.1)d:0.3,((B:0.1)#H1:0.2,C:0.3)e:0.2)R:0.1)"/>
+  <init spec='beast.util.TreeParser' id='newick:species' IsLabelledNewick="true" adjustTipHeights="false"
+        newick="(((A:0.2,#H1[&amp;gamma=0.4]:0.1)d:0.3,((B:0.1)#H1:0.2,C:0.3)e:0.2)f:0.1)"/>
   <run chainLength="100000" id="mcmc" spec="MCMC">
     <state id="state" storeEvery="100">
       <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
@@ -45,7 +46,7 @@
       <stateNode id="embedding:gene1" spec="parameter.IntegerParameter">-1</stateNode>
     </state>
 
-    <init estimate="false" id="initializer" method="random" spec="speciesnetwork.StarBeastInitializer" speciesNetwork="@network:species">
+    <init estimate="false" id="initializer" method="random" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@network:species">
       <geneTree idref="tree:gene1"/>
       <rebuildEmbedding id="reEmbed:gene1" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1" weight="0.0"/>
     </init>

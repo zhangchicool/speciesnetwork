@@ -99,8 +99,8 @@ public class Network extends StateNode {
 
         // node of origin
         nodes[nodeCount - 1] = new NetworkNode(this);
-        final NetworkNode origin = nodes[nodeCount - 1];
-        origin.childBranchNumbers.add(leftNr);
+        nodes[nodeCount - 1].height = minInternalHeight + leafNodeCount * step;
+        nodes[nodeCount - 1].childBranchNumbers.add(leftNr);
     }
 
     public NetworkNode getOrigin() {

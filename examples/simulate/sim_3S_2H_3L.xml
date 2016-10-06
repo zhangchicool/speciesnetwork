@@ -1,10 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<beast namespace="beast.core:beast.evolution.alignment:beast.core.util:beast.evolution.sitemodel:beast.evolution.substitutionmodel" version="2.0">
+<beast namespace="beast.core:beast.evolution.alignment:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.app" version="2.0">
     <data id="gene1" name="alignment">
         <sequence id="gene1_a1" taxon="a1" totalcount="4" value="-"/>
         <sequence id="gene1_a2" taxon="a2" totalcount="4" value="-"/>
         <sequence id="gene1_b1" taxon="b1" totalcount="4" value="-"/>
         <sequence id="gene1_b2" taxon="b2" totalcount="4" value="-"/>
+        <sequence id="gene1_b3" taxon="b3" totalcount="4" value="-"/>
+        <sequence id="gene1_b4" taxon="b4" totalcount="4" value="-"/>
         <sequence id="gene1_c1" taxon="c1" totalcount="4" value="-"/>
         <sequence id="gene1_c2" taxon="c2" totalcount="4" value="-"/>
     </data>
@@ -13,6 +15,8 @@
         <sequence id="gene2_a2" taxon="a2" totalcount="4" value="-"/>
         <sequence id="gene2_b1" taxon="b1" totalcount="4" value="-"/>
         <sequence id="gene2_b2" taxon="b2" totalcount="4" value="-"/>
+        <sequence id="gene2_b3" taxon="b3" totalcount="4" value="-"/>
+        <sequence id="gene2_b4" taxon="b4" totalcount="4" value="-"/>
         <sequence id="gene2_c1" taxon="c1" totalcount="4" value="-"/>
         <sequence id="gene2_c2" taxon="c2" totalcount="4" value="-"/>
     </data>
@@ -21,12 +25,14 @@
         <sequence id="gene3_a2" taxon="a2" totalcount="4" value="-"/>
         <sequence id="gene3_b1" taxon="b1" totalcount="4" value="-"/>
         <sequence id="gene3_b2" taxon="b2" totalcount="4" value="-"/>
+        <sequence id="gene3_b3" taxon="b3" totalcount="4" value="-"/>
+        <sequence id="gene3_b4" taxon="b4" totalcount="4" value="-"/>
         <sequence id="gene3_c1" taxon="c1" totalcount="4" value="-"/>
         <sequence id="gene3_c2" taxon="c2" totalcount="4" value="-"/>
     </data>
 
     <init spec='beast.util.TreeParser' id='newick:species' IsLabelledNewick="true" adjustTipHeights="false"
-          newick="(((A:0.02,(B:0.01)#H1[&amp;gamma=0.7]:0.01)S1:0.03,(#H1:0.02,C:0.03)S2:0.02)R:0.01)"/>
+        newick="((((A:0.02,(B:0.01)#H1[&amp;gamma=0.4]:0.01)S1:0.01,(#H1:0.01)#H2[&amp;gamma=0.7]:0.01)S2:0.02,(#H2:0.02,C:0.04)S3:0.01)R:0.01)"/>
     <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
         <taxonset id="taxonSuperset" spec="TaxonSet">
             <taxon id="A" spec="TaxonSet">
@@ -36,6 +42,8 @@
             <taxon id="B" spec="TaxonSet">
                 <taxon id="b1" spec="Taxon"/>
                 <taxon id="b2" spec="Taxon"/>
+                <taxon id="b3" spec="Taxon"/>
+                <taxon id="b4" spec="Taxon"/>
             </taxon>
             <taxon id="C" spec="TaxonSet">
                 <taxon id="c1" spec="Taxon"/>
@@ -43,18 +51,12 @@
             </taxon>
         </taxonset>
     </stateNode>
-
-    <siteModel id="siteModel:gene1" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
-        <substModel id="jc:gene1" spec="JukesCantor"/>
-    </siteModel>
-    <siteModel id="siteModel:gene2" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
-        <substModel id="jc:gene2" spec="JukesCantor"/>
-    </siteModel>
-    <siteModel id="siteModel:gene3" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
-        <substModel id="jc:gene3" spec="JukesCantor"/>
+    
+    <siteModel id="siteModel:genex" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
+        <substModel id="jc:genex" spec="JukesCantor"/>
     </siteModel>
 
-    <run id="coalSimulator" outputFileName="sim_3S_3L.xml" spec="speciesnetwork.simulator.CoalescentSimulator" iterations="1">
+    <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="3S_2H_3L.xml" iterations="1">
         <state id="state">
             <tree id="tree:gene1" name="stateNode">
                 <taxonset alignment="@gene1" id="taxonset:gene1" spec="TaxonSet"/>
@@ -75,8 +77,8 @@
         <geneTree idref="tree:gene1"/> <embedding idref="embedding:gene1"/>
         <geneTree idref="tree:gene2"/> <embedding idref="embedding:gene2"/>
         <geneTree idref="tree:gene3"/> <embedding idref="embedding:gene3"/>
-        <sequenceSimulator id="seqgen:gene1" spec="beast.app.seqgen.SequenceSimulator" data="@gene1" tree="@tree:gene1" siteModel="@siteModel:gene1" sequencelength="200"/>
-        <sequenceSimulator id="seqgen:gene2" spec="beast.app.seqgen.SequenceSimulator" data="@gene2" tree="@tree:gene2" siteModel="@siteModel:gene2" sequencelength="200"/>
-        <sequenceSimulator id="seqgen:gene3" spec="beast.app.seqgen.SequenceSimulator" data="@gene3" tree="@tree:gene3" siteModel="@siteModel:gene3" sequencelength="200"/>
+        <sequenceSimulator id="seqgen:gene1" spec="seqgen.SequenceSimulator" data="@gene1" tree="@tree:gene1" siteModel="@siteModel:genex" sequencelength="200"/>
+        <sequenceSimulator id="seqgen:gene2" spec="seqgen.SequenceSimulator" data="@gene2" tree="@tree:gene2" siteModel="@siteModel:genex" sequencelength="200"/>
+        <sequenceSimulator id="seqgen:gene3" spec="seqgen.SequenceSimulator" data="@gene3" tree="@tree:gene3" siteModel="@siteModel:genex" sequencelength="200"/>
     </run>
 </beast>
