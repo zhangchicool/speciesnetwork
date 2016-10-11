@@ -27,6 +27,14 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
     private int nextSpeciationNr;
     private int nextReticulationNr;
 
+    public NetworkParser() {
+    }
+
+    public NetworkParser(final Tree tree) {
+        treeInput.setValue(tree, this);
+        initAndValidate();
+    }
+
     @Override
     public void initAndValidate() {
         final Tree tree = treeInput.get();

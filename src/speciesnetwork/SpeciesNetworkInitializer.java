@@ -114,7 +114,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
     private void pointInit() {
         final double clockRate = (clockRateInput.get() != null) ? clockRateInput.get().getArrayValue() : 1;
 
-        final Network sNetwork = speciesNetworkInput.get();
+        Network sNetwork = speciesNetworkInput.get();
         final TaxonSet species = sNetwork.taxonSetInput.get();
         final List<String> speciesNames = species.asStringList();
         final int speciesCount = speciesNames.size();
@@ -252,9 +252,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
         speciesTree.getInternalNodeCount();  // make sure node counts are correct
         speciesTree.addNode(origin);         // add the origin
         speciesTree.setRoot(origin);         // set origin as new root
-        NetworkParser networkParser = new NetworkParser();
-        networkParser.initByName("tree", speciesTree);
-        sNetwork.assignFrom(networkParser);
+        sNetwork = new NetworkParser(speciesTree);
         sNetwork.resetInternalNodeLabels();
     }
 
