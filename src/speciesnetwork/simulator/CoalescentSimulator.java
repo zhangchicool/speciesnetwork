@@ -51,6 +51,8 @@ public class CoalescentSimulator extends Runnable {
             new Input<>("iterations","Number of iterations to simulate (default is 1).");
     public final Input<Boolean> networkOperatorInput =
             new Input<>("networkOperator", "Whether to write network topology operators (default false).", false);
+    public final Input<String> initMethodInput =
+            new Input<>("initMethod", "Initializing method (point, random, user).", "user");
 
     private Network speciesNetwork;
     private RealParameter popSizes;
@@ -201,7 +203,7 @@ public class CoalescentSimulator extends Runnable {
                     "    <map name=\"prior\">beast.math.distributions.Prior</map>\n");
         // print initial species network
         out.println("    <init spec=\"beast.util.TreeParser\" id=\"newick:species\" IsLabelledNewick=\"true\" " +
-                            "adjustTipHeights=\"false\" newick=\"" + speciesNetwork.getOrigin().toString(true) + "\"/>\n");
+                            "adjustTipHeights=\"false\"\n          newick=\"" + speciesNetwork.getOrigin().toString(true) + "\"/>");
         out.println("    <run chainLength=\"10000000\" id=\"mcmc\" spec=\"MCMC\">");  // MCMC block
         out.println("        <state id=\"state\" storeEvery=\"1000\">");  // states
         // print state nodes
@@ -238,7 +240,8 @@ public class CoalescentSimulator extends Runnable {
                     "newick=\"" + geneTree.getRoot().toNewick() + "\"/>");
         }
         // starbeast initializer
-        out.println("        <init estimate=\"false\" id=\"initializer\" method=\"point\" " +
+        final String initMethod = initMethodInput.get();
+        out.println("        <init estimate=\"false\" id=\"initializer\" method=\"" + initMethod + "\" " +
                                 "spec=\"speciesnetwork.SpeciesNetworkInitializer\" speciesNetwork=\"@network:species\">");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
@@ -368,9 +371,9 @@ public class CoalescentSimulator extends Runnable {
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         }
         out.println("        </operator>");
-        out.println("        <operator id=\"speciesEdgeRelocateAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"50.0\">");
+        out.println("        <operator id=\"speciesEdgeRelocateAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"100.0\">");
         out.println("            <operator id=\"edgeRelocator\" spec=\"speciesnetwork.operators.EdgeRelocator\" " +
-                                            "speciesNetwork=\"@network:species\" isWide=\"false\" weight=\"0.0\"/>");
+                                            "speciesNetwork=\"@network:species\" isWide=\"true\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         }
