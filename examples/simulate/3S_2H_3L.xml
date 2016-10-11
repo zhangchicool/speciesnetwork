@@ -42,10 +42,8 @@
     <map name="OneOnX">beast.math.distributions.OneOnX</map>
     <map name="prior">beast.math.distributions.Prior</map>
 
-    <!--
     <init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false"
           newick="((((A:0.02,(B:0.01)#H1[&amp;gamma=0.4]:0.01)S1:0.01,(#H1:0.01)#H2[&amp;gamma=0.7]:0.01)S2:0.02,(#H2:0.02,C:0.04)S3:0.01)R:0.01)"/>
-    -->
     <run chainLength="2000000" id="mcmc" spec="MCMC">
         <state id="state" storeEvery="1000">
             <stateNode id="network:species" spec="speciesnetwork.Network"> <!-- spec="speciesnetwork.NetworkParser" tree="@newick:species" -->
@@ -83,11 +81,9 @@
             <parameter id="clockRate:gene3" name="stateNode">1.0</parameter>
         </state>
 
-        <!--
         <init spec="beast.util.TreeParser" id="newick:gene1" initial="@tree:gene1" taxa="@gene1" IsLabelledNewick="true" newick="(((a1:0.006105279813139699,a2:0.006105279813139699):0.03676656594632005,(b4:1.8495694220139303E-4,b1:1.8495694220139303E-4):0.04268688881725836):0.04265625085617267,((c1:0.032450230037189214,c2:0.032450230037189214):0.0165473326687123,(b3:0.0015304386406498312,b2:0.0015304386406498312):0.04746712406525168):0.036530533909730906):0.0"/>
         <init spec="beast.util.TreeParser" id="newick:gene2" initial="@tree:gene2" taxa="@gene2" IsLabelledNewick="true" newick="(((b2:0.053031559369693684,(b4:0.0037463165606604434,(b3:0.0017491492028762871,b1:0.0017491492028762871):0.0019971673577841562):0.04928524280903324):0.0013054967800777487,(c1:0.027921781762743847,c2:0.027921781762743847):0.026415274387027586):0.017513055329140777,(a2:0.0035117820121721016,a1:0.0035117820121721016):0.06833832946674011):0.0"/>
         <init spec="beast.util.TreeParser" id="newick:gene3" initial="@tree:gene3" taxa="@gene3" IsLabelledNewick="true" newick="((c1:0.007011529433659613,c2:0.007011529433659613):0.05658609851167551,((b3:0.017937996680068916,((b2:4.749573661090857E-4,b1:4.749573661090857E-4):3.972130005582599E-4,b4:8.721703666673456E-4):0.01706582631340157):0.01708927824733005,(a2:0.01393560924662295,a1:0.01393560924662295):0.021091665680776018):0.028570353017936152):0.0"/>
-        -->
         <init estimate="false" id="initializer" method="point" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@network:species">
             <geneTree idref="tree:gene1"/>
             <rebuildEmbedding id="rebuildEmbedding:gene1" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1" weight="0.0"/>

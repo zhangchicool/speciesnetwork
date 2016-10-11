@@ -96,8 +96,8 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
     }
 
     private void randomInit() {
+        // initialize caterpillar species tree, if no user defined network
         final Network sNetwork = speciesNetworkInput.get();
-        // initialize caterpillar species tree
         // do not scale the species network at the moment!
         final double rootHeight = sNetwork.getRoot().getHeight();
 
@@ -245,15 +245,17 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
 
         // finally, convert the species tree to species network
         final Node root = speciesTree.getRoot();
-        final Node origin = newNode();
+        final Node origin = newNode();       // create origin
         origin.setHeight(1.5 * root.getHeight());
-        origin.setLeft(root);
-        root.setParent(origin);
-        speciesTree.addNode(origin); // add the origin
-        speciesTree.setRoot(origin); // set new root
+        origin.setLeft(root);                // set root as child of origin
+        root.setParent(origin);              // set origin as parent of root
+        speciesTree.getInternalNodeCount();  // make sure node counts are correct
+        speciesTree.addNode(origin);         // add the origin
+        speciesTree.setRoot(origin);         // set origin as new root
         NetworkParser networkParser = new NetworkParser();
         networkParser.initByName("tree", speciesTree);
         sNetwork.assignFrom(networkParser);
+        sNetwork.resetInternalNodeLabels();
     }
 
     private double[] firstMeetings(final Tree gtree, final Map<String, Integer> tipName2Species, final int speciesCount) {

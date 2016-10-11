@@ -101,6 +101,9 @@ public class Network extends StateNode {
         nodes[nodeCount - 1] = new NetworkNode(this);
         nodes[nodeCount - 1].height = minInternalHeight + leafNodeCount * step;
         nodes[nodeCount - 1].childBranchNumbers.add(leftNr);
+
+        // set internal node labels
+        resetInternalNodeLabels();
     }
 
     public NetworkNode getOrigin() {
@@ -485,6 +488,16 @@ public class Network extends StateNode {
         return nodes[nodeI].height;
     }
 
+    protected void resetInternalNodeLabels() {
+        // reset the speciation and reticulation node labels
+        for (int i = 0; i < speciationNodeCount; i++) {
+            nodes[leafNodeCount + i].setLabel("S" + (i+1));
+        }
+        for (int i = 0; i < reticulationNodeCount; i++) {
+            nodes[leafNodeCount + speciationNodeCount + i].setLabel("#H" + (i+1));
+        }
+    }
+
     /**
      * add a reticulation branch to the species network
      */
@@ -620,13 +633,7 @@ public class Network extends StateNode {
         }
 
         // update the speciation and reticulation node labels
-        for (int i = 0; i < speciationNodeCount; i++) {
-            nodes[leafNodeCount + i].setLabel("S" + (i+1));
-        }
-        for (int i = 0; i < reticulationNodeCount; i++) {
-            nodes[leafNodeCount + speciationNodeCount + i].setLabel("#H" + (i+1));
-        }
-
+        resetInternalNodeLabels();
         // update relationships
         updateRelationships();
     }
