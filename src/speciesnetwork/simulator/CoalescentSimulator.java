@@ -219,6 +219,10 @@ public class CoalescentSimulator extends Runnable {
         }
         out.println("                </taxonset>");
         out.println("            </stateNode>");
+        out.println("            <parameter id=\"origin:species\" lower=\"0.0\" name=\"stateNode\">" +
+                                        speciesNetwork.getOrigin().getHeight() + "</parameter>");
+        out.println("            <parameter id=\"birthRate:species\" lower=\"0.0\" name=\"stateNode\">50.0</parameter>");
+        out.println("            <parameter id=\"hybridRate:species\" lower=\"0.0\" name=\"stateNode\">20.0</parameter>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <tree id=\"tree:gene" + (i+1) + "\" name=\"stateNode\">");
             out.println("                <taxonset alignment=\"@gene" + (i+1) + "\" " +
@@ -267,12 +271,15 @@ public class CoalescentSimulator extends Runnable {
         }
         out.println("                    <!-- populationModel id=\"popModel\" popSizes=\"" + buf + "\" " +
                                                     "spec=\"speciesnetwork.ConstantPopulation\"/ -->");
-        out.println("                    <populationModel alpha=\"4.0\" beta=\"0.04\" id=\"popModel\" " +
+        out.println("                    <populationModel alpha=\"5.0\" beta=\"0.05\" id=\"popModel\" " +
                                                     "spec=\"speciesnetwork.ConstantPopulationIO\"/>");
         out.println("                </distribution>");
         // network prior
-        out.println("                <distribution id=\"networkPrior\" speciationRate=\"10.0\" hybridizationRate=\"5.0\" " +
-                        "spec=\"speciesnetwork.YuleHybridModel\" network=\"@network:species\" betaShape=\"1.0\"/>");
+        out.println("                <distribution id=\"networkPrior\" spec=\"speciesnetwork.YuleHybridModel\" speciationRate=\"@birthRate:species\" " +
+                                            "hybridizationRate=\"@hybridRate:species\" network=\"@network:species\" betaShape=\"1.0\"/>");
+        out.println("                <prior id=\"networkOrigin\" name=\"distribution\" x=\"@origin:species\">");
+        out.println("                    <Uniform id=\"uniform.01\" name=\"distr\" upper=\"Infinity\"/>");
+        out.println("                </prior>");
         // clock rate prior
         for (int i = 1; i < nrOfGeneTrees; i++) {
             if (i == 1) {
@@ -366,12 +373,12 @@ public class CoalescentSimulator extends Runnable {
         if (!networkOperatorInput.get())  out.println("        <!--");
         out.println("        <operator id=\"speciesNodeSliderAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"100.0\">");
         out.println("            <operator id=\"nodeSlider\" spec=\"speciesnetwork.operators.NodeSlider\" " +
-                                            "speciesNetwork=\"@network:species\" weight=\"0.0\"/>");
+                    "speciesNetwork=\"@network:species\" origin=\"@origin:species\" windowSize=\"0.02\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         }
         out.println("        </operator>");
-        out.println("        <operator id=\"speciesEdgeRelocateAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"100.0\">");
+        out.println("        <operator id=\"speciesEdgeRelocateAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"50.0\">");
         out.println("            <operator id=\"edgeRelocator\" spec=\"speciesnetwork.operators.EdgeRelocator\" " +
                                             "speciesNetwork=\"@network:species\" isWide=\"true\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++) {

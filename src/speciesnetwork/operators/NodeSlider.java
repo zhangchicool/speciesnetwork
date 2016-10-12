@@ -4,6 +4,7 @@ import java.util.*;
 
 import beast.core.Description;
 import beast.core.Input;
+import beast.core.parameter.RealParameter;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
@@ -22,11 +23,17 @@ import beast.core.StateNode;
 public class NodeSlider extends Operator {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Input.Validate.REQUIRED);
+    public final Input<RealParameter> originInput =
+            new Input<RealParameter>("origin", "The time when the process started.", Input.Validate.REQUIRED);
     public final Input<Double> windowSizeInput =
-            new Input<>("windowSize", "The size of the sliding window (default is 0.01).", 0.01);
+            new Input<>("windowSize", "The size of the sliding window (default is 0.1).", 0.1);
 
     @Override
     public void initAndValidate() {
+        final double tOrigin = originInput.get().getValue();
+        final double tMRCA = speciesNetworkInput.get().getRoot().getHeight();
+        if (tOrigin < tMRCA)
+            throw new IllegalArgumentException("Time of origin (" + tOrigin + ") < time of MRCA (" + tMRCA + ")!");
     }
 
     @Override
@@ -61,10 +68,24 @@ public class NodeSlider extends Operator {
         }
 
         // update the new node height
+        if (snNode.isOrigin()) {
+            final RealParameter origin = originInput.get();
+            if (outsideBounds(newHeight, origin))
+                return Double.NEGATIVE_INFINITY;
+
+            origin.setValue(newHeight);
+        }
         speciesNetwork.startEditing(this);
         snNode.setHeight(newHeight);
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
         return 0.0;
+    }
+
+    private boolean outsideBounds(final double value, final RealParameter param) {
+        final Double l = param.getLower();
+        final Double h = param.getUpper();
+
+        return (value < l || value > h);
     }
 }

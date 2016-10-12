@@ -74,7 +74,7 @@ public class YuleHybridModel extends Distribution {
     public double calculateLogP() {
         final Network network = networkInput.get();
 
-        // sort the internal nodes according to their heights
+        // sort the internal nodes according to their heights in ascending order
         List<NetworkNode> nodes = Arrays.asList(network.getInternalNodesWithOrigin());
         nodes.sort(hc);
 
