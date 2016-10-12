@@ -48,7 +48,9 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
     public final Input<Method> initMethod = new Input<>("method", "Initialise either with a totally random state" +
             "or a point estimate based on alignments data (default point)", Method.POINT, Method.values());
     public final Input<Network> speciesNetworkInput
-            = new Input<>("speciesNetwork", "Species network to initialize.");
+            = new Input<>("speciesNetwork", "Species network to initialize.", Validate.REQUIRED);
+    public final Input<RealParameter> originInput =
+            new Input<>("origin", "The time when the process started.", Validate.REQUIRED);
     public final Input<List<Tree>> geneTreesInput =
             new Input<>("geneTree", "Gene tree to initialize.", new ArrayList<>());
     public final Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
@@ -56,7 +58,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
     public final Input<YuleHybridModel> hybridYuleInput = new Input<>("hybridYule",
             "The species network (with hybridization) to initialize.", Validate.XOR, speciesNetworkInput);
     public final Input<RealParameter> birthRateInput =
-            new Input<>("birthRate", "Network prior birth rate to initialize.");
+            new Input<>("birthRate", "Network birth rate to initialize.");
     public final Input<RealParameter> hybridRateInput =
             new Input<>("hybridRate", "Network hybridization rate to initialize.");
     public final Input<Function> clockRateInput =
@@ -83,6 +85,11 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
                 break;
         }
 
+        final double tOrigin = originInput.get().getValue();
+        final double tMRCA = speciesNetworkInput.get().getRoot().getHeight();
+        if (tOrigin < tMRCA)
+            throw new IllegalArgumentException("Time of origin (" + tOrigin + ") < time of MRCA (" + tMRCA + ")!");
+
         // initialize embedding for all gene trees
         for (RebuildEmbedding operator: rebuildEmbeddingInput.get()) {
             if (operator.initializeEmbedding() < 0)
@@ -98,7 +105,10 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
     private void randomInit() {
         // initialize caterpillar species tree, if no user defined network
         final Network sNetwork = speciesNetworkInput.get();
-        // do not scale the species network at the moment!
+        // scale the species network according to the time of origin
+        final double tOrigin = originInput.get().getValue();
+        sNetwork.scale(tOrigin/sNetwork.getOrigin().getHeight());
+
         final double rootHeight = sNetwork.getRoot().getHeight();
 
         // initialize caterpillar gene trees
@@ -114,7 +124,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
     private void pointInit() {
         final double clockRate = (clockRateInput.get() != null) ? clockRateInput.get().getArrayValue() : 1;
 
-        Network sNetwork = speciesNetworkInput.get();
+        final Network sNetwork = speciesNetworkInput.get();
         final TaxonSet species = sNetwork.taxonSetInput.get();
         final List<String> speciesNames = species.asStringList();
         final int speciesCount = speciesNames.size();
@@ -246,14 +256,20 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
         // finally, convert the species tree to species network
         final Node root = speciesTree.getRoot();
         final Node origin = newNode();       // create origin
-        origin.setHeight(1.5 * root.getHeight());
+        origin.setHeight(1.2 * root.getHeight());
         origin.setLeft(root);                // set root as child of origin
         root.setParent(origin);              // set origin as parent of root
         speciesTree.getInternalNodeCount();  // make sure node counts are correct
         speciesTree.addNode(origin);         // add the origin
         speciesTree.setRoot(origin);         // set origin as new root
-        sNetwork = new NetworkParser(speciesTree);
+        NetworkParser networkParser = new NetworkParser(speciesTree);
+        sNetwork.assignFrom(networkParser);
         sNetwork.resetInternalNodeLabels();
+
+        // set the time of origin
+        final double tOrigin = sNetwork.getOrigin().getHeight();
+        final RealParameter originTime = originInput.get();
+        originTime.setValue(tOrigin);
     }
 
     private double[] firstMeetings(final Tree gtree, final Map<String, Integer> tipName2Species, final int speciesCount) {

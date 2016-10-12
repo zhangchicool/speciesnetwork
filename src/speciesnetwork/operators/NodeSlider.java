@@ -4,13 +4,13 @@ import java.util.*;
 
 import beast.core.Description;
 import beast.core.Input;
+import beast.core.Input.Validate;
 import beast.core.parameter.RealParameter;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 import speciesnetwork.SanityChecks;
 import beast.core.Operator;
-import beast.core.StateNode;
 
 /**
  * Randomly pick an internal network node including origin.
@@ -22,18 +22,14 @@ import beast.core.StateNode;
 @Description("Randomly selects an internal network node and move its height using an uniform sliding window.")
 public class NodeSlider extends Operator {
     public final Input<Network> speciesNetworkInput =
-            new Input<>("speciesNetwork", "The species network.", Input.Validate.REQUIRED);
+            new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
     public final Input<RealParameter> originInput =
-            new Input<RealParameter>("origin", "The time when the process started.", Input.Validate.REQUIRED);
+            new Input<>("origin", "The time when the process started.", Validate.REQUIRED);
     public final Input<Double> windowSizeInput =
             new Input<>("windowSize", "The size of the sliding window (default is 0.1).", 0.1);
 
     @Override
     public void initAndValidate() {
-        final double tOrigin = originInput.get().getValue();
-        final double tMRCA = speciesNetworkInput.get().getRoot().getHeight();
-        if (tOrigin < tMRCA)
-            throw new IllegalArgumentException("Time of origin (" + tOrigin + ") < time of MRCA (" + tMRCA + ")!");
     }
 
     @Override
@@ -69,11 +65,11 @@ public class NodeSlider extends Operator {
 
         // update the new node height
         if (snNode.isOrigin()) {
-            final RealParameter origin = originInput.get();
-            if (outsideBounds(newHeight, origin))
+            final RealParameter originTime = originInput.get();
+            if (outsideBounds(newHeight, originTime))
                 return Double.NEGATIVE_INFINITY;
 
-            origin.setValue(newHeight);
+            originTime.setValue(newHeight);
         }
         speciesNetwork.startEditing(this);
         snNode.setHeight(newHeight);

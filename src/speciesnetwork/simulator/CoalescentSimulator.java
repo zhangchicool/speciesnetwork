@@ -246,7 +246,7 @@ public class CoalescentSimulator extends Runnable {
         // starbeast initializer
         final String initMethod = initMethodInput.get();
         out.println("        <init estimate=\"false\" id=\"initializer\" method=\"" + initMethod + "\" " +
-                                "spec=\"speciesnetwork.SpeciesNetworkInitializer\" speciesNetwork=\"@network:species\">");
+                "spec=\"speciesnetwork.SpeciesNetworkInitializer\" speciesNetwork=\"@network:species\"> origin=\"@origin:species\"");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
             out.println("            <rebuildEmbedding id=\"rebuildEmbedding:gene" + (i+1) + "\" taxonSuperset=\"@taxonSuperset\" " +
@@ -275,8 +275,8 @@ public class CoalescentSimulator extends Runnable {
                                                     "spec=\"speciesnetwork.ConstantPopulationIO\"/>");
         out.println("                </distribution>");
         // network prior
-        out.println("                <distribution id=\"networkPrior\" spec=\"speciesnetwork.YuleHybridModel\" speciationRate=\"@birthRate:species\" " +
-                                            "hybridizationRate=\"@hybridRate:species\" network=\"@network:species\" betaShape=\"1.0\"/>");
+        out.println("                <distribution id=\"networkPrior\" spec=\"speciesnetwork.YuleHybridModel\" birthRate=\"@birthRate:species\" " +
+                                            "hybridRate=\"@hybridRate:species\" network=\"@network:species\" betaShape=\"1.0\"/>");
         out.println("                <prior id=\"networkOrigin\" name=\"distribution\" x=\"@origin:species\">");
         out.println("                    <Uniform id=\"uniform.01\" name=\"distr\" upper=\"Infinity\"/>");
         out.println("                </prior>");
@@ -414,6 +414,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("            <log idref=\"likelihood\"/>");
         out.println("            <log idref=\"prior\"/>");
         out.println("            <log idref=\"coalescent\"/>");
+        out.println("            <log idref=\"origin:species\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <log id=\"height:gene" + (i+1) + "\" tree=\"@tree:gene" + (i+1) + "\" " +
                                         "spec=\"beast.evolution.tree.TreeStatLogger\"/>");

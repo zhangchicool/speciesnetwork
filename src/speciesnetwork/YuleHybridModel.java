@@ -19,21 +19,19 @@ import beast.math.distributions.Beta;
 public class YuleHybridModel extends Distribution {
     public final Input<Network> networkInput =
             new Input<>("network", "The species network.", Validate.REQUIRED);
-    public final Input<RealParameter> speciationInput =
-            new Input<>("speciationRate", "Speciation rate, lambda.");
-    public final Input<RealParameter> hybridizationInput =
-            new Input<>("hybridizationRate", "Hybridization rate, nu.");
+    public final Input<RealParameter> birthRateInput =
+            new Input<>("birthRate", "Speciation rate, lambda.");
+    public final Input<RealParameter> hybridRateInput =
+            new Input<>("hybridRate", "Hybridization rate, nu.");
     public final Input<RealParameter> netDiversification =
             new Input<RealParameter>("netDiversification", "Net diversification rate: lambda-nu");
-    public final Input<RealParameter> turnOver = new Input<RealParameter>("turnOver", "Turn over rate: nu/lambda");
+    public final Input<RealParameter> turnOverInput = new Input<RealParameter>("turnOver", "Turn over rate: nu/lambda");
     public final Input<RealParameter> rhoProbInput =
             new Input<>("rho", "Sampling prob. of extant species, rho.");
     public final Input<RealParameter> betaShapeInput =
             new Input<>("betaShape", "Shape of the symmetric beta prior distribution on gammas.", Validate.REQUIRED);
-    // public final Input<RealParameter> originHeightInput =
-    //      new Input<>("originHeight", "the height of the point of origin of the process");
-    // public final Input<Boolean> conditionalOnRootInput =
-    //      new Input<>("conditionalOnRoot", "condition on the root (otherwise: on the time of origin)", true);
+    // public final Input<RealParameter> originInput =
+    //        new Input<RealParameter>("origin", "The time when the process started.");
 
     private static Comparator<NetworkNode> hc = new NodeHeightComparator();
 
@@ -42,13 +40,13 @@ public class YuleHybridModel extends Distribution {
 
     @Override
     public void initAndValidate() {
-        if (speciationInput.get() != null && hybridizationInput.get() != null) {
-            lambda = speciationInput.get().getValue();
-            nu = hybridizationInput.get().getValue();
+        if (birthRateInput.get() != null && hybridRateInput.get() != null) {
+            lambda = birthRateInput.get().getValue();
+            nu = hybridRateInput.get().getValue();
         }
-        else if (netDiversification.get() != null && turnOver.get() != null) {
-            lambda = netDiversification.get().getValue() / (1 - turnOver.get().getValue());
-            nu = lambda * turnOver.get().getValue();
+        else if (netDiversification.get() != null && turnOverInput.get() != null) {
+            lambda = netDiversification.get().getValue() / (1 - turnOverInput.get().getValue());
+            nu = lambda * turnOverInput.get().getValue();
         } else {
             throw new RuntimeException("Either specify speciationRate and hybridizationRate " +
                                         "OR specify netDiversification and turnOver.");
@@ -104,10 +102,10 @@ public class YuleHybridModel extends Distribution {
     @Override
     protected boolean requiresRecalculation() {
         return networkInput.get().isDirty() ||
-                speciationInput.get().somethingIsDirty() ||
-                hybridizationInput.get().somethingIsDirty() ||
+                birthRateInput.get().somethingIsDirty() ||
+                hybridRateInput.get().somethingIsDirty() ||
                 netDiversification.get().somethingIsDirty() ||
-                turnOver.get().somethingIsDirty();
+                turnOverInput.get().somethingIsDirty();
     }
 
     @Override

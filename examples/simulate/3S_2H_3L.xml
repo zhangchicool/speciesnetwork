@@ -44,7 +44,7 @@
 
     <init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false"
           newick="((((A:0.02,(B:0.01)#H1[&amp;gamma=0.4]:0.01)S1:0.01,(#H1:0.01)#H2[&amp;gamma=0.7]:0.01)S2:0.02,(#H2:0.02,C:0.04)S3:0.01)R:0.01)"/>
-    <run chainLength="2000000" id="mcmc" spec="MCMC">
+    <run chainLength="10000000" id="mcmc" spec="MCMC">
         <state id="state" storeEvery="1000">
             <stateNode id="network:species" spec="speciesnetwork.Network"> <!-- spec="speciesnetwork.NetworkParser" tree="@newick:species" -->
                 <taxonset id="taxonSuperset" spec="TaxonSet">
@@ -64,6 +64,9 @@
                     </taxon>
                 </taxonset>
             </stateNode>
+            <parameter id="origin:species" lower="0.0" name="stateNode">0.06</parameter>
+            <parameter id="birthRate:species" lower="0.0" name="stateNode">10.0</parameter>
+            <parameter id="hybridRate:species" lower="0.0" name="stateNode">4.0</parameter>
             <tree id="tree:gene1" name="stateNode">
                 <taxonset alignment="@gene1" id="taxonset:gene1" spec="TaxonSet"/>
             </tree>
@@ -84,7 +87,7 @@
         <init spec="beast.util.TreeParser" id="newick:gene1" initial="@tree:gene1" taxa="@gene1" IsLabelledNewick="true" newick="(((a1:0.006105279813139699,a2:0.006105279813139699):0.03676656594632005,(b4:1.8495694220139303E-4,b1:1.8495694220139303E-4):0.04268688881725836):0.04265625085617267,((c1:0.032450230037189214,c2:0.032450230037189214):0.0165473326687123,(b3:0.0015304386406498312,b2:0.0015304386406498312):0.04746712406525168):0.036530533909730906):0.0"/>
         <init spec="beast.util.TreeParser" id="newick:gene2" initial="@tree:gene2" taxa="@gene2" IsLabelledNewick="true" newick="(((b2:0.053031559369693684,(b4:0.0037463165606604434,(b3:0.0017491492028762871,b1:0.0017491492028762871):0.0019971673577841562):0.04928524280903324):0.0013054967800777487,(c1:0.027921781762743847,c2:0.027921781762743847):0.026415274387027586):0.017513055329140777,(a2:0.0035117820121721016,a1:0.0035117820121721016):0.06833832946674011):0.0"/>
         <init spec="beast.util.TreeParser" id="newick:gene3" initial="@tree:gene3" taxa="@gene3" IsLabelledNewick="true" newick="((c1:0.007011529433659613,c2:0.007011529433659613):0.05658609851167551,((b3:0.017937996680068916,((b2:4.749573661090857E-4,b1:4.749573661090857E-4):3.972130005582599E-4,b4:8.721703666673456E-4):0.01706582631340157):0.01708927824733005,(a2:0.01393560924662295,a1:0.01393560924662295):0.021091665680776018):0.028570353017936152):0.0"/>
-        <init estimate="false" id="initializer" method="point" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@network:species">
+        <init estimate="false" id="initializer" method="point" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@network:species" origin="@origin:species">
             <geneTree idref="tree:gene1"/>
             <rebuildEmbedding id="rebuildEmbedding:gene1" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1" weight="0.0"/>
             <geneTree idref="tree:gene2"/>
@@ -100,9 +103,12 @@
                     <geneTreeWithin id="geneTree:gene2" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene2" embedding="@embedding:gene2"/>
                     <geneTreeWithin id="geneTree:gene3" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene3" embedding="@embedding:gene3"/>
                     <!-- populationModel id="popModel" popSizes="0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01" spec="speciesnetwork.ConstantPopulation"/ -->
-                    <populationModel alpha="4.0" beta="0.04" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
+                    <populationModel alpha="5.0" beta="0.05" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
                 </distribution>
-                <distribution id="networkPrior" speciationRate="10" hybridizationRate="5" spec="speciesnetwork.YuleHybridModel" network="@network:species" betaShape="1.0"/>
+                <distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" birthRate="@birthRate:species" hybridRate="@hybridRate:species" network="@network:species" betaShape="1.0"/>
+                <prior id="networkOrigin" name="distribution" x="@origin:species">
+                    <Uniform id="uniform.01" name="distr" upper="Infinity"/>
+                </prior>
                 <prior id="clockPrior:gene2" name="distribution" x="@clockRate:gene2">
                     <Gamma id="gamma.clock2" name="distr">
                         <parameter id="RealParameter.01" estimate="false" name="alpha">2.0</parameter>
@@ -202,30 +208,16 @@
         </operator>
         <!-- operator id="strictClockRateScaler:gene3" spec="ScaleOperator" parameter="@clockRate:gene3" scaleFactor="0.5" weight="3.0"/ -->
 
-        <!-- operator id="allClockTreeUpDownAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="10">
-            <operator id="allClockTreeUpDown" spec="UpDownOperator" scaleFactor="0.75" weight="0.0">
-                <up idref="clockRate:gene1"/>
-                <up idref="clockRate:gene2"/>
-                <up idref="clockRate:gene3"/>
-                <down idref="tree:gene1"/>
-                <down idref="tree:gene2"/>
-                <down idref="tree:gene3"/>
-            </operator>
-            <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
-            <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
-            <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
-        </operator -->
-
         <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="20.0"/>
         <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="10.0"/>
 
         <operator id="speciesNodeSliderAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
-            <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" weight="0.0"/>
+            <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@origin:species" windowSize="0.02" weight="0.0"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
         </operator>
-        <operator id="speciesEdgeRelocateAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+        <operator id="speciesEdgeRelocateAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="50.0">
             <operator id="edgeRelocator" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
@@ -244,7 +236,7 @@
             <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
         </operator>
 
-        <logger id="screenlog" logEvery="10000" model="@posterior">
+        <logger id="screenlog" logEvery="20000" model="@posterior">
             <log idref="posterior"/>
             <log idref="likelihood"/>
             <log idref="prior"/>
@@ -255,6 +247,7 @@
             <log idref="likelihood"/>
             <log idref="prior"/>
             <log idref="coalescent"/>
+            <log idref="origin:species"/>
             <log id="height:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeStatLogger"/>
             <log idref="clockRate:gene1"/>
             <log id="height:gene2" tree="@tree:gene2" spec="beast.evolution.tree.TreeStatLogger"/>
