@@ -1,16 +1,14 @@
 package speciesnetwork.operators;
 
-import java.util.*;
-
 import beast.core.Description;
 import beast.core.Input;
 import beast.core.Input.Validate;
+import beast.core.Operator;
 import beast.core.parameter.RealParameter;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 import speciesnetwork.SanityChecks;
-import beast.core.Operator;
 
 /**
  * Randomly pick an internal network node including origin.

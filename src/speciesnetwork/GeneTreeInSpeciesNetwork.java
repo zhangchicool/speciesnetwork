@@ -1,6 +1,5 @@
 package speciesnetwork;
 
-import java.util.Comparator;
 import java.util.List;
 
 import com.google.common.collect.ArrayListMultimap;

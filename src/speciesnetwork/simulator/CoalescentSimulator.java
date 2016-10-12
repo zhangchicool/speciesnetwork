@@ -18,7 +18,8 @@ import beast.evolution.alignment.*;
 import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
 import beast.util.Randomizer;
-import speciesnetwork.*;
+import speciesnetwork.Network;
+import speciesnetwork.NetworkNode;
 
 /**
  * @author Chi Zhang

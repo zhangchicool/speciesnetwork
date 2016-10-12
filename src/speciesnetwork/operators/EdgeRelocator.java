@@ -8,7 +8,6 @@ import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.Operator;
 import beast.util.Randomizer;
-
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 import speciesnetwork.SanityChecks;

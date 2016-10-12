@@ -1,7 +1,6 @@
 package speciesnetwork.tools;
 
 import java.io.*;
-import java.util.*;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -11,7 +10,8 @@ import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.Runnable;
 import beast.util.TreeParser;
-import speciesnetwork.*;
+import speciesnetwork.Network;
+import speciesnetwork.NetworkParser;
 
 /**
  * @author Chi Zhang

@@ -2,6 +2,9 @@ package speciesnetwork.operators;
 
 import java.util.*;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 import beast.core.Description;
 import beast.core.Input;
 import beast.core.Input.Validate;
@@ -14,9 +17,6 @@ import beast.evolution.tree.Tree;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 
 /**
  * @author Huw Ogilvie
