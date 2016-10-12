@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beast namespace="beast.core:beast.app" version="2.0">
+    <run id="coalSimulator" spec="speciesnetwork.tools.SummarizeNetwork" inputFileName="3S_2H_3L.xml.species.trees"/>
+</beast>

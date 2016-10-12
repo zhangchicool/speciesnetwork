@@ -1,4 +1,4 @@
-package speciesnetwork;
+package speciesnetwork.tools;
 
 import java.io.*;
 import java.util.*;
@@ -11,6 +11,7 @@ import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.Runnable;
 import beast.util.TreeParser;
+import speciesnetwork.*;
 
 /**
  * @author Chi Zhang
