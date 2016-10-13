@@ -86,7 +86,7 @@
       <log idref="likelihood"/>
     </logger>
     <logger fileName="test.species.trees" id="treelog:species" logEvery="100" mode="tree">
-      <log id="networkLogger:species" spec="speciesnetwork.SpeciesNetworkLogger" speciesNetwork="@network:species"/>
+      <log id="networkLogger:species" spec="speciesnetwork.NetworkWithMetaDataLogger" speciesNetwork="@network:species"/>
     </logger>
     <logger fileName="test.gene1.embed.log" id="embedlog:gene1" logEvery="100" sort="smart">
       <log idref="embedding:gene1"/>
