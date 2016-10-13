@@ -220,10 +220,10 @@ public class CoalescentSimulator extends Runnable {
         }
         out.println("                </taxonset>");
         out.println("            </stateNode>");
-        out.println("            <parameter id=\"origin:species\" lower=\"0.0\" name=\"stateNode\">" +
+        out.println("            <parameter id=\"originTime:species\" lower=\"0.0\" name=\"stateNode\">" +
                                         speciesNetwork.getOrigin().getHeight() + "</parameter>");
-        out.println("            <parameter id=\"birthRate:species\" lower=\"0.0\" name=\"stateNode\">50.0</parameter>");
-        out.println("            <parameter id=\"hybridRate:species\" lower=\"0.0\" name=\"stateNode\">20.0</parameter>");
+        out.println("            <parameter id=\"netDivRate:species\" lower=\"0.0\" name=\"stateNode\">1.0</parameter>");
+        out.println("            <parameter id=\"turnOverRate:species\" lower=\"0.0\" upper=\"1.0\" name=\"stateNode\">0.5</parameter>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <tree id=\"tree:gene" + (i+1) + "\" name=\"stateNode\">");
             out.println("                <taxonset alignment=\"@gene" + (i+1) + "\" " +
@@ -247,7 +247,7 @@ public class CoalescentSimulator extends Runnable {
         // starbeast initializer
         final String initMethod = initMethodInput.get();
         out.println("        <init estimate=\"false\" id=\"initializer\" method=\"" + initMethod + "\" " +
-                "spec=\"speciesnetwork.SpeciesNetworkInitializer\" speciesNetwork=\"@network:species\"> origin=\"@origin:species\"");
+                "spec=\"speciesnetwork.SpeciesNetworkInitializer\" speciesNetwork=\"@network:species\" origin=\"@originTime:species\">");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
             out.println("            <rebuildEmbedding id=\"rebuildEmbedding:gene" + (i+1) + "\" taxonSuperset=\"@taxonSuperset\" " +
@@ -276,22 +276,27 @@ public class CoalescentSimulator extends Runnable {
                                                     "spec=\"speciesnetwork.ConstantPopulationIO\"/>");
         out.println("                </distribution>");
         // network prior
-        out.println("                <distribution id=\"networkPrior\" spec=\"speciesnetwork.YuleHybridModel\" birthRate=\"@birthRate:species\" " +
-                                            "hybridRate=\"@hybridRate:species\" network=\"@network:species\" betaShape=\"1.0\"/>");
-        out.println("                <prior id=\"networkOrigin\" name=\"distribution\" x=\"@origin:species\">");
-        out.println("                    <Uniform id=\"uniform.01\" name=\"distr\" upper=\"Infinity\"/>");
+        out.println("                <distribution id=\"networkPrior\" spec=\"speciesnetwork.YuleHybridModel\" network=\"@network:species\" " +
+                    "netDiversification=\"@netDivRate:species\" turnOver=\"@turnOverRate:species\" betaShape=\"1.0\"/>");
+        out.println("                <prior id=\"networkOrigin\" name=\"distribution\" x=\"@originTime:species\">");
+        out.println("                    <Exponential id=\"exponential.02\" name=\"distr\" mean=\"0.1\"/>  " +
+                                        "<!-- Uniform id=\"uniform.01\" name=\"distr\" upper=\"Infinity\"/ -->");
+        out.println("                </prior>");
+        out.println("                <prior id=\"netDivPrior\" name=\"distribution\" x=\"@netDivRate:species\">");
+        out.println("                    <Exponential id=\"exponential.01\" name=\"distr\" mean=\"10.0\"/>");
+        out.println("                </prior>");
+        out.println("                <prior id=\"turnOverPrior\" name=\"distribution\" x=\"@turnOverRate:species\">");
+        out.println("                    <Beta id=\"betadistr.01\" name=\"distr\" alpha=\"1.0\" beta=\"1.0\"/>");
         out.println("                </prior>");
         // clock rate prior
-        for (int i = 1; i < nrOfGeneTrees; i++) {
-            if (i == 1) {
-                out.println("                <prior id=\"clockPrior:gene2\" name=\"distribution\" x=\"@clockRate:gene2\">");
-                out.println("                    <Gamma id=\"gamma.clock2\" name=\"distr\">");
-                out.println("                        <parameter id=\"RealParameter.01\" estimate=\"false\" name=\"alpha\">2.0</parameter>");
-                out.println("                        <parameter id=\"RealParameter.02\" estimate=\"false\" name=\"beta\">0.5</parameter>");
-                out.println("                    </Gamma>\n                </prior>");
+        for (int i = 0; i < nrOfGeneTrees; i++) {
+            if (i == 0) {
+                out.println("                <prior id=\"clockPrior:gene1\" name=\"distribution\" x=\"@clockRate:gene1\">");
+                out.println("                    <Gamma id=\"gamma.clock1\" name=\"distr\" alpha=\"2.0\" beta=\"0.5\"/>");
+                out.println("                </prior>");
             } else {
                 out.println("                <prior id=\"clockPrior:gene" + (i+1) + "\" name=\"distribution\" " +
-                                                    "x=\"@clockRate:gene" + (i+1) + "\" distr=\"@gamma.clock2\"/>");
+                                                    "x=\"@clockRate:gene" + (i+1) + "\" distr=\"@gamma.clock1\"/>");
             }
         }
         out.println("            </distribution>");
@@ -366,19 +371,21 @@ public class CoalescentSimulator extends Runnable {
             out.println("        </operator -->\n");
         }
         // species network operators
+        out.println("        <operator id=\"divrRateScaler\" spec=\"ScaleOperator\" parameter=\"@netDivRate:species\" scaleFactor=\"0.75\" weight=\"5.0\"/>");
+        out.println("        <operator id=\"turnOverScaler\" spec=\"ScaleOperator\" parameter=\"@turnOverRate:species\" scaleFactor=\"0.75\" weight=\"5.0\"/>");
         out.println("        <operator id=\"gammaProbUniform\" spec=\"speciesnetwork.operators.GammaProbUniform\" " +
                                 "speciesNetwork=\"@network:species\" weight=\"20.0\"/>");
         out.println("        <operator id=\"gammaProbRndWalk\" spec=\"speciesnetwork.operators.GammaProbRndWalk\" " +
                                 "speciesNetwork=\"@network:species\" weight=\"10.0\"/>\n");
-        // whether or not to write network topology operators
-        if (!networkOperatorInput.get())  out.println("        <!--");
         out.println("        <operator id=\"speciesNodeSliderAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"100.0\">");
         out.println("            <operator id=\"nodeSlider\" spec=\"speciesnetwork.operators.NodeSlider\" " +
-                    "speciesNetwork=\"@network:species\" origin=\"@origin:species\" windowSize=\"0.02\" weight=\"0.0\"/>");
+                    "speciesNetwork=\"@network:species\" origin=\"@originTime:species\" windowSize=\"0.03\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         }
         out.println("        </operator>");
+        // whether or not to write network topology operators
+        if (!networkOperatorInput.get())  out.println("        <!--");
         out.println("        <operator id=\"speciesEdgeRelocateAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"50.0\">");
         out.println("            <operator id=\"edgeRelocator\" spec=\"speciesnetwork.operators.EdgeRelocator\" " +
                                             "speciesNetwork=\"@network:species\" isWide=\"true\" weight=\"0.0\"/>");
@@ -415,7 +422,10 @@ public class CoalescentSimulator extends Runnable {
         out.println("            <log idref=\"likelihood\"/>");
         out.println("            <log idref=\"prior\"/>");
         out.println("            <log idref=\"coalescent\"/>");
-        out.println("            <log idref=\"origin:species\"/>");
+        out.println("            <log idref=\"netDivRate:species\"/>");
+        out.println("            <log idref=\"turnOverRate:species\"/>");
+        out.println("            <log idref=\"originTime:species\"/>");
+        out.println("            <log id=\"length:network\" speciesNetwork=\"@network:species\" spec=\"speciesnetwork.NetworkStatLogger\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <log id=\"height:gene" + (i+1) + "\" tree=\"@tree:gene" + (i+1) + "\" " +
                                         "spec=\"beast.evolution.tree.TreeStatLogger\"/>");
@@ -424,7 +434,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("        </logger>");
         out.println("        <logger fileName=\"" + outputFileName + ".species.trees\" id=\"treelog:species\" " +
                              "logEvery=\"1000\" mode=\"tree\">");
-        out.println("            <log id=\"networkLogger:species\" spec=\"speciesnetwork.SpeciesNetworkLogger\" " +
+        out.println("            <log id=\"networkLogger:species\" spec=\"speciesnetwork.NetworkWithMetaDataLogger\" " +
                                     "speciesNetwork=\"@network:species\"/>");
         out.println("        </logger>");
         for (int i = 0; i < nrOfGeneTrees; i++) {

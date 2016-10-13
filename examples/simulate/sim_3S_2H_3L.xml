@@ -56,7 +56,7 @@
         <substModel id="jc:genex" spec="JukesCantor"/>
     </siteModel>
 
-    <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="3S_2H_3L.xml" iterations="1">
+    <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="3S_2H_3L.xml" iterations="1" initMethod="user">
         <state id="state">
             <tree id="tree:gene1" name="stateNode">
                 <taxonset alignment="@gene1" id="taxonset:gene1" spec="TaxonSet"/>
