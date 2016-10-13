@@ -26,7 +26,7 @@ import speciesnetwork.NetworkNode;
  */
 
 @Description("Simulate gene trees given a species network (multispecies coalescent).")
-public class CoalescentSimulator extends Runnable {
+public class MultispeciesCoalescent extends Runnable {
     public final Input<State> startStateInput =
             new Input<>("state", "elements of the state space", Validate.REQUIRED);
 
