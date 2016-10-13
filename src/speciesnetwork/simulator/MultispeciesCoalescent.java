@@ -31,7 +31,7 @@ public class MultispeciesCoalescent extends Runnable {
             new Input<>("state", "elements of the state space", Validate.REQUIRED);
 
     public final Input<Network> speciesNetworkInput =
-            new Input<>("speciesNetwork", "Species network for embedding the gene tree.", Validate.REQUIRED);
+            new Input<>("speciesNetwork", "Species network for embedding the gene trees.", Validate.REQUIRED);
     public final Input<RealParameter> popSizesInput =
             new Input<>("popSizes", "Constant per-branch population sizes.", Validate.REQUIRED);
     public final Input<TaxonSet> taxonSuperSetInput =
