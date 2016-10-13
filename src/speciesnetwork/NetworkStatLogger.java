@@ -40,10 +40,13 @@ public class NetworkStatLogger extends CalculationNode implements Loggable, Func
     public void log(int sample, PrintStream out) {
         final Network speciesNetwork = speciesNetworkInput.get();
         if (logHeigthInput.get()) {
+            // network root height
         	out.print(speciesNetwork.getRoot().getHeight() + "\t");
         }
         if (logLengthInput.get()) {
-            out.print(speciesNetwork.getNetworkLength() + "\t");
+            // network length (excluding the root branch length)
+            final double rootBrl = speciesNetwork.getOrigin().getHeight() - speciesNetwork.getRoot().getHeight();
+            out.print(speciesNetwork.getNetworkLength() - rootBrl + "\t");
         }
     }
 
