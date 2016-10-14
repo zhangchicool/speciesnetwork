@@ -41,7 +41,7 @@
     </init>
 
     <distribution id="posterior" spec="util.CompoundDistribution">
-      <!-- distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
+      <!-- distribution id="coalescent" spec="speciesnetwork.CoalescentSimulator" speciesNetwork="@network:species">
         <populationModel alpha="2.0" beta="1.0" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
         <geneTreeWithin id="geneTree:gene1" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1"/>
       </distribution>

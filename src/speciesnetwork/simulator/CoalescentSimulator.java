@@ -26,7 +26,7 @@ import speciesnetwork.NetworkNode;
  */
 
 @Description("Simulate gene trees given a species network (multispecies coalescent).")
-public class MultispeciesCoalescent extends Runnable {
+public class CoalescentSimulator extends Runnable {
     public final Input<State> startStateInput =
             new Input<>("state", "elements of the state space", Validate.REQUIRED);
 
@@ -259,7 +259,7 @@ public class MultispeciesCoalescent extends Runnable {
         out.println("        <distribution id=\"posterior\" spec=\"util.CompoundDistribution\">");
         out.println("            <distribution id=\"prior\" spec=\"util.CompoundDistribution\">");  // prior
         // coalescent
-        out.println("                <distribution id=\"coalescent\" spec=\"speciesnetwork.MultispeciesCoalescent\" " +
+        out.println("                <distribution id=\"coalescent\" spec=\"speciesnetwork.CoalescentSimulator\" " +
                                                     "speciesNetwork=\"@network:species\">");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("                    <geneTreeWithin id=\"geneTree:gene" + (i+1) + "\" ploidy=\"2.0\" " +

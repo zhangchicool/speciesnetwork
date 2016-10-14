@@ -32,7 +32,7 @@
         </taxonset>
     </stateNode>
 
-    <run id="coalSimulator" spec="speciesnetwork.simulator.MultispeciesCoalescent" outputFileName="3S_2H_C2.sim.trees" iterations="100">
+    <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="3S_2H_C2.sim.trees" iterations="100">
         <state id="state">
             <tree id="tree:gene1" name="stateNode">
                 <taxonset alignment="@gene1" id="taxonset:gene1" spec="TaxonSet"/>
