@@ -159,6 +159,114 @@ public class CoalescentSimulator extends Runnable {
         }
     }
 
+    // recursively simulate lineages coalescent in each population
+    private void simulateGeneTree(NetworkNode snNode, Tree geneTree, IntegerParameter embedding, double ploidy) {
+        if (snNode.isVisited())
+            return;
+        for (NetworkNode c: snNode.getChildren()) {
+            simulateGeneTree(c, geneTree, embedding, ploidy);
+        }
+
+        snNode.setVisited(true);  // set visited indicator
+
+        final Collection<Node> lineagesAtBottom = networkNodeGeneLineagesMap.get(snNode);
+
+        if (snNode.isReticulation()) {
+            // assign lineages at the bottom to the left and right populations
+            final Collection<Node> lineagesAtLBottom = new HashSet<>();
+            final Collection<Node> lineagesAtRBottom = new HashSet<>();
+            for (Node lineage : lineagesAtBottom) {
+                if (Randomizer.nextDouble() < snNode.getGammaProb())
+                    lineagesAtLBottom.add(lineage);
+                else
+                    lineagesAtRBottom.add(lineage);
+            }
+
+            final double bottomHeight = snNode.getHeight();
+            final int lBranchNumber = snNode.gammaBranchNumber;
+            NetworkNode lParent = snNode.getParentByBranch(lBranchNumber);
+            final double lPopSize = popSizes.getValue(lBranchNumber);
+            final double lTopHeight = lParent.getHeight();
+            List<Node> lineagesAtLTop =
+                    simulateCoalescentEvents(lineagesAtLBottom, bottomHeight, lTopHeight, ploidy*lPopSize, geneTree);
+            final int rBranchNumber = snNode.gammaBranchNumber + 1;
+            NetworkNode rParent = snNode.getParentByBranch(rBranchNumber);
+            final double rPopSize = popSizes.getValue(rBranchNumber);
+            final double rTopHeight = rParent.getHeight();
+            List<Node> lineagesAtRTop =
+                    simulateCoalescentEvents(lineagesAtRBottom, bottomHeight, rTopHeight, ploidy*rPopSize, geneTree);
+
+            networkNodeGeneLineagesMap.putAll(lParent, lineagesAtLTop);
+            networkNodeGeneLineagesMap.putAll(rParent, lineagesAtRTop);
+            // update embedding
+            final int traversalLParentNr = lParent.getTraversalNumber();
+            for (final Node geneNode : lineagesAtLTop)
+                embedding.setMatrixValue(traversalLParentNr, geneNode.getNr(), lBranchNumber);
+            final int traversalRParentNr = rParent.getTraversalNumber();
+            for (final Node geneNode : lineagesAtRTop)
+                embedding.setMatrixValue(traversalRParentNr, geneNode.getNr(), rBranchNumber);
+        }
+        else {
+            final double bottomHeight = snNode.getHeight();
+            final int sBranchNumber = snNode.gammaBranchNumber;
+            NetworkNode sParent = snNode.getParentByBranch(sBranchNumber);
+            final double popSize = popSizes.getValue(sBranchNumber);
+            final double topHeight;
+            if (sParent.isOrigin())  // network root
+                topHeight = Double.POSITIVE_INFINITY;
+            else
+                topHeight = sParent.getHeight();
+
+            List<Node> lineagesAtTop =
+                    simulateCoalescentEvents(lineagesAtBottom, bottomHeight, topHeight, ploidy*popSize, geneTree);
+            if (sParent.isOrigin()) {
+                geneTree.setRoot(lineagesAtTop.get(0));
+            } else {
+                networkNodeGeneLineagesMap.putAll(sParent, lineagesAtTop);
+                // update embedding
+                final int traversalParentNr = sParent.getTraversalNumber();
+                for (final Node geneNode : lineagesAtTop)
+                    embedding.setMatrixValue(traversalParentNr, geneNode.getNr(), sBranchNumber);
+            }
+        }
+    }
+
+    private List<Node> simulateCoalescentEvents(Collection<Node> lineages, double bottomHeight,
+                                                double topHeight, double pNu, Tree geneTree) {
+        // start from the lineages at the bottom
+        List<Node> currentLineages = new ArrayList<>(lineages);
+        double currentHeight = bottomHeight;
+
+        List<Node> internalNodes = geneTree.getInternalNodes();
+
+        // then go up backward in time
+        while (currentLineages.size() > 1 && currentHeight < topHeight) {
+            // generate a coalescent waiting time
+            final int nLineage = currentLineages.size();
+            final double coalescentRate = nLineage * (nLineage - 1) / (2 * pNu);
+            final double waitingTime = Randomizer.nextExponential(coalescentRate);
+            currentHeight += waitingTime;
+
+            if (currentHeight < topHeight) {
+                // randomly pick two lineages to coalescence
+                int rnd = Randomizer.nextInt(nLineage);
+                final Node left = currentLineages.get(rnd);
+                currentLineages.remove(left);
+                rnd = Randomizer.nextInt(nLineage - 1);
+                final Node right = currentLineages.get(rnd);
+                currentLineages.remove(right);
+                // deal with the parent of the two picked nodes
+                final Node node = internalNodes.get(nodeIndex++);
+                left.setParent(node); right.setParent(node);
+                node.setLeft(left);   node.setRight(right);
+                node.setHeight(currentHeight);
+                currentLineages.add(node);
+            }
+        }
+
+        return currentLineages;
+    }
+
     private void writeXMLOutput(String outputFileName) throws IOException {
         PrintStream out;  // where to print
         if (outputFileName == null) {
@@ -263,8 +371,8 @@ public class CoalescentSimulator extends Runnable {
                                                     "speciesNetwork=\"@network:species\">");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("                    <geneTreeWithin id=\"geneTree:gene" + (i+1) + "\" ploidy=\"2.0\" " +
-                    "spec=\"speciesnetwork.GeneTreeInSpeciesNetwork\" speciesNetwork=\"@network:species\" " +
-                    "geneTree=\"@tree:gene" + (i+1) + "\" embedding=\"@embedding:gene" + (i+1) + "\"/>");
+                        "spec=\"speciesnetwork.GeneTreeInSpeciesNetwork\" speciesNetwork=\"@network:species\" " +
+                        "geneTree=\"@tree:gene" + (i+1) + "\" embedding=\"@embedding:gene" + (i+1) + "\"/>");
         }
         StringBuilder buf = new StringBuilder();
         for (int k = 0; k < popSizes.getDimension(); k++) {
@@ -466,113 +574,5 @@ public class CoalescentSimulator extends Runnable {
             }
             fw.close();
         }
-    }
-
-    // recursively simulate lineages coalescent in each population
-    private void simulateGeneTree(NetworkNode snNode, Tree geneTree, IntegerParameter embedding, double ploidy) {
-        if (snNode.isVisited())
-            return;
-        for (NetworkNode c: snNode.getChildren()) {
-            simulateGeneTree(c, geneTree, embedding, ploidy);
-        }
-
-        snNode.setVisited(true);  // set visited indicator
-
-        final Collection<Node> lineagesAtBottom = networkNodeGeneLineagesMap.get(snNode);
-
-        if (snNode.isReticulation()) {
-            // assign lineages at the bottom to the left and right populations
-            final Collection<Node> lineagesAtLBottom = new HashSet<>();
-            final Collection<Node> lineagesAtRBottom = new HashSet<>();
-            for (Node lineage : lineagesAtBottom) {
-                if (Randomizer.nextDouble() < snNode.getGammaProb())
-                    lineagesAtLBottom.add(lineage);
-                else
-                    lineagesAtRBottom.add(lineage);
-            }
-
-            final double bottomHeight = snNode.getHeight();
-            final int lBranchNumber = snNode.gammaBranchNumber;
-            NetworkNode lParent = snNode.getParentByBranch(lBranchNumber);
-            final double lPopSize = popSizes.getValue(lBranchNumber);
-            final double lTopHeight = lParent.getHeight();
-            List<Node> lineagesAtLTop =
-                    simulateCoalescentEvents(lineagesAtLBottom, bottomHeight, lTopHeight, ploidy*lPopSize, geneTree);
-            final int rBranchNumber = snNode.gammaBranchNumber + 1;
-            NetworkNode rParent = snNode.getParentByBranch(rBranchNumber);
-            final double rPopSize = popSizes.getValue(rBranchNumber);
-            final double rTopHeight = rParent.getHeight();
-            List<Node> lineagesAtRTop =
-                    simulateCoalescentEvents(lineagesAtRBottom, bottomHeight, rTopHeight, ploidy*rPopSize, geneTree);
-
-            networkNodeGeneLineagesMap.putAll(lParent, lineagesAtLTop);
-            networkNodeGeneLineagesMap.putAll(rParent, lineagesAtRTop);
-            // update embedding
-            final int traversalLParentNr = lParent.getTraversalNumber();
-            for (final Node geneNode : lineagesAtLTop)
-                embedding.setMatrixValue(traversalLParentNr, geneNode.getNr(), lBranchNumber);
-            final int traversalRParentNr = rParent.getTraversalNumber();
-            for (final Node geneNode : lineagesAtRTop)
-                embedding.setMatrixValue(traversalRParentNr, geneNode.getNr(), rBranchNumber);
-        }
-        else {
-            final double bottomHeight = snNode.getHeight();
-            final int sBranchNumber = snNode.gammaBranchNumber;
-            NetworkNode sParent = snNode.getParentByBranch(sBranchNumber);
-            final double popSize = popSizes.getValue(sBranchNumber);
-            final double topHeight;
-            if (sParent.isOrigin())  // network root
-                topHeight = Double.POSITIVE_INFINITY;
-            else
-                topHeight = sParent.getHeight();
-
-            List<Node> lineagesAtTop =
-                    simulateCoalescentEvents(lineagesAtBottom, bottomHeight, topHeight, ploidy*popSize, geneTree);
-            if (sParent.isOrigin()) {
-                geneTree.setRoot(lineagesAtTop.get(0));
-            } else {
-                networkNodeGeneLineagesMap.putAll(sParent, lineagesAtTop);
-                // update embedding
-                final int traversalParentNr = sParent.getTraversalNumber();
-                for (final Node geneNode : lineagesAtTop)
-                    embedding.setMatrixValue(traversalParentNr, geneNode.getNr(), sBranchNumber);
-            }
-        }
-    }
-
-    private List<Node> simulateCoalescentEvents(Collection<Node> lineages, double bottomHeight,
-                                                double topHeight, double pNu, Tree geneTree) {
-        // start from the lineages at the bottom
-        List<Node> currentLineages = new ArrayList<>(lineages);
-        double currentHeight = bottomHeight;
-
-        List<Node> internalNodes = geneTree.getInternalNodes();
-
-        // then go up backward in time
-        while (currentLineages.size() > 1 && currentHeight < topHeight) {
-            // generate a coalescent waiting time
-            final int nLineage = currentLineages.size();
-            final double coalescentRate = nLineage * (nLineage - 1) / (2 * pNu);
-            final double waitingTime = Randomizer.nextExponential(coalescentRate);
-            currentHeight += waitingTime;
-
-            if (currentHeight < topHeight) {
-                // randomly pick two lineages to coalescence
-                int rnd = Randomizer.nextInt(nLineage);
-                final Node left = currentLineages.get(rnd);
-                currentLineages.remove(left);
-                rnd = Randomizer.nextInt(nLineage - 1);
-                final Node right = currentLineages.get(rnd);
-                currentLineages.remove(right);
-                // deal with the parent of the two picked nodes
-                final Node node = internalNodes.get(nodeIndex++);
-                left.setParent(node); right.setParent(node);
-                node.setLeft(left);   node.setRight(right);
-                node.setHeight(currentHeight);
-                currentLineages.add(node);
-            }
-        }
-
-        return currentLineages;
     }
 }

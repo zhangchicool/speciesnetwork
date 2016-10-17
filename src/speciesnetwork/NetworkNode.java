@@ -155,6 +155,10 @@ public class NetworkNode {
         return nodeNumber;
     }
 
+    public void setNr(int nr) {
+        nodeNumber = nr;
+    }
+
     public double getHeight() {
         return height;
     }
