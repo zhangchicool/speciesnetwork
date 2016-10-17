@@ -32,6 +32,8 @@ public class CoalescentSimulator extends Runnable {
 
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "Species network for embedding the gene trees.", Validate.REQUIRED);
+    public final Input<NetworkPureBirthHybrid> networkSimulatorInput =
+            new Input<>("networkSimulator", "Species network simulator.", Validate.XOR, speciesNetworkInput);
     public final Input<RealParameter> popSizesInput =
             new Input<>("popSizes", "Constant per-branch population sizes.", Validate.REQUIRED);
     public final Input<TaxonSet> taxonSuperSetInput =
@@ -84,7 +86,8 @@ public class CoalescentSimulator extends Runnable {
 
     @Override
     public void run() throws IOException {
-        speciesNetwork = speciesNetworkInput.get();
+        if ((speciesNetwork = speciesNetworkInput.get()) == null)
+            speciesNetwork = networkSimulatorInput.get().simulate();  // simulate a species network
         popSizes = popSizesInput.get();
         ploidies = ploidiesInput.get();
         if (ploidies == null) ploidies = new RealParameter("2.0");  // default
@@ -367,7 +370,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("        <distribution id=\"posterior\" spec=\"util.CompoundDistribution\">");
         out.println("            <distribution id=\"prior\" spec=\"util.CompoundDistribution\">");  // prior
         // coalescent
-        out.println("                <distribution id=\"coalescent\" spec=\"speciesnetwork.CoalescentSimulator\" " +
+        out.println("                <distribution id=\"coalescent\" spec=\"speciesnetwork.MultispeciesCoalescent\" " +
                                                     "speciesNetwork=\"@network:species\">");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("                    <geneTreeWithin id=\"geneTree:gene" + (i+1) + "\" ploidy=\"2.0\" " +

@@ -13,32 +13,33 @@
 
     <init spec='beast.util.TreeParser' id='newick:species' IsLabelledNewick="true" adjustTipHeights="false"
         newick="((((A:0.02,(B:0.01)#H1[&amp;gamma=0.4]:0.01)S1:0.01,(#H1:0.01)#H2[&amp;gamma=0.7]:0.01)S2:0.02,(#H2:0.02,C:0.04)S3:0.01)R:0.01)"/>
-    <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
-        <taxonset id="taxonSuperset" spec="TaxonSet">
-            <taxon id="A" spec="TaxonSet">
-                <taxon id="a1" spec="Taxon"/>
-                <taxon id="a2" spec="Taxon"/>
-            </taxon>
-            <taxon id="B" spec="TaxonSet">
-                <taxon id="b1" spec="Taxon"/>
-                <taxon id="b2" spec="Taxon"/>
-                <taxon id="b3" spec="Taxon"/>
-                <taxon id="b4" spec="Taxon"/>
-            </taxon>
-            <taxon id="C" spec="TaxonSet">
-                <taxon id="c1" spec="Taxon"/>
-                <taxon id="c2" spec="Taxon"/>
-            </taxon>
-        </taxonset>
-    </stateNode>
 
     <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="3S_2H_C2.sim.trees" iterations="100">
         <state id="state">
+            <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
+                <taxonset id="taxonSuperset" spec="TaxonSet">
+                    <taxon id="A" spec="TaxonSet">
+                        <taxon id="a1" spec="Taxon"/>
+                        <taxon id="a2" spec="Taxon"/>
+                    </taxon>
+                    <taxon id="B" spec="TaxonSet">
+                        <taxon id="b1" spec="Taxon"/>
+                        <taxon id="b2" spec="Taxon"/>
+                        <taxon id="b3" spec="Taxon"/>
+                        <taxon id="b4" spec="Taxon"/>
+                    </taxon>
+                    <taxon id="C" spec="TaxonSet">
+                        <taxon id="c1" spec="Taxon"/>
+                        <taxon id="c2" spec="Taxon"/>
+                    </taxon>
+                </taxonset>
+            </stateNode>
             <tree id="tree:gene1" name="stateNode">
                 <taxonset alignment="@gene1" id="taxonset:gene1" spec="TaxonSet"/>
             </tree>
             <stateNode id="embedding:gene1" spec="parameter.IntegerParameter">-1</stateNode>
         </state>
+
         <speciesNetwork idref="network:species"/>
         <parameter id="pop.sizes" name="popSizes">0.01</parameter>
         <taxonSuperset idref="taxonSuperset"/>

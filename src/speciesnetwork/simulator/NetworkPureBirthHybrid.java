@@ -9,6 +9,7 @@ import beast.core.Input.Validate;
 import beast.core.Runnable;
 import beast.core.State;
 import beast.core.parameter.RealParameter;
+import beast.evolution.alignment.TaxonSet;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
@@ -28,20 +29,31 @@ public class NetworkPureBirthHybrid extends Runnable {
     public final Input<RealParameter> hybridRateInput =
             new Input<>("hybridRate", "Hybridization rate, nu.", Validate.REQUIRED);
 
+    // number of extant species to condition on (-1 for no such condition)
+    private int numTips = -1;
+
     @Override
     public void initAndValidate() {
+        Network speciesNetwork = speciesNetworkInput.get();
+        TaxonSet species = speciesNetwork.taxonSetInput.get();
+        if (species != null)
+            numTips = species.asStringList().size();
     }
 
     @Override
     public void run() {
-        Network speciesNetwork = speciesNetworkInput.get();
+        simulate();
+    }
 
+    public Network simulate() {
+        Network speciesNetwork = speciesNetworkInput.get();
+        NetworkNode[] networkTips = speciesNetwork.getLeafNodes();
         final double timeOrigin = originInput.get().getValue();
         final double lambda = birthRateInput.get().getValue();
         final double nu = hybridRateInput.get().getValue();
 
         // set the initial states
-        speciesNetwork.getRoot().getChildren().clear();
+        speciesNetwork.makeDummy();
 
         final List<NetworkNode> networkNodeList = new ArrayList<>();
         networkNodeList.add(speciesNetwork.getRoot());
@@ -101,6 +113,8 @@ public class NetworkPureBirthHybrid extends Runnable {
 
         // TODO: deal with branch numbers and relationships
 
+
+        return speciesNetwork;
     }
 
 

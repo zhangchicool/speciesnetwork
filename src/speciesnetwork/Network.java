@@ -53,11 +53,7 @@ public class Network extends StateNode {
                 makeCaterpillar(0, 1);
                 updateRelationships();
             } else {
-                // make dummy network with a single root node
-                nodes = new NetworkNode[1];
-                nodes[1] = new NetworkNode(this);
-                nodeCount = leafNodeCount = 1;
-                speciationNodeCount = reticulationNodeCount = 0;
+                makeDummy();
             }
         }
     }
@@ -66,6 +62,14 @@ public class Network extends StateNode {
         for (NetworkNode node: nodes) {
             node.updateRelationships();
         }
+    }
+
+    public void makeDummy() {
+        // make dummy network with a single node
+        nodes = new NetworkNode[1];
+        nodes[0] = new NetworkNode(this);
+        nodeCount = 1;
+        leafNodeCount = speciationNodeCount = reticulationNodeCount = 0;
     }
 
     private void makeCaterpillar(final double minInternalHeight, final double step) {
@@ -636,5 +640,15 @@ public class Network extends StateNode {
         resetInternalNodeLabels();
         // update relationships
         updateRelationships();
+    }
+
+    /* add a node to the nodes array */
+    public void addNode(NetworkNode node) {
+
+    }
+
+    /* join two nodes to form a hybrid node */
+    public NetworkNode joinNode (NetworkNode node1, NetworkNode node2) {
+        return node1;
     }
 }
