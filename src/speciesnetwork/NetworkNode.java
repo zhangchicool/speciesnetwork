@@ -22,15 +22,17 @@ public class NetworkNode {
      */
     protected String label;
 
-    /**
-     * inheritance probability associated with the left parent branch
-     */
-    protected double inheritProb;
+    protected int nodeNumber;
 
     /**
      * height of this node
      */
     protected double height;
+
+    /**
+     * inheritance probability associated with the gamma branch
+     */
+    protected double inheritProb;
 
     /**
      * children and parents of this node
@@ -40,10 +42,6 @@ public class NetworkNode {
     protected Multiset<NetworkNode> children;
     protected Multiset<NetworkNode> parents;
 
-    /**
-     * counts of children and parents of this node
-     */
-    protected int nodeNumber;
     protected int nParents;
     protected int nChildren;
 

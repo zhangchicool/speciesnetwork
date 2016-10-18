@@ -642,13 +642,65 @@ public class Network extends StateNode {
         updateRelationships();
     }
 
-    /* add a node to the nodes array */
-    public void addNode(NetworkNode node) {
-
+    /* add a speciation node to the nodes array */
+    public void addSpeciationNode(NetworkNode sNode) {
+        NetworkNode[] tmpNodes = new NetworkNode[nodeCount + 1];
+        System.arraycopy(nodes, 0, tmpNodes, 0, leafNodeCount+speciationNodeCount);
+        System.arraycopy(nodes, leafNodeCount+speciationNodeCount, tmpNodes, leafNodeCount+speciationNodeCount+1, reticulationNodeCount+1);
+        // add the node to the end of the speciation nodes and before the reticulation nodes
+        tmpNodes[leafNodeCount+speciationNodeCount] = sNode;
+        nodes = tmpNodes;
+        nodeCount++;
+        speciationNodeCount++;
     }
 
-    /* join two nodes to form a hybrid node */
-    public NetworkNode joinNode (NetworkNode node1, NetworkNode node2) {
-        return node1;
+    /* add a reticulation node to the nodes array */
+    public void addReticulationNode(NetworkNode rNode) {
+        NetworkNode[] tmpNodes = new NetworkNode[nodeCount + 1];
+        System.arraycopy(nodes, 0, tmpNodes, 0, leafNodeCount+speciationNodeCount);
+        System.arraycopy(nodes, leafNodeCount+speciationNodeCount, tmpNodes, leafNodeCount+speciationNodeCount+1, reticulationNodeCount+1);
+        // add the node to the end of the speciation nodes and before the reticulation nodes
+        tmpNodes[leafNodeCount+speciationNodeCount] = rNode;
+        nodes = tmpNodes;
+        nodeCount++;
+        reticulationNodeCount++;
+    }
+
+    /* add a leaf node to the nodes array */
+    public void addLeafNode(NetworkNode lNode) {
+        NetworkNode[] tmpNodes = new NetworkNode[nodeCount + 1];
+        System.arraycopy(nodes, 0, tmpNodes, 0, leafNodeCount);
+        System.arraycopy(nodes, leafNodeCount, tmpNodes, leafNodeCount+1, speciationNodeCount+reticulationNodeCount+1);
+        // add the node to the end of the leaf nodes and before the speciation nodes
+        tmpNodes[leafNodeCount] = lNode;
+        nodes = tmpNodes;
+        nodeCount++;
+        leafNodeCount++;
+    }
+
+    public void deleteNode(NetworkNode node) {
+        int index = -1;
+        for (int i = 0; i < nodes.length; i++) {
+            if (nodes[i] == node) {
+                index = i;
+                break;
+            }
+        }
+        if (index < 0)  // node is not in nodes[]
+            return;
+
+        NetworkNode[] tmpNodes = new NetworkNode[nodeCount - 1];
+        System.arraycopy(nodes, 0, tmpNodes, 0, index);
+        System.arraycopy(nodes, index+1, tmpNodes, index, nodeCount-index-1);
+        nodes = tmpNodes;
+
+        // decrease the node count accordingly
+        nodeCount--;
+        if (index < leafNodeCount)
+            leafNodeCount--;
+        else if (index < leafNodeCount+speciationNodeCount)
+            speciationNodeCount--;
+        else if (index < nodeCount)
+            reticulationNodeCount--;
     }
 }

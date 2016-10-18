@@ -51,6 +51,7 @@ public class YuleHybridModel extends Distribution {
             throw new RuntimeException("Either specify speciationRate and hybridizationRate " +
                                         "OR specify netDiversification and turnOver.");
         }
+        assert (lambda > 0.0 && nu > 0.0);
         // rho = rhoProbInput.get() == null ? 1.0 : rhoProbInput.get().getValue();
 
         // make sure that all tips are at the same height, otherwise this Yule Model is not appropriate

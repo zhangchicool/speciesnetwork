@@ -54,9 +54,15 @@ public class NetworkPureBirthHybrid extends Runnable {
 
         // set the initial states
         speciesNetwork.makeDummy();
+        final NetworkNode origin = speciesNetwork.getOrigin();
+        final NetworkNode root = new NetworkNode(speciesNetwork);
+        speciesNetwork.addSpeciationNode(root);
+        origin.getChildren().add(root);
+        root.getParents().add(origin);
 
         final List<NetworkNode> networkNodeList = new ArrayList<>();
-        networkNodeList.add(speciesNetwork.getRoot());
+        networkNodeList.add(root);
+
         double currentTime = timeOrigin;
         // start the simulation
         while (currentTime > 0.0) {
@@ -75,8 +81,8 @@ public class NetworkPureBirthHybrid extends Runnable {
 
                     final NetworkNode cNode1 = new NetworkNode(speciesNetwork);
                     final NetworkNode cNode2 = new NetworkNode(speciesNetwork);
-                    speciesNetwork.addNode(cNode1);
-                    speciesNetwork.addNode(cNode2);
+                    speciesNetwork.addSpeciationNode(cNode1);
+                    speciesNetwork.addSpeciationNode(cNode2);
                     networkNodeList.add(cNode1);
                     networkNodeList.add(cNode2);
 
@@ -93,15 +99,15 @@ public class NetworkPureBirthHybrid extends Runnable {
                     final NetworkNode pNode2 = networkNodeList.get(rnd);
                     networkNodeList.remove(pNode1);
                     networkNodeList.remove(pNode2);
-                    final NetworkNode hNode = speciesNetwork.joinNode(pNode1, pNode2);
+                    speciesNetwork.deleteNode(pNode2); // delete pNode2, use pNode1 as the hybrid node
 
                     final NetworkNode cNode = new NetworkNode(speciesNetwork);
-                    speciesNetwork.addNode(cNode);
+                    speciesNetwork.addSpeciationNode(cNode);
                     networkNodeList.add(cNode);
 
-                    hNode.setHeight(currentTime);
-                    hNode.getChildren().add(cNode);
-                    cNode.getParents().add(hNode);
+                    pNode1.setHeight(currentTime);
+                    pNode1.getChildren().add(cNode);
+                    cNode.getParents().add(pNode1);
                 }
             }
         }

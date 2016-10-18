@@ -64,11 +64,8 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
     public final Input<Function> clockRateInput =
             new Input<>("baseRate", "Main clock rate used to scale trees (default 1).");
 
-    @Override
-    public void initAndValidate() {
-        // what does this do and is it dangerous to call it or not to call it at the start or at the end??????
-        super.initAndValidate();
-    }
+    // @Override
+    // public void initAndValidate() { super.initAndValidate(); }
 
     @Override
     public void initStateNodes() {
