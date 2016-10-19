@@ -42,9 +42,6 @@ public class NetworkNode {
     protected Multiset<NetworkNode> children;
     protected Multiset<NetworkNode> parents;
 
-    protected int nParents;
-    protected int nChildren;
-
     /**
      * status of this node after an operation is performed on the state
      */
@@ -60,7 +57,6 @@ public class NetworkNode {
                 break;
             }
         }
-
         if (nodeNumber < 0) {
             throw new RuntimeException("Node is not attached to the network!");
         }
@@ -68,8 +64,6 @@ public class NetworkNode {
         gammaBranchNumber = network.getBranchNumber(nodeNumber);
         parents = updateParents();
         children = updateChildren();
-        nParents = parents.size();
-        nChildren = children.size();
 
         isDirty |= Network.IS_DIRTY;
     }
@@ -106,8 +100,6 @@ public class NetworkNode {
         children = HashMultiset.create();
         parents = HashMultiset.create();
         nodeNumber = -1;
-        nParents = 0;
-        nChildren = 0;
         isDirty = Network.IS_DIRTY;
         df = new DecimalFormat("0.########");
     }
@@ -140,8 +132,6 @@ public class NetworkNode {
         dst.childBranchNumbers.addAll(src.childBranchNumbers);
         dst.children.clear();
         dst.parents.clear();
-        dst.nParents = src.nParents;
-        dst.nChildren = src.nChildren;
         dst.isDirty = src.isDirty;
     }
 
@@ -183,11 +173,11 @@ public class NetworkNode {
     }
 
     public int getParentCount() {
-        return nParents;
+        return parents.size();
     }
 
     public int getChildCount() {
-        return nChildren;
+        return children.size();
     }
 
     public Multiset<NetworkNode> getParents() {
@@ -244,28 +234,28 @@ public class NetworkNode {
      * @return true if current node is origin node
      */
     public boolean isOrigin() {
-        return nParents == 0;
+        return parents.size() == 0;
     }
 
     /**
      * @return true if current node is leaf node
      */
     public boolean isLeaf() {
-        return nChildren == 0;
+        return children.size() == 0;
     }
 
     /**
      * @return true if current node is reticulation node
      */
     public boolean isReticulation() {
-        return nParents == 2;
+        return parents.size() == 2;
     }
 
     /**
      * @return true if current node is reticulation node
      */
     public boolean isSpeciation() {
-        return nChildren == 2;
+        return children.size() == 2;
     }
 
     /**
@@ -309,7 +299,7 @@ public class NetworkNode {
     private String buildNewick(double parentHeight, Integer branchNumber, boolean inXML) {
         final StringBuilder subtreeString = new StringBuilder();
         // only add children to a reticulation node once
-        if (nChildren > 0 && !touched) {
+        if (children.size() > 0 && !touched) {
             touched = true;
             subtreeString.append("(");
             int i = 0;
@@ -329,7 +319,7 @@ public class NetworkNode {
         //  subtreeString.append(nodeNumber);
 
         // add inheritance probabilities to reticulation nodes
-        if (nParents == 2 && gammaBranchNumber.equals(branchNumber)) {
+        if (parents.size() == 2 && gammaBranchNumber.equals(branchNumber)) {
             if (inXML)
                 subtreeString.append("[&amp;gamma=");
             else
@@ -394,7 +384,7 @@ public class NetworkNode {
     private int recurseLeafNodeCount() {
         if (touched)
             return 0;
-        else if (nChildren == 0)
+        else if (children.size() == 0)
             return 1;
 
         int nodeCount = 0;
@@ -414,7 +404,7 @@ public class NetworkNode {
         if (touched) return 0;
 
         // don't count reticulation nodes
-        int nodeCount = (nChildren == 2) ? 1 : 0;
+        int nodeCount = (children.size() == 2) ? 1 : 0;
         for (NetworkNode child: children) {
             nodeCount += child.recurseSpeciationNodeCount();
         }
@@ -431,7 +421,7 @@ public class NetworkNode {
         if (touched) return 0;
 
         // only count reticulation nodes
-        int nodeCount = (nParents == 2) ? 1 : 0;
+        int nodeCount = (parents.size() == 2) ? 1 : 0;
         for (NetworkNode child: children) {
             nodeCount += child.recurseReticulationNodeCount();
         }
@@ -446,8 +436,8 @@ public class NetworkNode {
         System.out.println(String.format("%s: %f", "height", height));
         System.out.println(String.format("%s: %d", "nodeNr", nodeNumber));
         System.out.println(String.format("%s: %d", "branchNr", gammaBranchNumber));
-        System.out.println(String.format("%s: %d", "nParents", nParents));
-        System.out.println(String.format("%s: %d", "nChildren", nChildren));
+        System.out.println(String.format("%s: %d", "nParents", parents.size()));
+        System.out.println(String.format("%s: %d", "nChildren", children.size()));
         for (Integer i: childBranchNumbers) {
             System.out.println(String.format("%s: %d", "childBranchNumber", i));
         }
