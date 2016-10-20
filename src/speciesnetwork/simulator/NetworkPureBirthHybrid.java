@@ -1,6 +1,10 @@
 package speciesnetwork.simulator;
 
-import java.util.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 
 import beast.core.Description;
 import beast.core.Input;
@@ -26,14 +30,44 @@ public class NetworkPureBirthHybrid extends Runnable {
             new Input<>("birthRate", "Speciation rate, lambda.", Validate.REQUIRED);
     public final Input<RealParameter> hybridRateInput =
             new Input<>("hybridRate", "Hybridization rate, nu.", Validate.REQUIRED);
+    public final Input<String> outputFileNameInput =
+            new Input<>("outputFileName", "If provided, write to this file rather than to standard out.");
+    public final Input<Integer> iterationsInput =
+            new Input<>("iterations","Number of iterations to simulate (default is 1).");
 
     @Override
     public void initAndValidate() {
     }
 
     @Override
-    public void run() {
-        simulate();
+    public void run() throws IOException {
+        final int nrOfIterations;
+        if (iterationsInput.get() == null)
+            nrOfIterations = 1;
+        else
+            nrOfIterations = iterationsInput.get();
+
+        String outputFileName = outputFileNameInput.get();
+        if (outputFileName != null) {
+            String msg = "Writing";
+            if (new File(outputFileName).exists())
+                msg = "Warning: Appending";
+            System.err.println(msg + " file " + outputFileName);
+        }
+        for (int iteration = 0; iteration < nrOfIterations; iteration++) {
+            Network speciesNetwork = simulate();
+            writeNetworks(outputFileName, speciesNetwork);
+        }
+    }
+
+    private void writeNetworks(String outputFileName, Network speciesNetwork) throws IOException {
+        if (outputFileName == null) {
+            System.out.println(speciesNetwork.toString() + ";");
+        } else {
+            FileWriter fw = new FileWriter(outputFileName, true);
+            fw.write(speciesNetwork.toString() + ";\n");
+            fw.close();
+        }
     }
 
     protected Network simulate() {
@@ -61,6 +95,7 @@ public class NetworkPureBirthHybrid extends Runnable {
                 leaf.setLabel(speciesNames.get(i));
             }
         }
+
         return speciesNetwork;
     }
 

@@ -157,11 +157,11 @@ public class CoalescentSimulator extends Runnable {
                 }
             }
 
-            String outFileName = outputFileNameInput.get();
+            String outputFileName = outputFileNameInput.get();
             if (nrOfIterations == 1) {
-                writeXMLOutput(outFileName);  // generate an XML file for a single iteration
+                writeXMLOutput(outputFileName);  // generate an XML file for a single iteration
             } else {
-                writeGeneTrees(outFileName);  // otherwise, only output the gene trees
+                writeGeneTrees(outputFileName);  // otherwise, only output the gene trees
             }
         }
     }
@@ -571,7 +571,7 @@ public class CoalescentSimulator extends Runnable {
         if (outputFileName == null) {
             for (int i = 0; i < nrOfGeneTrees; i++) {
                 Tree geneTree = geneTrees.get(i);
-                System.out.println(geneTree.getRoot().toNewick());
+                System.out.println(geneTree.getRoot().toNewick() + ";");
             }
         } else {
             FileWriter fw = new FileWriter(outputFileName, true);
