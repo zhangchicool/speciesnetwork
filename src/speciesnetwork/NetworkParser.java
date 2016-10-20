@@ -124,9 +124,9 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
             branchNumber = getBranchNumber(matchingNodeNr) + 1;
         }
 
-        for (Node c: treeNode.getChildren()) {
-            final Integer childBranchNumber = rebuildNetwork(c);
-            newNode.childBranchNumbers.add(childBranchNumber);
+        for (Node child: treeNode.getChildren()) {
+            final Integer childBranchNr = rebuildNetwork(child);
+            newNode.childBranchNumbers.add(childBranchNr);
         }
 
         return branchNumber;

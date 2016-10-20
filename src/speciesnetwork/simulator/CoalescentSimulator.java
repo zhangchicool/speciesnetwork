@@ -20,6 +20,7 @@ import beast.evolution.tree.Tree;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
+import speciesnetwork.SanityChecks;
 
 /**
  * @author Chi Zhang
@@ -88,10 +89,13 @@ public class CoalescentSimulator extends Runnable {
     public void run() throws IOException {
         if ((speciesNetwork = speciesNetworkInput.get()) == null)
             speciesNetwork = networkSimulatorInput.get().simulate();  // simulate a species network
+        SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
+
         popSizes = popSizesInput.get();
-        ploidies = ploidiesInput.get();
-        if (ploidies == null) ploidies = new RealParameter("2.0");  // default
+        if ((ploidies = ploidiesInput.get()) == null)
+            ploidies = new RealParameter("2.0");  // default
         ploidies.setDimension(nrOfGeneTrees);
+
         seqSimulators = seqSimulatorsInput.get();
 
         final int nrOfIterations;

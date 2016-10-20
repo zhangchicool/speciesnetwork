@@ -492,7 +492,7 @@ public class Network extends StateNode {
         return nodes[nodeI].height;
     }
 
-    protected void resetInternalNodeLabels() {
+    public void resetInternalNodeLabels() {
         // reset the speciation and reticulation node labels
         for (int i = 0; i < speciationNodeCount; i++) {
             nodes[leafNodeCount + i].setLabel("S" + (i+1));

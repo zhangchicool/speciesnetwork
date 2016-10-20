@@ -1,13 +1,11 @@
 package speciesnetwork.simulator;
 
-import java.io.*;
 import java.util.*;
 
 import beast.core.Description;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.Runnable;
-import beast.core.State;
 import beast.core.parameter.RealParameter;
 import beast.evolution.alignment.TaxonSet;
 import beast.util.Randomizer;
@@ -29,15 +27,8 @@ public class NetworkPureBirthHybrid extends Runnable {
     public final Input<RealParameter> hybridRateInput =
             new Input<>("hybridRate", "Hybridization rate, nu.", Validate.REQUIRED);
 
-    // number of extant species to condition on (-1 for no such condition)
-    private int numTips = -1;
-
     @Override
     public void initAndValidate() {
-        Network speciesNetwork = speciesNetworkInput.get();
-        TaxonSet species = speciesNetwork.taxonSetInput.get();
-        if (species != null)
-            numTips = species.asStringList().size();
     }
 
     @Override
@@ -45,9 +36,35 @@ public class NetworkPureBirthHybrid extends Runnable {
         simulate();
     }
 
-    public Network simulate() {
+    protected Network simulate() {
         Network speciesNetwork = speciesNetworkInput.get();
-        NetworkNode[] networkTips = speciesNetwork.getLeafNodes();
+        TaxonSet speciesTaxa = speciesNetwork.taxonSetInput.get();
+        List<String> speciesNames = new ArrayList<>();
+
+        final int numTips;  // number of extant species (-1 for no such condition)
+        if (speciesTaxa != null) {
+            speciesNames = speciesTaxa.asStringList();
+            numTips = speciesNames.size();
+        } else {
+            numTips = -1;
+        }
+
+        if (numTips < 0)
+            simulate(speciesNetwork);
+        else {
+            do {  // simulate until we get the desired number of tips (caution!)
+               simulate(speciesNetwork);
+            } while (speciesNetwork.getLeafNodeCount() != numTips);
+            // set the tip labels to match the taxa labels
+            for (int i = 0; i < speciesNetwork.getLeafNodeCount(); i++) {
+                NetworkNode leaf = speciesNetwork.getNode(i);
+                leaf.setLabel(speciesNames.get(i));
+            }
+        }
+        return speciesNetwork;
+    }
+
+    private void simulate(Network speciesNetwork) {
         final double timeOrigin = originInput.get().getValue();
         final double lambda = birthRateInput.get().getValue();
         final double nu = hybridRateInput.get().getValue();
@@ -55,6 +72,7 @@ public class NetworkPureBirthHybrid extends Runnable {
         // set the initial states
         speciesNetwork.makeDummy();
         final NetworkNode origin = speciesNetwork.getOrigin();
+        origin.setHeight(timeOrigin);
         final NetworkNode root = new NetworkNode(speciesNetwork);
         speciesNetwork.addSpeciationNode(root);
         origin.getChildren().add(root);
@@ -78,6 +96,7 @@ public class NetworkPureBirthHybrid extends Runnable {
                     rnd = Randomizer.nextInt(k);
                     final NetworkNode pNode = networkNodeList.get(rnd);
                     networkNodeList.remove(pNode);
+                    pNode.setHeight(currentTime);
 
                     final NetworkNode cNode1 = new NetworkNode(speciesNetwork);
                     final NetworkNode cNode2 = new NetworkNode(speciesNetwork);
@@ -86,7 +105,6 @@ public class NetworkPureBirthHybrid extends Runnable {
                     networkNodeList.add(cNode1);
                     networkNodeList.add(cNode2);
 
-                    pNode.setHeight(currentTime);
                     pNode.getChildren().add(cNode1);
                     pNode.getChildren().add(cNode2);
                     cNode1.getParents().add(pNode);
@@ -95,35 +113,59 @@ public class NetworkPureBirthHybrid extends Runnable {
                     // hybridization event, pick two branches to join
                     rnd = Randomizer.nextInt(k);
                     final NetworkNode pNode1 = networkNodeList.get(rnd);
+                    networkNodeList.remove(pNode1);
                     rnd = Randomizer.nextInt(k-1);
                     final NetworkNode pNode2 = networkNodeList.get(rnd);
-                    networkNodeList.remove(pNode1);
                     networkNodeList.remove(pNode2);
-                    speciesNetwork.deleteNode(pNode2); // delete pNode2, use pNode1 as the hybrid node
+                    speciesNetwork.deleteNode(pNode1);
+                    speciesNetwork.deleteNode(pNode2);
+                    speciesNetwork.addReticulationNode(pNode1);  // use pNode1 as the hybrid node
+                    pNode1.setHeight(currentTime);
+                    pNode1.setGammaProb(Randomizer.nextDouble());
 
                     final NetworkNode cNode = new NetworkNode(speciesNetwork);
                     speciesNetwork.addSpeciationNode(cNode);
                     networkNodeList.add(cNode);
 
-                    pNode1.setHeight(currentTime);
+                    pNode1.getParents().addAll(pNode2.getParents());
+                    for (NetworkNode parent: pNode2.getParents()) {
+                        parent.getChildren().remove(pNode2);
+                        parent.getChildren().add(pNode1);
+                    }
                     pNode1.getChildren().add(cNode);
                     cNode.getParents().add(pNode1);
                 }
             }
         }
 
-        // reached the present, set tip heights to zero
-        for (NetworkNode node: networkNodeList) {
-            node.setHeight(0.0);
+        // reached the present, set node labels
+        for (int i = 0; i < networkNodeList.size(); i++) {
+            NetworkNode node = networkNodeList.get(i);
+            speciesNetwork.deleteNode(node);
+            speciesNetwork.addLeafNode(node);
+            node.setLabel("T" + (i+1));
         }
+        speciesNetwork.resetInternalNodeLabels();
 
-        // TODO: deal with branch numbers and relationships
-
-
-        return speciesNetwork;
+        // deal with branch numbers and relationships
+        for (int i = 0; i < speciesNetwork.getNodeCount(); i++) {
+            NetworkNode node = speciesNetwork.getNode(i);
+            node.setNr(i);
+            node.gammaBranchNumber = speciesNetwork.getBranchNumber(i);
+        }
+        speciesNetwork.resetAllVisited();
+        setChildBranchNrs(speciesNetwork.getOrigin());
     }
 
-
-
-
+    private Integer setChildBranchNrs(NetworkNode node) {
+        if (node.isVisited()) {
+            return node.gammaBranchNumber + 1;
+        } else {
+            for (NetworkNode child: node.getChildren()) {
+                node.childBranchNumbers.add(setChildBranchNrs(child));
+            }
+            node.setVisited(true);
+            return node.gammaBranchNumber;
+        }
+    }
 }

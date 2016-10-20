@@ -41,7 +41,6 @@
     <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="3S_2H_3L.xml" iterations="1" initMethod="user">
         <state id="state">
             <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
-            <!-- stateNode id="network:species" spec="speciesnetwork.Network" -->
                 <taxonset id="taxonSuperset" spec="TaxonSet">
                     <taxon id="A" spec="TaxonSet">
                         <taxon id="a1" spec="Taxon"/>
@@ -74,7 +73,7 @@
         </state>
 
         <speciesNetwork idref="network:species"/>
-        <!-- networkSimulator id="network:simulated" speciesNetwork="@network:species" origin="0.06" birthRate="100" hybridRate="50"
+        <!-- networkSimulator id="network:simulated" speciesNetwork="@network:species" origin="0.06" birthRate="30" hybridRate="20"
                           spec="speciesnetwork.simulator.NetworkPureBirthHybrid"/ -->
         <parameter id="pop.sizes" name="popSizes">0.01</parameter>
         <taxonSuperset idref="taxonSuperset"/>
