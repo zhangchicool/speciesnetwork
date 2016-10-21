@@ -3,6 +3,7 @@ package speciesnetwork.simulator;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ import beast.evolution.alignment.TaxonSet;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
+import speciesnetwork.tools.SummarizeNetwork;
 
 /**
  * @author Chi Zhang
@@ -30,10 +32,14 @@ public class NetworkPureBirthHybrid extends Runnable {
             new Input<>("birthRate", "Speciation rate, lambda.", Validate.REQUIRED);
     public final Input<RealParameter> hybridRateInput =
             new Input<>("hybridRate", "Hybridization rate, nu.", Validate.REQUIRED);
+
     public final Input<String> outputFileNameInput =
             new Input<>("outputFileName", "If provided, write to this file rather than to standard out.");
     public final Input<Integer> iterationsInput =
-            new Input<>("iterations","Number of iterations to simulate (default is 1).");
+            new Input<>("iterations", "Number of iterations to simulate (default is 1).");
+
+    public final Input<SummarizeNetwork> summaryInput =
+            new Input<>("summary", "Print summary statistics of the networks.");
 
     @Override
     public void initAndValidate() {
@@ -41,32 +47,33 @@ public class NetworkPureBirthHybrid extends Runnable {
 
     @Override
     public void run() throws IOException {
+        String outputFileName = outputFileNameInput.get();
+
+        PrintStream out;  // where to print
+        if (outputFileName == null) {
+            out = System.out;
+        } else {
+            String msg = "Writing";
+            if (new File(outputFileName).exists())
+                msg = "Warning: Overwriting";
+            System.err.println(msg + " file " + outputFileName);
+            out = new PrintStream(outputFileName);
+        }
+        // print header
+        out.println("#NEXUS\n\nBegin trees;");
+
         final int nrOfIterations;
         if (iterationsInput.get() == null)
             nrOfIterations = 1;
         else
             nrOfIterations = iterationsInput.get();
-
-        String outputFileName = outputFileNameInput.get();
-        if (outputFileName != null) {
-            String msg = "Writing";
-            if (new File(outputFileName).exists())
-                msg = "Warning: Appending";
-            System.err.println(msg + " file " + outputFileName);
+        for (int iteration = 1; iteration <= nrOfIterations; iteration++) {
+            out.println("tree SIM_" + iteration + " =" + simulate().toString() + ";");
         }
-        for (int iteration = 0; iteration < nrOfIterations; iteration++) {
-            Network speciesNetwork = simulate();
-            writeNetworks(outputFileName, speciesNetwork);
-        }
-    }
+        out.println("End;");
 
-    private void writeNetworks(String outputFileName, Network speciesNetwork) throws IOException {
-        if (outputFileName == null) {
-            System.out.println(speciesNetwork.toString() + ";");
-        } else {
-            FileWriter fw = new FileWriter(outputFileName, true);
-            fw.write(speciesNetwork.toString() + ";\n");
-            fw.close();
+        if (summaryInput.get() != null) {
+            summaryInput.get().run();
         }
     }
 

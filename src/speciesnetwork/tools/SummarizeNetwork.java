@@ -1,6 +1,7 @@
 package speciesnetwork.tools;
 
 import java.io.*;
+import java.text.DecimalFormat;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -11,6 +12,7 @@ import beast.core.Input.Validate;
 import beast.core.Runnable;
 import beast.util.TreeParser;
 import speciesnetwork.Network;
+import speciesnetwork.NetworkNode;
 import speciesnetwork.NetworkParser;
 
 /**
@@ -29,39 +31,13 @@ public class SummarizeNetwork extends Runnable {
 
     @Override
     public void initAndValidate() {
-
     }
 
     @Override
     public void run() throws IOException {
-        final String inFileName = inputFileNameInput.get();
-        final String outFileName = outputFileNameInput.get();
+        final String inputFileName = inputFileNameInput.get();
+        final String outputFileName = outputFileNameInput.get();
 
-        int numNetworks = 0;
-        try (BufferedReader br = new BufferedReader(new FileReader(inFileName))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.trim().toLowerCase().startsWith("tree ")) {
-                    // process the line.
-                    final int i = line.indexOf('(');
-                    if (i > 0) line = line.substring(i);
-                    TreeParser tree = new TreeParser(line);
-                    NetworkParser network = new NetworkParser(tree);
-
-                    final int nHybrid = network.getReticulationNodeCount();
-                    nHybridInNetworkMap.put(nHybrid, network);
-
-                    numNetworks++;
-                }
-            }
-
-            writeOutput(outFileName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void writeOutput(String outputFileName) throws IOException {
         PrintStream out;  // where to print
         if (outputFileName == null) {
             out = System.out;
@@ -72,9 +48,58 @@ public class SummarizeNetwork extends Runnable {
             System.err.println(msg + " file " + outputFileName);
             out = new PrintStream(outputFileName);
         }
+        // print header
+        out.println("nHybrid  length  tMRCA  tHybrid  tSpecia");
 
-        for (Integer i = 0; i < nHybridInNetworkMap.keySet().size(); i++) {
-            out.println(i + "-->" + nHybridInNetworkMap.get(i).size());
+        int numNetworks = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader(inputFileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().toLowerCase().startsWith("tree ")) {
+                    // process the line.
+                    final int i = line.indexOf('(');
+                    if (i > 0) line = line.substring(i);
+                    TreeParser tree = new TreeParser(line);
+                    NetworkParser network = new NetworkParser(tree);
+
+                    printSummary(out, network);  // summarize
+
+                    // final int nHybrid = network.getReticulationNodeCount();
+                    // nHybridInNetworkMap.put(nHybrid, network);
+                    numNetworks++;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        System.err.println(numNetworks + " networks processed");
+    }
+
+    /**
+     * print some summary statics, including
+     * 1. number of hybridization
+     * 2. network length
+     * 3. time of mrca (root)
+     * 4. time of youngest hybridization
+     * 5. time of youngest speciation
+     */
+    private void printSummary(PrintStream out, Network network) {
+        final int nHybrid = network.getReticulationNodeCount();
+        final double length = network.getNetworkLength();
+        final double tMRCA = network.getRoot().getHeight();
+
+        double tHybrid = 0.0;
+        for (NetworkNode hNode: network.getReticulationNodes()) {
+            if (tHybrid == 0.0 || tHybrid > hNode.getHeight())
+                tHybrid = hNode.getHeight();
+        }
+        double tSpecia = 0.0;
+        for (NetworkNode sNode: network.getSpeciationNodes()) {
+            if (tSpecia == 0.0 || tSpecia > sNode.getHeight())
+                tSpecia = sNode.getHeight();
+        }
+
+        DecimalFormat df = new DecimalFormat("#.####");
+        out.println(nHybrid + "\t" + df.format(length) + "\t" + df.format(tMRCA) + "\t" + df.format(tHybrid) + "\t" + df.format(tSpecia));
     }
 }

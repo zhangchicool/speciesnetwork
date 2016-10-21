@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <beast namespace="beast.core:beast.evolution.alignment:beast.app" version="2.0">
-    <run id="networkSimulator" spec="speciesnetwork.simulator.NetworkPureBirthHybrid" outputFileName="3S_network.trees" iterations="100">
+    <run id="networkSimulator" outputFileName="3S_network.trees" iterations="100"
+         spec="speciesnetwork.simulator.NetworkPureBirthHybrid">
         <speciesNetwork id="network:species" spec="speciesnetwork.Network">
             <taxonset id="taxonSuperset" spec="TaxonSet">
                 <taxon id="A" spec="TaxonSet">
@@ -17,5 +18,8 @@
         <parameter id="time.origin" name="origin">0.06</parameter>
         <parameter id="rate.birth" name="birthRate">30.0</parameter>
         <parameter id="rate.hybrid" name="hybridRate">20</parameter>
+
+        <summary id="network.summary" inputFileName="3S_network.trees" outputFileName="3S_network.sum.log"
+                 spec="speciesnetwork.tools.SummarizeNetwork"/>
     </run>
 </beast>

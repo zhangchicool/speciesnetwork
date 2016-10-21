@@ -225,6 +225,15 @@ public class Network extends StateNode {
     }
 
     /**
+     * @return an array of speciation nodes in this network
+     */
+    public NetworkNode[] getSpeciationNodes() {
+        final NetworkNode[] speciationNodes = new NetworkNode[speciationNodeCount];
+        System.arraycopy(nodes, leafNodeCount, speciationNodes, 0, speciationNodeCount);
+        return speciationNodes;
+    }
+
+    /**
      * @return an array of reticulation nodes in this network
      */
     public NetworkNode[] getReticulationNodes() {

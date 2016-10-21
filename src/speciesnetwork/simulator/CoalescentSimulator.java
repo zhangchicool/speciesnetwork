@@ -52,7 +52,7 @@ public class CoalescentSimulator extends Runnable {
     public final Input<String> outputFileNameInput =
             new Input<>("outputFileName", "If provided, write to this file rather than to standard out.");
     public final Input<Integer> iterationsInput =
-            new Input<>("iterations","Number of iterations to simulate (default is 1).");
+            new Input<>("iterations", "Number of iterations to simulate (default is 1).");
     public final Input<Boolean> networkOperatorInput =
             new Input<>("networkOperator", "Whether to write network topology operators (default false).", false);
     public final Input<String> initMethodInput =
