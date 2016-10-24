@@ -29,7 +29,7 @@ public class YuleHybridModel extends Distribution {
     public final Input<RealParameter> rhoProbInput =
             new Input<>("rho", "Sampling prob. of extant species, rho.");
     public final Input<RealParameter> betaShapeInput =
-            new Input<>("betaShape", "Shape of the symmetric beta prior distribution on gammas.", Validate.REQUIRED);
+            new Input<>("betaShape", "Shape of the symmetric beta prior on gamma probs (default 1.0).");
     // public final Input<RealParameter> originInput =
     //        new Input<RealParameter>("origin", "The time when the process started.");
 
@@ -65,8 +65,13 @@ public class YuleHybridModel extends Distribution {
         }
 
         betaPrior = new Beta();
-        betaPrior.alphaInput.setValue(betaShapeInput.get(), betaPrior);
-        betaPrior.betaInput.setValue(betaShapeInput.get(), betaPrior);
+        final RealParameter betaShape;
+        if (betaShapeInput.get() == null)
+            betaShape = new RealParameter("1.0");  // default
+        else
+            betaShape = betaShapeInput.get();
+        betaPrior.alphaInput.setValue(betaShape, betaPrior);
+        betaPrior.betaInput.setValue(betaShape, betaPrior);
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.junit.runners.Suite.SuiteClasses;
     ConstantPopIOTest.class,
     ConstantPopulationTest.class,
     NetworkParserTest.class,
+    YuleHybridModelTest.class
 })
 
 public class AllTests {

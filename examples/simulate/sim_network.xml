@@ -5,13 +5,13 @@
         <speciesNetwork id="network:species" spec="speciesnetwork.Network">
             <taxonset id="taxonSuperset" spec="TaxonSet">
                 <taxon id="A" spec="TaxonSet">
-                    <taxon id="a" spec="Taxon"/>
+                    <taxon id="a1" spec="Taxon"/>
                 </taxon>
                 <taxon id="B" spec="TaxonSet">
-                    <taxon id="b" spec="Taxon"/>
+                    <taxon id="b1" spec="Taxon"/>
                 </taxon>
                 <taxon id="C" spec="TaxonSet">
-                    <taxon id="c" spec="Taxon"/>
+                    <taxon id="c1" spec="Taxon"/>
                 </taxon>
             </taxonset>
         </speciesNetwork>

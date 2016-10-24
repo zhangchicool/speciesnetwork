@@ -15,7 +15,7 @@ import beast.core.Loggable;
 public class NetworkStatLogger extends CalculationNode implements Loggable, Function {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network to be logged.", Validate.REQUIRED);
-    public final Input<Boolean> logHeigthInput = new Input<>("logHeigth", "If true, MRCA height will be logged.", true);
+    public final Input<Boolean> logHeigthInput = new Input<>("logHeigth", "If true, root height will be logged.", true);
     public final Input<Boolean> logLengthInput = new Input<>("logLength", "If true, network length will be logged.", true);
 
     @Override
@@ -29,7 +29,7 @@ public class NetworkStatLogger extends CalculationNode implements Loggable, Func
     public void init(PrintStream out) {
         final Network speciesNetwork = speciesNetworkInput.get();
         if (logHeigthInput.get()) {
-            out.print(speciesNetwork.getID() + ".tmrca\t");
+            out.print(speciesNetwork.getID() + ".height\t");
         }
         if (logLengthInput.get()) {
             out.print(speciesNetwork.getID() + ".length\t");

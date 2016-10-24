@@ -492,35 +492,37 @@ public class CoalescentSimulator extends Runnable {
                                 "speciesNetwork=\"@network:species\" weight=\"20.0\"/>");
         out.println("        <operator id=\"gammaProbRndWalk\" spec=\"speciesnetwork.operators.GammaProbRndWalk\" " +
                                 "speciesNetwork=\"@network:species\" weight=\"10.0\"/>\n");
-        out.println("        <operator id=\"speciesNodeSliderAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"100.0\">");
+        out.println("        <operator id=\"speciesNodeSliderAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"" + 20*(nrOfGeneTrees+10) + "\">");
         out.println("            <operator id=\"nodeSlider\" spec=\"speciesnetwork.operators.NodeSlider\" " +
-                    "speciesNetwork=\"@network:species\" origin=\"@originTime:species\" windowSize=\"0.03\" weight=\"0.0\"/>");
-        for (int i = 0; i < nrOfGeneTrees; i++) {
+                    "speciesNetwork=\"@network:species\" origin=\"@originTime:species\" windowSize=\"0.01\" weight=\"0.0\"/>");
+        for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
-        }
         out.println("        </operator>");
         // whether or not to write network topology operators
         if (!networkOperatorInput.get())  out.println("        <!--");
-        out.println("        <operator id=\"speciesEdgeRelocateAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"50.0\">");
-        out.println("            <operator id=\"edgeRelocator\" spec=\"speciesnetwork.operators.EdgeRelocator\" " +
+        out.println("        <operator id=\"speciesEdgeRelocateWAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"100.0\">");
+        out.println("            <operator id=\"edgeRelocatorW\" spec=\"speciesnetwork.operators.EdgeRelocator\" " +
                                             "speciesNetwork=\"@network:species\" isWide=\"true\" weight=\"0.0\"/>");
-        for (int i = 0; i < nrOfGeneTrees; i++) {
+        for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
-        }
+        out.println("        </operator>");
+        out.println("        <operator id=\"speciesEdgeRelocateNAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"50.0\">");
+        out.println("            <operator id=\"edgeRelocatorN\" spec=\"speciesnetwork.operators.EdgeRelocator\" " +
+                                            "speciesNetwork=\"@network:species\" isWide=\"false\" weight=\"0.0\"/>");
+        for (int i = 0; i < nrOfGeneTrees; i++)
+            out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
         out.println("        <operator id=\"speciesAddHybridAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"50.0\">");
         out.println("            <operator id=\"addReticulation\" spec=\"speciesnetwork.operators.AddReticulation\" " +
                                             "speciesNetwork=\"@network:species\" weight=\"0.0\"/>");
-        for (int i = 0; i < nrOfGeneTrees; i++) {
+        for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
-        }
         out.println("        </operator>");
         out.println("        <operator id=\"speciesDeleteHybridAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"50.0\">");
         out.println("            <operator id=\"deleteReticulation\" spec=\"speciesnetwork.operators.DeleteReticulation\" " +
                                             "speciesNetwork=\"@network:species\" weight=\"0.0\"/>");
-        for (int i = 0; i < nrOfGeneTrees; i++) {
+        for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
-        }
         out.println("        </operator>");
         if (!networkOperatorInput.get())  out.println("        -->");
         // print loggers
