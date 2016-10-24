@@ -95,13 +95,15 @@ public class YuleHybridModel extends Distribution {
 
             final int nBranch = network.getBranchCount((nodeHeight + nextHeight) /2.0);
             logP += (nBranch * lambda + nu * nBranch * (nBranch -1) /2) * (nextHeight - nodeHeight);
-            if (i > 0 && nodes.get(i-1).isReticulation())
-                logP += Math.log(nu);
-            else if (i > 0)
-                logP += Math.log(lambda);
 
-            if (node.isReticulation()) logP += betaPrior.logDensity(node.inheritProb);
+            if (node.isReticulation()) {
+                logP += Math.log(nu);
+                logP += betaPrior.logDensity(node.inheritProb);
+            } else if (!node.isOrigin()) {
+                logP += Math.log(lambda);
+            }
         }
+
         return logP;
     }
 
