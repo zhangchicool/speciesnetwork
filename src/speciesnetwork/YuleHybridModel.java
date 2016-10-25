@@ -24,14 +24,15 @@ public class YuleHybridModel extends Distribution {
     public final Input<RealParameter> hybridRateInput =
             new Input<>("hybridRate", "Hybridization rate, nu.");
     public final Input<RealParameter> netDiversification =
-            new Input<RealParameter>("netDiversification", "Net diversification rate: lambda-nu");
-    public final Input<RealParameter> turnOverInput = new Input<RealParameter>("turnOver", "Turn over rate: nu/lambda");
+            new Input<>("netDiversification", "Net diversification rate: lambda-nu");
+    public final Input<RealParameter> turnOverInput =
+            new Input<>("turnOver", "Turn over rate: nu/lambda");
     public final Input<RealParameter> rhoProbInput =
             new Input<>("rho", "Sampling prob. of extant species, rho.");
     public final Input<RealParameter> betaShapeInput =
             new Input<>("betaShape", "Shape of the symmetric beta prior on gamma probs (default 1.0).");
     // public final Input<RealParameter> originInput =
-    //        new Input<RealParameter>("origin", "The time when the process started.");
+    //        new Input<>("origin", "The time when the process started.");
 
     private static Comparator<NetworkNode> hc = new NodeHeightComparator();
 
