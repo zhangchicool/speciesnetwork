@@ -17,6 +17,13 @@ public class YuleHybridModelTest {
     final RealParameter birthRate = new RealParameter("30");
     final RealParameter hybridRate = new RealParameter("20");
 
+    // lam  <- 30
+    // nu   <- 20
+    // logp <- -lam * 0.1 + log(lam) +
+    //         -(2*lam + nu) * 0.2 + log(lam) +
+    //         -(3*lam + 3*nu) * 0.1 + log(lam) +
+    //         -(4*lam + 6*nu) * 0.1 + log(nu) +
+    //         -(3*lam + 3*nu) * 0.1
     final double expectedLogP = -59.80067558;
     final double allowedError = 1e-6;
 
