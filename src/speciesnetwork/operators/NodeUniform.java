@@ -4,7 +4,6 @@ import beast.core.Description;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.Operator;
-import beast.core.parameter.RealParameter;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
@@ -41,7 +40,6 @@ public class NodeUniform extends Operator {
         for (NetworkNode p: snNode.getParents()) {
             upper = Math.min(upper, p.getHeight());
         }
-
         double lower = 0.0;
         for (NetworkNode c: snNode.getChildren()) {
             lower = Math.max(lower, c.getHeight());
