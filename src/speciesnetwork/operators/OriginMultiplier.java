@@ -24,15 +24,19 @@ public class OriginMultiplier extends Operator {
             new Input<>("origin", "The time when the process started.", Validate.REQUIRED);
     public final Input<Double> tuningInput =
             new Input<>("tuning", "A fine-tuning parameter (default is 1).", 1.0);
+    public final Input<Boolean> optimiseInput = new Input<>("optimise",
+            "Automatic tuning in order to achieve a good acceptance rate (default false)", false);
+
+    private double tuning;
 
     @Override
     public void initAndValidate() {
+        tuning = tuningInput.get();
     }
 
     @Override
     public double proposal() {
         final Network speciesNetwork = speciesNetworkInput.get();
-        final double tuning = tuningInput.get();
 
         // determine the lower and upper bounds
         double upper = Double.MAX_VALUE;
@@ -65,5 +69,23 @@ public class OriginMultiplier extends Operator {
         final Double h = param.getUpper();
 
         return (value < l || value > h);
+    }
+
+    @Override
+    public void optimize(final double logAlpha) {
+        if (optimiseInput.get()) {
+            double delta = calcDelta(logAlpha);
+            setCoercableParameterValue(tuning * Math.exp(delta));
+        }
+    }
+
+    @Override
+    public double getCoercableParameterValue() {
+        return tuning;
+    }
+
+    @Override
+    public void setCoercableParameterValue(final double value) {
+        tuning = Math.max(Math.min(value, 20.0), 1e-4);
     }
 }
