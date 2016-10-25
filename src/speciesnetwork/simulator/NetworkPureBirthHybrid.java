@@ -94,7 +94,7 @@ public class NetworkPureBirthHybrid extends Runnable {
                simulate(speciesNetwork);
             } while (speciesNetwork.getLeafNodeCount() != numTips);
             // set the tip labels to match the taxa labels
-            for (int i = 0; i < speciesNetwork.getLeafNodeCount(); i++) {
+            for (int i = 0; i < numTips; i++) {
                 NetworkNode leaf = speciesNetwork.getNode(i);
                 leaf.setLabel(speciesNames.get(i));
             }
