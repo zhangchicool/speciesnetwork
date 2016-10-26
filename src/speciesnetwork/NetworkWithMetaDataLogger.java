@@ -35,7 +35,7 @@ public class NetworkWithMetaDataLogger extends BEASTObject implements Loggable {
             df = null;
         } else {
             // just new DecimalFormat("#.######") (with dp time '#' after the decimal)
-            df = new DecimalFormat("#."+new String(new char[dp]).replace('\0', '#'));
+            df = new DecimalFormat("#." + new String(new char[dp]).replace('\0', '#'));
             df.setRoundingMode(RoundingMode.HALF_UP);
         }
     }

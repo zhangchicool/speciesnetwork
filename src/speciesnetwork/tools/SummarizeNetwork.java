@@ -99,7 +99,7 @@ public class SummarizeNetwork extends Runnable {
                 tSpecia = sNode.getHeight();
         }
 
-        DecimalFormat df = new DecimalFormat("#.####");
+        DecimalFormat df = new DecimalFormat("#.########");
         out.println(nHybrid + "\t" + df.format(length) + "\t" + df.format(height) + "\t" + df.format(tHybrid) + "\t" + df.format(tSpecia));
     }
 }
