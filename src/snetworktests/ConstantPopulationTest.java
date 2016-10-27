@@ -14,6 +14,18 @@ import speciesnetwork.PopulationSizeModel;
 public class ConstantPopulationTest extends PopulationTestHelper {
 
     public ConstantPopulationTest() {
+        /*
+        gammaP <- 0.4
+        logGene1 <- - log(2*0.1) - 0.07/(2*0.1) - 0.1*3/(2*0.1) +
+            2*log(1-gammaP) + log(gammaP) - 0.1/(2*0.1) +
+            - log(2*0.1) - 0.05*3/(2*0.1) - 0.25/(2*0.1) - log(2*0.1) - 0.05/(2*0.1) +
+            - 2*log(2*0.1) - 0.05*3/(2*0.1) - 0.08/(2*0.1)
+        logGene2 <- - log(2*0.1) - 0.1/(2*0.1) +
+            - log(2*0.1) - 0.05*3/(2*0.1) - 0.05/(2*0.1) +
+            2*log(gammaP) - 0.2/(2*0.1) - 0.2*3/(2*0.1) +
+            - 3*log(2*0.1) - 0.1*6/(2*0.1) - 0.05*3/(2*0.1) - 0.05/(2*0.1)
+        logP <- logGene1 + logGene2
+        */
         expectedLogP = -2.52067921; // -0.046217525 -2.474461685
 
         nSpecies = 3;

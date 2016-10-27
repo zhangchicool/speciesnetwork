@@ -14,6 +14,18 @@ import speciesnetwork.PopulationSizeModel;
 public class ConstantPopIOTest extends PopulationTestHelper {
 
     public ConstantPopIOTest() {
+        /*
+        alpha  <- 5.0
+        beta   <- 1.0
+        gammaP <- 0.4
+        logP <- 2*log(gammaP) + log(1-gammaP) + 2*log(1-gammaP) +
+            log(1/2) + alpha*log(beta) - (alpha+1)*log(beta + 3*0.1/2 + 3*0.05/2 + 0.05/2) + log(gamma(alpha+1)/gamma(alpha)) +
+            log(1/4) + alpha*log(beta) - (alpha+2)*log(beta + 0.07/2 + 0.1/2) + log(gamma(alpha+2)/gamma(alpha)) +
+            log(1/2) + alpha*log(beta) - (alpha+1)*log(beta + 0.05/2 + 3*0.2/2) + log(gamma(alpha+1)/gamma(alpha)) +
+            log(1/2) + alpha*log(beta) - (alpha+1)*log(beta + 3*0.05/2 + 0.25/2) + log(gamma(alpha+1)/gamma(alpha)) +
+            alpha*log(beta) - alpha*log(beta + 0.2/2) + alpha*log(beta) - alpha*log(beta + 0.1/2) +
+            log(1/4/8) + alpha*log(beta) - (alpha+5)*log(beta + 3*0.05/2 + 0.08/2 + 6*0.1/2 + 3*0.05/2 + 0.05/2) + log(gamma(alpha+5)/gamma(alpha))
+         */
         expectedLogP = -2.010226796; // this should be the right answer (calculated by hand)
 
         nSpecies = 3;
