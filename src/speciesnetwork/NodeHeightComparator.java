@@ -5,7 +5,7 @@ import java.util.Comparator;
 // unambiguous, so only identical nodes are considered equal
 // if height is equal, consider distance from root (depth)
 // if depth is equal, consider assigned node number
-final class NodeHeightComparator implements Comparator<NetworkNode> {
+public final class NodeHeightComparator implements Comparator<NetworkNode> {
     @Override
     public int compare(NetworkNode nodeA, NetworkNode nodeB) {
         final double heightA = nodeA.getHeight();

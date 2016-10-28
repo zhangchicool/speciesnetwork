@@ -2,6 +2,9 @@ package speciesnetwork.tools;
 
 import java.io.*;
 import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -14,6 +17,7 @@ import beast.util.TreeParser;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 import speciesnetwork.NetworkParser;
+import speciesnetwork.NodeHeightComparator;
 
 /**
  * @author Chi Zhang
@@ -28,6 +32,8 @@ public class SummarizeNetwork extends Runnable {
 
     // map the number of reticulations with the networks
     private Multimap<Integer, Network> nHybridInNetworkMap = HashMultimap.create();
+
+    private static Comparator<NetworkNode> hc = new NodeHeightComparator();
 
     @Override
     public void initAndValidate() {
