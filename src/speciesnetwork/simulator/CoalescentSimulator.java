@@ -34,7 +34,7 @@ public class CoalescentSimulator extends Runnable {
 
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "Species network for embedding the gene trees.", Validate.REQUIRED);
-    public final Input<NetworkPureBirthHybrid> networkSimulatorInput =
+    public final Input<YuleHybridSimulator> networkSimulatorInput =
             new Input<>("networkSimulator", "Species network simulator.", Validate.XOR, speciesNetworkInput);
     public final Input<RealParameter> popSizesInput =
             new Input<>("popSizes", "Constant per-branch population sizes.", Validate.REQUIRED);

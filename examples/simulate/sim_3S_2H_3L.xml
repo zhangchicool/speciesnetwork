@@ -73,8 +73,7 @@
         </state>
 
         <speciesNetwork idref="network:species"/>
-        <!-- networkSimulator id="network:simulated" speciesNetwork="@network:species" origin="0.06" birthRate="30" hybridRate="20"
-                          spec="speciesnetwork.simulator.NetworkPureBirthHybrid"/ -->
+        <!-- networkSimulator id="network:simulated" speciesNetwork="@network:species" origin="0.06" birthRate="30" hybridRate="20" spec="speciesnetwork.simulator.YuleHybridSimulator"/ -->
         <parameter id="pop.sizes" name="popSizes">0.01</parameter>
         <taxonSuperset idref="taxonSuperset"/>
         <geneTree idref="tree:gene1"/> <embedding idref="embedding:gene1"/>

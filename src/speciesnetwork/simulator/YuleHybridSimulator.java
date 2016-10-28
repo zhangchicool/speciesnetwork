@@ -20,7 +20,7 @@ import speciesnetwork.tools.SummarizeNetwork;
  */
 
 @Description("Simulate a species network under the pure birth and hybridization process.")
-public class NetworkPureBirthHybrid extends Runnable {
+public class YuleHybridSimulator extends Runnable {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "Species network to be simulated.", Validate.REQUIRED);
     public final Input<RealParameter> originInput =
