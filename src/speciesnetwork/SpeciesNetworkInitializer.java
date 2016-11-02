@@ -161,7 +161,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
                     // distance between species-taxon 0 and the species-taxon with missing lineages,
                     // so i < speciesCount - 1.
                     // What if lineages for species-taxon 0 are missing? Then all entries will be 'infinite'.
-                    String id = (i < speciesCount - 1? sNetwork.nodes[i+1].label : "unknown taxon");
+                    String id = (i < speciesCount - 1) ? sNetwork.nodes[i+1].label : "unknown taxon";
                     if (i == 0) {
                         // test that all entries are 'infinite', which implies taxon 0 has lineages missing
                         boolean b = true;
