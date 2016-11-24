@@ -396,9 +396,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("                <distribution id=\"networkPrior\" spec=\"speciesnetwork.YuleHybridModel\" network=\"@network:species\" " +
                     "netDiversification=\"@netDivRate:species\" turnOver=\"@turnOverRate:species\" betaShape=\"1.0\"/>");
         out.println("                <prior id=\"networkOrigin\" name=\"distribution\" x=\"@originTime:species\">");
-        out.println("                    <Normal id=\"normal.01\" name=\"distr\" mean=\"" + df.format(speciesNetwork.getOrigin().getHeight()) + "\" " +
-                "sigma=\"" + df.format(speciesNetwork.getOrigin().getHeight() - speciesNetwork.getRoot().getHeight()) + "\"/>");
-        out.println("                    <!-- Uniform id=\"uniform.01\" name=\"distr\" upper=\"Infinity\"/ -->");
+        out.println("                    <Uniform id=\"uniform.01\" name=\"distr\" upper=\"Infinity\"/>");
         out.println("                </prior>");
         out.println("                <prior id=\"netDivPrior\" name=\"distribution\" x=\"@netDivRate:species\">");
         out.println("                    <Exponential id=\"exponential.01\" name=\"distr\" mean=\"10.0\"/>");

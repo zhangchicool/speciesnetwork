@@ -25,10 +25,14 @@ public class YuleHybridSimulator extends Runnable {
             new Input<>("speciesNetwork", "Species network to be simulated.", Validate.REQUIRED);
     public final Input<RealParameter> originInput =
             new Input<>("origin", "The time when the process started.", Validate.REQUIRED);
+    public final Input<RealParameter> tmrcaInput =
+            new Input<>("tmrca", "The time of most recent common ancestor (root).", Validate.XOR, originInput);
+
     public final Input<RealParameter> birthRateInput =
             new Input<>("birthRate", "Speciation rate, lambda.", Validate.REQUIRED);
     public final Input<RealParameter> hybridRateInput =
             new Input<>("hybridRate", "Hybridization rate, nu.", Validate.REQUIRED);
+    public final Input<Integer> nHybridizationInput = new Input<>("nHybrid", "Number of Hybridization.");
 
     public final Input<String> outputFileNameInput =
             new Input<>("outputFileName", "If provided, write to this file rather than to standard out.");
@@ -86,13 +90,29 @@ public class YuleHybridSimulator extends Runnable {
         } else {
             numTips = -1;
         }
+        final int numHybrid; // number of hybridization (-1 for no such condition)
+        if (nHybridizationInput.get() != null)
+            numHybrid = nHybridizationInput.get();
+        else
+            numHybrid = -1;
 
-        if (numTips < 0)
+        if (numTips < 0) {
             simulate(speciesNetwork);
-        else {
-            do {  // simulate until we get the desired number of tips (caution!)
+        }
+        else if (numHybrid < 0) {  // condition on numTips
+            do {  // simulate until we get the desired condition (caution!)
                simulate(speciesNetwork);
             } while (speciesNetwork.getLeafNodeCount() != numTips);
+            // set the tip labels to match the taxa labels
+            for (int i = 0; i < numTips; i++) {
+                NetworkNode leaf = speciesNetwork.getNode(i);
+                leaf.setLabel(speciesNames.get(i));
+            }
+        }
+        else {  // condition on numTips and numHybrid
+            do {  // simulate until we get the desired condition (caution!)
+                simulate(speciesNetwork);
+            } while (speciesNetwork.getLeafNodeCount() != numTips || speciesNetwork.getReticulationNodeCount() != numHybrid);
             // set the tip labels to match the taxa labels
             for (int i = 0; i < numTips; i++) {
                 NetworkNode leaf = speciesNetwork.getNode(i);
@@ -104,9 +124,14 @@ public class YuleHybridSimulator extends Runnable {
     }
 
     private void simulate(Network speciesNetwork) {
-        final double timeOrigin = originInput.get().getValue();
         final double lambda = birthRateInput.get().getValue();
         final double nu = hybridRateInput.get().getValue();
+
+        final double timeOrigin;
+        if (originInput.get() != null)
+            timeOrigin = originInput.get().getValue();
+        else
+            timeOrigin = tmrcaInput.get().getValue() + 1.0 / lambda;
 
         // set the initial states
         speciesNetwork.makeDummy();
@@ -119,13 +144,21 @@ public class YuleHybridSimulator extends Runnable {
 
         final List<NetworkNode> networkNodeList = new ArrayList<>();
         networkNodeList.add(root);
+        boolean atRoot = true;
 
         double currentTime = timeOrigin;
         // start the simulation
         while (currentTime > 0.0) {
             final int k = networkNodeList.size();  // current number of branches
             final double totalRate = k*lambda + 0.5*k*(k-1)*nu;
-            final double waitingTime = Randomizer.nextExponential(totalRate);
+
+            final double waitingTime;
+            if (atRoot && originInput.get() == null) {
+                waitingTime = 1.0 / lambda;
+                atRoot = false;
+            } else {
+                waitingTime = Randomizer.nextExponential(totalRate);
+            }
             currentTime -= waitingTime;
 
             if (currentTime > 0.0) {

@@ -43,7 +43,7 @@
     <map name="prior">beast.math.distributions.Prior</map>
 
     <init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false"
-          newick="((((A:0.02,(B:0.01)#H1[&amp;gamma=0.4]:0.01)S1:0.01,(#H1:0.01)#H2[&amp;gamma=0.7]:0.01)S2:0.02,(#H2:0.02,C:0.04)S3:0.01)R:0.01)"/>
+          newick="((((A:0.02,(B:0.01)#H1[&amp;gamma=0.4]:0.01)S1:0.01,(#H1:0.01)#H2[&amp;gamma=0.7]:0.01)S2:0.02,(#H2:0.02,C:0.04)S3:0.01)R:0.03)"/>
     <run chainLength="2000000" id="mcmc" spec="MCMC">
         <state id="state" storeEvery="1000">
             <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
@@ -64,7 +64,7 @@
                     </taxon>
                 </taxonset>
             </stateNode>
-            <parameter id="originTime:species" lower="0.0" name="stateNode">0.06</parameter>
+            <parameter id="originTime:species" lower="0.0" name="stateNode">0.08</parameter>
             <parameter id="netDivRate:species" lower="0.0" name="stateNode">1.0</parameter>
             <parameter id="turnOverRate:species" lower="0.0" upper="1.0" name="stateNode">0.5</parameter>
             <tree id="tree:gene1" name="stateNode">
@@ -107,8 +107,7 @@
                 </distribution>
                 <distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" network="@network:species" netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" betaShape="1.0"/>
                 <prior id="networkOrigin" name="distribution" x="@originTime:species">
-                    <Normal id="normal.01" name="distr" mean="0.06" sigma="0.01"/>
-                    <!-- Uniform id="uniform.01" name="distr" upper="Infinity"/ -->
+                    <Uniform id="uniform.01" name="distr" upper="Infinity"/>
                 </prior>
                 <prior id="netDivPrior" name="distribution" x="@netDivRate:species">
                     <Exponential id="exponential.01" name="distr" mean="10.0"/>
