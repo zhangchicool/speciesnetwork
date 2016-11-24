@@ -24,7 +24,11 @@ public class NodeSlider extends Operator {
     public final Input<RealParameter> originInput =
             new Input<>("origin", "The time when the process started.", Validate.REQUIRED);
     public final Input<Double> windowSizeInput =
-            new Input<>("windowSize", "The size of the sliding window (default is 0.1).", 0.1);
+            new Input<>("windowSize", "Window size of the uniform proposal (default is 0.02).", 0.02);
+    public final Input<Boolean> isNormalInput =
+            new Input<>("isNormal", "Using normal proposal (default: uniform proposal).", false);
+    public final Input<Double> sigmaInput =
+            new Input<>("sigma", "Standard deviation of the normal proposal (default is 0.01).", 0.01);
 
     @Override
     public void initAndValidate() {
@@ -33,7 +37,6 @@ public class NodeSlider extends Operator {
     @Override
     public double proposal() {
         final Network speciesNetwork = speciesNetworkInput.get();
-        final double windowSize = windowSizeInput.get();
 
         // pick an internal node randomly, including origin
         final NetworkNode[] internalNodes = speciesNetwork.getInternalNodesWithOrigin();
@@ -52,7 +55,14 @@ public class NodeSlider extends Operator {
 
         // propose a new height, reflect it back if it's outside the boundary
         final double oldHeight = snNode.getHeight();
-        double newHeight = oldHeight + (Randomizer.nextDouble() - 0.5) * windowSize;
+        double newHeight;
+        if (isNormalInput.get()) {
+            final double sigma = sigmaInput.get();
+            newHeight = oldHeight + Randomizer.nextGaussian() * sigma;
+        } else {
+            final double windowSize = windowSizeInput.get();
+            newHeight = oldHeight + (Randomizer.nextDouble() - 0.5) * windowSize;
+        }
         while (newHeight < lower || newHeight > upper) {
             if (newHeight < lower)
                 newHeight = 2.0 * lower - newHeight;
