@@ -322,7 +322,7 @@ public class CoalescentSimulator extends Runnable {
         // print initial species network
         out.println("    <init spec=\"beast.util.TreeParser\" id=\"newick:species\" IsLabelledNewick=\"true\" " +
                             "adjustTipHeights=\"false\"\n          newick=\"" + speciesNetwork.getOrigin().toString(true) + "\"/>");
-        out.println("    <run chainLength=\"10000000\" id=\"mcmc\" spec=\"MCMC\">");  // MCMC block
+        out.println("    <run chainLength=\"20000000\" id=\"mcmc\" spec=\"MCMC\">");  // MCMC block
         out.println("        <state id=\"state\" storeEvery=\"1000\">");  // states
         // print state nodes
         out.println("            <stateNode id=\"network:species\" spec=\"speciesnetwork.NetworkParser\" tree=\"@newick:species\">");
@@ -494,14 +494,14 @@ public class CoalescentSimulator extends Runnable {
         out.println("        <operator id=\"gammaProbRndWalk\" spec=\"speciesnetwork.operators.GammaProbRndWalk\" " +
                                 "speciesNetwork=\"@network:species\" weight=\"10.0\"/>\n");
         out.println("        <operator id=\"speciesOriginMultiplier\" spec=\"speciesnetwork.operators.OriginMultiplier\" " +
-                                "speciesNetwork=\"@network:species\" origin=\"@originTime:species\" weight=\"30.0\"/>");
-        out.println("        <operator id=\"speciesNodeUniformAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"" + 10*(nrOfGeneTrees+20) + "\">");
+                                "speciesNetwork=\"@network:species\" origin=\"@originTime:species\" weight=\"20.0\"/>");
+        out.println("        <operator id=\"speciesNodeUniformAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"" + 10*(nrOfGeneTrees+10) + "\">");
         out.println("            <operator id=\"nodeUniform\" spec=\"speciesnetwork.operators.NodeUniform\" " +
                                     "speciesNetwork=\"@network:species\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
-        out.println("        <operator id=\"speciesNodeSliderAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"" + 10*(nrOfGeneTrees+20) + "\">");
+        out.println("        <operator id=\"speciesNodeSliderAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"" + 10*(nrOfGeneTrees+10) + "\">");
         out.println("            <operator id=\"nodeSlider\" spec=\"speciesnetwork.operators.NodeSlider\" speciesNetwork=\"@network:species\" " +
                                     "origin=\"@originTime:species\" isNormal=\"true\" sigma=\"0.005\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++)
@@ -543,7 +543,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("            <log idref=\"coalescent\"/>");
         out.println("        </logger>");
         out.println("        <logger fileName=\"" + outputFileName + ".trace.log\" id=\"tracelog\" " +
-                            "logEvery=\"1000\" model=\"@posterior\" sort=\"smart\">");
+                            "logEvery=\"2000\" model=\"@posterior\" sort=\"smart\">");
         out.println("            <log idref=\"posterior\"/>");
         out.println("            <log idref=\"likelihood\"/>");
         out.println("            <log idref=\"prior\"/>");
@@ -559,17 +559,17 @@ public class CoalescentSimulator extends Runnable {
         }
         out.println("        </logger>");
         out.println("        <logger fileName=\"" + outputFileName + ".species.trees\" id=\"treelog:species\" " +
-                             "logEvery=\"1000\" mode=\"tree\">");
+                             "logEvery=\"2000\" mode=\"tree\">");
         out.println("            <log id=\"networkLogger:species\" spec=\"speciesnetwork.NetworkWithMetaDataLogger\" " +
                                     "speciesNetwork=\"@network:species\"/>");
         out.println("        </logger>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("        <logger fileName=\"" + outputFileName + ".gene" + (i+1) + ".log\" " +
-                                    "id=\"embedlog:gene" + (i+1) + "\" logEvery=\"1000\" sort=\"smart\">");
+                                    "id=\"embedlog:gene" + (i+1) + "\" logEvery=\"2000\" sort=\"smart\">");
             out.println("            <log idref=\"embedding:gene" + (i+1) + "\"/>");
             out.println("        </logger>");
             out.println("        <logger fileName=\"" + outputFileName + ".gene" + (i+1) + ".trees\" " +
-                                    "id=\"treelog:gene" + (i+1) + "\" logEvery=\"1000\" mode=\"tree\">");
+                                    "id=\"treelog:gene" + (i+1) + "\" logEvery=\"2000\" mode=\"tree\">");
             out.println("            <log id=\"treeLogger:gene" + (i+1) + "\" tree=\"@tree:gene" + (i+1) + "\" " +
                                         "spec=\"beast.evolution.tree.TreeWithMetaDataLogger\"/>");
             out.println("        </logger>");
