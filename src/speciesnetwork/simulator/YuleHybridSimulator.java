@@ -109,10 +109,11 @@ public class YuleHybridSimulator extends Runnable {
                 leaf.setLabel(speciesNames.get(i));
             }
         }
-        else {  // condition on numTips and numHybrid
+        else {  // condition on numTips and numHybrid, and no bubble in this case
             do {  // simulate until we get the desired condition (caution!)
                 simulate(speciesNetwork);
-            } while (speciesNetwork.getLeafNodeCount() != numTips || speciesNetwork.getReticulationNodeCount() != numHybrid);
+            } while (speciesNetwork.getLeafNodeCount() != numTips ||
+                    speciesNetwork.getReticulationNodeCount() != numHybrid || speciesNetwork.hasBubble());
             // set the tip labels to match the taxa labels
             for (int i = 0; i < numTips; i++) {
                 NetworkNode leaf = speciesNetwork.getNode(i);

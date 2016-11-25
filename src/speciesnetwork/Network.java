@@ -712,4 +712,13 @@ public class Network extends StateNode {
         else if (index < nodeCount)
             reticulationNodeCount--;
     }
+
+    public boolean hasBubble() {
+        for (NetworkNode hNode: getReticulationNodes()) {
+            if (hNode.getParentByBranch(hNode.gammaBranchNumber) == hNode.getParentByBranch(hNode.gammaBranchNumber+1))
+                return true;
+        }
+
+        return false;
+    }
 }

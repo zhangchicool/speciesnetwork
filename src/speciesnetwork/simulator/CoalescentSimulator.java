@@ -494,21 +494,21 @@ public class CoalescentSimulator extends Runnable {
         out.println("        <operator id=\"gammaProbRndWalk\" spec=\"speciesnetwork.operators.GammaProbRndWalk\" " +
                                 "speciesNetwork=\"@network:species\" weight=\"10.0\"/>\n");
         out.println("        <operator id=\"speciesOriginMultiplier\" spec=\"speciesnetwork.operators.OriginMultiplier\" " +
-                                "speciesNetwork=\"@network:species\" origin=\"@originTime:species\" weight=\"25\"/>");
+                                "speciesNetwork=\"@network:species\" origin=\"@originTime:species\" weight=\"30.0\"/>");
         out.println("        <operator id=\"speciesNodeUniformAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"" + 10*(nrOfGeneTrees+20) + "\">");
         out.println("            <operator id=\"nodeUniform\" spec=\"speciesnetwork.operators.NodeUniform\" " +
                                     "speciesNetwork=\"@network:species\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
-        // whether or not to write network topology operators
-        if (!networkOperatorInput.get())  out.println("        <!--");
-        out.println("        <operator id=\"speciesNodeSliderAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"500.0\">");
-        out.println("            <operator id=\"nodeSlider\" spec=\"speciesnetwork.operators.NodeSlider\" windowSize=\"0.01\" " +
-                                    "speciesNetwork=\"@network:species\" origin=\"@originTime:species\" weight=\"0.0\"/>");
+        out.println("        <operator id=\"speciesNodeSliderAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"" + 10*(nrOfGeneTrees+20) + "\">");
+        out.println("            <operator id=\"nodeSlider\" spec=\"speciesnetwork.operators.NodeSlider\" speciesNetwork=\"@network:species\" " +
+                                    "origin=\"@originTime:species\" isNormal=\"true\" sigma=\"0.005\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
+        // whether or not to write network topology operators
+        if (!networkOperatorInput.get())  out.println("        <!--");
         out.println("        <operator id=\"speciesEdgeRelocateWAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"100.0\">");
         out.println("            <operator id=\"edgeRelocatorW\" spec=\"speciesnetwork.operators.EdgeRelocator\" " +
                                             "speciesNetwork=\"@network:species\" isWide=\"true\" weight=\"0.0\"/>");
