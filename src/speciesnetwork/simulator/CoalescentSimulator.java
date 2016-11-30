@@ -385,11 +385,12 @@ public class CoalescentSimulator extends Runnable {
         }
         StringBuilder buf = new StringBuilder();
         for (int k = 0; k < popSizes.getDimension(); k++) {
-            buf.append(popSizes.getValue(k));  buf.append(" ");
+            buf.append(popSizes.getValue(k));
+            if (k < popSizes.getDimension() - 1) buf.append(" ");
         }
         out.println("                    <!-- populationModel id=\"popModel\" popSizes=\"" + buf + "\" " +
                                                     "spec=\"speciesnetwork.ConstantPopulation\"/ -->");
-        out.println("                    <populationModel alpha=\"5.0\" beta=\"0.05\" id=\"popModel\" " +
+        out.println("                    <populationModel alpha=\"10.0\" beta=\"0.1\" id=\"popModel\" " +
                                                     "spec=\"speciesnetwork.ConstantPopulationIO\"/>");
         out.println("                </distribution>");
         // network prior
