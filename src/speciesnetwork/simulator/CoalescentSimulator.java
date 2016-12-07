@@ -30,7 +30,7 @@ import speciesnetwork.SanityChecks;
 @Description("Simulate gene trees given a species network (multispecies coalescent).")
 public class CoalescentSimulator extends Runnable {
     public final Input<State> startStateInput =
-            new Input<>("state", "elements of the state space", Validate.REQUIRED);
+            new Input<>("state", "elements of the state space");
 
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "Species network for embedding the gene trees.", Validate.REQUIRED);
@@ -81,23 +81,20 @@ public class CoalescentSimulator extends Runnable {
             throw new RuntimeException("Check gene tree and embedding input!");
         nrOfGeneTrees = geneTrees.size();
 
-        // initialize state nodes, essential
-        State state = startStateInput.get();
-        state.initialise();
-    }
-
-    @Override
-    public void run() throws IOException {
-        if ((speciesNetwork = speciesNetworkInput.get()) == null)
-            speciesNetwork = networkSimulatorInput.get().simulate();  // simulate a species network
-        SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
-
-        popSizes = popSizesInput.get();
         if ((ploidies = ploidiesInput.get()) == null)
             ploidies = new RealParameter("2.0");  // default
         ploidies.setDimension(nrOfGeneTrees);
 
         seqSimulators = seqSimulatorsInput.get();
+    }
+
+    @Override
+    public void run() throws IOException {
+        // initialize state nodes, essential
+        State state = startStateInput.get();
+        if (state == null)
+            throw new RuntimeException("Input 'state' must be specified!");
+        state.initialise();
 
         final int nrOfIterations;
         if (iterationsInput.get() == null)
@@ -105,64 +102,75 @@ public class CoalescentSimulator extends Runnable {
         else
             nrOfIterations = iterationsInput.get();
         for (int iteration = 0; iteration < nrOfIterations; iteration++) {
-            // set popSizes dimension
-            final int speciesBranchCount = speciesNetwork.getBranchCount();
-            popSizes.setDimension(speciesBranchCount);
-
-            final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
-            // simulate each gene tree and alignment
-            for (int ig = 0; ig < nrOfGeneTrees; ig++) {
-                Tree geneTree = geneTrees.get(ig);
-                IntegerParameter embedding = embeddings.get(ig);
-
-                // initialize embedding matrix to -1 (no traversal)
-                final int geneNodeCount = geneTree.getNodeCount();
-                embedding.setDimension(traversalNodeCount * geneNodeCount);
-                embedding.setMinorDimension(geneNodeCount);
-                for (int i = 0; i < traversalNodeCount; i++)
-                    for (int j = 0; j < geneNodeCount; j++)
-                        embedding.setMatrixValue(i, j, -1);
-
-                networkNodeGeneLineagesMap.clear();
-                // generate map of tip names to tip nodes
-                final Map<String, NetworkNode> speciesNodeMap = new HashMap<>();
-                for (NetworkNode leafNode : speciesNetwork.getLeafNodes()) {
-                    final String speciesName = leafNode.getLabel();
-                    speciesNodeMap.put(speciesName, leafNode);
-                }
-                final Map<String, Node> geneNodeMap = new HashMap<>();
-                for (Node leafNode : geneTree.getExternalNodes()) {
-                    final String geneName = leafNode.getID();
-                    geneNodeMap.put(geneName, leafNode);
-                }
-                // multimap of species network tip node to gene tree tip nodes
-                final TaxonSet taxonSuperSet = taxonSuperSetInput.get();
-                for (Taxon speciesTip : taxonSuperSet.taxonsetInput.get()) {
-                    final NetworkNode speciesNode = speciesNodeMap.get(speciesTip.getID());
-                    final TaxonSet speciesTaxonSet = (TaxonSet) speciesTip;
-                    for (Taxon geneTip : speciesTaxonSet.taxonsetInput.get()) {
-                        final Node geneNode = geneNodeMap.get(geneTip.getID());
-                        networkNodeGeneLineagesMap.put(speciesNode, geneNode);
-                    }
-                }
-
-                // reset visited indicator
-                speciesNetwork.resetAllVisited();
-                // simulate the gene tree
-                nodeIndex = 0;
-                simulateGeneTree(speciesNetwork.getRoot(), geneTree, embedding, ploidies.getValue(ig));
-
-                // simulate alignment on the gene tree
-                if (seqSimulators.size() > ig) {
-                    alignments.add(seqSimulators.get(ig).simulate());
-                }
-            }
+            simulate();
 
             String outputFileName = outputFileNameInput.get();
             if (nrOfIterations == 1) {
                 writeXMLOutput(outputFileName);  // generate an XML file for a single iteration
             } else {
                 writeGeneTrees(outputFileName);  // otherwise, only output the gene trees
+            }
+        }
+    }
+
+    public void simulate() {
+        if (speciesNetworkInput.get() == null)
+            speciesNetwork = networkSimulatorInput.get().simulate();  // simulate a species network
+        else
+            speciesNetwork = speciesNetworkInput.get();
+        SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
+
+        // set popSizes dimension
+        popSizes = popSizesInput.get();
+        final int speciesBranchCount = speciesNetwork.getBranchCount();
+        popSizes.setDimension(speciesBranchCount);
+
+        final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
+        // simulate each gene tree and alignment
+        for (int ig = 0; ig < nrOfGeneTrees; ig++) {
+            Tree geneTree = geneTrees.get(ig);
+            IntegerParameter embedding = embeddings.get(ig);
+
+            // initialize embedding matrix to -1 (no traversal)
+            final int geneNodeCount = geneTree.getNodeCount();
+            embedding.setDimension(traversalNodeCount * geneNodeCount);
+            embedding.setMinorDimension(geneNodeCount);
+            for (int i = 0; i < traversalNodeCount; i++)
+                for (int j = 0; j < geneNodeCount; j++)
+                    embedding.setMatrixValue(i, j, -1);
+
+            networkNodeGeneLineagesMap.clear();
+            // generate map of tip names to tip nodes
+            final Map<String, NetworkNode> speciesNodeMap = new HashMap<>();
+            for (NetworkNode leafNode : speciesNetwork.getLeafNodes()) {
+                final String speciesName = leafNode.getLabel();
+                speciesNodeMap.put(speciesName, leafNode);
+            }
+            final Map<String, Node> geneNodeMap = new HashMap<>();
+            for (Node leafNode : geneTree.getExternalNodes()) {
+                final String geneName = leafNode.getID();
+                geneNodeMap.put(geneName, leafNode);
+            }
+            // multimap of species network tip node to gene tree tip nodes
+            final TaxonSet taxonSuperSet = taxonSuperSetInput.get();
+            for (Taxon speciesTip : taxonSuperSet.taxonsetInput.get()) {
+                final NetworkNode speciesNode = speciesNodeMap.get(speciesTip.getID());
+                final TaxonSet speciesTaxonSet = (TaxonSet) speciesTip;
+                for (Taxon geneTip : speciesTaxonSet.taxonsetInput.get()) {
+                    final Node geneNode = geneNodeMap.get(geneTip.getID());
+                    networkNodeGeneLineagesMap.put(speciesNode, geneNode);
+                }
+            }
+
+            // reset visited indicator
+            speciesNetwork.resetAllVisited();
+            // simulate the gene tree
+            nodeIndex = 0;
+            simulateGeneTree(speciesNetwork.getRoot(), geneTree, embedding, ploidies.getValue(ig));
+
+            // simulate alignment on the gene tree
+            if (seqSimulators.size() > ig) {
+                alignments.add(seqSimulators.get(ig).simulate());
             }
         }
     }
@@ -322,7 +330,7 @@ public class CoalescentSimulator extends Runnable {
         // print initial species network
         out.println("    <init spec=\"beast.util.TreeParser\" id=\"newick:species\" IsLabelledNewick=\"true\" " +
                             "adjustTipHeights=\"false\"\n          newick=\"" + speciesNetwork.getOrigin().toString(true) + "\"/>");
-        out.println("    <run chainLength=\"20000000\" id=\"mcmc\" spec=\"MCMC\">");  // MCMC block
+        out.println("    <run chainLength=\"50000000\" id=\"mcmc\" spec=\"MCMC\">");  // MCMC block
         out.println("        <state id=\"state\" storeEvery=\"1000\">");  // states
         // print state nodes
         out.println("            <stateNode id=\"network:species\" spec=\"speciesnetwork.NetworkParser\" tree=\"@newick:species\">");
@@ -491,9 +499,9 @@ public class CoalescentSimulator extends Runnable {
         out.println("        <operator id=\"divrRateScaler\" spec=\"ScaleOperator\" parameter=\"@netDivRate:species\" scaleFactor=\"0.75\" weight=\"5.0\"/>");
         out.println("        <operator id=\"turnOverScaler\" spec=\"ScaleOperator\" parameter=\"@turnOverRate:species\" scaleFactor=\"0.75\" weight=\"5.0\"/>");
         out.println("        <operator id=\"gammaProbUniform\" spec=\"speciesnetwork.operators.GammaProbUniform\" " +
-                                "speciesNetwork=\"@network:species\" weight=\"20.0\"/>");
+                                "speciesNetwork=\"@network:species\" weight=\"50.0\"/>");
         out.println("        <operator id=\"gammaProbRndWalk\" spec=\"speciesnetwork.operators.GammaProbRndWalk\" " +
-                                "speciesNetwork=\"@network:species\" weight=\"10.0\"/>\n");
+                                "speciesNetwork=\"@network:species\" weight=\"20.0\"/>\n");
         out.println("        <operator id=\"speciesOriginMultiplier\" spec=\"speciesnetwork.operators.OriginMultiplier\" " +
                                 "speciesNetwork=\"@network:species\" origin=\"@originTime:species\" weight=\"20.0\"/>");
         out.println("        <operator id=\"speciesNodeUniformAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"" + 10*(nrOfGeneTrees+10) + "\">");
@@ -510,25 +518,25 @@ public class CoalescentSimulator extends Runnable {
         out.println("        </operator>");
         // whether or not to write network topology operators
         if (!networkOperatorInput.get())  out.println("        <!--");
-        out.println("        <operator id=\"speciesEdgeRelocateWAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"100.0\">");
+        out.println("        <operator id=\"speciesEdgeRelocateWAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"200.0\">");
         out.println("            <operator id=\"edgeRelocatorW\" spec=\"speciesnetwork.operators.EdgeRelocator\" " +
                                             "speciesNetwork=\"@network:species\" isWide=\"true\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
-        out.println("        <operator id=\"speciesEdgeRelocateNAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"50.0\">");
+        out.println("        <operator id=\"speciesEdgeRelocateNAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"100.0\">");
         out.println("            <operator id=\"edgeRelocatorN\" spec=\"speciesnetwork.operators.EdgeRelocator\" " +
                                             "speciesNetwork=\"@network:species\" isWide=\"false\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
-        out.println("        <operator id=\"speciesAddHybridAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"100.0\">");
+        out.println("        <operator id=\"speciesAddHybridAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"200.0\">");
         out.println("            <operator id=\"addReticulation\" spec=\"speciesnetwork.operators.AddReticulation\" " +
                                             "speciesNetwork=\"@network:species\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
-        out.println("        <operator id=\"speciesDeleteHybridAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"100.0\">");
+        out.println("        <operator id=\"speciesDeleteHybridAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"200.0\">");
         out.println("            <operator id=\"deleteReticulation\" spec=\"speciesnetwork.operators.DeleteReticulation\" " +
                                             "speciesNetwork=\"@network:species\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++)

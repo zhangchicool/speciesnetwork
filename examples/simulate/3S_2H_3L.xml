@@ -88,6 +88,13 @@
         <init spec="beast.util.TreeParser" id="newick:gene2" initial="@tree:gene2" taxa="@gene2" IsLabelledNewick="true" newick="((b3:0.049979609079620624,(c1:0.04606311873938737,c2:0.04606311873938737):0.003916490340233253):0.01753344624952015,(((a1:0.005991502073352469,a2:0.005991502073352469):0.028402702851526882,b4:0.03439420492487935):0.011047370185908345,(b1:0.00978472686125314,b2:0.00978472686125314):0.03565684824953456):0.022071480218353076):0.0"/>
         <init spec="beast.util.TreeParser" id="newick:gene3" initial="@tree:gene3" taxa="@gene3" IsLabelledNewick="true" newick="((c2:0.01393560924662295,c1:0.01393560924662295):0.04109166568077602,((a1:0.018966967611777213,a2:0.018966967611777213):0.014309253695778963,((b2:0.0021185029711614403,(b4:0.001168588238943269,b3:0.001168588238943269):9.499147322181713E-4):0.00119163900167478,b1:0.0033101419728362204):0.029966079334719956):0.021751053619842788):0.0"/>
         <init estimate="false" id="initializer" method="random" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@network:species" origin="@originTime:species">
+            <coalescentSimulator spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species">
+                <parameter id="popSizes" name="popSizes">0.01</parameter>
+                <taxonSuperset idref="taxonSuperset"/>
+                <geneTree idref="tree:gene1"/> <embedding idref="embedding:gene1"/>
+                <geneTree idref="tree:gene2"/> <embedding idref="embedding:gene2"/>
+                <geneTree idref="tree:gene3"/> <embedding idref="embedding:gene3"/>
+            </coalescentSimulator>
             <geneTree idref="tree:gene1"/>
             <rebuildEmbedding id="rebuildEmbedding:gene1" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1" weight="0.0"/>
             <geneTree idref="tree:gene2"/>

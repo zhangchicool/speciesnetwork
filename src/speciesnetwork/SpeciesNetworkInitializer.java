@@ -19,6 +19,7 @@ import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
 import beast.util.ClusterTree;
 import speciesnetwork.operators.RebuildEmbedding;
+import speciesnetwork.simulator.CoalescentSimulator;
 
 /**
  * @author Joseph Heled
@@ -55,14 +56,15 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
             new Input<>("geneTree", "Gene tree to initialize.", new ArrayList<>());
     public final Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
             "Operator which rebuilds embedding of gene trees within species network.", new ArrayList<>());
-    public final Input<YuleHybridModel> hybridYuleInput = new Input<>("hybridYule",
-            "The species network (with hybridization) to initialize.", Validate.XOR, speciesNetworkInput);
     public final Input<RealParameter> birthRateInput =
             new Input<>("birthRate", "Network birth rate to initialize.");
     public final Input<RealParameter> hybridRateInput =
             new Input<>("hybridRate", "Network hybridization rate to initialize.");
     public final Input<Function> clockRateInput =
             new Input<>("baseRate", "Main clock rate used to scale trees (default 1).");
+
+    public final Input<CoalescentSimulator> coalSimulatorInput =
+            new Input<>("coalescentSimulator", "Simulate gene trees to initialize.");
 
     // @Override
     // public void initAndValidate() { super.initAndValidate(); }
@@ -106,12 +108,17 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
         final double tOrigin = originInput.get().getValue();
         sNetwork.scale(tOrigin/sNetwork.getOrigin().getHeight());
 
-        final double rootHeight = sNetwork.getRoot().getHeight();
-
-        // initialize caterpillar gene trees
-        final List<Tree> geneTrees = geneTreesInput.get();
-        for (final Tree gtree : geneTrees) {
-            gtree.makeCaterpillar(rootHeight, rootHeight/gtree.getInternalNodeCount(), true);
+        if (coalSimulatorInput.get() == null) {
+            final double rootHeight = sNetwork.getRoot().getHeight();
+            // initialize caterpillar gene trees
+            final List<Tree> geneTrees = geneTreesInput.get();
+            for (final Tree gtree : geneTrees) {
+                gtree.makeCaterpillar(rootHeight, rootHeight / gtree.getInternalNodeCount(), true);
+            }
+        }
+        else {
+            // initialize simulated gene trees
+            coalSimulatorInput.get().simulate();
         }
     }
 
