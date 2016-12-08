@@ -2475,10 +2475,11 @@ name="alignment">
                 </taxon>
             </taxonset>
         </stateNode>
+        <parameter id="popSizes:species" lower="0.0" name="stateNode">0.01</parameter>
         <parameter id="originTime:species" lower="0.0" name="stateNode">0.1</parameter>
         <parameter id="netDivRate:species" lower="0.0" name="stateNode">10.0</parameter>
         <parameter id="turnOverRate:species" lower="0.0" upper="1.0" name="stateNode">0.5</parameter>
-        
+
         <tree id="tree.t:lpw_4cl" name="stateNode">
             <taxonset id="TaxonSet.lpw_4cl" spec="TaxonSet">
                 <alignment idref="lpw_4cl"/>
@@ -2582,8 +2583,7 @@ name="alignment">
     </state>
 
     <init id="initializer" estimate="false" method="random" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@network:species" origin="@originTime:species">
-        <coalescentSimulator spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species">
-            <parameter id="popSizes" name="popSizes">0.01</parameter>
+        <coalescentSimulator spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species" popSizes="@popSizes:species">
             <taxonSuperset idref="taxonSuperset"/>
             <geneTree idref="tree.t:lpw_4cl"/> <embedding idref="embedding:lpw_4cl"/>
             <geneTree idref="tree.t:lpw_ebs"/> <embedding idref="embedding:lpw_ebs"/>
@@ -2623,8 +2623,8 @@ name="alignment">
 
     <distribution id="posterior" spec="util.CompoundDistribution">
         <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
-            <!-- populationModel id="popModel" popSizes="0.001" spec="speciesnetwork.ConstantPopulation"/ -->
-            <populationModel alpha="4.0" beta="0.004" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
+            <!-- populationModel id="popModel" popSizes="@popSizes:species" spec="speciesnetwork.ConstantPopulation"/ -->
+            <populationModel alpha="4.0" beta="0.05" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
             <geneTreeWithin id="geneTree:lpw_4cl" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_4cl" embedding="@embedding:lpw_4cl"/>
             <geneTreeWithin id="geneTree:lpw_ebs" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_ebs" embedding="@embedding:lpw_ebs"/>
             <geneTreeWithin id="geneTree:lpw_gi" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_gi" embedding="@embedding:lpw_gi"/>
