@@ -267,6 +267,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
         speciesTree.addNode(origin);         // add the origin
         speciesTree.setRoot(origin);         // set origin as new root
         NetworkParser networkParser = new NetworkParser(speciesTree);
+        networkParser.setID(sNetwork.getID()); // set the ID for assignFrom
         sNetwork.assignFrom(networkParser);
         sNetwork.resetInternalNodeLabels();
 
