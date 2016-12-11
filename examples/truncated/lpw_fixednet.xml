@@ -3,7 +3,7 @@
 
 
 <data
-id="lpw_4cl"
+id="4cl"
 name="alignment">
                     <sequence id="seq_L10" taxon="L10" totalcount="4" value="GGGCGTACGCATCATAGTTACCCAGTCGGCTTATGTTGACAAATTAACCGATCTACAGAGCGACGATCTGATCGTTATCACCATCGACGGTGCTCCTAAGGAGGGTTGCAAACATATTTCGTTCTGACCGAAGCGGACGAAACACAGTGCCCGTCCGTGGAAATCCAGCCGGACGACGTCGTGGCGTTGCCTATTCATCCGGAACAACGGGGCTCCCCAAGGGCGTAATGCTAACGCACAAGGGCCTGGTGTCCAGCGTTGCGCAGCAGGTCGACGGTGAGAACCCCAATCTGTATTTCCATTCGGAGGACGTGATTCTGTGTGTCTTGCCTCTCTTCCACATCTACTCTCTCAATTCGGTTCTCCTCTGCGCGCTCAGAGCCGGGGCCGCGACACTGATTATGCAAAAATTCAACCTGACGACGTGTCTGGAGCTGATCCAGAGATATAAGGTTACAGTTGCCCCAATTGTGCCCCCGATCGTCTTGGACATCACAAAGAGCCCCAATTTTTCCCAATACGATGTCTCGTCCGTCCGGATAATAATGTCTGGCGCTGCACCTCTCGGGAAGGAGCTCGAAGACGCCCTCAGAGAGCG"/>
                     <sequence id="seq_L102" taxon="L102" totalcount="4" value="GGGCGTACGCATCATAGTTACCCAGTCGGCTTATGTTGACAAATTAACCGATCTACAGAGCGACGATCTGATCGTTATCACCATCGACGGTGCTCCTAAGGAGGGTTGCAAACATATTTCGTTCTGACCGAAGCGGACGAAACACAGTGCCCGTCCGTGGAAATCCAGCCGGACGACGTCGTGGCGTTGCCTATTCATCCGGAACAACGGGGCTCCCCAAGGGCGTAATGCTAACGCACAAGGGCCTGGTGTCCAGCGTTGCGCAGCAGGTCGACGGTGAGAACCCCAATCTGTATTTCCATTCGGAGGACGTGATTCTGTGTGTCTTGCCTCTCTTCCACATCTACTCTCTCAATTCGGTTCTCCTCTGCGCGCTCAGAGCCGGGGCCGCGACACTGATTATGCAAAAATTCAACCTGACGACGTGTCTGGAGCTGATCCAGAGATATAAGGTTACAGTTGCCCCAATTGTGCCCCCGATCGTCTTGGACATCACAAAGAGCCCCAATTTTTCCCAATACGATGTCTCGTCCGTCCGGATAATAATGTCTGGCGCTGCACCTCTCGGGAAGGAGCTCGAAGACGCCCTCAGAGAGCG"/>
@@ -207,7 +207,7 @@ name="alignment">
                     <sequence id="seq_W92" taxon="W92" totalcount="4" value="GGGCGTGCGCATCATAGTTACCCAGTCGGCTTATGTTGACAAATTAACCGATCTACAGAGCGACGATCTGATCGTTATCACCATCGACGGTGCTCCCAAGGAGGGTTGTAAACATATTTCGTTCTGACCGAAGCGGACGAAACACAGTGCCCGTCCGTGGAAATCCAGCCGGACGACGTCGTGGCGTTGCCTATTCATCCGGAACAACGGGGCTCCCCAAGGGCGTAATGCTAACGCACAAGGGCCTGGTGTCCAGCGTTGCGCAGCAGGTCGACGGTGAGAACCCCAATCTGTATTTCCATTCGGAGGACGTGATTCTGTGTGTCTTGCCTCTCTTCCACATCTACTCTCTCAATTCGGTTCTCCTCTGCGCGCTCAGAGCCGGGGCCGCGACACTGATTATGCAAAAATTCAACCTGACGACGTGTCTGGAGCTGATCCAGAGATATAAGGTTACAGTTGCCCCAATTGTGCCCCCGATCGTCTTGGACATCACAAAGAGCCCCAATTTTTCCCAATACGATGTCTCGTCCGTCCGGATAATAATGTCTGGCGCTGCACCTCTCGGGAAGGAGCTCGAAGACGCCCTCAGAGAGCG"/>
                 </data>
 <data
-id="lpw_ebs"
+id="ebs"
 name="alignment">
                     <sequence id="seq_L101" taxon="L10" totalcount="4" value="GGCGGACATCCACGGGCTTCGCATGGTCGAACCTCGGGAGCTCTAAGTCTCGTATACGAAATTTCGATCTGCAGCGATGGCCAAATCAAAGCCGATGAAAAAAGTCTTGGACTCATACACGATCAAGGGAACCGACAAGGTCGTCAAAGGTAAGGGAGAAGCCTCTCGACCCTCCCTGGTATTCGATCGCTCGACCTCGTTCGTTCATTTATTTTCTGTTTTGTTTTCTTTAGTCGGGGACTGTGTGGTGTTGCGTGCCGAGGATGCCCAGAAGCCACCGTACATAGCTAGGGTGGAGAAGATAGAAGCCGATGGCCGGGGAAACCATGTGAAGGTCCGTGTGCGGTGGTATTATCGGCCGGAGGAGTCTATAGGAGGCCGCCGCCAATTCCACGGCGCAAAGGAGCTCTTCCTTTCGGATCATTTTGACGAGCAGAGCGCTGATACAATTGAGGGCAAATGCAGTGTGCATACTTTCAAGAACTACACCAAACTGGACAGCGTCGGCTCCGAAGACTATTTCTGCCGCTTTGAATACAACGCTGCAACCGGAGGGTTCACTCCCGATA"/>
                     <sequence id="seq_L1021" taxon="L102" totalcount="4" value="GGCGGACATCCACGGGCTTCGCATGGTCGAACCTCGGGAGCTCTAAGTCTCGTATACGAAATTTCGATCTGCAGCGATGGCCAAATCAAAGCCGATGAAAAAAGTCTTGGACTCATACACGATCAAGGGAACCGACAAGGTCGTCAAAGGTAAGGGAGAAGCCTCTCGACCCTCCCTGGTATTCGATCGCTCGACCTCGTTCGTTCATTTATTTTCTGTTTTGTTTTCTTTAGTCGGGGACTGTGTGGTGTTGCGTGCCGAGGATGCCCAGAAGCCACCGTACATAGCTAGGGTGGAGAAGATAGAAGCCGATGGCCGGGGAAACCATGTGAAGGTCCGTGTGCGGTGGTATTATCGGCCGGAGGAGTCTATAGGAGGCCGCCGCCAATTCCACGGCGCAAAGGAGCTCTTCCTTTCGGATCATTTTGACGAGCAGAGCGCTGATACAATTGAGGGCAAATGCAGTGTGCATACTTTCAAGAACTACACCAAACTGGACAGCGTCGGCTCCGAAGACTATTTCTGCCGCTTTGAATACAACGCTGCAACCGGAGGGTTCACTCCCGATA"/>
@@ -411,7 +411,7 @@ name="alignment">
                     <sequence id="seq_W921" taxon="W92" totalcount="4" value="GGCGGACATCCACGGGCTTCGCATGGTCGAACCTCGGGAGCTCTAAGTCTCGTATACGAAATTTCGATCTGCAGCGATGGCCAAATCAAAGCCGATGAAAAAAGTCTTGGACTCATACACGATCAAGGGAACCGACAAGGTCGTCAAAGGTAAGGGAGAAGCCTCTCGACCCTCCCTGGTATTCGATCGCTCGACCTCGTTCGTTCATTTATTTTCTGTTTTGTTTTCTTTAGTCGGGGACTGTGTGGTGTTGCGTGCCGAGGATGCCCAGAAGCCACCGTACATAGCTAGGGTGGAGAAGATAGAAGCCGATGGCCGGGGAAACCATGTGAAGGTCCGTGTGCGGTGGTATTATCGGCCGGAGGAGTCTATAGGAGGCCGCCGCCAATTCCACGGCGCAAAGGAGCTCTTCCTTTCGGATCATTTTGACGAGCAGAGCGCTGATACAATTGAGGGTAAATGCAGTGTGCATACTTTCAAGAACTACACCAAACTGGACAGCGTCGGCTCCGAAGACTATTTCTGCCGCTTTGAATACAACGCTGCAACCGGAGGGTTCACTCCCGATA"/>
                 </data>
 <data
-id="lpw_gi"
+id="gi"
 name="alignment">
                     <sequence id="seq_L103" taxon="L10" totalcount="4" value="AAATGTTAGCCATTGTGAAATTAAGAGACGTTCATTAGAAAGATTGTACAAGCTTGCCTTTCAGCCATGCCACTGCAACGTAACAGTTCTGCGAGAGTACTACATTTCTTACAGCATAAAAAAAAATATTTATTTCATCCTCGAAACTCTAGAAATACATTAGCTATTTCCTGAGAAACCCAGGAATGCCAAGTTCCATGCGCCGGGGTGATATACACTATGACGAGAAAAATATGCGGTGTCAAACATTTGCAGAGAAACCTAATGCATTGGCTGCTAATGCAAGAAGGGCAATAGACATCCCCCTTGCTTGCCGATTGTGGGCTTCCCAAGCCAGGCATTGTTCTACAGCTTTATTCCAATCTTGAACAACGATATCCTTTCCATAATACAAATGTTCAGAATGGTGGTTTTTTTCTGAAAAGTTCTTGCAATACCTGAAATTGAGAGATTCCGCATGCAAGATATCCCGCAGAACTGATGTACTAAGTGCGCGGACATGAGCACTGGAATGTGAAAGACATTGAACAGTAGCAGGTAGCCGATACTGCATACACATAATTCCATAAAGGGTT"/>
                     <sequence id="seq_L1022" taxon="L102" totalcount="4" value="AAATGTTAGCCATTGTGAAATTAAGAGACGTTCATTAGAAAGATTGTACAAGCTTGCCTTTCAGCCATGCCACTGCAACGTAACAGTTCTGCGAGAGTACTACATTTCTTACAGCATAAAAAAAAATATTTATTTCATCCTCGAAACTCTAGAAATACATTAGCTATTTCCTGAGAAACCCAGGAATGCCAAGTTCCATGCGCCGGGGTGATATACACTATGACGAGAAAAATATGCGGTGTCAAACATTTGCAGAGAAACCTAATGCATTGGCTGCTAATGCAAGAAGGGCAATAGACATCCCCCTTGCTTGCCGATTGTGGGCTTCCCAAGCCAGGCATTGTTCTACAGCTTTATTCCAATCTTGAACAACGATATCCTTTCCATAATACAAATGTTCAGAATGGTGGTTTTTTTCTGAAAAGTTCTTGCAATACCTGAAATTGAGAGATTCCGCATGCAAGATATCCCGCAGAACTGATGTACTAAGTGCGCGGACATGAGCACTGGAATGTGAAAGACATTGAACAGTAGCAGGTAGCCGATACTGCATACACATAATTCCATAAAGGGTT"/>
@@ -615,7 +615,7 @@ name="alignment">
                     <sequence id="seq_W922" taxon="W92" totalcount="4" value="AAATGTTAGCCATTGTGAAATTAAGAGACGTTCATTAGAAAGATTGTACAAGCTTGCCTTTCAGCCATGCCACTGCAACGTAACAGTTCTGCGAGAGTACTACATTTCTTACAGCATAAAAAAAAATATTTATTTCATCCTCGAAACTCTAGAAATACATTAGCTATTTCCTGAGAAACCCAGGAATGCCAAGTTCCATGCGCCGGGGTGATATACACTATGACGAGAAAAATATGCGGTGTCAAACATTTGCAGAGAAACCTAATGCATTGGCTGCTAATGCAAGAAGGGCAATAGACATCCCCCTTGCTTGCCGATTGTGGGCTTCCCAAGCCAGGCATTGTTCTACAGCTTTATTCCAATCTTGAACAACGATATCCTTTCCATAATACAAATGTTCAGAATGGTGGTTTTTTTCTGAAAAGTTCTTGCAATACCTGAAATTGAGAGATTCCGCATGCAAGATATCCCGCAGAACTGATGTACTAAGTGCGCGGACATGAGCACTGGAATGTGAAAGACATTGAACAGTAGCAGGTAGCCGATACTGCATACACATAATTCCATAAAGGGTT"/>
                 </data>
 <data
-id="lpw_m002"
+id="m002"
 name="alignment">
                     <sequence id="seq_L104" taxon="L10" totalcount="4" value="TTTTAGGGAGACAAAAATGAAGTCTATATTGCATTATTTTTTCTATTAAATCTTTGTTTGCTGAGATTACTCTAGGGTTTTGTACTGTGCACCGCACAGAAAAAATGAGTTTTAGATGTTGTTTGTTCCTTGTGTTTTGCAGTCAGTATACGGCAGCGGCGGCCGAAGCGATGAGATCAAGCGGTGTGGCAGCGCGGGAGTTTTCAGAGGTTAGCAGGGCAGGCAGAGGCGGAGGAAATAATAAGAGAACGGTGTTCTGGATGAGAGATCCGGCCACGGGGAACTGGATTCCGGAGGATCACTTCGGCGAGACCGACACTGCAGAGCTGAGGCAGAAGCTCCTCTCCTCCAGAAAGTAGATAAATAGGCATTATAAGAAT"/>
                     <sequence id="seq_L1023" taxon="L102" totalcount="4" value="TTTTAGGGAGACAAAAATGAAGTCTATATTGCATTATTTTTTCTATTAAATCTTTGTTTGCTGAGATTACTCTAGGGTTTTGTACTGTGCACCGCACAGAAAAAATGAGTTTTAGATGTTGTTTGTTCCTTGTGTTTTGCAGTCAGTATACGGCAGCGGCGGCCGAAGCGATGAGATCAAGCGGTGTGGCAGCGCGGGAGTTTTCAGAGGTTAGCAGGGCAGGCAGAGGCGGAGGAAATAATAAGAGAACGGTGTTCTGGATGAGAGATCCGGCCACGGGGAACTGGATTCCGGAGGATCACTTCGGCGAGACCGACACTGCAGAGCTGAGGCAGAAGCTCCTCTCCTCCAGAAAGTAGATAAATAGGCATTATAAGAAT"/>
@@ -819,7 +819,7 @@ name="alignment">
                     <sequence id="seq_W923" taxon="W92" totalcount="4" value="TTTTAGGGAGACAAACATGAAGTCTATATTGCATTATTTTTTCTATTAAATCTTTGTTTGCTGAGATTACTCTAGGGTTTTGTACTGTGCACCGCACAGAAAAAATGAGTTTTAGATGTTGTTTGTTCCTTGTGTTTTGCAGTCAGTATACGGCAGCGGCGGCCGAAGCGATGAGATCAAGCGGTGTGGCAGCGCGGGAGTTTCCAGAGGTTAGCAAGGCAGGCAGAGGCGGAGGAAATAATAAGAGAACGGTGTTCTGGATGAGAGATCCGGCCACGGGGAACTGGATTCCGGAGGATCACTTCGGCGAGACCGACACTGCAGAGCTGAGGCAGAAGCTCCTCTCCTCCAGAAAGTAGATAAATAGGCATTATAAGAAT"/>
                 </data>
 <data
-id="lpw_m7d1"
+id="m7d1"
 name="alignment">
                     <sequence id="seq_L105" taxon="L10" totalcount="4" value="TTTTTCTCTTCTGTCACCTTTTTTCAAGGAGATGGAGGCGTCGGCACCATTAAGCAGTTCAATTTCACCCCTGGTATTACTATAAAATTAACACTAATTAGCAAAGATCAATATTGTACTTCCGCTTCTAGTTGTTTCCTCGATTCAATCAGCTCAGTATCAATGCAAATGCTGATAAGTATAAGTATTAAGTGGTACTTATAACGTTCTCTGTTTTCGTGCAGCTAACAAGGATTTCAGCTACGCCAAGGAGCGAGTGGATGAAATTGACGAGGACAAGATGGTGTACAAGTACACAACAATCGATGGAGGGCCGCTGGGGAAGAAGCTAAGTGCATTGAACTGTGAGCTCAAATTCGTTCCCAGGAAAGAAGGGGGCTGTGTGGTGATCTGGATCTGCAATTACGAAACCCTCCCTGGTGCTCAGCTTGATGAAGGCAGAGCACAAGAGATAAAGGAACATAGCGGTGCCATGTTCAAGAAGATCGAG"/>
                     <sequence id="seq_L1024" taxon="L102" totalcount="4" value="TTTTTCTCTTCTGTCACCTTTTTTCAAGGAGATGGAGGCGTCGGCACCATTAAGCAGTTCAATTTCACCCCTGGTATTACTATAAAATTAACACTAATTAGCAAAGATCAATATTGTACTTCCGCTTCTAGTTGTTTCCTCGATTCAATCAGCTCAGTATCAATGCAAATGCTGATAAGTATAAGTATTAAGTGGTACTTATAACGTTCTCTGTTTTCGTGCAGCTAACAAGGATTTCAGCTACGCCAAGGAGCGAGTGGATGAAATTGACGAGGACAAGATGGTGTACAAGTACACAACAATCGATGGAGGGCCGCTGGGGAAGAAGCTAAGTGCATTGAACTGTGAGCTCAAATTCGTTCCCAGGAAAGAAGGGGGCTGTGTGGTGATCTGGATCTGCAATTACGAAACCCTCCCTGGTGCTCAGCTTGATGAAGGCAGAGCACAAGAGATAAAGGAACATAGCGGTGCCATGTTCAAGAAGATCGAG"/>
@@ -1023,7 +1023,7 @@ name="alignment">
                     <sequence id="seq_W924" taxon="W92" totalcount="4" value="TTTTTCTCTTCTGTCACCTTTTTTCAAGGAGATGGAGGCGTCGGCACCATTAAGCAGTTCAATTTCACCCCTGGTATTACTATAAAATTAACACTAATTAGCAAAGATCAATATTGTACTTCCGCTTCTAGTTGTTTCCTCGATTCAATCAGCTCAGTATCAATGCAAATGCTGATAAGTATAAGTATTAAGTGGTACTTATAACGTTCTCTGTTTTCGTGCAGCTAACAAGGATTTCAGCTACGCCAAGGAGCGAGTGGATGAAATTGACGAGGACAAGATGGTGTACAAGTACACAACAATCGATGGAGGGCCGCTGGGGAAGAAGCTAAGTGCATTGAACTGTGAGCTCAAATTCGTTCCCAGGAAAGAAGGGGGCTGTGTGGTGATCTGGATCTGCAATTACGAAACCCTCCCTGGTGCTCAGCTTGATGAAGGCAGAGCACAAGAGATAAAGGAACATAGCGGTGCCATGTTCAAGAAGATCGAG"/>
                 </data>
 <data
-id="lpw_sb16"
+id="sb16"
 name="alignment">
                     <sequence id="seq_L106" taxon="L10" totalcount="4" value="ATACTTTAATGAAGCTAAGAGTTCCATTTCTGGGGCAAGCTGCTTTTCGGCTAACTCCACTGCTTTTGACCTCAATTTTGCTAACTGCTTCCTTCTCTCATATGATACCTGGGCCTTTGCCTTTCTCTTCTCTTCCAATTCCTGCATAGCATATAGACAAAGAAAAGACTGAATACTGTGTGTAGAATGTAACCATTAGTCTAAATATAACATGATAAAATACACAACTCCAATTGGGAAAATTCAAGAAATGCAGCACATAACACATTACCGTAATAGTGTCAAAGTGATGCCAGCCAACTTCTTTGGAAAGCCTTCCTAGCAGGCAATATTTGTGACCTGGCTGAAGCCTCAACACTCTGTAGAGACAAAGTGTAACAAGTTAAGTCACATCATCTAAAGGGCATTCTGAATCATTCTCTAAACTCTAAATCAGATCCAGAAATACAGTCCATAAGTTCAAGTAACCATAGATACATCCAGTGGGACTGGTCACCAGGGAAGCAACCCACGTTCAAATCCCAGCAGGCATAGCTAAAACAATTAGTGCTTTCGCCAAGTTTGAAGGCTTGCTGAATTGAATTGGAACAATGATAATGCAGA"/>
                     <sequence id="seq_L1025" taxon="L102" totalcount="4" value="ATACTTTAATGAAGCTAAGAGTTCCATTTCTGGGGCAAGCTGCTTTTCGGCTAACTCCACTGCTTTTGACCTCAATTTTGCTAACTGCTTCCTTCTCTCATATGATACCTGGGCCTTTGCCTTTCTCTTCTCTTCCAATTCCTGCATAGCATATAGACAAAGAAAAGACTGAATACTGTGTGTAGAATGTAACCATTAGTCTAAATATAACATGATAAAATACACAACTCCAATTGGGAAAATTCAAGAAATGCAGCACATAACACATTACCGTAATAGTGTCAAAGTGATGCCAGCCAACTTCTTTGGAAAGCCTTCCTAGCAGGCAATATTTGTGACCTGGCTGAAGCCTCAACACTCTGTAGAGACAAAGTGTAACAAGTTAAGTCACATCATCTAAAGGGCATTCTGAATCATTCTCTAAACTCTAAATCAGATCCAGAAATACAGTCCATAAGTTCAAGTAACCATAGATACATCCAGTGGGACTGGTCACCAGGGAAGCAACCCACGTTCAAATCCCAGCAGGCATAGCTAAAACAATTAGTGCTTTCGCCAAGTTTGAAGGCTTGCTGAATTGAATTGGAACAATGATAATGCAGA"/>
@@ -1227,7 +1227,7 @@ name="alignment">
                     <sequence id="seq_W925" taxon="W92" totalcount="4" value="ATACTTTAATGAAGCTAAGAGTTCCATTTCTGGGGCAAGCTGCTTTTCGGCTAACTCCACTGCTTTTGACCTCAATTTTGCTAACTGCTTCCTTCTCTCATATGATACCTGGGCCTTTGCCTTTCTCTTCTCTTCCAATTCCTGCATAGCATATAGACAAAGAAAAGACTGAATACTGTGTGTAGAATGTAACCATTAGTCTAAATATAACATGATAAAATACACAACTCCAATTGGGAAAATTCAAGAAATTGAGCACATAACACATTACCGTAATAGTGTCAAAGTGATGCCAGCCAACTTCTTTGGAAAGCCTTCCTAGCAGGCAATATTTGTGACCTGGCTGAAGCCTCAACACTCTGTAGAGACAAAGTGTAACAAGTTAAGTCACATCATCTAAAGGGCATTCTGAATCATTCTCTAAACTCTAAATCAGATCCAGAAATACAGTCCATAAGTTCAAGTAACCATAGATACATCCAGTGGGACTGGTCACCAGGGAAGCAACCCACGTTCAAATCCCAGCAGGCATAGCTAAAACAATTAGTGCTTTCGCCAAGTTTGAAGGCTTGCTGAATTGAATTGGAACAATGATAATGCAGA"/>
                 </data>
 <data
-id="lpw_sb29"
+id="sb29"
 name="alignment">
                     <sequence id="seq_L107" taxon="L10" totalcount="4" value="AAAACCAGTCCTGATAAGCACCAGGAAAAGTTATTGGTCTAAATGAGTAAAGGTATTTTGTAGACCTTCGAGACCGAAATTAAATAATGATTGTTGCTGCTCCTGCGAGAAATTTTCCAATCTGAAGCTGCTCTCAACTTCTTCTTTCTCAGAAATGGGTTCTGAAAATGATGATGGCTTGGAACACTGGAATCATTATGCAATCCTGACATTAAGTCTGTGGAATTGCAATTTGTCCATTGGTGGTTGATGGAGGAGGAAATTGGGTTGAATGCTGTATTCTGCACTGGAGCCTTAAGGGTACTGTCACTGAAAGGGGTATTTGAGTTTTGGAAAAAA"/>
                     <sequence id="seq_L1026" taxon="L102" totalcount="4" value="AAAACCAGTCCTGATAAGCACCAGGAAAAGTTATTGGTCTAAATGAGTAAAGGTATTTTGTAGACCTTCGAGACCGAAATTAAATAATGATTGTTGCTGCTCCTGCGAGAAATTTTCCAATCTGAAGCTGCTCTCAACTTCTTCTTTCTCAGAAATGGGTTCTGAAAATGATGATGGCTTGGAACACTGGAATCATTATGCAATCCTGACATTAAGTCTGTGGAATTGCAATTTGTCCATTGGTGGTTGATGGAGGAGGAAATTGGGTTGAATGCTGTATTCTGCACTGGAGCCTTAAGGGTACTGTCACTGAAAGGGGTATTTGAGTTTTGGAAAAAA"/>
@@ -1431,7 +1431,7 @@ name="alignment">
                     <sequence id="seq_W926" taxon="W92" totalcount="4" value="AAAACCAGTCCTGATAAGCACCAGGAAAAGTTATTGGTCTAAATGAGTAAAGGTATTTTGTAGACCTTCGAGACCGAAATTAAATAATGATTGTTGCTGCTCCTGCGAGAAATTTTCCAATCTGAAGCTGCTCTGAACTTCTTCTTTCTCAGAAATGGGTTCTGAAAATGATGATGGCTTGGAACACTGGAATCATTATGCAATCCTGACATTAAGTCTGTGGAATTGCAATTTGTCCATTGGTGGTTGATGGAGGAGGAAATTGGGTTGAATGCTGTATTCTGCACTGGAGCCTTAAGGGTACTGTCACTGAAAGGGGTAGTTGAGTTTTGGAAAAAA"/>
                 </data>
 <data
-id="lpw_sb62"
+id="sb62"
 name="alignment">
                     <sequence id="seq_L108" taxon="L10" totalcount="4" value="CTTACTGGATTAATCAGGTCAGTATTTTCCATTTTGTGAATCCCACTTGATGAGTTACTGCAATTGGTTAATTCAAAATATATGTTTTATATAGATGATTTTTTTAGATGCCAGTTTCTTTCCTTTTTATTAATTTTTCTCTATAGCAGAGTTGTCAGATGCATGTGTTCACTTAGGTTCCTTACATCAAAAGGA"/>
                     <sequence id="seq_L1027" taxon="L102" totalcount="4" value="CTTACTGGATTAATCAGGTCAGTATTTTCCATTTTGTGAATCCCACTTGATGAGTTACTGCAATTGGTTAATTCAAAATATATGTTTTATATAGATGATTTTTTTAGATGCCAGTTTCTTTCCTTTTTATTAATTTTTCTCTATAGCAGAGTTGTCAGATGCATGTGTTCACTTAGGTTCCTTACATCAAAAGGA"/>
@@ -1635,7 +1635,7 @@ name="alignment">
                     <sequence id="seq_W927" taxon="W92" totalcount="4" value="CTTACTGGATTAATCAGGTCAGTATATTCCATATTGTGAATCCCACTTGATGAGTTGCTGCAATTGGTTAATTCAAAATATATGTTTTATATAGATGATTTTTTTAGATGCCAGTTTCTTTCCTTTTTATTAATTTTTCTCTATAGCAGAGTTGTCAGATGCATGTGTTCACTTAGGTTCCTTACATCAAAGGGA"/>
                 </data>
 <data
-id="lpw_se1364"
+id="se1364"
 name="alignment">
                     <sequence id="seq_L109" taxon="L10" totalcount="4" value="AGCTTCAAAGAGCCCACTCTCCAGAACACTTACAACCTGGAGGACAAACGTTACCATGTCAAGTCTACTTTCTCAAGTAATGGAGAGTGGATCTCTACTTGATGTTAGACCATTTTGCTCTAATGAGATAGATTTGTACAAAATGAACTAAATAGCAAATTAGCCACTTATGGCCAGTCCCACCACGAAAGATTTTCTTGATCGTCCATGGCAAATACATAAGTACAAGATGTTGTTGGTGCCTCTGGGAAGAGTATACACTCCATTTTCATATGACAGTCCTGAGGAAGTAGAAGCTTTTC"/>
                     <sequence id="seq_L1028" taxon="L102" totalcount="4" value="AGCTTCAAAGAGCCCACTCTCCAGAACACTTACAACCTGGAGGACAAACGTTACCATGTCAAGTCTACTTTCTCAAGTAATGGAGAGTGGATCTCTACTTGATGTTAGACCATTTTGCTCTAATGAGATAGATTTGTACAAAATGAACTAAATAGCAAATTAGCCACTTATGGCCAGTCCCACCACGAAAGATTTTCTTGATCGTCCATGGCAAATACATAAGTACAAGATGTTGTTGGTGCCTCTGGGAAGAGTATACACTCCATTTTCATATGACAGTCCTGAGGAAGTAGAAGCTTTTC"/>
@@ -1839,7 +1839,7 @@ name="alignment">
                     <sequence id="seq_W928" taxon="W92" totalcount="4" value="AGCTTCAAAGAGCCCACTCTCCAGAACACTTACAACCTGGAGGACAAACGTTACCATGTCAAGTCTACTTTCTCAAGTAATGGAGAGTGGATCTCTACTTGATCTTAGACCATTTTGCTCTAATGAGATAGATTTGTACAAAATGAACTAAATAGCAAATTAGCCGCTTATGGCCAGTCCCACCACGAAAGATTTTCTTGATCGTCCATGGCAAATACATAAGTACAAGATGTTGTTGGTGCCTCTGGGAAGAGTATACACTCCATTTTCATATGACAGTCCTGAGGAAGTAGAAGCTTTTC"/>
                 </data>
 <data
-id="lpw_se1390"
+id="se1390"
 name="alignment">
                     <sequence id="seq_L1010" taxon="L10" totalcount="4" value="TAAAGCATTCCTCTATCTTTCTTTCTTCCTCTTCTCCCCATTTATATCCTCCACGTTTATATTGGAGGCAGAGAGGCATCTGGCCAAAACCACAGCGTCCTCCAGCGCCGAGCAAGCACCTTGACCTAGATCAGGCGTCATCGGGTGCAACGCGTCTCCGACAACCGTCACGCTCCCCTTTCCCTTTGCCTTTCTGTCCCACTCCCACGGCCATAACCATCTGAACCTTAGATCCGCCATATTCAACTTGTCACTGGACTTTATCAACTCTCCAACGGGTTCTGGAAAGTCTTTCACGGCCTCTAACGCCGCGCGTCTCACGCTCTCCGAATCATGAGATACGTGGGCATCTGTAAAATTAATGTCACCTCGGCTCAGGTCACCACTACCTATTTACAAAAGCGGATGAATGTGGAAATGATATAAGAAAAGTTACCTTCCGGTTGTGATTTCTTGGTTATAAACC"/>
                     <sequence id="seq_L1029" taxon="L102" totalcount="4" value="TAAAGCATTCCTCTATCTTTCTTTCTTCCTCTTCTCCCCATTTATATCCTCCACGTTTATATTGGAGGCAGAGAGGCATCTGGCCAAAACCACAGCGTCCTCCAGCGCCGAGCAAGCACCTTGACCTAGATCAGGCGTCATCGGGTGCAACGCGTCTCCGACAACCGTCACGCTCCCCTTTCCCTTTGCCTTTCTGTCCCACTCCCACGGCCATAACCATCTGAACCTTAGATCCGCCATATTCAACTTGTCACTGGACTTTATCAACTCTCCAACGGGTTCTGGAAAGTCTTTCACGGCCTCTAACGCCGCGCGTCTCACGCTCTCCGAATCATGAGATACGTGGGCATCTGTAAAATTAATGTCACCTCGGCTCAGGTCACCACTACCTATTTACAAAAGCGGATGAATGTGGAAATGATATAAGAAAAGTTACCTTCCGGTTGTGATTTCTTGGTTATAAACC"/>
@@ -2043,7 +2043,7 @@ name="alignment">
                     <sequence id="seq_W929" taxon="W92" totalcount="4" value="TAAAGCATTCCTCTATCTTTCTTTCTTCCTCTTCTCCCCATTTATATCCTCCACGTTTATATTGGAGGCAGAGAGGCATCTGGCCAAAACCACAGCGTCCTCCAGCGCCGAGCAAGCACCTTGACCTAGATCAGGCGTCATCGGGTGCAACGCGTCTCCGACAACCGTCACGCTCCCCTTTCCCTTTGCCTTTCTGTCCCACCCCCACGGCCATAGCCATCTGAACCTTAGATCCGCCATACTCAACTTGTCACTGGACTTTATCAACTCTCCAACGGGTTCTGGAAAATCTCTCACGGCCTCTAACGCCGCGCGTCTCACGCTCTCCGAATCATGAGATACGTGGGCATCTGTAAAATTAAAGTCACCTCGGCTCAGGTCACCACTAACTATTTACAAAAGCGGATGAATGTGGAAATGATATAAGAAAAGTTACCTTCCCGTTGTGATTTCTTGGTTATAAACC"/>
                 </data>
 <data
-id="lpw_xy1420"
+id="xy1420"
 name="alignment">
                     <sequence id="seq_L1011" taxon="L10" totalcount="4" value="GACTTTGTATTTTCGGCGTCGTTCGATCGAGCCCTGGTGCCCGCACTGCTCGCCTCCGAGGTCGAGCGCACACTTAAGACAGGAGGTGTTGCGGCGATGCTGGTCTCGCCGCGGCGACTAAACGTGGGGAACGCGATAAACCCCTTCTATTCCTTGAGCCCCGTGGTAGCCCTAT"/>
                     <sequence id="seq_L10210" taxon="L102" totalcount="4" value="GACTTTGTATTTTCGGCGTCGTTCGATCGAGCCCTGGTGCCCGCACTGCTCGCCTCCGAGGTCGAGCGCACACTTAAGACAGGAGGTGTTGCGGCGATGCTGGTCTCGCCGCGGCGACTAAACGTGGGGAACGCGATAAACCCCTTCTATTCCTTGAGCCCCGTGGTAGCCCTAT"/>
@@ -2475,167 +2475,168 @@ name="alignment">
                 </taxon>
             </taxonset>
         </stateNode>
-        <parameter id="popSizes:species" lower="0.0" name="stateNode">0.01</parameter>
         <parameter id="originTime:species" lower="0.0" name="stateNode">0.1</parameter>
         <parameter id="netDivRate:species" lower="0.0" name="stateNode">10.0</parameter>
         <parameter id="turnOverRate:species" lower="0.0" upper="1.0" name="stateNode">0.5</parameter>
 
-        <tree id="tree.t:lpw_4cl" name="stateNode">
-            <taxonset id="TaxonSet.lpw_4cl" spec="TaxonSet">
-                <alignment idref="lpw_4cl"/>
+        <tree id="tree.t:4cl" name="stateNode">
+            <taxonset id="TaxonSet.4cl" spec="TaxonSet">
+                <alignment idref="4cl"/>
             </taxonset>
         </tree>
-        <stateNode id="embedding:lpw_4cl" spec="parameter.IntegerParameter">-1</stateNode>
-        <parameter id="clockRate.c:lpw_4cl" name="stateNode">1.0</parameter>
-        <tree id="tree.t:lpw_ebs" name="stateNode">
-            <taxonset id="TaxonSet.lpw_ebs" spec="TaxonSet">
-                <alignment idref="lpw_ebs"/>
+        <stateNode id="embedding:4cl" spec="parameter.IntegerParameter">-1</stateNode>
+        <tree id="tree.t:ebs" name="stateNode">
+            <taxonset id="TaxonSet.ebs" spec="TaxonSet">
+                <alignment idref="ebs"/>
             </taxonset>
         </tree>
-        <stateNode id="embedding:lpw_ebs" spec="parameter.IntegerParameter">-1</stateNode>
-        <parameter id="clockRate.c:lpw_ebs" name="stateNode">1.0</parameter>
-        <tree id="tree.t:lpw_gi" name="stateNode">
-            <taxonset id="TaxonSet.lpw_gi" spec="TaxonSet">
-                <alignment idref="lpw_gi"/>
+        <stateNode id="embedding:ebs" spec="parameter.IntegerParameter">-1</stateNode>
+        <tree id="tree.t:gi" name="stateNode">
+            <taxonset id="TaxonSet.gi" spec="TaxonSet">
+                <alignment idref="gi"/>
             </taxonset>
         </tree>
-        <stateNode id="embedding:lpw_gi" spec="parameter.IntegerParameter">-1</stateNode>
-        <parameter id="clockRate.c:lpw_gi" name="stateNode">1.0</parameter>
-        <tree id="tree.t:lpw_m002" name="stateNode">
-            <taxonset id="TaxonSet.lpw_m002" spec="TaxonSet">
-                <alignment idref="lpw_m002"/>
+        <stateNode id="embedding:gi" spec="parameter.IntegerParameter">-1</stateNode>
+        <tree id="tree.t:m002" name="stateNode">
+            <taxonset id="TaxonSet.m002" spec="TaxonSet">
+                <alignment idref="m002"/>
             </taxonset>
         </tree>
-        <stateNode id="embedding:lpw_m002" spec="parameter.IntegerParameter">-1</stateNode>
-        <parameter id="clockRate.c:lpw_m002" name="stateNode">1.0</parameter>
-        <tree id="tree.t:lpw_m7d1" name="stateNode">
-            <taxonset id="TaxonSet.lpw_m7d1" spec="TaxonSet">
-                <alignment idref="lpw_m7d1"/>
+        <stateNode id="embedding:m002" spec="parameter.IntegerParameter">-1</stateNode>
+        <tree id="tree.t:m7d1" name="stateNode">
+            <taxonset id="TaxonSet.m7d1" spec="TaxonSet">
+                <alignment idref="m7d1"/>
             </taxonset>
         </tree>
-        <stateNode id="embedding:lpw_m7d1" spec="parameter.IntegerParameter">-1</stateNode>
-        <parameter id="clockRate.c:lpw_m7d1" name="stateNode">1.0</parameter>
-        <tree id="tree.t:lpw_sb16" name="stateNode">
-            <taxonset id="TaxonSet.lpw_sb16" spec="TaxonSet">
-                <alignment idref="lpw_sb16"/>
+        <stateNode id="embedding:m7d1" spec="parameter.IntegerParameter">-1</stateNode>
+        <tree id="tree.t:sb16" name="stateNode">
+            <taxonset id="TaxonSet.sb16" spec="TaxonSet">
+                <alignment idref="sb16"/>
             </taxonset>
         </tree>
-        <stateNode id="embedding:lpw_sb16" spec="parameter.IntegerParameter">-1</stateNode>
-        <parameter id="clockRate.c:lpw_sb16" name="stateNode">1.0</parameter>
-        <tree id="tree.t:lpw_sb29" name="stateNode">
-            <taxonset id="TaxonSet.lpw_sb29" spec="TaxonSet">
-                <alignment idref="lpw_sb29"/>
+        <stateNode id="embedding:sb16" spec="parameter.IntegerParameter">-1</stateNode>
+        <tree id="tree.t:sb29" name="stateNode">
+            <taxonset id="TaxonSet.sb29" spec="TaxonSet">
+                <alignment idref="sb29"/>
             </taxonset>
         </tree>
-        <stateNode id="embedding:lpw_sb29" spec="parameter.IntegerParameter">-1</stateNode>
-        <parameter id="clockRate.c:lpw_sb29" name="stateNode">1.0</parameter>
-        <tree id="tree.t:lpw_sb62" name="stateNode">
-            <taxonset id="TaxonSet.lpw_sb62" spec="TaxonSet">
-                <alignment idref="lpw_sb62"/>
+        <stateNode id="embedding:sb29" spec="parameter.IntegerParameter">-1</stateNode>
+        <tree id="tree.t:sb62" name="stateNode">
+            <taxonset id="TaxonSet.sb62" spec="TaxonSet">
+                <alignment idref="sb62"/>
             </taxonset>
         </tree>
-        <stateNode id="embedding:lpw_sb62" spec="parameter.IntegerParameter">-1</stateNode>
-        <parameter id="clockRate.c:lpw_sb62" name="stateNode">1.0</parameter>
-        <tree id="tree.t:lpw_se1364" name="stateNode">
-            <taxonset id="TaxonSet.lpw_se1364" spec="TaxonSet">
-                <alignment idref="lpw_se1364"/>
+        <stateNode id="embedding:sb62" spec="parameter.IntegerParameter">-1</stateNode>
+        <tree id="tree.t:se1364" name="stateNode">
+            <taxonset id="TaxonSet.se1364" spec="TaxonSet">
+                <alignment idref="se1364"/>
             </taxonset>
         </tree>
-        <stateNode id="embedding:lpw_se1364" spec="parameter.IntegerParameter">-1</stateNode>
-        <parameter id="clockRate.c:lpw_se1364" name="stateNode">1.0</parameter>
-        <tree id="tree.t:lpw_se1390" name="stateNode">
-            <taxonset id="TaxonSet.lpw_se1390" spec="TaxonSet">
-                <alignment idref="lpw_se1390"/>
+        <stateNode id="embedding:se1364" spec="parameter.IntegerParameter">-1</stateNode>
+        <tree id="tree.t:se1390" name="stateNode">
+            <taxonset id="TaxonSet.se1390" spec="TaxonSet">
+                <alignment idref="se1390"/>
             </taxonset>
         </tree>
-        <stateNode id="embedding:lpw_se1390" spec="parameter.IntegerParameter">-1</stateNode>
-        <parameter id="clockRate.c:lpw_se1390" name="stateNode">1.0</parameter>
-        <tree id="tree.t:lpw_xy1420" name="stateNode">
-            <taxonset id="TaxonSet.lpw_xy1420" spec="TaxonSet">
-                <alignment idref="lpw_xy1420"/>
+        <stateNode id="embedding:se1390" spec="parameter.IntegerParameter">-1</stateNode>
+        <tree id="tree.t:xy1420" name="stateNode">
+            <taxonset id="TaxonSet.xy1420" spec="TaxonSet">
+                <alignment idref="xy1420"/>
             </taxonset>
         </tree>
-        <stateNode id="embedding:lpw_xy1420" spec="parameter.IntegerParameter">-1</stateNode>
-        <parameter id="clockRate.c:lpw_xy1420" name="stateNode">1.0</parameter>
+        <stateNode id="embedding:xy1420" spec="parameter.IntegerParameter">-1</stateNode>
 
-        <parameter id="kappa.s:lpw_4cl" lower="0.0" name="stateNode">2.0</parameter>
-        <parameter id="kappa.s:lpw_ebs" lower="0.0" name="stateNode">2.0</parameter>
-        <parameter id="kappa.s:lpw_gi" lower="0.0" name="stateNode">2.0</parameter>
-        <parameter id="kappa.s:lpw_m002" lower="0.0" name="stateNode">2.0</parameter>
-        <parameter id="kappa.s:lpw_m7d1" lower="0.0" name="stateNode">2.0</parameter>
-        <parameter id="kappa.s:lpw_sb16" lower="0.0" name="stateNode">2.0</parameter>
-        <parameter id="kappa.s:lpw_sb29" lower="0.0" name="stateNode">2.0</parameter>
-        <parameter id="kappa.s:lpw_sb62" lower="0.0" name="stateNode">2.0</parameter>
-        <parameter id="kappa.s:lpw_se1364" lower="0.0" name="stateNode">2.0</parameter>
-        <parameter id="kappa.s:lpw_se1390" lower="0.0" name="stateNode">2.0</parameter>
-        <parameter id="kappa.s:lpw_xy1420" lower="0.0" name="stateNode">2.0</parameter>
-        <parameter id="freqParameter.s:lpw_4cl" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
-        <parameter id="freqParameter.s:lpw_ebs" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
-        <parameter id="freqParameter.s:lpw_gi" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
-        <parameter id="freqParameter.s:lpw_m002" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
-        <parameter id="freqParameter.s:lpw_m7d1" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
-        <parameter id="freqParameter.s:lpw_sb16" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
-        <parameter id="freqParameter.s:lpw_sb29" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
-        <parameter id="freqParameter.s:lpw_sb62" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
-        <parameter id="freqParameter.s:lpw_se1364" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
-        <parameter id="freqParameter.s:lpw_se1390" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
-        <parameter id="freqParameter.s:lpw_xy1420" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
+        <parameter id="clockRate.c:gene" name="stateNode">1.0</parameter>
+        <parameter id="mutationRate.s:4cl" name="stateNode">1.0</parameter>
+        <parameter id="mutationRate.s:ebs" name="stateNode">1.0</parameter>
+        <parameter id="mutationRate.s:gi" name="stateNode">1.0</parameter>
+        <parameter id="mutationRate.s:m002" name="stateNode">1.0</parameter>
+        <parameter id="mutationRate.s:m7d1" name="stateNode">1.0</parameter>
+        <parameter id="mutationRate.s:sb16" name="stateNode">1.0</parameter>
+        <parameter id="mutationRate.s:sb29" name="stateNode">1.0</parameter>
+        <parameter id="mutationRate.s:sb62" name="stateNode">1.0</parameter>
+        <parameter id="mutationRate.s:se1364" name="stateNode">1.0</parameter>
+        <parameter id="mutationRate.s:se1390" name="stateNode">1.0</parameter>
+        <parameter id="mutationRate.s:xy1420" name="stateNode">1.0</parameter>
+        <parameter id="kappa.s:4cl" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="kappa.s:ebs" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="kappa.s:gi" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="kappa.s:m002" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="kappa.s:m7d1" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="kappa.s:sb16" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="kappa.s:sb29" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="kappa.s:sb62" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="kappa.s:se1364" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="kappa.s:se1390" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="kappa.s:xy1420" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="freqParameter.s:4cl" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
+        <parameter id="freqParameter.s:ebs" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
+        <parameter id="freqParameter.s:gi" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
+        <parameter id="freqParameter.s:m002" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
+        <parameter id="freqParameter.s:m7d1" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
+        <parameter id="freqParameter.s:sb16" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
+        <parameter id="freqParameter.s:sb29" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
+        <parameter id="freqParameter.s:sb62" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
+        <parameter id="freqParameter.s:se1364" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
+        <parameter id="freqParameter.s:se1390" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
+        <parameter id="freqParameter.s:xy1420" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
     </state>
 
     <init id="initializer" estimate="false" method="random" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@network:species" origin="@originTime:species">
-        <coalescentSimulator spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species" popSizes="@popSizes:species">
+        <coalescentSimulator spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species">
+            <parameter id="popSizes:species" estimate="false" name="popSizes">0.01</parameter>
             <taxonSuperset idref="taxonSuperset"/>
-            <geneTree idref="tree.t:lpw_4cl"/> <embedding idref="embedding:lpw_4cl"/>
-            <geneTree idref="tree.t:lpw_ebs"/> <embedding idref="embedding:lpw_ebs"/>
-            <geneTree idref="tree.t:lpw_gi"/> <embedding idref="embedding:lpw_gi"/>
-            <geneTree idref="tree.t:lpw_m002"/> <embedding idref="embedding:lpw_m002"/>
-            <geneTree idref="tree.t:lpw_m7d1"/> <embedding idref="embedding:lpw_m7d1"/>
-            <geneTree idref="tree.t:lpw_sb16"/> <embedding idref="embedding:lpw_sb16"/>
-            <geneTree idref="tree.t:lpw_sb29"/> <embedding idref="embedding:lpw_sb29"/>
-            <geneTree idref="tree.t:lpw_sb62"/> <embedding idref="embedding:lpw_sb62"/>
-            <geneTree idref="tree.t:lpw_se1390"/> <embedding idref="embedding:lpw_se1390"/>
-            <geneTree idref="tree.t:lpw_se1364"/> <embedding idref="embedding:lpw_se1364"/>
-            <geneTree idref="tree.t:lpw_xy1420"/> <embedding idref="embedding:lpw_xy1420"/>
+            <geneTree idref="tree.t:4cl"/> <embedding idref="embedding:4cl"/>
+            <geneTree idref="tree.t:ebs"/> <embedding idref="embedding:ebs"/>
+            <geneTree idref="tree.t:gi"/> <embedding idref="embedding:gi"/>
+            <geneTree idref="tree.t:m002"/> <embedding idref="embedding:m002"/>
+            <geneTree idref="tree.t:m7d1"/> <embedding idref="embedding:m7d1"/>
+            <geneTree idref="tree.t:sb16"/> <embedding idref="embedding:sb16"/>
+            <geneTree idref="tree.t:sb29"/> <embedding idref="embedding:sb29"/>
+            <geneTree idref="tree.t:sb62"/> <embedding idref="embedding:sb62"/>
+            <geneTree idref="tree.t:se1390"/> <embedding idref="embedding:se1390"/>
+            <geneTree idref="tree.t:se1364"/> <embedding idref="embedding:se1364"/>
+            <geneTree idref="tree.t:xy1420"/> <embedding idref="embedding:xy1420"/>
         </coalescentSimulator>
-        <geneTree idref="tree.t:lpw_4cl"/>
-        <geneTree idref="tree.t:lpw_ebs"/>
-        <geneTree idref="tree.t:lpw_gi"/>
-        <geneTree idref="tree.t:lpw_m002"/>
-        <geneTree idref="tree.t:lpw_m7d1"/>
-        <geneTree idref="tree.t:lpw_sb16"/>
-        <geneTree idref="tree.t:lpw_sb29"/>
-        <geneTree idref="tree.t:lpw_sb62"/>
-        <geneTree idref="tree.t:lpw_se1390"/>
-        <geneTree idref="tree.t:lpw_se1364"/>
-        <geneTree idref="tree.t:lpw_xy1420"/>
-        <rebuildEmbedding id="rebuildEmbedding:lpw_4cl" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:lpw_4cl" embedding="@embedding:lpw_4cl" weight="0.0"/>
-        <rebuildEmbedding id="rebuildEmbedding:lpw_ebs" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:lpw_ebs" embedding="@embedding:lpw_ebs" weight="0.0"/>
-        <rebuildEmbedding id="rebuildEmbedding:lpw_gi" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:lpw_gi" embedding="@embedding:lpw_gi" weight="0.0"/>
-        <rebuildEmbedding id="rebuildEmbedding:lpw_m002" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:lpw_m002" embedding="@embedding:lpw_m002" weight="0.0"/>
-        <rebuildEmbedding id="rebuildEmbedding:lpw_m7d1" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:lpw_m7d1" embedding="@embedding:lpw_m7d1" weight="0.0"/>
-        <rebuildEmbedding id="rebuildEmbedding:lpw_sb16" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:lpw_sb16" embedding="@embedding:lpw_sb16" weight="0.0"/>
-        <rebuildEmbedding id="rebuildEmbedding:lpw_sb29" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:lpw_sb29" embedding="@embedding:lpw_sb29" weight="0.0"/>
-        <rebuildEmbedding id="rebuildEmbedding:lpw_sb62" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:lpw_sb62" embedding="@embedding:lpw_sb62" weight="0.0"/>
-        <rebuildEmbedding id="rebuildEmbedding:lpw_se1390" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:lpw_se1390" embedding="@embedding:lpw_se1390" weight="0.0"/>
-        <rebuildEmbedding id="rebuildEmbedding:lpw_se1364" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:lpw_se1364" embedding="@embedding:lpw_se1364" weight="0.0"/>
-        <rebuildEmbedding id="rebuildEmbedding:lpw_xy1420" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:lpw_xy1420" embedding="@embedding:lpw_xy1420" weight="0.0"/>
+        <geneTree idref="tree.t:4cl"/>
+        <geneTree idref="tree.t:ebs"/>
+        <geneTree idref="tree.t:gi"/>
+        <geneTree idref="tree.t:m002"/>
+        <geneTree idref="tree.t:m7d1"/>
+        <geneTree idref="tree.t:sb16"/>
+        <geneTree idref="tree.t:sb29"/>
+        <geneTree idref="tree.t:sb62"/>
+        <geneTree idref="tree.t:se1390"/>
+        <geneTree idref="tree.t:se1364"/>
+        <geneTree idref="tree.t:xy1420"/>
+        <rebuildEmbedding id="rebuildEmbedding:4cl" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:4cl" embedding="@embedding:4cl" weight="0.0"/>
+        <rebuildEmbedding id="rebuildEmbedding:ebs" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:ebs" embedding="@embedding:ebs" weight="0.0"/>
+        <rebuildEmbedding id="rebuildEmbedding:gi" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:gi" embedding="@embedding:gi" weight="0.0"/>
+        <rebuildEmbedding id="rebuildEmbedding:m002" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:m002" embedding="@embedding:m002" weight="0.0"/>
+        <rebuildEmbedding id="rebuildEmbedding:m7d1" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:m7d1" embedding="@embedding:m7d1" weight="0.0"/>
+        <rebuildEmbedding id="rebuildEmbedding:sb16" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:sb16" embedding="@embedding:sb16" weight="0.0"/>
+        <rebuildEmbedding id="rebuildEmbedding:sb29" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:sb29" embedding="@embedding:sb29" weight="0.0"/>
+        <rebuildEmbedding id="rebuildEmbedding:sb62" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:sb62" embedding="@embedding:sb62" weight="0.0"/>
+        <rebuildEmbedding id="rebuildEmbedding:se1390" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:se1390" embedding="@embedding:se1390" weight="0.0"/>
+        <rebuildEmbedding id="rebuildEmbedding:se1364" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:se1364" embedding="@embedding:se1364" weight="0.0"/>
+        <rebuildEmbedding id="rebuildEmbedding:xy1420" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:xy1420" embedding="@embedding:xy1420" weight="0.0"/>
     </init>
 
     <distribution id="posterior" spec="util.CompoundDistribution">
         <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
             <!-- populationModel id="popModel" popSizes="@popSizes:species" spec="speciesnetwork.ConstantPopulation"/ -->
-            <populationModel alpha="4.0" beta="0.05" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
-            <geneTreeWithin id="geneTree:lpw_4cl" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_4cl" embedding="@embedding:lpw_4cl"/>
-            <geneTreeWithin id="geneTree:lpw_ebs" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_ebs" embedding="@embedding:lpw_ebs"/>
-            <geneTreeWithin id="geneTree:lpw_gi" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_gi" embedding="@embedding:lpw_gi"/>
-            <geneTreeWithin id="geneTree:lpw_m002" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_m002" embedding="@embedding:lpw_m002"/>
-            <geneTreeWithin id="geneTree:lpw_m7d1" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_m7d1" embedding="@embedding:lpw_m7d1"/>
-            <geneTreeWithin id="geneTree:lpw_sb16" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_sb16" embedding="@embedding:lpw_sb16"/>
-            <geneTreeWithin id="geneTree:lpw_sb29" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_sb29" embedding="@embedding:lpw_sb29"/>
-            <geneTreeWithin id="geneTree:lpw_sb62" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_sb62" embedding="@embedding:lpw_sb62"/>
-            <geneTreeWithin id="geneTree:lpw_se1364" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_se1364" embedding="@embedding:lpw_se1364"/>
-            <geneTreeWithin id="geneTree:lpw_se1390" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_se1390" embedding="@embedding:lpw_se1390"/>
-            <geneTreeWithin id="geneTree:lpw_xy1420" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:lpw_xy1420" embedding="@embedding:lpw_xy1420"/>
+            <populationModel alpha="4.0" beta="0.01" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
+            <geneTreeWithin id="geneTree:4cl" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:4cl" embedding="@embedding:4cl"/>
+            <geneTreeWithin id="geneTree:ebs" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:ebs" embedding="@embedding:ebs"/>
+            <geneTreeWithin id="geneTree:gi" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:gi" embedding="@embedding:gi"/>
+            <geneTreeWithin id="geneTree:m002" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:m002" embedding="@embedding:m002"/>
+            <geneTreeWithin id="geneTree:m7d1" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:m7d1" embedding="@embedding:m7d1"/>
+            <geneTreeWithin id="geneTree:sb16" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:sb16" embedding="@embedding:sb16"/>
+            <geneTreeWithin id="geneTree:sb29" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:sb29" embedding="@embedding:sb29"/>
+            <geneTreeWithin id="geneTree:sb62" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:sb62" embedding="@embedding:sb62"/>
+            <geneTreeWithin id="geneTree:se1364" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:se1364" embedding="@embedding:se1364"/>
+            <geneTreeWithin id="geneTree:se1390" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:se1390" embedding="@embedding:se1390"/>
+            <geneTreeWithin id="geneTree:xy1420" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:xy1420" embedding="@embedding:xy1420"/>
         </distribution>
         <distribution id="prior" spec="util.CompoundDistribution">
             <distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" network="@network:species" netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" betaShape="1.0"/>
@@ -2648,503 +2649,476 @@ name="alignment">
             <prior id="turnOverPrior" name="distribution" x="@turnOverRate:species">
                 <Beta id="betadistr.01" name="distr" alpha="1.0" beta="1.0"/>
             </prior>
-            <prior id="ClockPrior.c:lpw_4cl" name="distribution" x="@clockRate.c:lpw_4cl">
+            <prior id="clockPrior.c" name="distribution" x="@clockRate.c:gene">
                 <Gamma id="Gamma.0" mode="ShapeRate" name="distr">
                     <parameter id="RealParameter.0" estimate="false" name="alpha">100.0</parameter>
                     <parameter id="RealParameter.01" estimate="false" name="beta">100.0</parameter>
                 </Gamma>
             </prior>
-            <prior id="ClockPrior.c:lpw_ebs" name="distribution" x="@clockRate.c:lpw_ebs">
-                <Gamma id="Gamma.01" mode="ShapeRate" name="distr">
-                    <parameter id="RealParameter.02" estimate="false" name="alpha">2.0</parameter>
-                    <parameter id="RealParameter.03" estimate="false" name="beta">2.0</parameter>
-                </Gamma>
-            </prior>
-            <prior id="ClockPrior.c:lpw_gi" name="distribution" x="@clockRate.c:lpw_gi" distr="@Gamma.01"/>
-            <prior id="ClockPrior.c:lpw_m002" name="distribution" x="@clockRate.c:lpw_m002" distr="@Gamma.01"/>
-            <prior id="ClockPrior.c:lpw_m7d1" name="distribution" x="@clockRate.c:lpw_m7d1" distr="@Gamma.01"/>
-            <prior id="ClockPrior.c:lpw_sb16" name="distribution" x="@clockRate.c:lpw_sb16" distr="@Gamma.01"/>
-            <prior id="ClockPrior.c:lpw_sb29" name="distribution" x="@clockRate.c:lpw_sb29" distr="@Gamma.01"/>
-            <prior id="ClockPrior.c:lpw_sb62" name="distribution" x="@clockRate.c:lpw_sb62" distr="@Gamma.01"/>
-            <prior id="ClockPrior.c:lpw_se1364" name="distribution" x="@clockRate.c:lpw_se1364" distr="@Gamma.01"/>
-            <prior id="ClockPrior.c:lpw_se1390" name="distribution" x="@clockRate.c:lpw_se1390" distr="@Gamma.01"/>
-            <prior id="ClockPrior.c:lpw_xy1420" name="distribution" x="@clockRate.c:lpw_xy1420" distr="@Gamma.01"/>
-            <prior id="KappaPrior.s:lpw_4cl" name="distribution" x="@kappa.s:lpw_4cl">
+            <!-- prior for mutation rates is uniform Dirichlet -->
+            <prior id="KappaPrior.s:4cl" name="distribution" x="@kappa.s:4cl">
                 <LogNormal id="LogNormal.0" name="distr">
-                    <parameter id="RealParameter.020" estimate="false" name="M">1.0</parameter>
-                    <parameter id="RealParameter.021" estimate="false" name="S">1.25</parameter>
+                    <parameter id="RealParameter.02" estimate="false" name="M">1.0</parameter>
+                    <parameter id="RealParameter.03" estimate="false" name="S">1.25</parameter>
                 </LogNormal>
             </prior>
-            <prior id="KappaPrior.s:lpw_ebs" name="distribution" x="@kappa.s:lpw_ebs" distr="@LogNormal.0"/>
-            <prior id="KappaPrior.s:lpw_gi" name="distribution" x="@kappa.s:lpw_gi" distr="@LogNormal.0"/>
-            <prior id="KappaPrior.s:lpw_m002" name="distribution" x="@kappa.s:lpw_m002" distr="@LogNormal.0"/>
-            <prior id="KappaPrior.s:lpw_m7d1" name="distribution" x="@kappa.s:lpw_m7d1" distr="@LogNormal.0"/>
-            <prior id="KappaPrior.s:lpw_sb16" name="distribution" x="@kappa.s:lpw_sb16" distr="@LogNormal.0"/>
-            <prior id="KappaPrior.s:lpw_sb29" name="distribution" x="@kappa.s:lpw_sb29" distr="@LogNormal.0"/>
-            <prior id="KappaPrior.s:lpw_sb62" name="distribution" x="@kappa.s:lpw_sb62" distr="@LogNormal.0"/>
-            <prior id="KappaPrior.s:lpw_se1364" name="distribution" x="@kappa.s:lpw_se1364" distr="@LogNormal.0"/>
-            <prior id="KappaPrior.s:lpw_se1390" name="distribution" x="@kappa.s:lpw_se1390" distr="@LogNormal.0"/>
-            <prior id="KappaPrior.s:lpw_xy1420" name="distribution" x="@kappa.s:lpw_xy1420" distr="@LogNormal.0"/>
+            <prior id="KappaPrior.s:ebs" name="distribution" x="@kappa.s:ebs" distr="@LogNormal.0"/>
+            <prior id="KappaPrior.s:gi" name="distribution" x="@kappa.s:gi" distr="@LogNormal.0"/>
+            <prior id="KappaPrior.s:m002" name="distribution" x="@kappa.s:m002" distr="@LogNormal.0"/>
+            <prior id="KappaPrior.s:m7d1" name="distribution" x="@kappa.s:m7d1" distr="@LogNormal.0"/>
+            <prior id="KappaPrior.s:sb16" name="distribution" x="@kappa.s:sb16" distr="@LogNormal.0"/>
+            <prior id="KappaPrior.s:sb29" name="distribution" x="@kappa.s:sb29" distr="@LogNormal.0"/>
+            <prior id="KappaPrior.s:sb62" name="distribution" x="@kappa.s:sb62" distr="@LogNormal.0"/>
+            <prior id="KappaPrior.s:se1364" name="distribution" x="@kappa.s:se1364" distr="@LogNormal.0"/>
+            <prior id="KappaPrior.s:se1390" name="distribution" x="@kappa.s:se1390" distr="@LogNormal.0"/>
+            <prior id="KappaPrior.s:xy1420" name="distribution" x="@kappa.s:xy1420" distr="@LogNormal.0"/>
         </distribution>
         <distribution id="likelihood" spec="util.CompoundDistribution" useThreads="true">
-            <distribution id="treeLikelihood.lpw_4cl" spec="TreeLikelihood" data="@lpw_4cl" tree="@tree.t:lpw_4cl">
-                <siteModel id="SiteModel.s:lpw_4cl" spec="SiteModel">
-                    <parameter id="mutationRate.s:lpw_4cl" estimate="false" name="mutationRate">1.0</parameter>
-                    <parameter id="gammaShape.s:lpw_4cl" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:lpw_4cl" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
-                    <substModel id="hky.s:lpw_4cl" spec="HKY" kappa="@kappa.s:lpw_4cl">
-                        <frequencies id="estimatedFreqs.s:lpw_4cl" spec="Frequencies" frequencies="@freqParameter.s:lpw_4cl"/>
+            <distribution id="treeLikelihood.4cl" spec="TreeLikelihood" data="@4cl" tree="@tree.t:4cl">
+                <siteModel id="SiteModel.s:4cl" spec="SiteModel" mutationRate="@mutationRate.s:4cl">
+                    <parameter id="gammaShape.s:4cl" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:4cl" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:4cl" spec="HKY" kappa="@kappa.s:4cl">
+                        <frequencies id="estimatedFreqs.s:4cl" spec="Frequencies" frequencies="@freqParameter.s:4cl"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel id="StrictClock.c:lpw_4cl" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:lpw_4cl"/>
+                <branchRateModel id="strictClock.c:4cl" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:gene"/>
             </distribution>
-            <distribution id="treeLikelihood.lpw_ebs" spec="TreeLikelihood" data="@lpw_ebs" tree="@tree.t:lpw_ebs">
-                <siteModel id="SiteModel.s:lpw_ebs" spec="SiteModel">
-                    <parameter id="mutationRate.s:lpw_ebs" estimate="false" name="mutationRate">1.0</parameter>
-                    <parameter id="gammaShape.s:lpw_ebs" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:lpw_ebs" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
-                    <substModel id="hky.s:lpw_ebs" spec="HKY" kappa="@kappa.s:lpw_ebs">
-                        <frequencies id="estimatedFreqs.s:lpw_ebs" spec="Frequencies" frequencies="@freqParameter.s:lpw_ebs"/>
+            <distribution id="treeLikelihood.ebs" spec="TreeLikelihood" data="@ebs" tree="@tree.t:ebs">
+                <siteModel id="SiteModel.s:ebs" spec="SiteModel" mutationRate="@mutationRate.s:ebs">
+                    <parameter id="gammaShape.s:ebs" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:ebs" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:ebs" spec="HKY" kappa="@kappa.s:ebs">
+                        <frequencies id="estimatedFreqs.s:ebs" spec="Frequencies" frequencies="@freqParameter.s:ebs"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel id="StrictClock.c:lpw_ebs" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:lpw_ebs"/>
+                <branchRateModel id="strictClock.c:ebs" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:gene"/>
             </distribution>
-            <distribution id="treeLikelihood.lpw_gi" spec="TreeLikelihood" data="@lpw_gi" tree="@tree.t:lpw_gi">
-                <siteModel id="SiteModel.s:lpw_gi" spec="SiteModel">
-                    <parameter id="mutationRate.s:lpw_gi" estimate="false" name="mutationRate">1.0</parameter>
-                    <parameter id="gammaShape.s:lpw_gi" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:lpw_gi" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
-                    <substModel id="hky.s:lpw_gi" spec="HKY" kappa="@kappa.s:lpw_gi">
-                        <frequencies id="estimatedFreqs.s:lpw_gi" spec="Frequencies" frequencies="@freqParameter.s:lpw_gi"/>
+            <distribution id="treeLikelihood.gi" spec="TreeLikelihood" data="@gi" tree="@tree.t:gi">
+                <siteModel id="SiteModel.s:gi" spec="SiteModel" mutationRate="@mutationRate.s:gi">
+                    <parameter id="gammaShape.s:gi" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:gi" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:gi" spec="HKY" kappa="@kappa.s:gi">
+                        <frequencies id="estimatedFreqs.s:gi" spec="Frequencies" frequencies="@freqParameter.s:gi"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel id="StrictClock.c:lpw_gi" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:lpw_gi"/>
+                <branchRateModel id="strictClock.c:gi" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:gene"/>
             </distribution>
-            <distribution id="treeLikelihood.lpw_m002" spec="TreeLikelihood" data="@lpw_m002" tree="@tree.t:lpw_m002">
-                <siteModel id="SiteModel.s:lpw_m002" spec="SiteModel">
-                    <parameter id="mutationRate.s:lpw_m002" estimate="false" name="mutationRate">1.0</parameter>
-                    <parameter id="gammaShape.s:lpw_m002" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:lpw_m002" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
-                    <substModel id="hky.s:lpw_m002" spec="HKY" kappa="@kappa.s:lpw_m002">
-                        <frequencies id="estimatedFreqs.s:lpw_m002" spec="Frequencies" frequencies="@freqParameter.s:lpw_m002"/>
+            <distribution id="treeLikelihood.m002" spec="TreeLikelihood" data="@m002" tree="@tree.t:m002">
+                <siteModel id="SiteModel.s:m002" spec="SiteModel" mutationRate="@mutationRate.s:m002">
+                    <parameter id="gammaShape.s:m002" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:m002" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:m002" spec="HKY" kappa="@kappa.s:m002">
+                        <frequencies id="estimatedFreqs.s:m002" spec="Frequencies" frequencies="@freqParameter.s:m002"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel id="StrictClock.c:lpw_m002" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:lpw_m002"/>
+                <branchRateModel id="strictClock.c:m002" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:gene"/>
             </distribution>
-            <distribution id="treeLikelihood.lpw_m7d1" spec="TreeLikelihood" data="@lpw_m7d1" tree="@tree.t:lpw_m7d1">
-                <siteModel id="SiteModel.s:lpw_m7d1" spec="SiteModel">
-                    <parameter id="mutationRate.s:lpw_m7d1" estimate="false" name="mutationRate">1.0</parameter>
-                    <parameter id="gammaShape.s:lpw_m7d1" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:lpw_m7d1" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
-                    <substModel id="hky.s:lpw_m7d1" spec="HKY" kappa="@kappa.s:lpw_m7d1">
-                        <frequencies id="estimatedFreqs.s:lpw_m7d1" spec="Frequencies" frequencies="@freqParameter.s:lpw_m7d1"/>
+            <distribution id="treeLikelihood.m7d1" spec="TreeLikelihood" data="@m7d1" tree="@tree.t:m7d1">
+                <siteModel id="SiteModel.s:m7d1" spec="SiteModel" mutationRate="@mutationRate.s:m7d1">
+                    <parameter id="gammaShape.s:m7d1" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:m7d1" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:m7d1" spec="HKY" kappa="@kappa.s:m7d1">
+                        <frequencies id="estimatedFreqs.s:m7d1" spec="Frequencies" frequencies="@freqParameter.s:m7d1"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel id="StrictClock.c:lpw_m7d1" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:lpw_m7d1"/>
+                <branchRateModel id="strictClock.c:m7d1" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:gene"/>
             </distribution>
-            <distribution id="treeLikelihood.lpw_sb16" spec="TreeLikelihood" data="@lpw_sb16" tree="@tree.t:lpw_sb16">
-                <siteModel id="SiteModel.s:lpw_sb16" spec="SiteModel">
-                    <parameter id="mutationRate.s:lpw_sb16" estimate="false" name="mutationRate">1.0</parameter>
-                    <parameter id="gammaShape.s:lpw_sb16" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:lpw_sb16" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
-                    <substModel id="hky.s:lpw_sb16" spec="HKY" kappa="@kappa.s:lpw_sb16">
-                        <frequencies id="estimatedFreqs.s:lpw_sb16" spec="Frequencies" frequencies="@freqParameter.s:lpw_sb16"/>
+            <distribution id="treeLikelihood.sb16" spec="TreeLikelihood" data="@sb16" tree="@tree.t:sb16">
+                <siteModel id="SiteModel.s:sb16" spec="SiteModel" mutationRate="@mutationRate.s:sb16">
+                    <parameter id="gammaShape.s:sb16" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:sb16" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:sb16" spec="HKY" kappa="@kappa.s:sb16">
+                        <frequencies id="estimatedFreqs.s:sb16" spec="Frequencies" frequencies="@freqParameter.s:sb16"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel id="StrictClock.c:lpw_sb16" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:lpw_sb16"/>
+                <branchRateModel id="strictClock.c:sb16" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:gene"/>
             </distribution>
-            <distribution id="treeLikelihood.lpw_sb29" spec="TreeLikelihood" data="@lpw_sb29" tree="@tree.t:lpw_sb29">
-                <siteModel id="SiteModel.s:lpw_sb29" spec="SiteModel">
-                    <parameter id="mutationRate.s:lpw_sb29" estimate="false" name="mutationRate">1.0</parameter>
-                    <parameter id="gammaShape.s:lpw_sb29" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:lpw_sb29" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
-                    <substModel id="hky.s:lpw_sb29" spec="HKY" kappa="@kappa.s:lpw_sb29">
-                        <frequencies id="estimatedFreqs.s:lpw_sb29" spec="Frequencies" frequencies="@freqParameter.s:lpw_sb29"/>
+            <distribution id="treeLikelihood.sb29" spec="TreeLikelihood" data="@sb29" tree="@tree.t:sb29">
+                <siteModel id="SiteModel.s:sb29" spec="SiteModel" mutationRate="@mutationRate.s:sb29">
+                    <parameter id="gammaShape.s:sb29" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:sb29" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:sb29" spec="HKY" kappa="@kappa.s:sb29">
+                        <frequencies id="estimatedFreqs.s:sb29" spec="Frequencies" frequencies="@freqParameter.s:sb29"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel id="StrictClock.c:lpw_sb29" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:lpw_sb29"/>
+                <branchRateModel id="strictClock.c:sb29" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:gene"/>
             </distribution>
-            <distribution id="treeLikelihood.lpw_sb62" spec="TreeLikelihood" data="@lpw_sb62" tree="@tree.t:lpw_sb62">
-                <siteModel id="SiteModel.s:lpw_sb62" spec="SiteModel">
-                    <parameter id="mutationRate.s:lpw_sb62" estimate="false" name="mutationRate">1.0</parameter>
-                    <parameter id="gammaShape.s:lpw_sb62" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:lpw_sb62" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
-                    <substModel id="hky.s:lpw_sb62" spec="HKY" kappa="@kappa.s:lpw_sb62">
-                        <frequencies id="estimatedFreqs.s:lpw_sb62" spec="Frequencies" frequencies="@freqParameter.s:lpw_sb62"/>
+            <distribution id="treeLikelihood.sb62" spec="TreeLikelihood" data="@sb62" tree="@tree.t:sb62">
+                <siteModel id="SiteModel.s:sb62" spec="SiteModel" mutationRate="@mutationRate.s:sb62">
+                    <parameter id="gammaShape.s:sb62" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:sb62" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:sb62" spec="HKY" kappa="@kappa.s:sb62">
+                        <frequencies id="estimatedFreqs.s:sb62" spec="Frequencies" frequencies="@freqParameter.s:sb62"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel id="StrictClock.c:lpw_sb62" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:lpw_sb62"/>
+                <branchRateModel id="strictClock.c:sb62" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:gene"/>
             </distribution>
-            <distribution id="treeLikelihood.lpw_se1364" spec="TreeLikelihood" data="@lpw_se1364" tree="@tree.t:lpw_se1364">
-                <siteModel id="SiteModel.s:lpw_se1364" spec="SiteModel">
-                    <parameter id="mutationRate.s:lpw_se1364" estimate="false" name="mutationRate">1.0</parameter>
-                    <parameter id="gammaShape.s:lpw_se1364" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:lpw_se1364" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
-                    <substModel id="hky.s:lpw_se1364" spec="HKY" kappa="@kappa.s:lpw_se1364">
-                        <frequencies id="estimatedFreqs.s:lpw_se1364" spec="Frequencies" frequencies="@freqParameter.s:lpw_se1364"/>
+            <distribution id="treeLikelihood.se1364" spec="TreeLikelihood" data="@se1364" tree="@tree.t:se1364">
+                <siteModel id="SiteModel.s:se1364" spec="SiteModel" mutationRate="@mutationRate.s:se1364">
+                    <parameter id="gammaShape.s:se1364" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:se1364" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:se1364" spec="HKY" kappa="@kappa.s:se1364">
+                        <frequencies id="estimatedFreqs.s:se1364" spec="Frequencies" frequencies="@freqParameter.s:se1364"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel id="StrictClock.c:lpw_se1364" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:lpw_se1364"/>
+                <branchRateModel id="strictClock.c:se1364" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:gene"/>
             </distribution>
-            <distribution id="treeLikelihood.lpw_se1390" spec="TreeLikelihood" data="@lpw_se1390" tree="@tree.t:lpw_se1390">
-                <siteModel id="SiteModel.s:lpw_se1390" spec="SiteModel">
-                    <parameter id="mutationRate.s:lpw_se1390" estimate="false" name="mutationRate">1.0</parameter>
-                    <parameter id="gammaShape.s:lpw_se1390" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:lpw_se1390" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
-                    <substModel id="hky.s:lpw_se1390" spec="HKY" kappa="@kappa.s:lpw_se1390">
-                        <frequencies id="estimatedFreqs.s:lpw_se1390" spec="Frequencies" frequencies="@freqParameter.s:lpw_se1390"/>
+            <distribution id="treeLikelihood.se1390" spec="TreeLikelihood" data="@se1390" tree="@tree.t:se1390">
+                <siteModel id="SiteModel.s:se1390" spec="SiteModel" mutationRate="@mutationRate.s:se1390">
+                    <parameter id="gammaShape.s:se1390" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:se1390" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:se1390" spec="HKY" kappa="@kappa.s:se1390">
+                        <frequencies id="estimatedFreqs.s:se1390" spec="Frequencies" frequencies="@freqParameter.s:se1390"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel id="StrictClock.c:lpw_se1390" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:lpw_se1390"/>
+                <branchRateModel id="strictClock.c:se1390" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:gene"/>
             </distribution>
-            <distribution id="treeLikelihood.lpw_xy1420" spec="TreeLikelihood" data="@lpw_xy1420" tree="@tree.t:lpw_xy1420">
-                <siteModel id="SiteModel.s:lpw_xy1420" spec="SiteModel">
-                    <parameter id="mutationRate.s:lpw_xy1420" estimate="false" name="mutationRate">1.0</parameter>
-                    <parameter id="gammaShape.s:lpw_xy1420" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:lpw_xy1420" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
-                    <substModel id="hky.s:lpw_xy1420" spec="HKY" kappa="@kappa.s:lpw_xy1420">
-                        <frequencies id="estimatedFreqs.s:lpw_xy1420" spec="Frequencies" frequencies="@freqParameter.s:lpw_xy1420"/>
+            <distribution id="treeLikelihood.xy1420" spec="TreeLikelihood" data="@xy1420" tree="@tree.t:xy1420">
+                <siteModel id="SiteModel.s:xy1420" spec="SiteModel" mutationRate="@mutationRate.s:xy1420">
+                    <parameter id="gammaShape.s:xy1420" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:xy1420" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:xy1420" spec="HKY" kappa="@kappa.s:xy1420">
+                        <frequencies id="estimatedFreqs.s:xy1420" spec="Frequencies" frequencies="@freqParameter.s:xy1420"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel id="StrictClock.c:lpw_xy1420" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:lpw_xy1420"/>
+                <branchRateModel id="strictClock.c:xy1420" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:gene"/>
             </distribution>
         </distribution>
     </distribution>
 
-    <operator id="KappaScaler.s:lpw_4cl" spec="ScaleOperator" parameter="@kappa.s:lpw_4cl" scaleFactor="0.5" weight="0.1"/>
-    <operator id="KappaScaler.s:lpw_ebs" spec="ScaleOperator" parameter="@kappa.s:lpw_ebs" scaleFactor="0.5" weight="0.1"/>
-    <operator id="KappaScaler.s:lpw_gi" spec="ScaleOperator" parameter="@kappa.s:lpw_gi" scaleFactor="0.5" weight="0.1"/>
-    <operator id="KappaScaler.s:lpw_m002" spec="ScaleOperator" parameter="@kappa.s:lpw_m002" scaleFactor="0.5" weight="0.1"/>
-    <operator id="KappaScaler.s:lpw_m7d1" spec="ScaleOperator" parameter="@kappa.s:lpw_m7d1" scaleFactor="0.5" weight="0.1"/>
-    <operator id="KappaScaler.s:lpw_sb16" spec="ScaleOperator" parameter="@kappa.s:lpw_sb16" scaleFactor="0.5" weight="0.1"/>
-    <operator id="KappaScaler.s:lpw_sb29" spec="ScaleOperator" parameter="@kappa.s:lpw_sb29" scaleFactor="0.5" weight="0.1"/>
-    <operator id="KappaScaler.s:lpw_sb62" spec="ScaleOperator" parameter="@kappa.s:lpw_sb62" scaleFactor="0.5" weight="0.1"/>
-    <operator id="KappaScaler.s:lpw_se1364" spec="ScaleOperator" parameter="@kappa.s:lpw_se1364" scaleFactor="0.5" weight="0.1"/>
-    <operator id="KappaScaler.s:lpw_se1390" spec="ScaleOperator" parameter="@kappa.s:lpw_se1390" scaleFactor="0.5" weight="0.1"/>
-    <operator id="KappaScaler.s:lpw_xy1420" spec="ScaleOperator" parameter="@kappa.s:lpw_xy1420" scaleFactor="0.5" weight="0.1"/>
+    <operator id="KappaScaler.s:4cl" spec="ScaleOperator" parameter="@kappa.s:4cl" scaleFactor="0.5" weight="0.1"/>
+    <operator id="KappaScaler.s:ebs" spec="ScaleOperator" parameter="@kappa.s:ebs" scaleFactor="0.5" weight="0.1"/>
+    <operator id="KappaScaler.s:gi" spec="ScaleOperator" parameter="@kappa.s:gi" scaleFactor="0.5" weight="0.1"/>
+    <operator id="KappaScaler.s:m002" spec="ScaleOperator" parameter="@kappa.s:m002" scaleFactor="0.5" weight="0.1"/>
+    <operator id="KappaScaler.s:m7d1" spec="ScaleOperator" parameter="@kappa.s:m7d1" scaleFactor="0.5" weight="0.1"/>
+    <operator id="KappaScaler.s:sb16" spec="ScaleOperator" parameter="@kappa.s:sb16" scaleFactor="0.5" weight="0.1"/>
+    <operator id="KappaScaler.s:sb29" spec="ScaleOperator" parameter="@kappa.s:sb29" scaleFactor="0.5" weight="0.1"/>
+    <operator id="KappaScaler.s:sb62" spec="ScaleOperator" parameter="@kappa.s:sb62" scaleFactor="0.5" weight="0.1"/>
+    <operator id="KappaScaler.s:se1364" spec="ScaleOperator" parameter="@kappa.s:se1364" scaleFactor="0.5" weight="0.1"/>
+    <operator id="KappaScaler.s:se1390" spec="ScaleOperator" parameter="@kappa.s:se1390" scaleFactor="0.5" weight="0.1"/>
+    <operator id="KappaScaler.s:xy1420" spec="ScaleOperator" parameter="@kappa.s:xy1420" scaleFactor="0.5" weight="0.1"/>
 
-    <operator id="FrequenciesExchanger.s:lpw_4cl" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
-        <parameter idref="freqParameter.s:lpw_4cl"/>
+    <operator id="FrequenciesExchanger.s:4cl" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
+        <parameter idref="freqParameter.s:4cl"/>
     </operator>
-    <operator id="FrequenciesExchanger.s:lpw_ebs" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
-        <parameter idref="freqParameter.s:lpw_ebs"/>
+    <operator id="FrequenciesExchanger.s:ebs" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
+        <parameter idref="freqParameter.s:ebs"/>
     </operator>
-    <operator id="FrequenciesExchanger.s:lpw_gi" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
-        <parameter idref="freqParameter.s:lpw_gi"/>
+    <operator id="FrequenciesExchanger.s:gi" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
+        <parameter idref="freqParameter.s:gi"/>
     </operator>
-    <operator id="FrequenciesExchanger.s:lpw_m002" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
-        <parameter idref="freqParameter.s:lpw_m002"/>
+    <operator id="FrequenciesExchanger.s:m002" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
+        <parameter idref="freqParameter.s:m002"/>
     </operator>
-    <operator id="FrequenciesExchanger.s:lpw_m7d1" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
-        <parameter idref="freqParameter.s:lpw_m7d1"/>
+    <operator id="FrequenciesExchanger.s:m7d1" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
+        <parameter idref="freqParameter.s:m7d1"/>
     </operator>
-    <operator id="FrequenciesExchanger.s:lpw_sb16" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
-        <parameter idref="freqParameter.s:lpw_sb16"/>
+    <operator id="FrequenciesExchanger.s:sb16" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
+        <parameter idref="freqParameter.s:sb16"/>
     </operator>
-    <operator id="FrequenciesExchanger.s:lpw_sb29" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
-        <parameter idref="freqParameter.s:lpw_sb29"/>
+    <operator id="FrequenciesExchanger.s:sb29" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
+        <parameter idref="freqParameter.s:sb29"/>
     </operator>
-    <operator id="FrequenciesExchanger.s:lpw_sb62" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
-        <parameter idref="freqParameter.s:lpw_sb62"/>
+    <operator id="FrequenciesExchanger.s:sb62" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
+        <parameter idref="freqParameter.s:sb62"/>
     </operator>
-    <operator id="FrequenciesExchanger.s:lpw_se1364" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
-        <parameter idref="freqParameter.s:lpw_se1364"/>
+    <operator id="FrequenciesExchanger.s:se1364" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
+        <parameter idref="freqParameter.s:se1364"/>
     </operator>
-    <operator id="FrequenciesExchanger.s:lpw_se1390" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
-        <parameter idref="freqParameter.s:lpw_se1390"/>
+    <operator id="FrequenciesExchanger.s:se1390" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
+        <parameter idref="freqParameter.s:se1390"/>
     </operator>
-    <operator id="FrequenciesExchanger.s:lpw_xy1420" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
-        <parameter idref="freqParameter.s:lpw_xy1420"/>
-    </operator>
-
-    <!-- operator id="StrictClockRateScaler.c:lpw_4cl" spec="ScaleOperator" parameter="@clockRate.c:lpw_4cl" scaleFactor="0.75" weight="3.0"/ -->
-    <operator id="scaleAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="3.0">
-        <operator id="scale:lpw_4cl" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_4cl" weight="0.0"/>
-    </operator>
-    <operator id="scaleRootAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="3.0">
-        <operator id="scaleRoot:lpw_4cl" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_4cl" weight="0.0"/>
-    </operator>
-    <operator id="uniformAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="30.0">
-        <operator id="uniform:lpw_4cl" spec="Uniform" tree="@tree.t:lpw_4cl" weight="0.0"/>
-    </operator>
-    <operator id="subSlideAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="15.0">
-        <operator id="subSlide:lpw_4cl" spec="SubtreeSlide" tree="@tree.t:lpw_4cl" weight="0.0"/>
-    </operator>
-    <operator id="narrowAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="15.0">
-        <operator id="narrow:lpw_4cl" spec="Exchange" tree="@tree.t:lpw_4cl" weight="0.0"/>
-    </operator>
-    <operator id="wideAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="3.0">
-        <operator id="wide:lpw_4cl" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_4cl" weight="0.0"/>
-    </operator>
-    <operator id="WBAndEmbed:lpw_4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_4cl" weight="3.0">
-        <operator id="WilsonBalding:lpw_4cl" spec="WilsonBalding" tree="@tree.t:lpw_4cl" weight="0.0"/>
+    <operator id="FrequenciesExchanger.s:xy1420" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
+        <parameter idref="freqParameter.s:xy1420"/>
     </operator>
 
-    <operator id="StrictClockRateScaler.c:lpw_ebs" spec="ScaleOperator" parameter="@clockRate.c:lpw_ebs" scaleFactor="0.75" weight="3.0"/>
-    <operator id="scaleAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="3.0">
-        <operator id="scale:lpw_ebs" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_ebs" weight="0.0"/>
-    </operator>
-    <operator id="scaleRootAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="3.0">
-        <operator id="scaleRoot:lpw_ebs" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_ebs" weight="0.0"/>
-    </operator>
-    <operator id="uniformAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="30.0">
-        <operator id="uniform:lpw_ebs" spec="Uniform" tree="@tree.t:lpw_ebs" weight="0.0"/>
-    </operator>
-    <operator id="subSlideAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="15.0">
-        <operator id="subSlide:lpw_ebs" spec="SubtreeSlide" tree="@tree.t:lpw_ebs" weight="0.0"/>
-    </operator>
-    <operator id="narrowAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="15.0">
-        <operator id="narrow:lpw_ebs" spec="Exchange" tree="@tree.t:lpw_ebs" weight="0.0"/>
-    </operator>
-    <operator id="wideAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="3.0">
-        <operator id="wide:lpw_ebs" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_ebs" weight="0.0"/>
-    </operator>
-    <operator id="WBAndEmbed:lpw_ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_ebs" weight="3.0">
-        <operator id="WilsonBalding:lpw_ebs" spec="WilsonBalding" tree="@tree.t:lpw_ebs" weight="0.0"/>
+    <operator id="FixMeanMutationRatesOperator" spec="DeltaExchangeOperator" delta="0.75" weight="3.0">
+        <parameter idref="mutationRate.s:4cl"/>
+        <parameter idref="mutationRate.s:ebs"/>
+        <parameter idref="mutationRate.s:gi"/>
+        <parameter idref="mutationRate.s:m002"/>
+        <parameter idref="mutationRate.s:m7d1"/>
+        <parameter idref="mutationRate.s:sb16"/>
+        <parameter idref="mutationRate.s:sb29"/>
+        <parameter idref="mutationRate.s:sb62"/>
+        <parameter idref="mutationRate.s:se1364"/>
+        <parameter idref="mutationRate.s:se1390"/>
+        <parameter idref="mutationRate.s:xy1420"/>
+        <weightvector id="weightparameter" spec="parameter.IntegerParameter" dimension="11" estimate="false">598 569 575 380 490 603 339 195 302 466 175</weightvector>
     </operator>
 
-    <operator id="StrictClockRateScaler.c:lpw_gi" spec="ScaleOperator" parameter="@clockRate.c:lpw_gi" scaleFactor="0.75" weight="3.0"/>
-    <operator id="scaleAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="3.0">
-        <operator id="scale:lpw_gi" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_gi" weight="0.0"/>
-    </operator>
-    <operator id="scaleRootAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="3.0">
-        <operator id="scaleRoot:lpw_gi" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_gi" weight="0.0"/>
-    </operator>
-    <operator id="uniformAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="30.0">
-        <operator id="uniform:lpw_gi" spec="Uniform" tree="@tree.t:lpw_gi" weight="0.0"/>
-    </operator>
-    <operator id="subSlideAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="15.0">
-        <operator id="subSlide:lpw_gi" spec="SubtreeSlide" tree="@tree.t:lpw_gi" weight="0.0"/>
-    </operator>
-    <operator id="narrowAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="15.0">
-        <operator id="narrow:lpw_gi" spec="Exchange" tree="@tree.t:lpw_gi" weight="0.0"/>
-    </operator>
-    <operator id="wideAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="3.0">
-        <operator id="wide:lpw_gi" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_gi" weight="0.0"/>
-    </operator>
-    <operator id="WBAndEmbed:lpw_gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_gi" weight="3.0">
-        <operator id="WilsonBalding:lpw_gi" spec="WilsonBalding" tree="@tree.t:lpw_gi" weight="0.0"/>
-    </operator>
-
-    <operator id="StrictClockRateScaler.c:lpw_m002" spec="ScaleOperator" parameter="@clockRate.c:lpw_m002" scaleFactor="0.75" weight="3.0"/>
-    <operator id="scaleAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="3.0">
-        <operator id="scale:lpw_m002" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_m002" weight="0.0"/>
-    </operator>
-    <operator id="scaleRootAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="3.0">
-        <operator id="scaleRoot:lpw_m002" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_m002" weight="0.0"/>
-    </operator>
-    <operator id="uniformAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="30.0">
-        <operator id="uniform:lpw_m002" spec="Uniform" tree="@tree.t:lpw_m002" weight="0.0"/>
-    </operator>
-    <operator id="subSlideAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="15.0">
-        <operator id="subSlide:lpw_m002" spec="SubtreeSlide" tree="@tree.t:lpw_m002" weight="0.0"/>
-    </operator>
-    <operator id="narrowAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="15.0">
-        <operator id="narrow:lpw_m002" spec="Exchange" tree="@tree.t:lpw_m002" weight="0.0"/>
-    </operator>
-    <operator id="wideAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="3.0">
-        <operator id="wide:lpw_m002" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_m002" weight="0.0"/>
-    </operator>
-    <operator id="WBAndEmbed:lpw_m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m002" weight="3.0">
-        <operator id="WilsonBalding:lpw_m002" spec="WilsonBalding" tree="@tree.t:lpw_m002" weight="0.0"/>
-    </operator>
-
-    <operator id="StrictClockRateScaler.c:lpw_m7d1" spec="ScaleOperator" parameter="@clockRate.c:lpw_m7d1" scaleFactor="0.75" weight="3.0"/>
-    <operator id="scaleAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="3.0">
-        <operator id="scale:lpw_m7d1" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_m7d1" weight="0.0"/>
-    </operator>
-    <operator id="scaleRootAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="3.0">
-        <operator id="scaleRoot:lpw_m7d1" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_m7d1" weight="0.0"/>
-    </operator>
-    <operator id="uniformAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="30.0">
-        <operator id="uniform:lpw_m7d1" spec="Uniform" tree="@tree.t:lpw_m7d1" weight="0.0"/>
-    </operator>
-    <operator id="subSlideAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="15.0">
-        <operator id="subSlide:lpw_m7d1" spec="SubtreeSlide" tree="@tree.t:lpw_m7d1" weight="0.0"/>
-    </operator>
-    <operator id="narrowAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="15.0">
-        <operator id="narrow:lpw_m7d1" spec="Exchange" tree="@tree.t:lpw_m7d1" weight="0.0"/>
-    </operator>
-    <operator id="wideAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="3.0">
-        <operator id="wide:lpw_m7d1" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_m7d1" weight="0.0"/>
-    </operator>
-    <operator id="WBAndEmbed:lpw_m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_m7d1" weight="3.0">
-        <operator id="WilsonBalding:lpw_m7d1" spec="WilsonBalding" tree="@tree.t:lpw_m7d1" weight="0.0"/>
-    </operator>
-
-    <operator id="StrictClockRateScaler.c:lpw_sb29" spec="ScaleOperator" parameter="@clockRate.c:lpw_sb29" scaleFactor="0.75" weight="3.0"/>
-    <operator id="scaleAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="3.0">
-        <operator id="scale:lpw_sb29" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_sb29" weight="0.0"/>
-    </operator>
-    <operator id="scaleRootAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="3.0">
-        <operator id="scaleRoot:lpw_sb29" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_sb29" weight="0.0"/>
-    </operator>
-    <operator id="uniformAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="30.0">
-        <operator id="uniform:lpw_sb29" spec="Uniform" tree="@tree.t:lpw_sb29" weight="0.0"/>
-    </operator>
-    <operator id="subSlideAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="15.0">
-        <operator id="subSlide:lpw_sb29" spec="SubtreeSlide" tree="@tree.t:lpw_sb29" weight="0.0"/>
-    </operator>
-    <operator id="narrowAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="15.0">
-        <operator id="narrow:lpw_sb29" spec="Exchange" tree="@tree.t:lpw_sb29" weight="0.0"/>
-    </operator>
-    <operator id="wideAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="3.0">
-        <operator id="wide:lpw_sb29" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_sb29" weight="0.0"/>
-    </operator>
-    <operator id="WBAndEmbed:lpw_sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb29" weight="3.0">
-        <operator id="WilsonBalding:lpw_sb29" spec="WilsonBalding" tree="@tree.t:lpw_sb29" weight="0.0"/>
-    </operator>
-
-    <operator id="StrictClockRateScaler.c:lpw_sb16" spec="ScaleOperator" parameter="@clockRate.c:lpw_sb16" scaleFactor="0.75" weight="3.0"/>
-    <operator id="scaleAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="3.0">
-        <operator id="scale:lpw_sb16" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_sb16" weight="0.0"/>
-    </operator>
-    <operator id="scaleRootAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="3.0">
-        <operator id="scaleRoot:lpw_sb16" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_sb16" weight="0.0"/>
-    </operator>
-    <operator id="uniformAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="30.0">
-        <operator id="uniform:lpw_sb16" spec="Uniform" tree="@tree.t:lpw_sb16" weight="0.0"/>
-    </operator>
-    <operator id="subSlideAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="15.0">
-        <operator id="subSlide:lpw_sb16" spec="SubtreeSlide" tree="@tree.t:lpw_sb16" weight="0.0"/>
-    </operator>
-    <operator id="narrowAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="15.0">
-        <operator id="narrow:lpw_sb16" spec="Exchange" tree="@tree.t:lpw_sb16" weight="0.0"/>
-    </operator>
-    <operator id="wideAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="3.0">
-        <operator id="wide:lpw_sb16" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_sb16" weight="0.0"/>
-    </operator>
-    <operator id="WBAndEmbed:lpw_sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb16" weight="3.0">
-        <operator id="WilsonBalding:lpw_sb16" spec="WilsonBalding" tree="@tree.t:lpw_sb16" weight="0.0"/>
-    </operator>
-
-    <operator id="StrictClockRateScaler.c:lpw_sb62" spec="ScaleOperator" parameter="@clockRate.c:lpw_sb62" scaleFactor="0.75" weight="3.0"/>
-    <operator id="scaleAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="3.0">
-        <operator id="scale:lpw_sb62" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_sb62" weight="0.0"/>
-    </operator>
-    <operator id="scaleRootAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="3.0">
-        <operator id="scaleRoot:lpw_sb62" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_sb62" weight="0.0"/>
-    </operator>
-    <operator id="uniformAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="30.0">
-        <operator id="uniform:lpw_sb62" spec="Uniform" tree="@tree.t:lpw_sb62" weight="0.0"/>
-    </operator>
-    <operator id="subSlideAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="15.0">
-        <operator id="subSlide:lpw_sb62" spec="SubtreeSlide" tree="@tree.t:lpw_sb62" weight="0.0"/>
-    </operator>
-    <operator id="narrowAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="15.0">
-        <operator id="narrow:lpw_sb62" spec="Exchange" tree="@tree.t:lpw_sb62" weight="0.0"/>
-    </operator>
-    <operator id="wideAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="3.0">
-        <operator id="wide:lpw_sb62" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_sb62" weight="0.0"/>
-    </operator>
-    <operator id="WBAndEmbed:lpw_sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_sb62" weight="3.0">
-        <operator id="WilsonBalding:lpw_sb62" spec="WilsonBalding" tree="@tree.t:lpw_sb62" weight="0.0"/>
-    </operator>
-
-    <operator id="StrictClockRateScaler.c:lpw_se1390" spec="ScaleOperator" parameter="@clockRate.c:lpw_se1390" scaleFactor="0.75" weight="3.0"/>
-    <operator id="scaleAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="3.0">
-        <operator id="scale:lpw_se1390" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_se1390" weight="0.0"/>
-    </operator>
-    <operator id="scaleRootAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="3.0">
-        <operator id="scaleRoot:lpw_se1390" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_se1390" weight="0.0"/>
-    </operator>
-    <operator id="uniformAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="30.0">
-        <operator id="uniform:lpw_se1390" spec="Uniform" tree="@tree.t:lpw_se1390" weight="0.0"/>
-    </operator>
-    <operator id="subSlideAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="15.0">
-        <operator id="subSlide:lpw_se1390" spec="SubtreeSlide" tree="@tree.t:lpw_se1390" weight="0.0"/>
-    </operator>
-    <operator id="narrowAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="15.0">
-        <operator id="narrow:lpw_se1390" spec="Exchange" tree="@tree.t:lpw_se1390" weight="0.0"/>
-    </operator>
-    <operator id="wideAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="3.0">
-        <operator id="wide:lpw_se1390" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_se1390" weight="0.0"/>
-    </operator>
-    <operator id="WBAndEmbed:lpw_se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1390" weight="3.0">
-        <operator id="WilsonBalding:lpw_se1390" spec="WilsonBalding" tree="@tree.t:lpw_se1390" weight="0.0"/>
-    </operator>
-
-    <operator id="StrictClockRateScaler.c:lpw_se1364" spec="ScaleOperator" parameter="@clockRate.c:lpw_se1364" scaleFactor="0.75" weight="3.0"/>
-    <operator id="scaleAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="3.0">
-        <operator id="scale:lpw_se1364" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_se1364" weight="0.0"/>
-    </operator>
-    <operator id="scaleRootAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="3.0">
-        <operator id="scaleRoot:lpw_se1364" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_se1364" weight="0.0"/>
-    </operator>
-    <operator id="uniformAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="30.0">
-        <operator id="uniform:lpw_se1364" spec="Uniform" tree="@tree.t:lpw_se1364" weight="0.0"/>
-    </operator>
-    <operator id="subSlideAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="15.0">
-        <operator id="subSlide:lpw_se1364" spec="SubtreeSlide" tree="@tree.t:lpw_se1364" weight="0.0"/>
-    </operator>
-    <operator id="narrowAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="15.0">
-        <operator id="narrow:lpw_se1364" spec="Exchange" tree="@tree.t:lpw_se1364" weight="0.0"/>
-    </operator>
-    <operator id="wideAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="3.0">
-        <operator id="wide:lpw_se1364" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_se1364" weight="0.0"/>
-    </operator>
-    <operator id="WBAndEmbed:lpw_se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_se1364" weight="3.0">
-        <operator id="WilsonBalding:lpw_se1364" spec="WilsonBalding" tree="@tree.t:lpw_se1364" weight="0.0"/>
-    </operator>
-
-    <operator id="StrictClockRateScaler.c:lpw_xy1420" spec="ScaleOperator" parameter="@clockRate.c:lpw_xy1420" scaleFactor="0.75" weight="3.0"/>
-    <operator id="scaleAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="3.0">
-        <operator id="scale:lpw_xy1420" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:lpw_xy1420" weight="0.0"/>
-    </operator>
-    <operator id="scaleRootAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="3.0">
-        <operator id="scaleRoot:lpw_xy1420" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:lpw_xy1420" weight="0.0"/>
-    </operator>
-    <operator id="uniformAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="30.0">
-        <operator id="uniform:lpw_xy1420" spec="Uniform" tree="@tree.t:lpw_xy1420" weight="0.0"/>
-    </operator>
-    <operator id="subSlideAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="15.0">
-        <operator id="subSlide:lpw_xy1420" spec="SubtreeSlide" tree="@tree.t:lpw_xy1420" weight="0.0"/>
-    </operator>
-    <operator id="narrowAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="15.0">
-        <operator id="narrow:lpw_xy1420" spec="Exchange" tree="@tree.t:lpw_xy1420" weight="0.0"/>
-    </operator>
-    <operator id="wideAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="3.0">
-        <operator id="wide:lpw_xy1420" spec="Exchange" isNarrow="false" tree="@tree.t:lpw_xy1420" weight="0.0"/>
-    </operator>
-    <operator id="WBAndEmbed:lpw_xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:lpw_xy1420" weight="3.0">
-        <operator id="WilsonBalding:lpw_xy1420" spec="WilsonBalding" tree="@tree.t:lpw_xy1420" weight="0.0"/>
-    </operator>
-
-    <operator id="allClockTreeUpDownAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="10.0">
-        <operator id="allClockTreeUpDown" spec="UpDownOperator" scaleFactor="0.75" weight="0.0">
-            <up idref="clockRate.c:lpw_ebs"/>
-            <up idref="clockRate.c:lpw_gi"/>
-            <up idref="clockRate.c:lpw_m002"/>
-            <up idref="clockRate.c:lpw_m7d1"/>
-            <up idref="clockRate.c:lpw_sb16"/>
-            <up idref="clockRate.c:lpw_sb29"/>
-            <up idref="clockRate.c:lpw_sb62"/>
-            <up idref="clockRate.c:lpw_se1390"/>
-            <up idref="clockRate.c:lpw_se1364"/>
-            <up idref="clockRate.c:lpw_xy1420"/>
-            <down idref="tree.t:lpw_4cl"/>
-            <down idref="tree.t:lpw_ebs"/>
-            <down idref="tree.t:lpw_gi"/>
-            <down idref="tree.t:lpw_m002"/>
-            <down idref="tree.t:lpw_m7d1"/>
-            <down idref="tree.t:lpw_sb16"/>
-            <down idref="tree.t:lpw_sb29"/>
-            <down idref="tree.t:lpw_sb62"/>
-            <down idref="tree.t:lpw_se1390"/>
-            <down idref="tree.t:lpw_se1364"/>
-            <down idref="tree.t:lpw_xy1420"/>
+    <!--
+    <operator id="strictClockRateScaler" spec="ScaleOperator" parameter="@clockRate.c:gene" scaleFactor="0.75" weight="5.0"/>
+    <operator id="allClockTreeUpDownAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="5.0">
+        <operator id="allClockTreeUpDown" spec="UpDownOperator" scaleFactor="0.8" weight="0.0">
+            <up idref="clockRate.c:gene"/>
+            <down idref="tree.t:4cl"/>
+            <down idref="tree.t:ebs"/>
+            <down idref="tree.t:gi"/>
+            <down idref="tree.t:m002"/>
+            <down idref="tree.t:m7d1"/>
+            <down idref="tree.t:sb16"/>
+            <down idref="tree.t:sb29"/>
+            <down idref="tree.t:sb62"/>
+            <down idref="tree.t:se1390"/>
+            <down idref="tree.t:se1364"/>
+            <down idref="tree.t:xy1420"/>
         </operator>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_4cl"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_ebs"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_gi"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_m002"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_m7d1"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb16"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb29"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb62"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1364"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1390"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_xy1420"/>
+        <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
+        <rebuildEmbedding idref="rebuildEmbedding:ebs"/>
+        <rebuildEmbedding idref="rebuildEmbedding:gi"/>
+        <rebuildEmbedding idref="rebuildEmbedding:m002"/>
+        <rebuildEmbedding idref="rebuildEmbedding:m7d1"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb16"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb29"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb62"/>
+        <rebuildEmbedding idref="rebuildEmbedding:se1364"/>
+        <rebuildEmbedding idref="rebuildEmbedding:se1390"/>
+        <rebuildEmbedding idref="rebuildEmbedding:xy1420"/>
+    </operator>
+    -->
+
+    <operator id="scaleAndEmbed:4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:4cl" weight="3.0">
+        <operator id="scale:4cl" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:4cl" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:4cl" weight="3.0">
+        <operator id="scaleRoot:4cl" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:4cl" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:4cl" weight="30.0">
+        <operator id="uniform:4cl" spec="Uniform" tree="@tree.t:4cl" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:4cl" weight="15.0">
+        <operator id="subSlide:4cl" spec="SubtreeSlide" tree="@tree.t:4cl" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:4cl" weight="15.0">
+        <operator id="narrow:4cl" spec="Exchange" tree="@tree.t:4cl" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:4cl" weight="3.0">
+        <operator id="wide:4cl" spec="Exchange" isNarrow="false" tree="@tree.t:4cl" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:4cl" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:4cl" weight="3.0">
+        <operator id="WilsonBalding:4cl" spec="WilsonBalding" tree="@tree.t:4cl" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleAndEmbed:ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:ebs" weight="3.0">
+        <operator id="scale:ebs" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:ebs" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:ebs" weight="3.0">
+        <operator id="scaleRoot:ebs" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:ebs" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:ebs" weight="30.0">
+        <operator id="uniform:ebs" spec="Uniform" tree="@tree.t:ebs" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:ebs" weight="15.0">
+        <operator id="subSlide:ebs" spec="SubtreeSlide" tree="@tree.t:ebs" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:ebs" weight="15.0">
+        <operator id="narrow:ebs" spec="Exchange" tree="@tree.t:ebs" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:ebs" weight="3.0">
+        <operator id="wide:ebs" spec="Exchange" isNarrow="false" tree="@tree.t:ebs" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:ebs" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:ebs" weight="3.0">
+        <operator id="WilsonBalding:ebs" spec="WilsonBalding" tree="@tree.t:ebs" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleAndEmbed:gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gi" weight="3.0">
+        <operator id="scale:gi" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:gi" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gi" weight="3.0">
+        <operator id="scaleRoot:gi" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:gi" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gi" weight="30.0">
+        <operator id="uniform:gi" spec="Uniform" tree="@tree.t:gi" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gi" weight="15.0">
+        <operator id="subSlide:gi" spec="SubtreeSlide" tree="@tree.t:gi" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gi" weight="15.0">
+        <operator id="narrow:gi" spec="Exchange" tree="@tree.t:gi" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gi" weight="3.0">
+        <operator id="wide:gi" spec="Exchange" isNarrow="false" tree="@tree.t:gi" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:gi" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gi" weight="3.0">
+        <operator id="WilsonBalding:gi" spec="WilsonBalding" tree="@tree.t:gi" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleAndEmbed:m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:m002" weight="3.0">
+        <operator id="scale:m002" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:m002" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:m002" weight="3.0">
+        <operator id="scaleRoot:m002" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:m002" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:m002" weight="30.0">
+        <operator id="uniform:m002" spec="Uniform" tree="@tree.t:m002" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:m002" weight="15.0">
+        <operator id="subSlide:m002" spec="SubtreeSlide" tree="@tree.t:m002" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:m002" weight="15.0">
+        <operator id="narrow:m002" spec="Exchange" tree="@tree.t:m002" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:m002" weight="3.0">
+        <operator id="wide:m002" spec="Exchange" isNarrow="false" tree="@tree.t:m002" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:m002" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:m002" weight="3.0">
+        <operator id="WilsonBalding:m002" spec="WilsonBalding" tree="@tree.t:m002" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleAndEmbed:m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:m7d1" weight="3.0">
+        <operator id="scale:m7d1" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:m7d1" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:m7d1" weight="3.0">
+        <operator id="scaleRoot:m7d1" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:m7d1" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:m7d1" weight="30.0">
+        <operator id="uniform:m7d1" spec="Uniform" tree="@tree.t:m7d1" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:m7d1" weight="15.0">
+        <operator id="subSlide:m7d1" spec="SubtreeSlide" tree="@tree.t:m7d1" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:m7d1" weight="15.0">
+        <operator id="narrow:m7d1" spec="Exchange" tree="@tree.t:m7d1" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:m7d1" weight="3.0">
+        <operator id="wide:m7d1" spec="Exchange" isNarrow="false" tree="@tree.t:m7d1" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:m7d1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:m7d1" weight="3.0">
+        <operator id="WilsonBalding:m7d1" spec="WilsonBalding" tree="@tree.t:m7d1" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleAndEmbed:sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb29" weight="3.0">
+        <operator id="scale:sb29" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:sb29" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb29" weight="3.0">
+        <operator id="scaleRoot:sb29" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:sb29" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb29" weight="30.0">
+        <operator id="uniform:sb29" spec="Uniform" tree="@tree.t:sb29" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb29" weight="15.0">
+        <operator id="subSlide:sb29" spec="SubtreeSlide" tree="@tree.t:sb29" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb29" weight="15.0">
+        <operator id="narrow:sb29" spec="Exchange" tree="@tree.t:sb29" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb29" weight="3.0">
+        <operator id="wide:sb29" spec="Exchange" isNarrow="false" tree="@tree.t:sb29" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:sb29" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb29" weight="3.0">
+        <operator id="WilsonBalding:sb29" spec="WilsonBalding" tree="@tree.t:sb29" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleAndEmbed:sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb16" weight="3.0">
+        <operator id="scale:sb16" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:sb16" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb16" weight="3.0">
+        <operator id="scaleRoot:sb16" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:sb16" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb16" weight="30.0">
+        <operator id="uniform:sb16" spec="Uniform" tree="@tree.t:sb16" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb16" weight="15.0">
+        <operator id="subSlide:sb16" spec="SubtreeSlide" tree="@tree.t:sb16" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb16" weight="15.0">
+        <operator id="narrow:sb16" spec="Exchange" tree="@tree.t:sb16" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb16" weight="3.0">
+        <operator id="wide:sb16" spec="Exchange" isNarrow="false" tree="@tree.t:sb16" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:sb16" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb16" weight="3.0">
+        <operator id="WilsonBalding:sb16" spec="WilsonBalding" tree="@tree.t:sb16" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleAndEmbed:sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb62" weight="3.0">
+        <operator id="scale:sb62" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:sb62" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb62" weight="3.0">
+        <operator id="scaleRoot:sb62" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:sb62" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb62" weight="30.0">
+        <operator id="uniform:sb62" spec="Uniform" tree="@tree.t:sb62" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb62" weight="15.0">
+        <operator id="subSlide:sb62" spec="SubtreeSlide" tree="@tree.t:sb62" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb62" weight="15.0">
+        <operator id="narrow:sb62" spec="Exchange" tree="@tree.t:sb62" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb62" weight="3.0">
+        <operator id="wide:sb62" spec="Exchange" isNarrow="false" tree="@tree.t:sb62" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:sb62" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:sb62" weight="3.0">
+        <operator id="WilsonBalding:sb62" spec="WilsonBalding" tree="@tree.t:sb62" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleAndEmbed:se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:se1390" weight="3.0">
+        <operator id="scale:se1390" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:se1390" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:se1390" weight="3.0">
+        <operator id="scaleRoot:se1390" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:se1390" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:se1390" weight="30.0">
+        <operator id="uniform:se1390" spec="Uniform" tree="@tree.t:se1390" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:se1390" weight="15.0">
+        <operator id="subSlide:se1390" spec="SubtreeSlide" tree="@tree.t:se1390" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:se1390" weight="15.0">
+        <operator id="narrow:se1390" spec="Exchange" tree="@tree.t:se1390" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:se1390" weight="3.0">
+        <operator id="wide:se1390" spec="Exchange" isNarrow="false" tree="@tree.t:se1390" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:se1390" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:se1390" weight="3.0">
+        <operator id="WilsonBalding:se1390" spec="WilsonBalding" tree="@tree.t:se1390" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleAndEmbed:se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:se1364" weight="3.0">
+        <operator id="scale:se1364" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:se1364" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:se1364" weight="3.0">
+        <operator id="scaleRoot:se1364" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:se1364" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:se1364" weight="30.0">
+        <operator id="uniform:se1364" spec="Uniform" tree="@tree.t:se1364" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:se1364" weight="15.0">
+        <operator id="subSlide:se1364" spec="SubtreeSlide" tree="@tree.t:se1364" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:se1364" weight="15.0">
+        <operator id="narrow:se1364" spec="Exchange" tree="@tree.t:se1364" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:se1364" weight="3.0">
+        <operator id="wide:se1364" spec="Exchange" isNarrow="false" tree="@tree.t:se1364" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:se1364" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:se1364" weight="3.0">
+        <operator id="WilsonBalding:se1364" spec="WilsonBalding" tree="@tree.t:se1364" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleAndEmbed:xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:xy1420" weight="3.0">
+        <operator id="scale:xy1420" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:xy1420" weight="0.0"/>
+    </operator>
+    <operator id="scaleRootAndEmbed:xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:xy1420" weight="3.0">
+        <operator id="scaleRoot:xy1420" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:xy1420" weight="0.0"/>
+    </operator>
+    <operator id="uniformAndEmbed:xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:xy1420" weight="30.0">
+        <operator id="uniform:xy1420" spec="Uniform" tree="@tree.t:xy1420" weight="0.0"/>
+    </operator>
+    <operator id="subSlideAndEmbed:xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:xy1420" weight="15.0">
+        <operator id="subSlide:xy1420" spec="SubtreeSlide" tree="@tree.t:xy1420" weight="0.0"/>
+    </operator>
+    <operator id="narrowAndEmbed:xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:xy1420" weight="15.0">
+        <operator id="narrow:xy1420" spec="Exchange" tree="@tree.t:xy1420" weight="0.0"/>
+    </operator>
+    <operator id="wideAndEmbed:xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:xy1420" weight="3.0">
+        <operator id="wide:xy1420" spec="Exchange" isNarrow="false" tree="@tree.t:xy1420" weight="0.0"/>
+    </operator>
+    <operator id="WBAndEmbed:xy1420" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:xy1420" weight="3.0">
+        <operator id="WilsonBalding:xy1420" spec="WilsonBalding" tree="@tree.t:xy1420" weight="0.0"/>
     </operator>
 
     <operator id="divrRateScaler" spec="ScaleOperator" parameter="@netDivRate:species" scaleFactor="0.75" weight="5.0"/>
@@ -3153,93 +3127,93 @@ name="alignment">
     <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="20.0"/>
     <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="10.0"/>
 
-    <operator id="speciesOriginMultiplier" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="20.0"/>
+    <operator id="speciesOriginMultiplier" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="10.0"/>
     <operator id="speciesNodeUniformAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="200.0">
         <operator id="nodeUniform" spec="speciesnetwork.operators.NodeUniform" speciesNetwork="@network:species" weight="0.0"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_4cl"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_ebs"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_gi"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_m002"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_m7d1"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb16"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb29"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb62"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1364"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1390"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_xy1420"/>
+        <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
+        <rebuildEmbedding idref="rebuildEmbedding:ebs"/>
+        <rebuildEmbedding idref="rebuildEmbedding:gi"/>
+        <rebuildEmbedding idref="rebuildEmbedding:m002"/>
+        <rebuildEmbedding idref="rebuildEmbedding:m7d1"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb16"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb29"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb62"/>
+        <rebuildEmbedding idref="rebuildEmbedding:se1364"/>
+        <rebuildEmbedding idref="rebuildEmbedding:se1390"/>
+        <rebuildEmbedding idref="rebuildEmbedding:xy1420"/>
     </operator>
     <operator id="speciesNodeSliderAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
-        <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.0005" weight="0.0"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_4cl"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_ebs"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_gi"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_m002"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_m7d1"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb16"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb29"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb62"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1364"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1390"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_xy1420"/>
+        <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.001" weight="0.0"/>
+        <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
+        <rebuildEmbedding idref="rebuildEmbedding:ebs"/>
+        <rebuildEmbedding idref="rebuildEmbedding:gi"/>
+        <rebuildEmbedding idref="rebuildEmbedding:m002"/>
+        <rebuildEmbedding idref="rebuildEmbedding:m7d1"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb16"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb29"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb62"/>
+        <rebuildEmbedding idref="rebuildEmbedding:se1364"/>
+        <rebuildEmbedding idref="rebuildEmbedding:se1390"/>
+        <rebuildEmbedding idref="rebuildEmbedding:xy1420"/>
     </operator>
 
     <!-- 
     <operator id="speciesEdgeRelocateWAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="200.0">
         <operator id="edgeRelocatorW" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_4cl"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_ebs"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_gi"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_m002"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_m7d1"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb16"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb29"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb62"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1364"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1390"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_xy1420"/>
+        <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
+        <rebuildEmbedding idref="rebuildEmbedding:ebs"/>
+        <rebuildEmbedding idref="rebuildEmbedding:gi"/>
+        <rebuildEmbedding idref="rebuildEmbedding:m002"/>
+        <rebuildEmbedding idref="rebuildEmbedding:m7d1"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb16"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb29"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb62"/>
+        <rebuildEmbedding idref="rebuildEmbedding:se1364"/>
+        <rebuildEmbedding idref="rebuildEmbedding:se1390"/>
+        <rebuildEmbedding idref="rebuildEmbedding:xy1420"/>
     </operator>
     <operator id="speciesEdgeRelocateNAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
         <operator id="edgeRelocatorN" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="false" weight="0.0"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_4cl"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_ebs"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_gi"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_m002"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_m7d1"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb16"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb29"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb62"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1364"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1390"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_xy1420"/>
+        <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
+        <rebuildEmbedding idref="rebuildEmbedding:ebs"/>
+        <rebuildEmbedding idref="rebuildEmbedding:gi"/>
+        <rebuildEmbedding idref="rebuildEmbedding:m002"/>
+        <rebuildEmbedding idref="rebuildEmbedding:m7d1"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb16"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb29"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb62"/>
+        <rebuildEmbedding idref="rebuildEmbedding:se1364"/>
+        <rebuildEmbedding idref="rebuildEmbedding:se1390"/>
+        <rebuildEmbedding idref="rebuildEmbedding:xy1420"/>
     </operator>
 
     <operator id="speciesAddHybridAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="200.0">
         <operator id="addReticulation" spec="speciesnetwork.operators.AddReticulation" speciesNetwork="@network:species" weight="0.0"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_4cl"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_ebs"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_gi"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_m002"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_m7d1"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb16"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb29"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb62"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1364"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1390"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_xy1420"/>
+        <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
+        <rebuildEmbedding idref="rebuildEmbedding:ebs"/>
+        <rebuildEmbedding idref="rebuildEmbedding:gi"/>
+        <rebuildEmbedding idref="rebuildEmbedding:m002"/>
+        <rebuildEmbedding idref="rebuildEmbedding:m7d1"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb16"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb29"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb62"/>
+        <rebuildEmbedding idref="rebuildEmbedding:se1364"/>
+        <rebuildEmbedding idref="rebuildEmbedding:se1390"/>
+        <rebuildEmbedding idref="rebuildEmbedding:xy1420"/>
     </operator>
     <operator id="speciesDeleteHybridAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="200.0">
         <operator id="deleteReticulation" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@network:species" weight="0.0"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_4cl"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_ebs"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_gi"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_m002"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_m7d1"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb16"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb29"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_sb62"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1364"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_se1390"/>
-        <rebuildEmbedding idref="rebuildEmbedding:lpw_xy1420"/>
+        <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
+        <rebuildEmbedding idref="rebuildEmbedding:ebs"/>
+        <rebuildEmbedding idref="rebuildEmbedding:gi"/>
+        <rebuildEmbedding idref="rebuildEmbedding:m002"/>
+        <rebuildEmbedding idref="rebuildEmbedding:m7d1"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb16"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb29"/>
+        <rebuildEmbedding idref="rebuildEmbedding:sb62"/>
+        <rebuildEmbedding idref="rebuildEmbedding:se1364"/>
+        <rebuildEmbedding idref="rebuildEmbedding:se1390"/>
+        <rebuildEmbedding idref="rebuildEmbedding:xy1420"/>
     </operator -->
 
     <logger id="screenlog" logEvery="100000" model="@posterior">
@@ -3259,88 +3233,89 @@ name="alignment">
         <log idref="turnOverRate:species"/>
         <log idref="originTime:species"/>
         <log id="networkLength" speciesNetwork="@network:species" spec="speciesnetwork.NetworkStatLogger"/>
-        <log id="treeHeight.t:lpw_4cl" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:lpw_4cl"/>
-        <log idref="clockRate.c:lpw_4cl"/>
-        <log id="treeHeight.t:lpw_ebs" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:lpw_ebs"/>
-        <log idref="clockRate.c:lpw_ebs"/>
-        <log id="treeHeight.t:lpw_gi" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:lpw_gi"/>
-        <log idref="clockRate.c:lpw_gi"/>
-        <log id="treeHeight.t:lpw_m002" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:lpw_m002"/>
-        <log idref="clockRate.c:lpw_m002"/>
-        <log id="treeHeight.t:lpw_m7d1" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:lpw_m7d1"/>
-        <log idref="clockRate.c:lpw_m7d1"/>
-        <log id="treeHeight.t:lpw_sb16" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:lpw_sb16"/>
-        <log idref="clockRate.c:lpw_sb16"/>
-        <log id="treeHeight.t:lpw_sb29" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:lpw_sb29"/>
-        <log idref="clockRate.c:lpw_sb29"/>
-        <log id="treeHeight.t:lpw_sb62" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:lpw_sb62"/>
-        <log idref="clockRate.c:lpw_sb62"/>
-        <log id="treeHeight.t:lpw_se1364" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:lpw_se1364"/>
-        <log idref="clockRate.c:lpw_se1364"/>
-        <log id="treeHeight.t:lpw_se1390" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:lpw_se1390"/>
-        <log idref="clockRate.c:lpw_se1390"/>
-        <log id="treeHeight.t:lpw_xy1420" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:lpw_xy1420"/>
-        <log idref="clockRate.c:lpw_xy1420"/>
-        <log idref="kappa.s:lpw_4cl"/>
-        <log idref="kappa.s:lpw_ebs"/>
-        <log idref="kappa.s:lpw_gi"/>
-        <log idref="kappa.s:lpw_m002"/>
-        <log idref="kappa.s:lpw_m7d1"/>
-        <log idref="kappa.s:lpw_sb16"/>
-        <log idref="kappa.s:lpw_sb29"/>
-        <log idref="kappa.s:lpw_sb62"/>
-        <log idref="kappa.s:lpw_se1364"/>
-        <log idref="kappa.s:lpw_se1390"/>
-        <log idref="kappa.s:lpw_xy1420"/>
-        <log idref="freqParameter.s:lpw_4cl"/>
-        <log idref="freqParameter.s:lpw_ebs"/>
-        <log idref="freqParameter.s:lpw_gi"/>
-        <log idref="freqParameter.s:lpw_m002"/>
-        <log idref="freqParameter.s:lpw_m7d1"/>
-        <log idref="freqParameter.s:lpw_sb16"/>
-        <log idref="freqParameter.s:lpw_sb29"/>
-        <log idref="freqParameter.s:lpw_sb62"/>
-        <log idref="freqParameter.s:lpw_se1364"/>
-        <log idref="freqParameter.s:lpw_se1390"/>
-        <log idref="freqParameter.s:lpw_xy1420"/>
+        <log id="treeHeight.t:4cl" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:4cl"/>
+        <log id="treeHeight.t:ebs" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:ebs"/>
+        <log id="treeHeight.t:gi" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:gi"/>
+        <log id="treeHeight.t:m002" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:m002"/>
+        <log id="treeHeight.t:m7d1" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:m7d1"/>
+        <log id="treeHeight.t:sb16" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:sb16"/>
+        <log id="treeHeight.t:sb29" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:sb29"/>
+        <log id="treeHeight.t:sb62" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:sb62"/>
+        <log id="treeHeight.t:se1364" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:se1364"/>
+        <log id="treeHeight.t:se1390" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:se1390"/>
+        <log id="treeHeight.t:xy1420" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:xy1420"/>
+        <log idref="clockRate.c:gene"/>
+        <log idref="mutationRate.s:4cl"/>
+        <log idref="mutationRate.s:ebs"/>
+        <log idref="mutationRate.s:gi"/>
+        <log idref="mutationRate.s:m002"/>
+        <log idref="mutationRate.s:m7d1"/>
+        <log idref="mutationRate.s:sb16"/>
+        <log idref="mutationRate.s:sb29"/>
+        <log idref="mutationRate.s:sb62"/>
+        <log idref="mutationRate.s:se1364"/>
+        <log idref="mutationRate.s:se1390"/>
+        <log idref="mutationRate.s:xy1420"/>
+        <log idref="kappa.s:4cl"/>
+        <log idref="kappa.s:ebs"/>
+        <log idref="kappa.s:gi"/>
+        <log idref="kappa.s:m002"/>
+        <log idref="kappa.s:m7d1"/>
+        <log idref="kappa.s:sb16"/>
+        <log idref="kappa.s:sb29"/>
+        <log idref="kappa.s:sb62"/>
+        <log idref="kappa.s:se1364"/>
+        <log idref="kappa.s:se1390"/>
+        <log idref="kappa.s:xy1420"/>
+        <log idref="freqParameter.s:4cl"/>
+        <log idref="freqParameter.s:ebs"/>
+        <log idref="freqParameter.s:gi"/>
+        <log idref="freqParameter.s:m002"/>
+        <log idref="freqParameter.s:m7d1"/>
+        <log idref="freqParameter.s:sb16"/>
+        <log idref="freqParameter.s:sb29"/>
+        <log idref="freqParameter.s:sb62"/>
+        <log idref="freqParameter.s:se1364"/>
+        <log idref="freqParameter.s:se1390"/>
+        <log idref="freqParameter.s:xy1420"/>
     </logger>
 
     <logger id="treelog.t:species" fileName="lpw_fixednet.species.trees" logEvery="5000" mode="tree">
         <log id="networkLogger:species" spec="speciesnetwork.NetworkWithMetaDataLogger" speciesNetwork="@network:species"/>
     </logger>
 
-    <logger id="treelog.t:lpw_4cl" fileName="lpw_fixednet.lpw_4cl.trees" logEvery="5000" mode="tree">
-        <log id="treeLogger.t:lpw_4cl" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_4cl"/>
+    <logger id="treelog.t:4cl" fileName="lpw_fixednet.4cl.trees" logEvery="5000" mode="tree">
+        <log id="treeLogger.t:4cl" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:4cl"/>
     </logger>
-    <logger id="treelog.t:lpw_ebs" fileName="lpw_fixednet.lpw_ebs.trees" logEvery="5000" mode="tree">
-        <log id="treeLogger.t:lpw_ebs" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_ebs"/>
+    <logger id="treelog.t:ebs" fileName="lpw_fixednet.ebs.trees" logEvery="5000" mode="tree">
+        <log id="treeLogger.t:ebs" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:ebs"/>
     </logger>
-    <logger id="treelog.t:lpw_gi" fileName="lpw_fixednet.lpw_gi.trees" logEvery="5000" mode="tree">
-        <log id="treeLogger.t:lpw_gi" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_gi"/>
+    <logger id="treelog.t:gi" fileName="lpw_fixednet.gi.trees" logEvery="5000" mode="tree">
+        <log id="treeLogger.t:gi" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:gi"/>
     </logger>
-    <logger id="treelog.t:lpw_m002" fileName="lpw_fixednet.lpw_m002.trees" logEvery="5000" mode="tree">
-        <log id="treeLogger.t:lpw_m002" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_m002"/>
+    <logger id="treelog.t:m002" fileName="lpw_fixednet.m002.trees" logEvery="5000" mode="tree">
+        <log id="treeLogger.t:m002" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:m002"/>
     </logger>
-    <logger id="treelog.t:lpw_m7d1" fileName="lpw_fixednet.lpw_m7d1.trees" logEvery="5000" mode="tree">
-        <log id="treeLogger.t:lpw_m7d1" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_m7d1"/>
+    <logger id="treelog.t:m7d1" fileName="lpw_fixednet.m7d1.trees" logEvery="5000" mode="tree">
+        <log id="treeLogger.t:m7d1" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:m7d1"/>
     </logger>
-    <logger id="treelog.t:lpw_sb16" fileName="lpw_fixednet.lpw_sb16.trees" logEvery="5000" mode="tree">
-        <log id="treeLogger.t:lpw_sb16" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_sb16"/>
+    <logger id="treelog.t:sb16" fileName="lpw_fixednet.sb16.trees" logEvery="5000" mode="tree">
+        <log id="treeLogger.t:sb16" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:sb16"/>
     </logger>
-    <logger id="treelog.t:lpw_sb29" fileName="lpw_fixednet.lpw_sb29.trees" logEvery="5000" mode="tree">
-        <log id="treeLogger.t:lpw_sb29" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_sb29"/>
+    <logger id="treelog.t:sb29" fileName="lpw_fixednet.sb29.trees" logEvery="5000" mode="tree">
+        <log id="treeLogger.t:sb29" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:sb29"/>
     </logger>
-    <logger id="treelog.t:lpw_sb62" fileName="lpw_fixednet.lpw_sb62.trees" logEvery="5000" mode="tree">
-        <log id="treeLogger.t:lpw_sb62" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_sb62"/>
+    <logger id="treelog.t:sb62" fileName="lpw_fixednet.sb62.trees" logEvery="5000" mode="tree">
+        <log id="treeLogger.t:sb62" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:sb62"/>
     </logger>
-    <logger id="treelog.t:lpw_se1364" fileName="lpw_fixednet.lpw_se1364.trees" logEvery="5000" mode="tree">
-        <log id="treeLogger.t:lpw_se1364" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_se1364"/>
+    <logger id="treelog.t:se1364" fileName="lpw_fixednet.se1364.trees" logEvery="5000" mode="tree">
+        <log id="treeLogger.t:se1364" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:se1364"/>
     </logger>
-    <logger id="treelog.t:lpw_se1390" fileName="lpw_fixednet.lpw_se1390.trees" logEvery="5000" mode="tree">
-        <log id="treeLogger.t:lpw_se1390" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_se1390"/>
+    <logger id="treelog.t:se1390" fileName="lpw_fixednet.se1390.trees" logEvery="5000" mode="tree">
+        <log id="treeLogger.t:se1390" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:se1390"/>
     </logger>
-    <logger id="treelog.t:lpw_xy1420" fileName="lpw_fixednet.lpw_xy1420.trees" logEvery="5000" mode="tree">
-        <log id="treeLogger.t:lpw_xy1420" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:lpw_xy1420"/>
+    <logger id="treelog.t:xy1420" fileName="lpw_fixednet.xy1420.trees" logEvery="5000" mode="tree">
+        <log id="treeLogger.t:xy1420" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:xy1420"/>
     </logger>
 
 </run>
