@@ -2261,9 +2261,9 @@ name="alignment">
 
 
 <init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false"
-      newick="(((W:0.02,(P:0.01)#H1:0.01)S1:0.03,(#H1:0.01,L:0.02)S2:0.03)R:0.05)"/>
+      newick="(((W:0.002,(P:0.001)#H1:0.001)S1:0.003,(#H1:0.001,L:0.002)S2:0.003)R:0.005)"/>
 
-<run id="mcmc" spec="MCMC" chainLength="50000000">
+<run id="mcmc" spec="MCMC" chainLength="100000000">
     <state id="state" storeEvery="5000">
         <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
             <taxonset id="taxonSuperset" spec="TaxonSet">
@@ -2475,8 +2475,8 @@ name="alignment">
                 </taxon>
             </taxonset>
         </stateNode>
-        <parameter id="originTime:species" lower="0.0" name="stateNode">0.1</parameter>
-        <parameter id="netDivRate:species" lower="0.0" name="stateNode">10.0</parameter>
+        <parameter id="originTime:species" lower="0.0" name="stateNode">0.01</parameter>
+        <parameter id="netDivRate:species" lower="0.0" name="stateNode">100.0</parameter>
         <parameter id="turnOverRate:species" lower="0.0" upper="1.0" name="stateNode">0.5</parameter>
 
         <tree id="tree.t:4cl" name="stateNode">
@@ -2584,7 +2584,7 @@ name="alignment">
 
     <init id="initializer" estimate="false" method="random" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@network:species" origin="@originTime:species">
         <coalescentSimulator spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species">
-            <parameter id="popSizes:species" estimate="false" name="popSizes">0.01</parameter>
+            <parameter id="popSizes:species" estimate="false" name="popSizes">0.001</parameter>
             <taxonSuperset idref="taxonSuperset"/>
             <geneTree idref="tree.t:4cl"/> <embedding idref="embedding:4cl"/>
             <geneTree idref="tree.t:ebs"/> <embedding idref="embedding:ebs"/>
@@ -2625,7 +2625,7 @@ name="alignment">
     <distribution id="posterior" spec="util.CompoundDistribution">
         <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
             <!-- populationModel id="popModel" popSizes="@popSizes:species" spec="speciesnetwork.ConstantPopulation"/ -->
-            <populationModel alpha="4.0" beta="0.01" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
+            <populationModel alpha="4.0" beta="0.003" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
             <geneTreeWithin id="geneTree:4cl" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:4cl" embedding="@embedding:4cl"/>
             <geneTreeWithin id="geneTree:ebs" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:ebs" embedding="@embedding:ebs"/>
             <geneTreeWithin id="geneTree:gi" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:gi" embedding="@embedding:gi"/>
@@ -2641,26 +2641,20 @@ name="alignment">
         <distribution id="prior" spec="util.CompoundDistribution">
             <distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" network="@network:species" netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" betaShape="1.0"/>
             <prior id="networkOrigin" name="distribution" x="@originTime:species">
-                <Uniform id="uniform.01" name="distr" upper="Infinity"/>
+                <Exponential id="Exponential.0" name="distr" mean="0.01"/>
             </prior>
             <prior id="netDivPrior" name="distribution" x="@netDivRate:species">
-                <Exponential id="exponential.01" name="distr" mean="100.0"/>
+                <Exponential id="Exponential.01" name="distr" mean="100.0"/>
             </prior>
             <prior id="turnOverPrior" name="distribution" x="@turnOverRate:species">
-                <Beta id="betadistr.01" name="distr" alpha="1.0" beta="1.0"/>
+                <Beta id="BetaDistr.01" name="distr" alpha="1.0" beta="1.0"/>
             </prior>
             <prior id="clockPrior.c" name="distribution" x="@clockRate.c:gene">
-                <Gamma id="Gamma.0" mode="ShapeRate" name="distr">
-                    <parameter id="RealParameter.0" estimate="false" name="alpha">100.0</parameter>
-                    <parameter id="RealParameter.01" estimate="false" name="beta">100.0</parameter>
-                </Gamma>
+                <Gamma id="Gamma.0" name="distr" alpha="1.0" beta="1.0"/>
             </prior>
             <!-- prior for mutation rates is uniform Dirichlet -->
             <prior id="KappaPrior.s:4cl" name="distribution" x="@kappa.s:4cl">
-                <LogNormal id="LogNormal.0" name="distr">
-                    <parameter id="RealParameter.02" estimate="false" name="M">1.0</parameter>
-                    <parameter id="RealParameter.03" estimate="false" name="S">1.25</parameter>
-                </LogNormal>
+                <LogNormal id="LogNormal.0" name="distr" M="1.0" S="1.25"/>
             </prior>
             <prior id="KappaPrior.s:ebs" name="distribution" x="@kappa.s:ebs" distr="@LogNormal.0"/>
             <prior id="KappaPrior.s:gi" name="distribution" x="@kappa.s:gi" distr="@LogNormal.0"/>
@@ -2676,8 +2670,6 @@ name="alignment">
         <distribution id="likelihood" spec="util.CompoundDistribution" useThreads="true">
             <distribution id="treeLikelihood.4cl" spec="TreeLikelihood" data="@4cl" tree="@tree.t:4cl">
                 <siteModel id="SiteModel.s:4cl" spec="SiteModel" mutationRate="@mutationRate.s:4cl">
-                    <parameter id="gammaShape.s:4cl" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:4cl" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
                     <substModel id="hky.s:4cl" spec="HKY" kappa="@kappa.s:4cl">
                         <frequencies id="estimatedFreqs.s:4cl" spec="Frequencies" frequencies="@freqParameter.s:4cl"/>
                     </substModel>
@@ -2686,8 +2678,6 @@ name="alignment">
             </distribution>
             <distribution id="treeLikelihood.ebs" spec="TreeLikelihood" data="@ebs" tree="@tree.t:ebs">
                 <siteModel id="SiteModel.s:ebs" spec="SiteModel" mutationRate="@mutationRate.s:ebs">
-                    <parameter id="gammaShape.s:ebs" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:ebs" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
                     <substModel id="hky.s:ebs" spec="HKY" kappa="@kappa.s:ebs">
                         <frequencies id="estimatedFreqs.s:ebs" spec="Frequencies" frequencies="@freqParameter.s:ebs"/>
                     </substModel>
@@ -2696,8 +2686,6 @@ name="alignment">
             </distribution>
             <distribution id="treeLikelihood.gi" spec="TreeLikelihood" data="@gi" tree="@tree.t:gi">
                 <siteModel id="SiteModel.s:gi" spec="SiteModel" mutationRate="@mutationRate.s:gi">
-                    <parameter id="gammaShape.s:gi" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:gi" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
                     <substModel id="hky.s:gi" spec="HKY" kappa="@kappa.s:gi">
                         <frequencies id="estimatedFreqs.s:gi" spec="Frequencies" frequencies="@freqParameter.s:gi"/>
                     </substModel>
@@ -2706,8 +2694,6 @@ name="alignment">
             </distribution>
             <distribution id="treeLikelihood.m002" spec="TreeLikelihood" data="@m002" tree="@tree.t:m002">
                 <siteModel id="SiteModel.s:m002" spec="SiteModel" mutationRate="@mutationRate.s:m002">
-                    <parameter id="gammaShape.s:m002" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:m002" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
                     <substModel id="hky.s:m002" spec="HKY" kappa="@kappa.s:m002">
                         <frequencies id="estimatedFreqs.s:m002" spec="Frequencies" frequencies="@freqParameter.s:m002"/>
                     </substModel>
@@ -2716,8 +2702,6 @@ name="alignment">
             </distribution>
             <distribution id="treeLikelihood.m7d1" spec="TreeLikelihood" data="@m7d1" tree="@tree.t:m7d1">
                 <siteModel id="SiteModel.s:m7d1" spec="SiteModel" mutationRate="@mutationRate.s:m7d1">
-                    <parameter id="gammaShape.s:m7d1" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:m7d1" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
                     <substModel id="hky.s:m7d1" spec="HKY" kappa="@kappa.s:m7d1">
                         <frequencies id="estimatedFreqs.s:m7d1" spec="Frequencies" frequencies="@freqParameter.s:m7d1"/>
                     </substModel>
@@ -2726,8 +2710,6 @@ name="alignment">
             </distribution>
             <distribution id="treeLikelihood.sb16" spec="TreeLikelihood" data="@sb16" tree="@tree.t:sb16">
                 <siteModel id="SiteModel.s:sb16" spec="SiteModel" mutationRate="@mutationRate.s:sb16">
-                    <parameter id="gammaShape.s:sb16" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:sb16" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
                     <substModel id="hky.s:sb16" spec="HKY" kappa="@kappa.s:sb16">
                         <frequencies id="estimatedFreqs.s:sb16" spec="Frequencies" frequencies="@freqParameter.s:sb16"/>
                     </substModel>
@@ -2736,8 +2718,6 @@ name="alignment">
             </distribution>
             <distribution id="treeLikelihood.sb29" spec="TreeLikelihood" data="@sb29" tree="@tree.t:sb29">
                 <siteModel id="SiteModel.s:sb29" spec="SiteModel" mutationRate="@mutationRate.s:sb29">
-                    <parameter id="gammaShape.s:sb29" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:sb29" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
                     <substModel id="hky.s:sb29" spec="HKY" kappa="@kappa.s:sb29">
                         <frequencies id="estimatedFreqs.s:sb29" spec="Frequencies" frequencies="@freqParameter.s:sb29"/>
                     </substModel>
@@ -2746,8 +2726,6 @@ name="alignment">
             </distribution>
             <distribution id="treeLikelihood.sb62" spec="TreeLikelihood" data="@sb62" tree="@tree.t:sb62">
                 <siteModel id="SiteModel.s:sb62" spec="SiteModel" mutationRate="@mutationRate.s:sb62">
-                    <parameter id="gammaShape.s:sb62" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:sb62" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
                     <substModel id="hky.s:sb62" spec="HKY" kappa="@kappa.s:sb62">
                         <frequencies id="estimatedFreqs.s:sb62" spec="Frequencies" frequencies="@freqParameter.s:sb62"/>
                     </substModel>
@@ -2756,8 +2734,6 @@ name="alignment">
             </distribution>
             <distribution id="treeLikelihood.se1364" spec="TreeLikelihood" data="@se1364" tree="@tree.t:se1364">
                 <siteModel id="SiteModel.s:se1364" spec="SiteModel" mutationRate="@mutationRate.s:se1364">
-                    <parameter id="gammaShape.s:se1364" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:se1364" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
                     <substModel id="hky.s:se1364" spec="HKY" kappa="@kappa.s:se1364">
                         <frequencies id="estimatedFreqs.s:se1364" spec="Frequencies" frequencies="@freqParameter.s:se1364"/>
                     </substModel>
@@ -2766,8 +2742,6 @@ name="alignment">
             </distribution>
             <distribution id="treeLikelihood.se1390" spec="TreeLikelihood" data="@se1390" tree="@tree.t:se1390">
                 <siteModel id="SiteModel.s:se1390" spec="SiteModel" mutationRate="@mutationRate.s:se1390">
-                    <parameter id="gammaShape.s:se1390" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:se1390" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
                     <substModel id="hky.s:se1390" spec="HKY" kappa="@kappa.s:se1390">
                         <frequencies id="estimatedFreqs.s:se1390" spec="Frequencies" frequencies="@freqParameter.s:se1390"/>
                     </substModel>
@@ -2776,8 +2750,6 @@ name="alignment">
             </distribution>
             <distribution id="treeLikelihood.xy1420" spec="TreeLikelihood" data="@xy1420" tree="@tree.t:xy1420">
                 <siteModel id="SiteModel.s:xy1420" spec="SiteModel" mutationRate="@mutationRate.s:xy1420">
-                    <parameter id="gammaShape.s:xy1420" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:xy1420" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
                     <substModel id="hky.s:xy1420" spec="HKY" kappa="@kappa.s:xy1420">
                         <frequencies id="estimatedFreqs.s:xy1420" spec="Frequencies" frequencies="@freqParameter.s:xy1420"/>
                     </substModel>
@@ -3121,14 +3093,14 @@ name="alignment">
         <operator id="WilsonBalding:xy1420" spec="WilsonBalding" tree="@tree.t:xy1420" weight="0.0"/>
     </operator>
 
-    <operator id="divrRateScaler" spec="ScaleOperator" parameter="@netDivRate:species" scaleFactor="0.75" weight="5.0"/>
-    <operator id="turnOverScaler" spec="ScaleOperator" parameter="@turnOverRate:species" scaleFactor="0.75" weight="5.0"/>
+    <operator id="divrRateScaler" spec="ScaleOperator" parameter="@netDivRate:species" scaleFactor="0.75" weight="3.0"/>
+    <operator id="turnOverScaler" spec="ScaleOperator" parameter="@turnOverRate:species" scaleFactor="0.75" weight="3.0"/>
     
-    <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="20.0"/>
-    <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="10.0"/>
+    <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="10.0"/>
+    <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="5.0"/>
 
-    <operator id="speciesOriginMultiplier" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="10.0"/>
-    <operator id="speciesNodeUniformAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="200.0">
+    <operator id="speciesOriginMultiplier" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="5.0"/>
+    <operator id="speciesNodeUniformAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="50.0">
         <operator id="nodeUniform" spec="speciesnetwork.operators.NodeUniform" speciesNetwork="@network:species" weight="0.0"/>
         <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
         <rebuildEmbedding idref="rebuildEmbedding:ebs"/>
@@ -3143,7 +3115,7 @@ name="alignment">
         <rebuildEmbedding idref="rebuildEmbedding:xy1420"/>
     </operator>
     <operator id="speciesNodeSliderAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
-        <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.001" weight="0.0"/>
+        <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.0002" weight="0.0"/>
         <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
         <rebuildEmbedding idref="rebuildEmbedding:ebs"/>
         <rebuildEmbedding idref="rebuildEmbedding:gi"/>
@@ -3158,7 +3130,7 @@ name="alignment">
     </operator>
 
     <!-- 
-    <operator id="speciesEdgeRelocateWAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="200.0">
+    <operator id="speciesEdgeRelocateWAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="50.0">
         <operator id="edgeRelocatorW" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
         <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
         <rebuildEmbedding idref="rebuildEmbedding:ebs"/>
@@ -3172,7 +3144,7 @@ name="alignment">
         <rebuildEmbedding idref="rebuildEmbedding:se1390"/>
         <rebuildEmbedding idref="rebuildEmbedding:xy1420"/>
     </operator>
-    <operator id="speciesEdgeRelocateNAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+    <operator id="speciesEdgeRelocateNAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="50.0">
         <operator id="edgeRelocatorN" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="false" weight="0.0"/>
         <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
         <rebuildEmbedding idref="rebuildEmbedding:ebs"/>
@@ -3187,7 +3159,7 @@ name="alignment">
         <rebuildEmbedding idref="rebuildEmbedding:xy1420"/>
     </operator>
 
-    <operator id="speciesAddHybridAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="200.0">
+    <operator id="speciesAddHybridAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
         <operator id="addReticulation" spec="speciesnetwork.operators.AddReticulation" speciesNetwork="@network:species" weight="0.0"/>
         <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
         <rebuildEmbedding idref="rebuildEmbedding:ebs"/>
@@ -3201,7 +3173,7 @@ name="alignment">
         <rebuildEmbedding idref="rebuildEmbedding:se1390"/>
         <rebuildEmbedding idref="rebuildEmbedding:xy1420"/>
     </operator>
-    <operator id="speciesDeleteHybridAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="200.0">
+    <operator id="speciesDeleteHybridAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
         <operator id="deleteReticulation" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@network:species" weight="0.0"/>
         <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
         <rebuildEmbedding idref="rebuildEmbedding:ebs"/>

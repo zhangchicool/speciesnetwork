@@ -67,21 +67,19 @@
             <parameter id="originTime:species" lower="0.0" name="stateNode">0.08</parameter>
             <parameter id="netDivRate:species" lower="0.0" name="stateNode">1.0</parameter>
             <parameter id="turnOverRate:species" lower="0.0" upper="1.0" name="stateNode">0.5</parameter>
+            <parameter id="clockRate:gene" name="stateNode">1.0</parameter>
             <tree id="tree:gene1" name="stateNode">
                 <taxonset alignment="@gene1" id="taxonset:gene1" spec="TaxonSet"/>
             </tree>
             <stateNode id="embedding:gene1" spec="parameter.IntegerParameter" dimension="90" minordimension="15">-1</stateNode>
-            <parameter id="clockRate:gene1" name="stateNode">1.0</parameter>
             <tree id="tree:gene2" name="stateNode">
                 <taxonset alignment="@gene2" id="taxonset:gene2" spec="TaxonSet"/>
             </tree>
             <stateNode id="embedding:gene2" spec="parameter.IntegerParameter" dimension="90" minordimension="15">-1</stateNode>
-            <parameter id="clockRate:gene2" name="stateNode">1.0</parameter>
             <tree id="tree:gene3" name="stateNode">
                 <taxonset alignment="@gene3" id="taxonset:gene3" spec="TaxonSet"/>
             </tree>
             <stateNode id="embedding:gene3" spec="parameter.IntegerParameter" dimension="90" minordimension="15">-1</stateNode>
-            <parameter id="clockRate:gene3" name="stateNode">1.0</parameter>
         </state>
 
         <init spec="beast.util.TreeParser" id="newick:gene1" initial="@tree:gene1" taxa="@gene1" IsLabelledNewick="true" newick="((((b2:0.005778285557267655,(b1:0.005408371672864869,b3:0.005408371672864869):3.6991388440278574E-4):0.004036445095345315,b4:0.00981473065261297):0.036290549160526736,(c1:0.008997562705901506,c2:0.008997562705901506):0.0371077171072382):0.024361194726486693,(a1:0.01873805240400737,a2:0.01873805240400737):0.051728422135619026):0.0"/>
@@ -110,11 +108,12 @@
                     <geneTreeWithin id="geneTree:gene2" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene2" embedding="@embedding:gene2"/>
                     <geneTreeWithin id="geneTree:gene3" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene3" embedding="@embedding:gene3"/>
                     <!-- populationModel id="popModel" popSizes="0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01" spec="speciesnetwork.ConstantPopulation"/ -->
-                    <populationModel alpha="5.0" beta="0.05" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
+                    <populationModel alpha="10.0" beta="0.1" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
                 </distribution>
                 <distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" network="@network:species" netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" betaShape="1.0"/>
                 <prior id="networkOrigin" name="distribution" x="@originTime:species">
-                    <Uniform id="uniform.01" name="distr" upper="Infinity"/>
+                    <Exponential id="exponential.0" name="distr" mean="0.1"/>
+                    <!-- Uniform id="uniform.01" name="distr" upper="Infinity"/ -->
                 </prior>
                 <prior id="netDivPrior" name="distribution" x="@netDivRate:species">
                     <Exponential id="exponential.01" name="distr" mean="10.0"/>
@@ -122,30 +121,28 @@
                 <prior id="turnOverPrior" name="distribution" x="@turnOverRate:species">
                     <Beta id="betadistr.01" name="distr" alpha="1.0" beta="1.0"/>
                 </prior>
-                <prior id="clockPrior:gene1" name="distribution" x="@clockRate:gene1">
-                    <Gamma id="gamma.clock1" name="distr" alpha="2.0" beta="0.5"/>
+                <prior id="clockPrior" name="distribution" x="@clockRate:gene">
+                    <Gamma id="gamma.01" name="distr" alpha="1.0" beta="1.0"/>
                 </prior>
-                <prior id="clockPrior:gene2" name="distribution" x="@clockRate:gene2" distr="@gamma.clock1"/>
-                <prior id="clockPrior:gene3" name="distribution" x="@clockRate:gene3" distr="@gamma.clock1"/>
             </distribution>
             <distribution id="likelihood" spec="util.CompoundDistribution">
                 <distribution data="@gene1" id="likelihood:gene1" tree="@tree:gene1" spec="TreeLikelihood">
-                    <siteModel id="siteModel:gene1" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
+                    <siteModel id="siteModel:gene1" mutationRate="1.0" spec="SiteModel">
                         <substModel id="jc:gene1" spec="JukesCantor"/>
                     </siteModel>
-                    <branchRateModel id="strictClock:gene1" clock.rate="@clockRate:gene1" spec="beast.evolution.branchratemodel.StrictClockModel"/>
+                    <branchRateModel id="strictClock:gene1" clock.rate="@clockRate:gene" spec="beast.evolution.branchratemodel.StrictClockModel"/>
                 </distribution>
                 <distribution data="@gene2" id="likelihood:gene2" tree="@tree:gene2" spec="TreeLikelihood">
-                    <siteModel id="siteModel:gene2" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
+                    <siteModel id="siteModel:gene2" mutationRate="1.0" spec="SiteModel">
                         <substModel id="jc:gene2" spec="JukesCantor"/>
                     </siteModel>
-                    <branchRateModel id="strictClock:gene2" clock.rate="@clockRate:gene2" spec="beast.evolution.branchratemodel.StrictClockModel"/>
+                    <branchRateModel id="strictClock:gene2" clock.rate="@clockRate:gene" spec="beast.evolution.branchratemodel.StrictClockModel"/>
                 </distribution>
                 <distribution data="@gene3" id="likelihood:gene3" tree="@tree:gene3" spec="TreeLikelihood">
-                    <siteModel id="siteModel:gene3" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
+                    <siteModel id="siteModel:gene3" mutationRate="1.0" spec="SiteModel">
                         <substModel id="jc:gene3" spec="JukesCantor"/>
                     </siteModel>
-                    <branchRateModel id="strictClock:gene3" clock.rate="@clockRate:gene3" spec="beast.evolution.branchratemodel.StrictClockModel"/>
+                    <branchRateModel id="strictClock:gene3" clock.rate="@clockRate:gene" spec="beast.evolution.branchratemodel.StrictClockModel"/>
                 </distribution>
             </distribution>
         </distribution>
@@ -171,7 +168,6 @@
         <operator id="WBAndEmbed:gene1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene1" weight="3.0">
             <operator id="WilsonBalding:gene1" spec="WilsonBalding" tree="@tree:gene1" weight="0.0"/>
         </operator>
-        <!-- operator id="strictClockRateScaler:gene1" spec="ScaleOperator" parameter="@clockRate:gene1" scaleFactor="0.5" weight="3.0"/ -->
 
         <operator id="scaleAndEmbed:gene2" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene2" weight="3.0">
             <operator id="scale:gene2" spec="ScaleOperator" scaleFactor="0.5" tree="@tree:gene2" weight="0.0"/>
@@ -194,7 +190,6 @@
         <operator id="WBAndEmbed:gene2" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene2" weight="3.0">
             <operator id="WilsonBalding:gene2" spec="WilsonBalding" tree="@tree:gene2" weight="0.0"/>
         </operator>
-        <!-- operator id="strictClockRateScaler:gene2" spec="ScaleOperator" parameter="@clockRate:gene2" scaleFactor="0.5" weight="3.0"/ -->
 
         <operator id="scaleAndEmbed:gene3" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene3" weight="3.0">
             <operator id="scale:gene3" spec="ScaleOperator" scaleFactor="0.5" tree="@tree:gene3" weight="0.0"/>
@@ -217,29 +212,14 @@
         <operator id="WBAndEmbed:gene3" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene3" weight="3.0">
             <operator id="WilsonBalding:gene3" spec="WilsonBalding" tree="@tree:gene3" weight="0.0"/>
         </operator>
-        <!-- operator id="strictClockRateScaler:gene3" spec="ScaleOperator" parameter="@clockRate:gene3" scaleFactor="0.5" weight="3.0"/ -->
 
-        <!-- operator id="allClockTreeUpDownAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="10">
-            <operator id="allClockTreeUpDown" spec="UpDownOperator" scaleFactor="0.75" weight="0.0">
-                <up idref="clockRate:gene1"/>
-                <up idref="clockRate:gene2"/>
-                <up idref="clockRate:gene3"/>
-                <down idref="tree:gene1"/>
-                <down idref="tree:gene2"/>
-                <down idref="tree:gene3"/>
-            </operator>
-            <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
-            <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
-            <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
-        </operator -->
+        <operator id="divrRateScaler" spec="ScaleOperator" parameter="@netDivRate:species" scaleFactor="0.75" weight="3.0"/>
+        <operator id="turnOverScaler" spec="ScaleOperator" parameter="@turnOverRate:species" scaleFactor="0.75" weight="3.0"/>
+        <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="10.0"/>
+        <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="5.0"/>
 
-        <operator id="divrRateScaler" spec="ScaleOperator" parameter="@netDivRate:species" scaleFactor="0.75" weight="5.0"/>
-        <operator id="turnOverScaler" spec="ScaleOperator" parameter="@turnOverRate:species" scaleFactor="0.75" weight="5.0"/>
-        <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="20.0"/>
-        <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="10.0"/>
-
-        <operator id="speciesOriginMultiplier" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="10.0"/>
-        <operator id="speciesNodeUniformAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+        <operator id="speciesOriginMultiplier" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="5.0"/>
+        <operator id="speciesNodeUniformAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="50.0">
             <operator id="nodeUniform" spec="speciesnetwork.operators.NodeUniform" speciesNetwork="@network:species" weight="0.0"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
@@ -252,7 +232,7 @@
             <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
         </operator>
         <!--
-        <operator id="speciesEdgeRelocateWAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+        <operator id="speciesEdgeRelocateWAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="50.0">
             <operator id="edgeRelocatorW" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
@@ -283,8 +263,9 @@
             <log idref="likelihood"/>
             <log idref="prior"/>
             <log idref="coalescent"/>
+            <log id="ESS.0" spec="util.ESS" arg="@posterior"/>
         </logger>
-        <logger fileName="3S_2H_3L.xml.trace.log" id="tracelog" logEvery="1000" model="@posterior" sort="smart">
+        <logger fileName="3S_2H_3L.xml.trace.log" id="tracelog" logEvery="2000" model="@posterior" sort="smart">
             <log idref="posterior"/>
             <log idref="likelihood"/>
             <log idref="prior"/>
@@ -292,33 +273,31 @@
             <log idref="netDivRate:species"/>
             <log idref="turnOverRate:species"/>
             <log idref="originTime:species"/>
-            <log id="length:network" speciesNetwork="@network:species" spec="speciesnetwork.NetworkStatLogger"/>
+            <log id="networkLength" speciesNetwork="@network:species" spec="speciesnetwork.NetworkStatLogger"/>
             <log id="height:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeStatLogger"/>
-            <log idref="clockRate:gene1"/>
             <log id="height:gene2" tree="@tree:gene2" spec="beast.evolution.tree.TreeStatLogger"/>
-            <log idref="clockRate:gene2"/>
             <log id="height:gene3" tree="@tree:gene3" spec="beast.evolution.tree.TreeStatLogger"/>
-            <log idref="clockRate:gene3"/>
+            <log idref="clockRate:gene"/>
         </logger>
-        <logger fileName="3S_2H_3L.xml.species.trees" id="treelog:species" logEvery="1000" mode="tree">
+        <logger fileName="3S_2H_3L.xml.species.trees" id="treelog:species" logEvery="2000" mode="tree">
             <log id="networkLogger:species" spec="speciesnetwork.NetworkWithMetaDataLogger" speciesNetwork="@network:species"/>
         </logger>
-        <logger fileName="3S_2H_3L.xml.gene1.log" id="embedlog:gene1" logEvery="1000" sort="smart">
+        <logger fileName="3S_2H_3L.xml.gene1.log" id="embedlog:gene1" logEvery="2000" sort="smart">
             <log idref="embedding:gene1"/>
         </logger>
-        <logger fileName="3S_2H_3L.xml.gene1.trees" id="treelog:gene1" logEvery="1000" mode="tree">
+        <logger fileName="3S_2H_3L.xml.gene1.trees" id="treelog:gene1" logEvery="2000" mode="tree">
             <log id="treeLogger:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeWithMetaDataLogger"/>
         </logger>
-        <logger fileName="3S_2H_3L.xml.gene2.log" id="embedlog:gene2" logEvery="1000" sort="smart">
+        <logger fileName="3S_2H_3L.xml.gene2.log" id="embedlog:gene2" logEvery="2000" sort="smart">
             <log idref="embedding:gene2"/>
         </logger>
-        <logger fileName="3S_2H_3L.xml.gene2.trees" id="treelog:gene2" logEvery="1000" mode="tree">
+        <logger fileName="3S_2H_3L.xml.gene2.trees" id="treelog:gene2" logEvery="2000" mode="tree">
             <log id="treeLogger:gene2" tree="@tree:gene2" spec="beast.evolution.tree.TreeWithMetaDataLogger"/>
         </logger>
-        <logger fileName="3S_2H_3L.xml.gene3.log" id="embedlog:gene3" logEvery="1000" sort="smart">
+        <logger fileName="3S_2H_3L.xml.gene3.log" id="embedlog:gene3" logEvery="2000" sort="smart">
             <log idref="embedding:gene3"/>
         </logger>
-        <logger fileName="3S_2H_3L.xml.gene3.trees" id="treelog:gene3" logEvery="1000" mode="tree">
+        <logger fileName="3S_2H_3L.xml.gene3.trees" id="treelog:gene3" logEvery="2000" mode="tree">
             <log id="treeLogger:gene3" tree="@tree:gene3" spec="beast.evolution.tree.TreeWithMetaDataLogger"/>
         </logger>
     </run>
