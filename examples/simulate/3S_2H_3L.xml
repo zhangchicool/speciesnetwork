@@ -71,15 +71,15 @@
             <tree id="tree:gene1" name="stateNode">
                 <taxonset alignment="@gene1" id="taxonset:gene1" spec="TaxonSet"/>
             </tree>
-            <stateNode id="embedding:gene1" spec="parameter.IntegerParameter" dimension="90" minordimension="15">-1</stateNode>
+            <stateNode id="embedding:gene1" spec="parameter.IntegerParameter">-1</stateNode>
             <tree id="tree:gene2" name="stateNode">
                 <taxonset alignment="@gene2" id="taxonset:gene2" spec="TaxonSet"/>
             </tree>
-            <stateNode id="embedding:gene2" spec="parameter.IntegerParameter" dimension="90" minordimension="15">-1</stateNode>
+            <stateNode id="embedding:gene2" spec="parameter.IntegerParameter">-1</stateNode>
             <tree id="tree:gene3" name="stateNode">
                 <taxonset alignment="@gene3" id="taxonset:gene3" spec="TaxonSet"/>
             </tree>
-            <stateNode id="embedding:gene3" spec="parameter.IntegerParameter" dimension="90" minordimension="15">-1</stateNode>
+            <stateNode id="embedding:gene3" spec="parameter.IntegerParameter">-1</stateNode>
         </state>
 
         <init spec="beast.util.TreeParser" id="newick:gene1" initial="@tree:gene1" taxa="@gene1" IsLabelledNewick="true" newick="((((b2:0.005778285557267655,(b1:0.005408371672864869,b3:0.005408371672864869):3.6991388440278574E-4):0.004036445095345315,b4:0.00981473065261297):0.036290549160526736,(c1:0.008997562705901506,c2:0.008997562705901506):0.0371077171072382):0.024361194726486693,(a1:0.01873805240400737,a2:0.01873805240400737):0.051728422135619026):0.0"/>
@@ -87,7 +87,7 @@
         <init spec="beast.util.TreeParser" id="newick:gene3" initial="@tree:gene3" taxa="@gene3" IsLabelledNewick="true" newick="((c2:0.01393560924662295,c1:0.01393560924662295):0.04109166568077602,((a1:0.018966967611777213,a2:0.018966967611777213):0.014309253695778963,((b2:0.0021185029711614403,(b4:0.001168588238943269,b3:0.001168588238943269):9.499147322181713E-4):0.00119163900167478,b1:0.0033101419728362204):0.029966079334719956):0.021751053619842788):0.0"/>
         <init estimate="false" id="initializer" method="random" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@network:species" origin="@originTime:species">
             <coalescentSimulator spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species">
-                <parameter id="popSizes" name="popSizes">0.01</parameter>
+                <parameter id="popSizes" estimate="false" name="popSizes">0.01</parameter>
                 <taxonSuperset idref="taxonSuperset"/>
                 <geneTree idref="tree:gene1"/> <embedding idref="embedding:gene1"/>
                 <geneTree idref="tree:gene2"/> <embedding idref="embedding:gene2"/>
@@ -107,13 +107,12 @@
                     <geneTreeWithin id="geneTree:gene1" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1"/>
                     <geneTreeWithin id="geneTree:gene2" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene2" embedding="@embedding:gene2"/>
                     <geneTreeWithin id="geneTree:gene3" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene3" embedding="@embedding:gene3"/>
-                    <!-- populationModel id="popModel" popSizes="0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01" spec="speciesnetwork.ConstantPopulation"/ -->
+                    <!-- populationModel id="popModel" popSizes="@popSizes" spec="speciesnetwork.ConstantPopulation"/ -->
                     <populationModel alpha="10.0" beta="0.1" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
                 </distribution>
                 <distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" network="@network:species" netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" betaShape="1.0"/>
                 <prior id="networkOrigin" name="distribution" x="@originTime:species">
                     <Exponential id="exponential.0" name="distr" mean="0.1"/>
-                    <!-- Uniform id="uniform.01" name="distr" upper="Infinity"/ -->
                 </prior>
                 <prior id="netDivPrior" name="distribution" x="@netDivRate:species">
                     <Exponential id="exponential.01" name="distr" mean="10.0"/>

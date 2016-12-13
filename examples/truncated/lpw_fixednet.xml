@@ -3129,7 +3129,7 @@ name="alignment">
         <rebuildEmbedding idref="rebuildEmbedding:xy1420"/>
     </operator>
 
-    <!-- 
+    <!--
     <operator id="speciesEdgeRelocateWAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="50.0">
         <operator id="edgeRelocatorW" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
         <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
@@ -3186,7 +3186,8 @@ name="alignment">
         <rebuildEmbedding idref="rebuildEmbedding:se1364"/>
         <rebuildEmbedding idref="rebuildEmbedding:se1390"/>
         <rebuildEmbedding idref="rebuildEmbedding:xy1420"/>
-    </operator -->
+    </operator>
+    -->
 
     <logger id="screenlog" logEvery="100000" model="@posterior">
         <log idref="posterior"/>
@@ -3289,7 +3290,6 @@ name="alignment">
     <logger id="treelog.t:xy1420" fileName="lpw_fixednet.xy1420.trees" logEvery="5000" mode="tree">
         <log id="treeLogger.t:xy1420" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:xy1420"/>
     </logger>
-
 </run>
 
 </beast>

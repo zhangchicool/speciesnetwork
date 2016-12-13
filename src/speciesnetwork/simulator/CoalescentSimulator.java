@@ -357,22 +357,26 @@ public class CoalescentSimulator extends Runnable {
             out.println("            </tree>");
             // print true embedding (doesn't make sense as gene node number may change, so just print -1)
             IntegerParameter embedding = embeddings.get(i);
-            out.println("            <stateNode id=\"embedding:gene" + (i+1) + "\" spec=\"parameter.IntegerParameter\" " +
-                                        "dimension=\"" + embedding.getDimension() + "\" minordimension=\"" +
-                                        embedding.getMinorDimension1() + "\">" + (-1) + "</stateNode>");
+            out.println("            <stateNode id=\"embedding:gene" + (i+1) + "\" spec=\"parameter.IntegerParameter\">" + (-1) + "</stateNode>");
         }
         out.println("        </state>\n");  // end of states
         // print initial/true gene trees
         for (int i = 0; i < nrOfGeneTrees; i++) {
             Tree geneTree = geneTrees.get(i);
-            out.println("        <init spec=\"beast.util.TreeParser\" id=\"newick:gene" + (i+1) + "\" " +
-                    "initial=\"@tree:gene" + (i+1) + "\" taxa=\"@gene" + (i+1) + "\" IsLabelledNewick=\"true\" " +
-                    "newick=\"" + geneTree.getRoot().toNewick() + "\"/>");
+            out.println("        <init spec=\"beast.util.TreeParser\" id=\"newick:gene" + (i+1) + "\" initial=\"@tree:gene" + (i+1) + "\" " +
+                    "taxa=\"@gene" + (i+1) + "\" IsLabelledNewick=\"true\" newick=\"" + geneTree.getRoot().toNewick() + "\"/>");
         }
         // starbeast initializer
         final String initMethod = initMethodInput.get();
         out.println("        <init estimate=\"false\" id=\"initializer\" method=\"" + initMethod + "\" " +
                 "spec=\"speciesnetwork.SpeciesNetworkInitializer\" speciesNetwork=\"@network:species\" origin=\"@originTime:species\">");
+        out.println("            <coalescentSimulator spec=\"speciesnetwork.simulator.CoalescentSimulator\" speciesNetwork=\"@network:species\">");
+        out.println("                <parameter id=\"popSizes\" estimate=\"false\" name=\"popSizes\">" + popSizes.getValue() + "</parameter>");
+        out.println("                <taxonSuperset idref=\"taxonSuperset\"/>");
+        for (int i = 0; i < nrOfGeneTrees; i++) {
+            out.println("                <geneTree idref=\"tree:gene" + (i+1) + "\"/> <embedding idref=\"embedding:gene" + (i+1) + "\"/>");
+        }
+        out.println("            </coalescentSimulator>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
             out.println("            <rebuildEmbedding id=\"rebuildEmbedding:gene" + (i+1) + "\" taxonSuperset=\"@taxonSuperset\" " +
@@ -391,12 +395,7 @@ public class CoalescentSimulator extends Runnable {
                         "spec=\"speciesnetwork.GeneTreeInSpeciesNetwork\" speciesNetwork=\"@network:species\" " +
                         "geneTree=\"@tree:gene" + (i+1) + "\" embedding=\"@embedding:gene" + (i+1) + "\"/>");
         }
-        StringBuilder buf = new StringBuilder();
-        for (int k = 0; k < popSizes.getDimension(); k++) {
-            buf.append(popSizes.getValue(k));
-            if (k < popSizes.getDimension() - 1) buf.append(" ");
-        }
-        out.println("                    <!-- populationModel id=\"popModel\" popSizes=\"" + buf + "\" " +
+        out.println("                    <!-- populationModel id=\"popModel\" popSizes=\"@popSizes\" " +
                                                     "spec=\"speciesnetwork.ConstantPopulation\"/ -->");
         out.println("                    <populationModel alpha=\"10.0\" beta=\"0.1\" id=\"popModel\" " +
                                                     "spec=\"speciesnetwork.ConstantPopulationIO\"/>");
@@ -405,8 +404,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("                <distribution id=\"networkPrior\" spec=\"speciesnetwork.YuleHybridModel\" network=\"@network:species\" " +
                     "netDiversification=\"@netDivRate:species\" turnOver=\"@turnOverRate:species\" betaShape=\"1.0\"/>");
         out.println("                <prior id=\"networkOrigin\" name=\"distribution\" x=\"@originTime:species\">");
-        out.println("                    <Uniform id=\"uniform.01\" name=\"distr\" upper=\"Infinity\"/>");
-        out.println("                    <!-- Exponential id=\"exponential.0\" name=\"distr\" mean=\"0.1\"/ -->");
+        out.println("                    <Exponential id=\"exponential.0\" name=\"distr\" mean=\"" + df.format(speciesNetwork.getOrigin().getHeight()) + "\"/>");
         out.println("                </prior>");
         out.println("                <prior id=\"netDivPrior\" name=\"distribution\" x=\"@netDivRate:species\">");
         out.println("                    <Exponential id=\"exponential.01\" name=\"distr\" mean=\"10.0\"/>");
@@ -487,7 +485,7 @@ public class CoalescentSimulator extends Runnable {
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
-        out.println("        <operator id=\"speciesNodeSliderAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"" + 5*(nrOfGeneTrees+10) + "\">");
+        out.println("        <operator id=\"speciesNodeSliderAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"" + 10*(nrOfGeneTrees+10) + "\">");
         out.println("            <operator id=\"nodeSlider\" spec=\"speciesnetwork.operators.NodeSlider\" speciesNetwork=\"@network:species\" " +
                                     "origin=\"@originTime:species\" isNormal=\"true\" sigma=\"0.005\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++)
