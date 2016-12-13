@@ -298,9 +298,8 @@ public class CoalescentSimulator extends Runnable {
         DecimalFormat df = new DecimalFormat("#.########");
         // print header
         out.println("<?xml version='1.0' encoding='UTF-8'?>");
-        out.println("<beast namespace=\"beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:" +
-                "beast.core.util:beast.evolution.operators:beast.evolution.sitemodel:" +
-                "beast.evolution.substitutionmodel:beast.evolution.likelihood\" version=\"2.0\">");
+        out.println("<beast namespace=\"beast.core:beast.core.util:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.evolution.operators:" +
+                    "beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.branchratemodel:beast.evolution.likelihood\" version=\"2.4\">");
         // print sequence data
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("    <data id=\"gene" + (i+1) + "\" name=\"alignment\">");
@@ -328,8 +327,8 @@ public class CoalescentSimulator extends Runnable {
                     "    <map name=\"OneOnX\">beast.math.distributions.OneOnX</map>\n" +
                     "    <map name=\"prior\">beast.math.distributions.Prior</map>\n");
         // print initial species network
-        out.println("    <init spec=\"beast.util.TreeParser\" id=\"newick:species\" IsLabelledNewick=\"true\" " +
-                            "adjustTipHeights=\"false\"\n          newick=\"" + speciesNetwork.getOrigin().toString(true) + "\"/>");
+        out.println("    <init spec=\"beast.util.TreeParser\" id=\"newick:species\" IsLabelledNewick=\"true\" adjustTipHeights=\"false\"\n" +
+                    "          newick=\"" + speciesNetwork.getOrigin().toString(true) + "\"/>");
         out.println("    <run chainLength=\"40000000\" id=\"mcmc\" spec=\"MCMC\">");  // MCMC block
         out.println("        <state id=\"state\" storeEvery=\"1000\">");  // states
         // print state nodes
@@ -352,8 +351,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("            <parameter id=\"clockRate:gene\" name=\"stateNode\">1.0</parameter>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <tree id=\"tree:gene" + (i+1) + "\" name=\"stateNode\">");
-            out.println("                <taxonset alignment=\"@gene" + (i+1) + "\" " +
-                                                 "id=\"taxonset:gene" + (i+1) + "\" spec=\"TaxonSet\"/>");
+            out.println("                <taxonset id=\"taxonset:gene" + (i + 1) + "\" alignment=\"@gene" + (i+1) + "\" spec=\"TaxonSet\"/>");
             out.println("            </tree>");
             // print true embedding (doesn't make sense as gene node number may change, so just print -1)
             IntegerParameter embedding = embeddings.get(i);
@@ -379,26 +377,21 @@ public class CoalescentSimulator extends Runnable {
         out.println("            </coalescentSimulator>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
-            out.println("            <rebuildEmbedding id=\"rebuildEmbedding:gene" + (i+1) + "\" taxonSuperset=\"@taxonSuperset\" " +
-                    "spec=\"speciesnetwork.operators.RebuildEmbedding\" speciesNetwork=\"@network:species\" " +
-                    "geneTree=\"@tree:gene" + (i+1) + "\" embedding=\"@embedding:gene" + (i+1) + "\" weight=\"0.0\"/>");
+            out.println("            <rebuildEmbedding id=\"rebuildEmbedding:gene" + (i+1) + "\" taxonSuperset=\"@taxonSuperset\" spec=\"speciesnetwork.operators.RebuildEmbedding\" " +
+                        "speciesNetwork=\"@network:species\" geneTree=\"@tree:gene" + (i+1) + "\" embedding=\"@embedding:gene" + (i+1) + "\" weight=\"0.0\"/>");
         }
         out.println("        </init>\n");
         // print posterior, prior, and likelihood stuff
         out.println("        <distribution id=\"posterior\" spec=\"util.CompoundDistribution\">");
         out.println("            <distribution id=\"prior\" spec=\"util.CompoundDistribution\">");  // prior
         // coalescent
-        out.println("                <distribution id=\"coalescent\" spec=\"speciesnetwork.MultispeciesCoalescent\" " +
-                                                    "speciesNetwork=\"@network:species\">");
+        out.println("                <distribution id=\"coalescent\" spec=\"speciesnetwork.MultispeciesCoalescent\" speciesNetwork=\"@network:species\">");
         for (int i = 0; i < nrOfGeneTrees; i++) {
-            out.println("                    <geneTreeWithin id=\"geneTree:gene" + (i+1) + "\" ploidy=\"2.0\" " +
-                        "spec=\"speciesnetwork.GeneTreeInSpeciesNetwork\" speciesNetwork=\"@network:species\" " +
-                        "geneTree=\"@tree:gene" + (i+1) + "\" embedding=\"@embedding:gene" + (i+1) + "\"/>");
+            out.println("                    <geneTreeWithin id=\"geneTree:gene" + (i+1) + "\" ploidy=\"2.0\" spec=\"speciesnetwork.GeneTreeInSpeciesNetwork\" " +
+                        "speciesNetwork=\"@network:species\" geneTree=\"@tree:gene" + (i+1) + "\" embedding=\"@embedding:gene" + (i+1) + "\"/>");
         }
-        out.println("                    <!-- populationModel id=\"popModel\" popSizes=\"@popSizes\" " +
-                                                    "spec=\"speciesnetwork.ConstantPopulation\"/ -->");
-        out.println("                    <populationModel alpha=\"10.0\" beta=\"0.1\" id=\"popModel\" " +
-                                                    "spec=\"speciesnetwork.ConstantPopulationIO\"/>");
+        out.println("                    <!-- populationModel id=\"popModel\" popSizes=\"@popSizes\" spec=\"speciesnetwork.ConstantPopulation\"/ -->");
+        out.println("                    <populationModel alpha=\"10.0\" beta=\"0.1\" id=\"popModel\" spec=\"speciesnetwork.ConstantPopulationIO\"/>");
         out.println("                </distribution>");
         // network prior
         out.println("                <distribution id=\"networkPrior\" spec=\"speciesnetwork.YuleHybridModel\" network=\"@network:species\" " +
@@ -410,7 +403,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("                    <Exponential id=\"exponential.01\" name=\"distr\" mean=\"10.0\"/>");
         out.println("                </prior>");
         out.println("                <prior id=\"turnOverPrior\" name=\"distribution\" x=\"@turnOverRate:species\">");
-        out.println("                    <Beta id=\"betadistr.01\" name=\"distr\" alpha=\"1.0\" beta=\"1.0\"/>");
+        out.println("                    <Beta id=\"betadistr.01\" name=\"distr\" alpha=\"1.0\" beta=\"2.0\"/>");
         out.println("                </prior>");
         // clock rate prior
         out.println("                <prior id=\"clockPrior\" name=\"distribution\" x=\"@clockRate:gene\">");
@@ -420,13 +413,11 @@ public class CoalescentSimulator extends Runnable {
         // likelihood
         out.println("            <distribution id=\"likelihood\" spec=\"util.CompoundDistribution\">");  // likelihood
         for (int i = 0; i < nrOfGeneTrees; i++) {
-            out.println("                <distribution data=\"@gene" + (i+1) + "\" id=\"likelihood:gene" + (i+1) + "\" " +
-                                                 "tree=\"@tree:gene" + (i+1) + "\" spec=\"TreeLikelihood\">");
+            out.println("                <distribution id=\"likelihood:gene" + (i + 1) + "\" data=\"@gene" + (i+1) + "\" tree=\"@tree:gene" + (i+1) + "\" spec=\"TreeLikelihood\">");
             out.println("                    <siteModel id=\"siteModel:gene" + (i+1) + "\" mutationRate=\"1.0\" spec=\"SiteModel\">");
             out.println("                        <substModel id=\"jc:gene" + (i+1) + "\" spec=\"JukesCantor\"/>");
             out.println("                    </siteModel>");
-            out.println("                    <branchRateModel id=\"strictClock:gene" + (i+1) + "\" clock.rate=\"@clockRate:gene\" " +
-                                                    "spec=\"beast.evolution.branchratemodel.StrictClockModel\"/>");
+            out.println("                    <branchRateModel id=\"strictClock:gene" + (i+1) + "\" clock.rate=\"@clockRate:gene\" spec=\"StrictClockModel\"/>");
             out.println("                </distribution>");
         }
         out.println("            </distribution>");
@@ -435,85 +426,72 @@ public class CoalescentSimulator extends Runnable {
         // gene tree operators
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("        <operator id=\"scaleAndEmbed:gene" + (i+1) + "\" spec=\"speciesnetwork.operators." +
-                    "JointReembedding\" rebuildEmbedding=\"@rebuildEmbedding:gene" + (i+1) + "\" weight=\"3.0\">");
-            out.println("            <operator id=\"scale:gene" + (i+1) + "\" spec=\"ScaleOperator\" " +
-                                        "scaleFactor=\"0.5\" tree=\"@tree:gene" + (i+1) + "\" weight=\"0.0\"/>");
+                        "JointReembedding\" rebuildEmbedding=\"@rebuildEmbedding:gene" + (i+1) + "\" weight=\"3.0\">");
+            out.println("            <operator id=\"scale:gene" + (i+1) + "\" spec=\"ScaleOperator\" scaleFactor=\"0.5\" tree=\"@tree:gene" + (i+1) + "\" weight=\"0.0\"/>");
             out.println("        </operator>");
             out.println("        <operator id=\"scaleRootAndEmbed:gene" + (i+1) + "\" spec=\"speciesnetwork.operators." +
-                    "JointReembedding\" rebuildEmbedding=\"@rebuildEmbedding:gene" + (i+1) + "\" weight=\"3.0\">");
+                        "JointReembedding\" rebuildEmbedding=\"@rebuildEmbedding:gene" + (i+1) + "\" weight=\"3.0\">");
             out.println("            <operator id=\"scaleRoot:gene" + (i+1) + "\" spec=\"ScaleOperator\" " +
-                      "rootOnly=\"true\" scaleFactor=\"0.5\" tree=\"@tree:gene" + (i+1) + "\" weight=\"0.0\"/>");
+                        "rootOnly=\"true\" scaleFactor=\"0.5\" tree=\"@tree:gene" + (i+1) + "\" weight=\"0.0\"/>");
             out.println("        </operator>");
             out.println("        <operator id=\"uniformAndEmbed:gene" + (i+1) + "\" spec=\"speciesnetwork.operators." +
-                    "JointReembedding\" rebuildEmbedding=\"@rebuildEmbedding:gene" + (i+1) + "\" weight=\"30.0\">");
-            out.println("            <operator id=\"uniform:gene" + (i+1) + "\" spec=\"Uniform\" " +
-                                                            "tree=\"@tree:gene" + (i+1) + "\" weight=\"0.0\"/>");
+                        "JointReembedding\" rebuildEmbedding=\"@rebuildEmbedding:gene" + (i+1) + "\" weight=\"30.0\">");
+            out.println("            <operator id=\"uniform:gene" + (i+1) + "\" spec=\"Uniform\" tree=\"@tree:gene" + (i+1) + "\" weight=\"0.0\"/>");
             out.println("        </operator>");
             out.println("        <operator id=\"subSlideAndEmbed:gene" + (i+1) + "\" spec=\"speciesnetwork.operators." +
-                    "JointReembedding\" rebuildEmbedding=\"@rebuildEmbedding:gene" + (i+1) + "\" weight=\"15.0\">");
-            out.println("            <operator id=\"subSlide:gene" + (i+1) + "\" spec=\"SubtreeSlide\" " +
-                                                            "tree=\"@tree:gene" + (i+1) + "\" weight=\"0.0\"/>");
+                        "JointReembedding\" rebuildEmbedding=\"@rebuildEmbedding:gene" + (i+1) + "\" weight=\"15.0\">");
+            out.println("            <operator id=\"subSlide:gene" + (i+1) + "\" spec=\"SubtreeSlide\" tree=\"@tree:gene" + (i+1) + "\" weight=\"0.0\"/>");
             out.println("        </operator>");
             out.println("        <operator id=\"narrowAndEmbed:gene" + (i+1) + "\" spec=\"speciesnetwork.operators." +
-                    "JointReembedding\" rebuildEmbedding=\"@rebuildEmbedding:gene" + (i+1) + "\" weight=\"15.0\">");
-            out.println("            <operator id=\"narrow:gene" + (i+1) + "\" spec=\"Exchange\" " +
-                                                            "tree=\"@tree:gene" + (i+1) + "\" weight=\"0.0\"/>");
+                        "JointReembedding\" rebuildEmbedding=\"@rebuildEmbedding:gene" + (i+1) + "\" weight=\"15.0\">");
+            out.println("            <operator id=\"narrow:gene" + (i+1) + "\" spec=\"Exchange\" tree=\"@tree:gene" + (i+1) + "\" weight=\"0.0\"/>");
             out.println("        </operator>");
             out.println("        <operator id=\"wideAndEmbed:gene" + (i+1) + "\" spec=\"speciesnetwork.operators." +
-                    "JointReembedding\" rebuildEmbedding=\"@rebuildEmbedding:gene" + (i+1) + "\" weight=\"3.0\">");
-            out.println("            <operator id=\"wide:gene" + (i+1) + "\" spec=\"Exchange\" " +
-                                         "isNarrow=\"false\" tree=\"@tree:gene" + (i+1) + "\" weight=\"0.0\"/>");
+                        "JointReembedding\" rebuildEmbedding=\"@rebuildEmbedding:gene" + (i+1) + "\" weight=\"3.0\">");
+            out.println("            <operator id=\"wide:gene" + (i+1) + "\" spec=\"Exchange\" isNarrow=\"false\" tree=\"@tree:gene" + (i+1) + "\" weight=\"0.0\"/>");
             out.println("        </operator>");
             out.println("        <operator id=\"WBAndEmbed:gene" + (i+1) + "\" spec=\"speciesnetwork.operators." +
-                    "JointReembedding\" rebuildEmbedding=\"@rebuildEmbedding:gene" + (i+1) + "\" weight=\"3.0\">");
-            out.println("            <operator id=\"WilsonBalding:gene" + (i+1) + "\" spec=\"WilsonBalding\" " +
-                                                            "tree=\"@tree:gene" + (i+1) + "\" weight=\"0.0\"/>");
+                        "JointReembedding\" rebuildEmbedding=\"@rebuildEmbedding:gene" + (i+1) + "\" weight=\"3.0\">");
+            out.println("            <operator id=\"WilsonBalding:gene" + (i+1) + "\" spec=\"WilsonBalding\" tree=\"@tree:gene" + (i+1) + "\" weight=\"0.0\"/>");
             out.println("        </operator>\n");
         }
         // species network operators
         out.println("        <operator id=\"divrRateScaler\" spec=\"ScaleOperator\" parameter=\"@netDivRate:species\" scaleFactor=\"0.75\" weight=\"3.0\"/>");
         out.println("        <operator id=\"turnOverScaler\" spec=\"ScaleOperator\" parameter=\"@turnOverRate:species\" scaleFactor=\"0.75\" weight=\"3.0\"/>");
-        out.println("        <operator id=\"gammaProbUniform\" spec=\"speciesnetwork.operators.GammaProbUniform\" " +
-                                "speciesNetwork=\"@network:species\" weight=\"10.0\"/>");
-        out.println("        <operator id=\"gammaProbRndWalk\" spec=\"speciesnetwork.operators.GammaProbRndWalk\" " +
-                                "speciesNetwork=\"@network:species\" weight=\"5.0\"/>\n");
+        out.println("        <operator id=\"gammaProbUniform\" spec=\"speciesnetwork.operators.GammaProbUniform\" speciesNetwork=\"@network:species\" weight=\"10.0\"/>");
+        out.println("        <operator id=\"gammaProbRndWalk\" spec=\"speciesnetwork.operators.GammaProbRndWalk\" speciesNetwork=\"@network:species\" weight=\"5.0\"/>\n");
         out.println("        <operator id=\"speciesOriginMultiplier\" spec=\"speciesnetwork.operators.OriginMultiplier\" " +
-                                "speciesNetwork=\"@network:species\" origin=\"@originTime:species\" weight=\"5.0\"/>");
+                    "speciesNetwork=\"@network:species\" origin=\"@originTime:species\" weight=\"5.0\"/>");
         out.println("        <operator id=\"speciesNodeUniformAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"" + 5*(nrOfGeneTrees+10) + "\">");
-        out.println("            <operator id=\"nodeUniform\" spec=\"speciesnetwork.operators.NodeUniform\" " +
-                                    "speciesNetwork=\"@network:species\" weight=\"0.0\"/>");
+        out.println("            <operator id=\"nodeUniform\" spec=\"speciesnetwork.operators.NodeUniform\" speciesNetwork=\"@network:species\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
         out.println("        <operator id=\"speciesNodeSliderAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"" + 10*(nrOfGeneTrees+10) + "\">");
         out.println("            <operator id=\"nodeSlider\" spec=\"speciesnetwork.operators.NodeSlider\" speciesNetwork=\"@network:species\" " +
-                                    "origin=\"@originTime:species\" isNormal=\"true\" sigma=\"0.005\" weight=\"0.0\"/>");
+                    "origin=\"@originTime:species\" isNormal=\"true\" sigma=\"0.005\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
         // whether or not to write network topology operators
         if (!networkOperatorInput.get())  out.println("        <!--");
-        out.println("        <operator id=\"speciesEdgeRelocateWAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"50.0\">");
-        out.println("            <operator id=\"edgeRelocatorW\" spec=\"speciesnetwork.operators.EdgeRelocator\" " +
-                                            "speciesNetwork=\"@network:species\" isWide=\"true\" weight=\"0.0\"/>");
+        out.println("        <operator id=\"speciesEdgeRelocateWAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"100.0\">");
+        out.println("            <operator id=\"edgeRelocatorW\" spec=\"speciesnetwork.operators.EdgeRelocator\" speciesNetwork=\"@network:species\" isWide=\"true\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
         out.println("        <operator id=\"speciesEdgeRelocateNAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"50.0\">");
-        out.println("            <operator id=\"edgeRelocatorN\" spec=\"speciesnetwork.operators.EdgeRelocator\" " +
-                                            "speciesNetwork=\"@network:species\" isWide=\"false\" weight=\"0.0\"/>");
+        out.println("            <operator id=\"edgeRelocatorN\" spec=\"speciesnetwork.operators.EdgeRelocator\" speciesNetwork=\"@network:species\" isWide=\"false\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
         out.println("        <operator id=\"speciesAddHybridAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"100.0\">");
-        out.println("            <operator id=\"addReticulation\" spec=\"speciesnetwork.operators.AddReticulation\" " +
-                                            "speciesNetwork=\"@network:species\" weight=\"0.0\"/>");
+        out.println("            <operator id=\"addReticulation\" spec=\"speciesnetwork.operators.AddReticulation\" speciesNetwork=\"@network:species\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
         out.println("        <operator id=\"speciesDeleteHybridAndEmbed\" spec=\"speciesnetwork.operators.JointReembedding\" weight=\"100.0\">");
-        out.println("            <operator id=\"deleteReticulation\" spec=\"speciesnetwork.operators.DeleteReticulation\" " +
-                                            "speciesNetwork=\"@network:species\" weight=\"0.0\"/>");
+        out.println("            <operator id=\"deleteReticulation\" spec=\"speciesnetwork.operators.DeleteReticulation\" speciesNetwork=\"@network:species\" weight=\"0.0\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <rebuildEmbedding idref=\"rebuildEmbedding:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
@@ -527,8 +505,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("            <log idref=\"coalescent\"/>");
         out.println("            <log id=\"ESS.0\" spec=\"util.ESS\" arg=\"@posterior\"/>");
         out.println("        </logger>");
-        out.println("        <logger fileName=\"" + outputFileName + ".trace.log\" id=\"tracelog\" " +
-                                "logEvery=\"2000\" model=\"@posterior\" sort=\"smart\">");
+        out.println("        <logger fileName=\"" + outputFileName + ".trace.log\" id=\"tracelog\" logEvery=\"2000\" model=\"@posterior\" sort=\"smart\">");
         out.println("            <log idref=\"posterior\"/>");
         out.println("            <log idref=\"likelihood\"/>");
         out.println("            <log idref=\"prior\"/>");
@@ -538,25 +515,19 @@ public class CoalescentSimulator extends Runnable {
         out.println("            <log idref=\"originTime:species\"/>");
         out.println("            <log id=\"networkLength\" speciesNetwork=\"@network:species\" spec=\"speciesnetwork.NetworkStatLogger\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
-            out.println("            <log id=\"height:gene" + (i+1) + "\" tree=\"@tree:gene" + (i+1) + "\" " +
-                                        "spec=\"beast.evolution.tree.TreeStatLogger\"/>");
+            out.println("            <log id=\"height:gene" + (i+1) + "\" tree=\"@tree:gene" + (i+1) + "\" spec=\"beast.evolution.tree.TreeStatLogger\"/>");
         }
         out.println("            <log idref=\"clockRate:gene\"/>");
         out.println("        </logger>");
-        out.println("        <logger fileName=\"" + outputFileName + ".species.trees\" id=\"treelog:species\" " +
-                             "logEvery=\"2000\" mode=\"tree\">");
-        out.println("            <log id=\"networkLogger:species\" spec=\"speciesnetwork.NetworkWithMetaDataLogger\" " +
-                                    "speciesNetwork=\"@network:species\"/>");
+        out.println("        <logger fileName=\"" + outputFileName + ".species.trees\" id=\"treelog:species\" logEvery=\"2000\" mode=\"tree\">");
+        out.println("            <log id=\"networkLogger:species\" spec=\"speciesnetwork.NetworkWithMetaDataLogger\" speciesNetwork=\"@network:species\"/>");
         out.println("        </logger>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
-            out.println("        <logger fileName=\"" + outputFileName + ".gene" + (i+1) + ".log\" " +
-                                    "id=\"embedlog:gene" + (i+1) + "\" logEvery=\"2000\" sort=\"smart\">");
+            out.println("        <logger fileName=\"" + outputFileName + ".gene" + (i+1) + ".log\" id=\"embedlog:gene" + (i+1) + "\" logEvery=\"2000\" sort=\"smart\">");
             out.println("            <log idref=\"embedding:gene" + (i+1) + "\"/>");
             out.println("        </logger>");
-            out.println("        <logger fileName=\"" + outputFileName + ".gene" + (i+1) + ".trees\" " +
-                                    "id=\"treelog:gene" + (i+1) + "\" logEvery=\"2000\" mode=\"tree\">");
-            out.println("            <log id=\"treeLogger:gene" + (i+1) + "\" tree=\"@tree:gene" + (i+1) + "\" " +
-                                        "spec=\"beast.evolution.tree.TreeWithMetaDataLogger\"/>");
+            out.println("        <logger fileName=\"" + outputFileName + ".gene" + (i+1) + ".trees\" id=\"treelog:gene" + (i+1) + "\" logEvery=\"2000\" mode=\"tree\">");
+            out.println("            <log id=\"treeLogger:gene" + (i+1) + "\" tree=\"@tree:gene" + (i+1) + "\" spec=\"beast.evolution.tree.TreeWithMetaDataLogger\"/>");
             out.println("        </logger>");
         }
         out.println("    </run>");  // end of MCMC

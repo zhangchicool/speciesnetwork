@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<beast namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" version="2.0">
+<beast namespace="beast.core:beast.core.util:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.branchratemodel:beast.evolution.likelihood" version="2.4">
     <data id="gene1" name="alignment">
         <sequence taxon="b2" value="CAGCACACTCTCGTGGACGCCATCACCGATATTCCATCGGACAGGAGGCAATGCAGAAGTACGACGATAGTATAAGTACGGTTAAAATTTATCTATTAGTCGGATGCGTCCACTATTATCTTCCGTACCGTTTACCACACGGCAAGTCCGTTGGAAAGTGGAAAAAAAGCTACATCCTTAAGCGTGATTTGGCAACATTC"/>
         <sequence taxon="b1" value="CAGCACACTCTCGTGGACGCCATCACCGATATTCCATCGGACAGGAGGCAATGCAGAAGTACGACGATAGTATAAGTACGGTTAAGATTTATCTATTGGTCGGATGCGTCCACTATTATCTTCCGTACCGTTTACCACACGGCAAGTCCGTTGGAAAGTGGAAAAAAAGCTACATCCTTAAGCGTGATTTGGCAACATTC"/>
@@ -69,15 +69,15 @@
             <parameter id="turnOverRate:species" lower="0.0" upper="1.0" name="stateNode">0.5</parameter>
             <parameter id="clockRate:gene" name="stateNode">1.0</parameter>
             <tree id="tree:gene1" name="stateNode">
-                <taxonset alignment="@gene1" id="taxonset:gene1" spec="TaxonSet"/>
+                <taxonset id="taxonset:gene1" alignment="@gene1" spec="TaxonSet"/>
             </tree>
             <stateNode id="embedding:gene1" spec="parameter.IntegerParameter">-1</stateNode>
             <tree id="tree:gene2" name="stateNode">
-                <taxonset alignment="@gene2" id="taxonset:gene2" spec="TaxonSet"/>
+                <taxonset id="taxonset:gene2" alignment="@gene2" spec="TaxonSet"/>
             </tree>
             <stateNode id="embedding:gene2" spec="parameter.IntegerParameter">-1</stateNode>
             <tree id="tree:gene3" name="stateNode">
-                <taxonset alignment="@gene3" id="taxonset:gene3" spec="TaxonSet"/>
+                <taxonset id="taxonset:gene3" alignment="@gene3" spec="TaxonSet"/>
             </tree>
             <stateNode id="embedding:gene3" spec="parameter.IntegerParameter">-1</stateNode>
         </state>
@@ -118,30 +118,30 @@
                     <Exponential id="exponential.01" name="distr" mean="10.0"/>
                 </prior>
                 <prior id="turnOverPrior" name="distribution" x="@turnOverRate:species">
-                    <Beta id="betadistr.01" name="distr" alpha="1.0" beta="1.0"/>
+                    <Beta id="betadistr.01" name="distr" alpha="1.0" beta="2.0"/>
                 </prior>
                 <prior id="clockPrior" name="distribution" x="@clockRate:gene">
                     <Gamma id="gamma.01" name="distr" alpha="1.0" beta="1.0"/>
                 </prior>
             </distribution>
             <distribution id="likelihood" spec="util.CompoundDistribution">
-                <distribution data="@gene1" id="likelihood:gene1" tree="@tree:gene1" spec="TreeLikelihood">
+                <distribution id="likelihood:gene1" data="@gene1" tree="@tree:gene1" spec="TreeLikelihood">
                     <siteModel id="siteModel:gene1" mutationRate="1.0" spec="SiteModel">
                         <substModel id="jc:gene1" spec="JukesCantor"/>
                     </siteModel>
-                    <branchRateModel id="strictClock:gene1" clock.rate="@clockRate:gene" spec="beast.evolution.branchratemodel.StrictClockModel"/>
+                    <branchRateModel id="strictClock:gene1" clock.rate="@clockRate:gene" spec="StrictClockModel"/>
                 </distribution>
-                <distribution data="@gene2" id="likelihood:gene2" tree="@tree:gene2" spec="TreeLikelihood">
+                <distribution id="likelihood:gene2" data="@gene2" tree="@tree:gene2" spec="TreeLikelihood">
                     <siteModel id="siteModel:gene2" mutationRate="1.0" spec="SiteModel">
                         <substModel id="jc:gene2" spec="JukesCantor"/>
                     </siteModel>
-                    <branchRateModel id="strictClock:gene2" clock.rate="@clockRate:gene" spec="beast.evolution.branchratemodel.StrictClockModel"/>
+                    <branchRateModel id="strictClock:gene2" clock.rate="@clockRate:gene" spec="StrictClockModel"/>
                 </distribution>
-                <distribution data="@gene3" id="likelihood:gene3" tree="@tree:gene3" spec="TreeLikelihood">
+                <distribution id="likelihood:gene3" data="@gene3" tree="@tree:gene3" spec="TreeLikelihood">
                     <siteModel id="siteModel:gene3" mutationRate="1.0" spec="SiteModel">
                         <substModel id="jc:gene3" spec="JukesCantor"/>
                     </siteModel>
-                    <branchRateModel id="strictClock:gene3" clock.rate="@clockRate:gene" spec="beast.evolution.branchratemodel.StrictClockModel"/>
+                    <branchRateModel id="strictClock:gene3" clock.rate="@clockRate:gene" spec="StrictClockModel"/>
                 </distribution>
             </distribution>
         </distribution>
