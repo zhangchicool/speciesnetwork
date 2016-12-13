@@ -38,7 +38,7 @@
     <init spec='beast.util.TreeParser' id='newick:species' IsLabelledNewick="true" adjustTipHeights="false"
           newick="((((A:0.02,(B:0.01)#H1[&amp;gamma=0.4]:0.01)S1:0.01,(#H1:0.01)#H2[&amp;gamma=0.7]:0.01)S2:0.02,(#H2:0.02,C:0.04)S3:0.01)R:0.03)"/>
 
-    <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="3S_2H_3L.xml" iterations="1" initMethod="user">
+    <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="3S_2H_3L.xml" networkOperator="true" initMethod="random">
         <state id="state">
             <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
                 <taxonset id="taxonSuperset" spec="TaxonSet">
@@ -79,7 +79,7 @@
         <networkSimulator id="network:simulated" speciesNetwork="@network:species" birthRate="30" hybridRate="20"
                           origin="0.08" spec="speciesnetwork.simulator.YuleHybridSimulator"/>
         -->
-        <parameter id="pop.sizes" name="popSizes">0.01</parameter>
+        <parameter id="popsizes" name="popSizes">0.01</parameter>
         <taxonSuperset idref="taxonSuperset"/>
         <geneTree idref="tree:gene1"/> <embedding idref="embedding:gene1"/>
         <geneTree idref="tree:gene2"/> <embedding idref="embedding:gene2"/>

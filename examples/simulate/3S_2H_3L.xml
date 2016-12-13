@@ -112,7 +112,7 @@
                 </distribution>
                 <distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" network="@network:species" netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" betaShape="1.0"/>
                 <prior id="networkOrigin" name="distribution" x="@originTime:species">
-                    <Exponential id="exponential.0" name="distr" mean="0.1"/>
+                    <Exponential id="exponential.0" name="distr" mean="0.08"/>
                 </prior>
                 <prior id="netDivPrior" name="distribution" x="@netDivRate:species">
                     <Exponential id="exponential.01" name="distr" mean="10.0"/>
@@ -218,20 +218,19 @@
         <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="5.0"/>
 
         <operator id="speciesOriginMultiplier" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="5.0"/>
-        <operator id="speciesNodeUniformAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="50.0">
+        <operator id="speciesNodeUniformAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="65">
             <operator id="nodeUniform" spec="speciesnetwork.operators.NodeUniform" speciesNetwork="@network:species" weight="0.0"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
         </operator>
-        <operator id="speciesNodeSliderAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+        <operator id="speciesNodeSliderAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="130">
             <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.005" weight="0.0"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
         </operator>
-        <!--
-        <operator id="speciesEdgeRelocateWAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="50.0">
+        <operator id="speciesEdgeRelocateWAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
             <operator id="edgeRelocatorW" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
@@ -255,7 +254,6 @@
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
         </operator>
-        -->
 
         <logger id="screenlog" logEvery="20000" model="@posterior">
             <log idref="posterior"/>
