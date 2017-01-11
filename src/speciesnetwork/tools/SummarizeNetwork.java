@@ -29,6 +29,7 @@ public class SummarizeNetwork extends Runnable {
             "Name of the file that contains networks in extended newick format.", Validate.REQUIRED);
     public final Input<String> outputFileNameInput = new Input<>("outputFileName",
             "If provided, write to this file rather than to standard out.");
+    public final Input<Integer> burninInput = new Input<>("burnin", "The absolute burn-in.", 0);
 
     // map the number of reticulations with the networks
     private Multimap<Integer, Network> nHybridInNetworkMap = HashMultimap.create();
@@ -57,6 +58,7 @@ public class SummarizeNetwork extends Runnable {
         // print header
         out.println("nHybrid  length  height  tHybrid  gamma");
 
+        final int burnin = burninInput.get();
         int numNetworks = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(inputFileName))) {
             String line;
@@ -68,15 +70,15 @@ public class SummarizeNetwork extends Runnable {
                     TreeParser tree = new TreeParser(line);
                     NetworkParser network = new NetworkParser(tree);
 
-                    printSummary(out, network);  // summarize
-
                     numNetworks++;
+                    if (numNetworks > burnin)
+                        printSummary(out, network);  // summarize
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.err.println(numNetworks + " networks processed");
+        System.err.println(numNetworks + " networks totally, " + burnin + " discarded as burn-in.");
     }
 
     private double getGammaProb(Network network) {
