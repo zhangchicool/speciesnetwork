@@ -55,14 +55,14 @@ public class SummarizeNetwork extends Runnable {
             out = new PrintStream(outputFileName);
         }
         // print header
-        out.println("nHybrid  length  height  tHybrid  tSpecia");
+        out.println("nHybrid  length  height  tHybrid  gamma");
 
         int numNetworks = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(inputFileName))) {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.trim().toLowerCase().startsWith("tree ")) {
-                    // process the line.
+                    // process the line (newick network string)
                     final int i = line.indexOf('(');
                     if (i > 0) line = line.substring(i);
                     TreeParser tree = new TreeParser(line);
@@ -70,8 +70,6 @@ public class SummarizeNetwork extends Runnable {
 
                     printSummary(out, network);  // summarize
 
-                    // final int nHybrid = network.getReticulationNodeCount();
-                    // nHybridInNetworkMap.put(nHybrid, network);
                     numNetworks++;
                 }
             }
@@ -81,31 +79,55 @@ public class SummarizeNetwork extends Runnable {
         System.err.println(numNetworks + " networks processed");
     }
 
+    private double getGammaProb(Network network) {
+        if (network.getReticulationNodeCount() != 1)
+            return Double.NaN;
+
+        NetworkNode tipA = null, tipB = null, tipC = null;
+        for (NetworkNode tip: network.getLeafNodes()) {
+            if (tip.getLabel().equals("A"))
+                tipA = tip;
+            else if (tip.getLabel().equals("B"))
+                tipB = tip;
+            else if (tip.getLabel().equals("C"))
+                tipC = tip;
+        }
+        if (tipA == null || tipB == null || tipC == null)
+            throw new RuntimeException("Check tip label!");
+
+        NetworkNode parentA = tipA.getParentByBranch(tipA.gammaBranchNumber);
+        NetworkNode parentB = tipB.getParentByBranch(tipB.gammaBranchNumber);
+        NetworkNode parentC = tipC.getParentByBranch(tipC.gammaBranchNumber);
+        if (parentB.isReticulation() && parentA.getChildren().contains(parentB) && parentC.getChildren().contains(parentB)) {
+            if (parentB.getParentByBranch(parentB.gammaBranchNumber) == parentA)
+                return parentB.getGammaProb();
+            else
+                return 1.0 - parentB.getGammaProb();
+        }
+        else return Double.NaN;
+    }
+
     /**
      * print some summary statics, including
      * 1. number of hybridization
      * 2. network length
      * 3. root height
      * 4. time of youngest hybridization
-     * 5. time of youngest speciation
+     * 5. gamma (NA if not the true network)
      */
     private void printSummary(PrintStream out, Network network) {
         final int nHybrid = network.getReticulationNodeCount();
         final double length = network.getNetworkLength();
         final double height = network.getRoot().getHeight();
+        final double gamma = getGammaProb(network);
 
         double tHybrid = 0.0;
         for (NetworkNode hNode: network.getReticulationNodes()) {
             if (tHybrid == 0.0 || tHybrid > hNode.getHeight())
                 tHybrid = hNode.getHeight();
         }
-        double tSpecia = 0.0;
-        for (NetworkNode sNode: network.getSpeciationNodes()) {
-            if (tSpecia == 0.0 || tSpecia > sNode.getHeight())
-                tSpecia = sNode.getHeight();
-        }
 
         DecimalFormat df = new DecimalFormat("#.########");
-        out.println(nHybrid + "\t" + df.format(length) + "\t" + df.format(height) + "\t" + df.format(tHybrid) + "\t" + df.format(tSpecia));
+        out.println(nHybrid + "\t" + df.format(length) + "\t" + df.format(height) + "\t" + df.format(tHybrid) + "\t" + gamma);
     }
 }
