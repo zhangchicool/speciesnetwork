@@ -87,12 +87,12 @@ public class SummarizeNetwork extends Runnable {
 
         NetworkNode tipA = null, tipB = null, tipC = null;
         for (NetworkNode tip: network.getLeafNodes()) {
-            if (tip.getLabel().equals("A"))
-                tipA = tip;
-            else if (tip.getLabel().equals("B"))
-                tipB = tip;
-            else if (tip.getLabel().equals("C"))
-                tipC = tip;
+            switch (tip.getLabel()) {
+                case "A":  tipA = tip;  break;
+                case "B":  tipB = tip;  break;
+                case "C":  tipC = tip;  break;
+                default:
+            }
         }
         if (tipA == null || tipB == null || tipC == null)
             throw new RuntimeException("Check tip label!");
@@ -101,6 +101,8 @@ public class SummarizeNetwork extends Runnable {
         NetworkNode parentB = tipB.getParentByBranch(tipB.gammaBranchNumber);
         NetworkNode parentC = tipC.getParentByBranch(tipC.gammaBranchNumber);
         if (parentB.isReticulation() && parentA.getChildren().contains(parentB) && parentC.getChildren().contains(parentB)) {
+            // System.out.println(parentB.getHeight() + "\t" + parentA.getHeight() + "\t" + parentC.getHeight()  + "\t" +
+            //                    network.getRoot().getHeight() + "\t" + network.getOrigin().getHeight());
             if (parentB.getParentByBranch(parentB.gammaBranchNumber) == parentA)
                 return parentB.getGammaProb();
             else
