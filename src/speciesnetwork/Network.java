@@ -718,7 +718,7 @@ public class Network extends StateNode {
             if (hNode.getParentByBranch(hNode.gammaBranchNumber) == hNode.getParentByBranch(hNode.gammaBranchNumber+1))
                 return true;
         }
-
+        // no parallel branches (bubble), return false
         return false;
     }
 }

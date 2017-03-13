@@ -22,7 +22,7 @@ public class MultispeciesCoalescent extends Distribution {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
     public final Input<List<GeneTreeInSpeciesNetwork>> geneTreeWrapperInput =
-            new Input<>("geneTreeWithin", "Gene trees within the species network.", new ArrayList<>());
+            new Input<>("geneTreeWithin", "Gene tree (wrapper) within the species network.", new ArrayList<>());
     public final Input<PopulationSizeModel> populationModelInput =
             new Input<>("populationModel", "The species network population model.", Validate.REQUIRED);
 

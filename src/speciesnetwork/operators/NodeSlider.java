@@ -17,7 +17,7 @@ import speciesnetwork.SanityChecks;
  * @author Chi Zhang
  */
 
-@Description("Randomly selects an internal network node and move its height using an uniform sliding window.")
+@Description("Randomly selects an internal network node and move its height using a sliding window.")
 public class NodeSlider extends Operator {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
