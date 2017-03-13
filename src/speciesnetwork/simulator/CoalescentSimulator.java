@@ -391,7 +391,7 @@ public class CoalescentSimulator extends Runnable {
                         "speciesNetwork=\"@network:species\" geneTree=\"@tree:gene" + (i+1) + "\" embedding=\"@embedding:gene" + (i+1) + "\"/>");
         }
         out.println("                    <!-- populationModel id=\"popModel\" popSizes=\"@popSizes\" spec=\"speciesnetwork.ConstantPopulation\"/ -->");
-        out.println("                    <populationModel alpha=\"10.0\" beta=\"0.1\" id=\"popModel\" spec=\"speciesnetwork.ConstantPopulationIO\"/>");
+        out.println("                    <populationModel alpha=\"10.0\" beta=\"0.1\" id=\"popModel\" spec=\"speciesnetwork.ConstantPopIntegrated\"/>");
         out.println("                </distribution>");
         // network prior
         out.println("                <distribution id=\"networkPrior\" spec=\"speciesnetwork.YuleHybridModel\" network=\"@network:species\" " +

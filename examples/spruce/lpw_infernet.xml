@@ -922,7 +922,7 @@
     <distribution id="posterior" spec="util.CompoundDistribution">
         <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
             <!-- populationModel id="popModel" popSizes="@popSizes:species" spec="speciesnetwork.ConstantPopulation"/ -->
-            <populationModel alpha="3.0" beta="0.003" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
+            <populationModel alpha="3.0" beta="0.003" id="popModel" spec="speciesnetwork.ConstantPopIntegrated"/>
             <geneTreeWithin id="geneTree:4cl" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:4cl" embedding="@embedding:4cl"/>
             <geneTreeWithin id="geneTree:ebs" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:ebs" embedding="@embedding:ebs"/>
             <geneTreeWithin id="geneTree:gi" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:gi" embedding="@embedding:gi"/>

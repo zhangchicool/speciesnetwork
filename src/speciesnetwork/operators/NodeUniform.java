@@ -10,9 +10,8 @@ import speciesnetwork.NetworkNode;
 import speciesnetwork.SanityChecks;
 
 /**
- * Randomly pick an internal network node.
+ * Randomly pick an internal network node (excluding origin).
  * Change its height uniformly between the lower and upper limit.
- * Time of origin is not changed.
  *
  * @author Chi Zhang
  */

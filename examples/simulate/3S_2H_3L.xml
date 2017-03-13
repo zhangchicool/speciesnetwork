@@ -108,7 +108,7 @@
                     <geneTreeWithin id="geneTree:gene2" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene2" embedding="@embedding:gene2"/>
                     <geneTreeWithin id="geneTree:gene3" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene3" embedding="@embedding:gene3"/>
                     <!-- populationModel id="popModel" popSizes="@popSizes" spec="speciesnetwork.ConstantPopulation"/ -->
-                    <populationModel alpha="10.0" beta="0.1" id="popModel" spec="speciesnetwork.ConstantPopulationIO"/>
+                    <populationModel alpha="10.0" beta="0.1" id="popModel" spec="speciesnetwork.ConstantPopIntegrated"/>
                 </distribution>
                 <distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" network="@network:species" netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" betaShape="1.0"/>
                 <prior id="networkOrigin" name="distribution" x="@originTime:species">

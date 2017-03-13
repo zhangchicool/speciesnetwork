@@ -8,7 +8,7 @@ import beast.core.parameter.IntegerParameter;
 import beast.core.parameter.RealParameter;
 import beast.evolution.alignment.Taxon;
 import beast.evolution.alignment.TaxonSet;
-import speciesnetwork.ConstantPopulationIO;
+import speciesnetwork.ConstantPopIntegrated;
 import speciesnetwork.PopulationSizeModel;
 
 public class ConstantPopIOTest extends PopulationTestHelper {
@@ -90,7 +90,7 @@ public class ConstantPopIOTest extends PopulationTestHelper {
         state.initByName("stateNode", betaParameter);
         state.initialise();
 
-        PopulationSizeModel populationModel = new ConstantPopulationIO();
+        PopulationSizeModel populationModel = new ConstantPopIntegrated();
         populationModel.initByName("alpha", alphaParameter, "beta", betaParameter);
         
         return populationModel;
