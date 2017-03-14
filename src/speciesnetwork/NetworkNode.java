@@ -238,6 +238,13 @@ public class NetworkNode {
     }
 
     /**
+     * @return true if current node is root node
+     */
+    public boolean isRoot() {
+        return getParentByBranch(gammaBranchNumber).isOrigin();
+    }
+
+    /**
      * @return true if current node is leaf node
      */
     public boolean isLeaf() {

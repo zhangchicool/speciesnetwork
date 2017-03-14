@@ -14,9 +14,9 @@ import java.util.List;
  * @author Chi Zhang
  */
 
-@Description("Randomly select an internal network node and move its height uniformly." +
+@Description("Randomly select an internal network node and move its height using a sliding window." +
         "Also update the affected gene tree node heights at each locus to maintain the compatibility.")
-public class CoordinatedNodeUniform extends NodeUniform {
+public class CoordinatedNodeSlider extends NodeSlider {
     public final Input<List<Tree>> geneTreesInput =
             new Input<>("geneTree", "Gene tree within the species network.", new ArrayList<>());
     public final Input<List<IntegerParameter>> embeddingsInput =

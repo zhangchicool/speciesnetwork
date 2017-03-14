@@ -16,10 +16,13 @@ import speciesnetwork.SanityChecks;
  * @author Chi Zhang
  */
 
-@Description("Randomly selects an internal network node and move its height uniformly.")
+@Description("Randomly select an internal network node and move its height uniformly.")
 public class NodeUniform extends Operator {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
+
+    protected double upper, lower, oldHeight, newHeight;
+    protected NetworkNode snNode;
 
     @Override
     public void initAndValidate() {
@@ -32,20 +35,21 @@ public class NodeUniform extends Operator {
         // pick an internal node randomly
         final NetworkNode[] internalNodes = speciesNetwork.getInternalNodes();
         final int randomIndex = Randomizer.nextInt(internalNodes.length);
-        NetworkNode snNode = internalNodes[randomIndex];
+        snNode = internalNodes[randomIndex];
 
         // determine the lower and upper bounds
-        double upper = Double.MAX_VALUE;
+        upper = Double.MAX_VALUE;
         for (NetworkNode p: snNode.getParents()) {
             upper = Math.min(upper, p.getHeight());
         }
-        double lower = 0.0;
+        lower = 0.0;
         for (NetworkNode c: snNode.getChildren()) {
             lower = Math.max(lower, c.getHeight());
         }
 
         // propose a new height uniformly
-        final double newHeight = Randomizer.nextDouble() * (upper - lower) + lower;
+        oldHeight = snNode.getHeight();
+        newHeight = Randomizer.nextDouble() * (upper - lower) + lower;
         speciesNetwork.startEditing(this);
         snNode.setHeight(newHeight);
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
