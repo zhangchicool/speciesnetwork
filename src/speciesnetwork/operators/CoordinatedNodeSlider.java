@@ -22,7 +22,7 @@ public class CoordinatedNodeSlider extends NodeSlider {
     public final Input<List<IntegerParameter>> embeddingsInput =
             new Input<>("embedding", "The embedding matrix.", new ArrayList<>());
 
-    private double nLoci;
+    private int nLoci;
 
     @Override
     public void initAndValidate() {
@@ -49,8 +49,8 @@ public class CoordinatedNodeSlider extends NodeSlider {
         if (!snNode.isSpeciation())  // necessary only when speciation node
             return 0.0;
 
-        double m = 0;  // # gene node heights changed relative to 'upper'
-        double n = 0;  // # gene node heights changed relative to 'lower'
+        int m = 0;  // # gene node heights changed relative to 'upper'
+        int n = 0;  // # gene node heights changed relative to 'lower'
         final List<Tree> geneTrees = geneTreesInput.get();
         final List<IntegerParameter> embeddings = embeddingsInput.get();
 
@@ -77,26 +77,27 @@ public class CoordinatedNodeSlider extends NodeSlider {
                         n++;
                     }
                 }
-                else if (oldHeight <= gNodeHeight && snNode.isRoot()) {
-                    // also update the node height relative to 'lower' (as upper limit is infinity)
-                    final double gHeightNew = lower + (gNodeHeight - lower) * (newHeight - lower) / (oldHeight - lower);
-                    gNode.setHeight(gHeightNew);
-                    n++;
-                }
-                else if (oldHeight <= gNodeHeight && gNodeHeight < upper) {
-                    final Integer snBranchNr = snNode.gammaBranchNumber;
-                    final int traversalNodeNr = snNode.getParentByBranch(snBranchNr).getTraversalNumber();
-                    Node ancNode = gNode;
-                    do {
-                        snNextBrNr = embedding.getMatrixValue(traversalNodeNr, ancNode.getNr());
-                        ancNode = ancNode.getParent();
-                    } while (snNextBrNr < 0 && ancNode.getHeight() < upper);
-                    // check if gNode is in the population represented by snNode
-                    if (snBranchNr.equals(snNextBrNr)) {
-                        // update the node height relative to 'upper'
-                        final double gHeightNew = upper - (upper - gNodeHeight) * (upper - newHeight) / (upper - oldHeight);
+                else if (gNodeHeight >= oldHeight) {
+                    if (snNode.isRoot()) {
+                        // also update the node height relative to 'lower' (as upper limit is infinity)
+                        final double gHeightNew = lower + (gNodeHeight - lower) * (newHeight - lower) / (oldHeight - lower);
                         gNode.setHeight(gHeightNew);
-                        m++;
+                        n++;
+                    } else if (gNodeHeight < upper) {
+                        final Integer snBranchNr = snNode.gammaBranchNumber;
+                        final int traversalNodeNr = snNode.getParentByBranch(snBranchNr).getTraversalNumber();
+                        Node ancNode = gNode;
+                        do {
+                            snNextBrNr = embedding.getMatrixValue(traversalNodeNr, ancNode.getNr());
+                            ancNode = ancNode.getParent();
+                        } while (snNextBrNr < 0 && ancNode.getHeight() < upper);
+                        // check if gNode is in the population represented by snNode
+                        if (snBranchNr.equals(snNextBrNr)) {
+                            // update the node height relative to 'upper'
+                            final double gHeightNew = upper - (upper - gNodeHeight) * (upper - newHeight) / (upper - oldHeight);
+                            gNode.setHeight(gHeightNew);
+                            m++;
+                        }
                     }
                 }
             }
