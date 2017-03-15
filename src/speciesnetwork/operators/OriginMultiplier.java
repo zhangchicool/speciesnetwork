@@ -39,16 +39,15 @@ public class OriginMultiplier extends Operator {
         final Network speciesNetwork = speciesNetworkInput.get();
 
         // determine the lower and upper bounds
-        double upper = Double.MAX_VALUE;
+        // double upper = Double.MAX_VALUE;
         double lower = speciesNetwork.getRoot().getHeight();
 
         // propose a new height, reflect it back if it's outside the boundary
         NetworkNode origin = speciesNetwork.getOrigin();
         final double oldHeight = origin.getHeight();
         double newHeight = oldHeight * Math.exp (tuning * (Randomizer.nextDouble() - 0.5));
-        while (newHeight < lower || newHeight > upper) {
-            if (newHeight < lower)  newHeight = lower * lower / newHeight;
-            if (newHeight > upper)  newHeight = upper * upper / newHeight;
+        while (newHeight < lower ) {
+            newHeight = lower * lower / newHeight;
         }
 
         // update the origin height

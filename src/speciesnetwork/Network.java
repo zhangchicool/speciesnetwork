@@ -207,7 +207,7 @@ public class Network extends StateNode {
     }
 
     /**
-     * speciation and reticulation nodes, do not include origin node
+     * speciation and reticulation nodes (do not include origin node)
      * @return an array of internal nodes in this network
      */
     public NetworkNode[] getInternalNodes() {
@@ -217,6 +217,9 @@ public class Network extends StateNode {
         return internalNodes;
     }
 
+    /**
+     * speciation and reticulation nodes plus origin node
+     */
     public NetworkNode[] getInternalNodesWithOrigin() {
         final int internalNodeCount = speciationNodeCount + reticulationNodeCount;
         final NetworkNode[] internalNodes = new NetworkNode[internalNodeCount + 1];

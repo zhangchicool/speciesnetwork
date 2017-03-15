@@ -1,98 +1,334 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<beast namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" version="2.0">
-  <data id="gene1" name="alignment">
-    <sequence id="gene1_a1" taxon="a1" totalcount="4" value="-"/>
-    <sequence id="gene1_a2" taxon="a2" totalcount="4" value="-"/>
-    <sequence id="gene1_b1" taxon="b1" totalcount="4" value="-"/>
-    <sequence id="gene1_b2" taxon="b2" totalcount="4" value="-"/>
-    <sequence id="gene1_c1" taxon="c1" totalcount="4" value="-"/>
-    <sequence id="gene1_c2" taxon="c2" totalcount="4" value="-"/>
-  </data>
+<beast namespace="beast.core:beast.core.util:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.branchratemodel:beast.evolution.likelihood" version="2.4">
+    <data id="gene1" name="alignment">
+        <sequence taxon="a1" value="CACACTCTCGTGGACGGCATCACCGATATTCCACCGGACAGGAGGCAATGGAGAAGTACGACGGTAGTAGAAGTACGGTTAAGATTTATCTATTGGTCGAATGAGTCCACTATTTTCTTCCGTACCGTTTGCCACACGGCAAGTCCGTTGGAAAGTGGAAAAAAAGATACATCCTTAAACATGATTTGGCAACCTTCTAC"/>
+        <sequence taxon="a2" value="CCCACTCTTGTGGAGGGCATCGCCGATATTCCACCGAACAGAAAGCAATGGAGAAGTACGACGTTAGTAGAAGTACGGTTAAGCTTTATCTATTGGTCGAATGAGTCCGCTATTTTGTTCCGTACCCTTTGCGACACGGCAAAGCCGTTGGAAAGTGGAAAAAAAGATAGACCCTTAAACATGATTTGGCAACCTTCTAC"/>
+        <sequence taxon="c1" value="CCAACTCTTGTGGACGCCATCGCCGATATTCCATTGTACAGAAGTCAATGCAGAAGATCGGCGATAATAAAAGTACGGTTAAACTTTATCTATTAAGCGGATGCGTCCGCTATTATCTTCCGTACCGTTTACCACTCGGCAATTCCGTTGGCAAGTGAAGAAAAAGGTACACCCCTAAGCGTGATGTGGCACCATTCTAC"/>
+        <sequence taxon="c2" value="CCAACTCTTGTGGACGCCATCGCCGATATTCCATTATACAGACGTCAATGCAGAAGATCGGCGATAATAAAAGTACGGTTAAACTTTATCTACTAAGCGGATGCGTCCGCTATTATCTTCCGTACCGTTTACCACTCGGCAATTCCGTTGGCAAGTGAAGAAAAAGGTACACCCTTAAGCGAGATTTGGCACCATTCTAC"/>
+        <sequence taxon="b4" value="CCGACTCTTGTGGACGCCATCGCCGATATTCCATTATACAGAAGGCAGTGCAGAAGTTCGACGATCATATAAGTACGGTTAAACTTTATCTAGTAATCGGATGCGTCCGGTATTATCTTCCGTACCGTTTATCTCTCGGCAATACCGTAGGGAAGTGGAGAAAAAGTTACACCCTTAAGCGTGATTTGGCACCATTCTAC"/>
+        <sequence taxon="b3" value="CCGACTCTTGTGGACGCCATCGCCGATATTCCATTATACAGAAGGCAGTGCAGAAGTTCGACGATCATATAAGTACGGTTAAACTTTATCTAGTAATCGGATGCGTCCGGTATTATCTTCCGTAACGTTTATCTCTCGGCAATACCGTAGGGAAGTGGAGAAAAAGTTACACCCTTAAGCGTGATTTGGCACCATTCTAC"/>
+        <sequence taxon="b2" value="CCGACTCTTGTGGACGCCATCGCCGATATTCCATTATGCAGAAGGCAGTGCAGAAGTTCGACGATCATATAAGTACGGTTAAACTTTATCTAGTAATCGGATGCGTCTGGTATTATCTTCCGTACCGTTTATCTCTCGGCAATACCGTAGGGAAGTGGAGATAAAGTTACACCCTTAAGCGTGATTTGGCACCATTCTAC"/>
+        <sequence taxon="b1" value="CCGACTCTTGTGGACGCCATCGCCGATATTCCATTATGCAGAAGGCAGTGCAGAAGTTCGACGATCATATAAGTACGGTTAAACTTTATCTAGTAATCGGATGCGTCTGGTATTATCTTCCGTACCGTTTATCTCTCGGCAATACCGTAGGGAAGTGGAGATAAAGTTACACCCTTAAGCGTGATTTGGCACCATTCTAC"/>
+    </data>
+    <data id="gene2" name="alignment">
+        <sequence taxon="b4" value="AAGCATGGTGTCTATCCCAGTCCTCTTCAACGTCGAACCGGAGTAGCAGAGACGGGGATTGTTCGTGGACAATGGAACTATTATAATATCCTCGGAAGCTAAGGTACATTATATTCAATGGTCATTTAGTCGGAGCTGTCAACCTAGGGAGAAAAGCATTTCGAAGAAGGTCCCCCTCTAACTTCATAACCAGTTTTTGC"/>
+        <sequence taxon="c2" value="AAGAATGGTGTCTATCCCAGTCTACTTCAACGTCAAAGCGGCGTAGTAGAGACGGAGATTGTTCCTGCTCAATGGAACTATTATAACATCCTCGGATGCTAAGGTACATTGTAGTCAATGGTCATTTGGTCGGAGCTGGCGACCTAGGGAGAAAAGCATTTCGAAGAAGCCCACCCTCTAACTTCCTAACCAGTTTTTGC"/>
+        <sequence taxon="b1" value="AAGCATGGTGTCTATCCCAGTCATCTTCAAGCTCAAACCGGAGTCGCAGAGACGGGGATTGTGCGTTGACAGTGGAACTATTATAACATCATCGGATGCTAAGGTACATTGTACTCAATGGTCATTTAGTCGGAGCTGGCGACCTAGGGAGAAAAGCACTTCGAAGAAGCCCACCCTCTAACTTCCTAACCAGTTTTTTC"/>
+        <sequence taxon="a1" value="AAGCACGGTGTCTATCCCAGTCATCTTCAAGGTCAAATCGGAGTCGTAGAGACGGGGATTGTTCGTTGACAGTGGAACTATTATAACATCCTCGGATAATAAGGTACATTGTATTCAATGGTCATTTAGTCGGAGCTGGCGCCCTAGGGAGAAAAGCATTTCGAAGAAGCCCACCCTCTAAATTCCTAACCAGTTTTTGC"/>
+        <sequence taxon="a2" value="ATGCATGGTGTCTATCCCAGTCATCTTCAAGGTCAAACCGGAGTCGTAGAGACGGGGATTGTGCGTTGACAGTGGAACTATTATAACTACCTCGGATGCTAAGGTACATTGTACTCAATGGTCATTTAGTCGGAGCTGGCGACCTAGGGAGAAAAGCATTTGGAAGAAGCCCACCCTCTAACTTCCTAACCAGTTTTTGC"/>
+        <sequence taxon="c1" value="AAGCATAGTGTCTATCCCAGTCCTCTTCAAGGTCAAACCGGAGCAGTAGAGACGGGGATTGTTCGTGGACAGTGGAACTATTATAATATCCTCCGATGCTAAGGTACATTGTAGTCAATGGTCATATAGTGGGAGCCGGCGAACTAGGGAGAACAGTATTTCGAAGAAGCCCACCCTCTAACTTCCTAACCAGTTTTTGC"/>
+        <sequence taxon="b3" value="AAGCATGGTGACTATCCCAGTCCACTTCAGCGTCAAACCGTAGTACTAGAGTCGGGGATTGTTCATAGACAAAGGAACTATTATAGCATACTCGGATGCCAAGGTACATTGTACTCAATGGTCATTTTGTCGGAGCTGGCGACCTATGGAGAAAAGCATTTTTAGGAACCCCACCCACTAATGTCATAACCAGCTATTGC"/>
+        <sequence taxon="b2" value="AAGCATGGTGACTATCCCAGTCCACTTCAGCGTCAAACCGTAGTACTAGAGTCGGGGATTGTTCATAGACAAAGGAACTATTATAGCATACTCGGATGCCAAGGTACATTGTACTCAATGGTCATTTTGTCGGAGCTGGCGACCTATGGAGAAAAGCATTTTTAGGAACCCCACCCACTAATGTCATAACCAGCTATTGC"/>
+    </data>
+    <data id="gene3" name="alignment">
+        <sequence taxon="a1" value="ATCCATAGACGGACCGGCCTACATTACAAGAACCCACTATCGGTAGATCTACTCTAGAATTATTCGTAACTATCGTGAAGCTTGCAGCTCCTCCATGGTCCTTAGCATATAACCCTTAGTTTAGTCATATTCGAAGCTCATCCATTTAACACAGTTCCGTTACCGTCCTCCATCCTACGGATCTCCTTTTTTGATGCTTC"/>
+        <sequence taxon="a2" value="ATCCATAGACGGAGCGGCCTTCATTACAAGAACCCACTATCGGTAGATCTACTCTAGAATTATTCGTAACCATCGTGAAGCTTGCAGCTCCTCCATGGTCCTTAGCATATAACCCTTAGTTTAGTCATATTCGAAGCTCATCGATTTAACACCGTTCCGTTACCGTCCTCCATCCTACGGATCTCCTTTTTTGATGCTTC"/>
+        <sequence taxon="b1" value="ATCAATAGACTGACCGGCCTACATTACAAGACCCCACTATCGGGAGATCTATGCTAGAATTATTCGTTACTATCGTGAAGCTTGTAGCTCCTCCATTGTCCTTAGCATATAACCCTTAGTTTAGACATATTCGAAGCTCATCGATTTATCACCGTTCCGTTACCGTCCGTCATACTACGGATCTCCTATTTTGAAACTTC"/>
+        <sequence taxon="c2" value="ATCAATAGACGAACCGGCCTACATTACAAGAACCCACTATCGGGAGATCTTCGCTGGAATTATTCGTTACTATCGTGAAGATTGCAGCTCCTCCATTGTCCTTAGCATATAACCCTTAGTTTAGTCATATTCGAAGCTCATCGATTTAATACCGTTCCGTTACCGTCCTTCATACTACGGATCTCCTTTTTTGAAGCTTC"/>
+        <sequence taxon="b3" value="ATCGATGGCCGGACCGGCCTACATTACAATAACCCACTATAGGGAGATCTGCTCTAGAATTACTCGTTACCATCGTGAACCTTGCAGCTCCTCCTTGGTCCCTAGCATATAACCCCGTGTTTAGACGTATTCGAAGCTCATCGGTTTAACACTGTTCCGGTACCATCCTTCATACTACGGATCTCCTTTTTTGAAGTTTC"/>
+        <sequence taxon="b4" value="ATCGATGGCCGGACCGGCCTACATTACAATAACCCACTATAGGGAGATCTGCTCTAGAATTATTCGTTACCATCGTGAACCTTGCAGCTCCTCCTTGGTCCCTAGCATATAACCCCGTGTTTAGACGTATTCGAAGCTCATCGGTTTAACACTGTTCCGGTACCATCCTTCATACTACGGATCTCCTTTTTTGAAGTTTC"/>
+        <sequence taxon="b2" value="ATCTATGGCCGGACCGGCCTACATTACAATAACCCACTATAGGGAGATCTGCTCTAGAATTATTCGTTACCATCGTTAACCTTGCAGCTCCTCCTTGGTCCCTAGCATATAACCCTGTGTTTAGACGTATTCGAAGCTCATCGGTTTAACACTGTTCCGGTACAATCCTTCATACTACGGATCTCCTTTTTTGAAGTTTC"/>
+        <sequence taxon="c1" value="ATTGATAGCCGGACCGGCCTACATTACAAGAACCCACTATAGGGAGATCTGCTCTAGAATTATTCGTTACCATCGTGAACCTTGCAGCTCCTCCCTGGTCCCTAGCCTATAACCCTGAGTTTAGACGTATTCGAAGCTCATCGGTTTAACATCGTTCCGGTACCATTCTTCATAATACGGATCTCCTATTTTGAAGTTTC"/>
+    </data>
 
-  <map name="Uniform">beast.math.distributions.Uniform</map>
-  <map name="Exponential">beast.math.distributions.Exponential</map>
-  <map name="LogNormal">beast.math.distributions.LogNormalDistributionModel</map>
-  <map name="Normal">beast.math.distributions.Normal</map>
-  <map name="Beta">beast.math.distributions.Beta</map>
-  <map name="Gamma">beast.math.distributions.Gamma</map>
-  <map name="LaplaceDistribution">beast.math.distributions.LaplaceDistribution</map>
-  <map name="InverseGamma">beast.math.distributions.InverseGamma</map>
-  <map name="OneOnX">beast.math.distributions.OneOnX</map>
-  <map name="prior">beast.math.distributions.Prior</map>
+    <map name="Uniform">beast.math.distributions.Uniform</map>
+    <map name="Exponential">beast.math.distributions.Exponential</map>
+    <map name="LogNormal">beast.math.distributions.LogNormalDistributionModel</map>
+    <map name="Normal">beast.math.distributions.Normal</map>
+    <map name="Beta">beast.math.distributions.Beta</map>
+    <map name="Gamma">beast.math.distributions.Gamma</map>
+    <map name="LaplaceDistribution">beast.math.distributions.LaplaceDistribution</map>
+    <map name="InverseGamma">beast.math.distributions.InverseGamma</map>
+    <map name="OneOnX">beast.math.distributions.OneOnX</map>
+    <map name="prior">beast.math.distributions.Prior</map>
 
-  <init spec='beast.util.TreeParser' id='newick:species' IsLabelledNewick="true" adjustTipHeights="false"
-        newick="(((A:0.2,#H1[&amp;gamma=0.4]:0.1)d:0.3,((B:0.1)#H1:0.2,C:0.3)e:0.2)f:0.1)"/>
-  <run chainLength="100000" id="mcmc" spec="MCMC">
-    <state id="state" storeEvery="100">
-      <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
-        <taxonset id="taxonSuperset" spec="TaxonSet">
-          <taxon id="A" spec="TaxonSet">
-            <taxon id="a1" spec="Taxon"/>
-            <taxon id="a2" spec="Taxon"/>
-          </taxon>
-          <taxon id="B" spec="TaxonSet">
-            <taxon id="b1" spec="Taxon"/>
-            <taxon id="b2" spec="Taxon"/>
-          </taxon>
-          <taxon id="C" spec="TaxonSet">
-            <taxon id="c1" spec="Taxon"/>
-            <taxon id="c2" spec="Taxon"/>
-          </taxon>
-        </taxonset>
-      </stateNode>
-      <tree id="tree:gene1" name="stateNode">
-        <taxonset alignment="@gene1" id="taxonset:gene1" spec="TaxonSet"/>
-      </tree>
-      <stateNode id="embedding:gene1" spec="parameter.IntegerParameter">-1</stateNode>
-    </state>
+    <init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false"
+          newick="(((A:0.02,(B:0.01)#H1[&amp;gamma=0.3]:0.01)S1:0.03,(#H1:0.02,C:0.03)S2:0.02)R:0.05)"/>
+    <run chainLength="2000000" id="mcmc" spec="MCMC">
+        <state id="state" storeEvery="1000">
+            <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
+                <taxonset id="taxonSuperset" spec="TaxonSet">
+                    <taxon id="A" spec="TaxonSet">
+                        <taxon id="a1" spec="Taxon"/>
+                        <taxon id="a2" spec="Taxon"/>
+                    </taxon>
+                    <taxon id="B" spec="TaxonSet">
+                        <taxon id="b1" spec="Taxon"/>
+                        <taxon id="b2" spec="Taxon"/>
+                        <taxon id="b3" spec="Taxon"/>
+                        <taxon id="b4" spec="Taxon"/>
+                    </taxon>
+                    <taxon id="C" spec="TaxonSet">
+                        <taxon id="c1" spec="Taxon"/>
+                        <taxon id="c2" spec="Taxon"/>
+                    </taxon>
+                </taxonset>
+            </stateNode>
+            <parameter id="originTime:species" lower="0.0" name="stateNode">1</parameter>  <!-- 10 times larger -->
+            <parameter id="netDivRate:species" lower="0.0" name="stateNode">1.0</parameter>
+            <parameter id="turnOverRate:species" lower="0.0" upper="1.0" name="stateNode">0.5</parameter>
+            <parameter id="clockRate:gene" name="stateNode">1.0</parameter>
+            <tree id="tree:gene1" name="stateNode">
+                <taxonset id="taxonset:gene1" alignment="@gene1" spec="TaxonSet"/>
+            </tree>
+            <stateNode id="embedding:gene1" spec="parameter.IntegerParameter">-1</stateNode>
+            <tree id="tree:gene2" name="stateNode">
+                <taxonset id="taxonset:gene2" alignment="@gene2" spec="TaxonSet"/>
+            </tree>
+            <stateNode id="embedding:gene2" spec="parameter.IntegerParameter">-1</stateNode>
+            <tree id="tree:gene3" name="stateNode">
+                <taxonset id="taxonset:gene3" alignment="@gene3" spec="TaxonSet"/>
+            </tree>
+            <stateNode id="embedding:gene3" spec="parameter.IntegerParameter">-1</stateNode>
+        </state>
 
-    <init estimate="false" id="initializer" method="random" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@network:species">
-      <geneTree idref="tree:gene1"/>
-      <rebuildEmbedding id="reEmbed:gene1" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1" weight="0.0"/>
-    </init>
+        <init spec="beast.util.TreeParser" id="newick:gene1" initial="@tree:gene1" taxa="@gene1" IsLabelledNewick="true" newick="((a1:0.03799512541180301,a2:0.03799512541180301):0.09164229832576833,((c1:0.012210559626279397,c2:0.012210559626279397):0.0463706708800271,((b4:0.008024102288863019,b3:0.008024102288863019):0.0056646603251665345,(b2:0.003716875908588011,b1:0.003716875908588011):0.009971886705441541):0.04489246789227695):0.07105619323126483):0.0"/>
+        <init spec="beast.util.TreeParser" id="newick:gene2" initial="@tree:gene2" taxa="@gene2" IsLabelledNewick="true" newick="(((b4:0.05363787124363242,c2:0.05363787124363242):0.01298086699950493,((b1:0.03047637253357874,(a1:0.023452808509234535,a2:0.023452808509234535):0.007023564024344203):0.024466995490131434,c1:0.05494336802371017):0.011675370219427182):0.07131525057558163,(b3:0.001475966833579416,b2:0.001475966833579416):0.13645802198513957):0.0"/>
+        <init spec="beast.util.TreeParser" id="newick:gene3" initial="@tree:gene3" taxa="@gene3" IsLabelledNewick="true" newick="(((a1:0.005699488393309028,a2:0.005699488393309028):0.046765378792554865,(b1:0.03167575830913299,c2:0.03167575830913299):0.020789108876730904):0.0381611905923292,(((b3:3.9721300055826E-4,b4:3.9721300055826E-4):0.011786934537812528,b2:0.012184147538370788):0.028556696067652276,c1:0.040740843606023064):0.049885214172170025):0.0"/>
+        <init estimate="false" id="initializer" method="random" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@network:species" origin="@originTime:species">
+            <!--
+            <coalescentSimulator spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species">
+                <parameter id="popSizes" estimate="false" name="popSizes">0.02</parameter>
+                <taxonSuperset idref="taxonSuperset"/>
+                <geneTree idref="tree:gene1"/> <embedding idref="embedding:gene1"/>
+                <geneTree idref="tree:gene2"/> <embedding idref="embedding:gene2"/>
+                <geneTree idref="tree:gene3"/> <embedding idref="embedding:gene3"/>
+            </coalescentSimulator>
+            -->
+            <geneTree idref="tree:gene1"/>
+            <rebuildEmbedding id="rebuildEmbedding:gene1" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1" weight="0.0"/>
+            <geneTree idref="tree:gene2"/>
+            <rebuildEmbedding id="rebuildEmbedding:gene2" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree:gene2" embedding="@embedding:gene2" weight="0.0"/>
+            <geneTree idref="tree:gene3"/>
+            <rebuildEmbedding id="rebuildEmbedding:gene3" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree:gene3" embedding="@embedding:gene3" weight="0.0"/>
+        </init>
 
-    <distribution id="posterior" spec="util.CompoundDistribution">
-      <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
-        <populationModel alpha="2.0" beta="1.0" id="popModel" spec="speciesnetwork.ConstantPopIntegrated"/>
-        <geneTreeWithin id="geneTree:gene1" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1"/>
-      </distribution>
-      <distribution id="prior" spec="util.CompoundDistribution">
-      </distribution>
-      <distribution id="likelihood" spec="util.CompoundDistribution">
-        <distribution data="@gene1" id="likelihood:gene1" spec="TreeLikelihood" tree="@tree:gene1">
-          <siteModel gammaCategoryCount="4" id="siteModel:gene1" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
-            <substModel id="jc:gene1" spec="JukesCantor"/>
-          </siteModel>
-          <branchRateModel clock.rate="1.0" id="clock:gene1" spec="beast.evolution.branchratemodel.StrictClockModel"/>
+        <distribution id="posterior" spec="util.CompoundDistribution">
+            <distribution id="prior" spec="util.CompoundDistribution">
+                <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
+                    <geneTreeWithin id="geneTree:gene1" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1"/>
+                    <geneTreeWithin id="geneTree:gene2" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene2" embedding="@embedding:gene2"/>
+                    <geneTreeWithin id="geneTree:gene3" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene3" embedding="@embedding:gene3"/>
+                    <!-- populationModel id="popModel" popSizes="@popSizes" spec="speciesnetwork.ConstantPopulation"/ -->
+                    <populationModel alpha="10.0" beta="0.2" id="popModel" spec="speciesnetwork.ConstantPopIntegrated"/>
+                </distribution>
+                <distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" network="@network:species" netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" betaShape="1.0"/>
+                <prior id="networkOrigin" name="distribution" x="@originTime:species">
+                    <Exponential id="exponential.0" name="distr" mean="0.1"/>
+                </prior>
+                <prior id="netDivPrior" name="distribution" x="@netDivRate:species">
+                    <Exponential id="exponential.01" name="distr" mean="10.0"/>
+                </prior>
+                <prior id="turnOverPrior" name="distribution" x="@turnOverRate:species">
+                    <Beta id="betadistr.01" name="distr" alpha="1.0" beta="2.0"/>
+                </prior>
+                <prior id="clockPrior" name="distribution" x="@clockRate:gene">
+                    <Gamma id="gamma.01" name="distr" alpha="1.0" beta="1.0"/>
+                </prior>
+            </distribution>
+            <distribution id="likelihood" spec="util.CompoundDistribution">
+                <distribution id="likelihood:gene1" data="@gene1" tree="@tree:gene1" spec="TreeLikelihood">
+                    <siteModel id="siteModel:gene1" mutationRate="1.0" spec="SiteModel">
+                        <substModel id="jc:gene1" spec="JukesCantor"/>
+                    </siteModel>
+                    <branchRateModel id="strictClock:gene1" clock.rate="@clockRate:gene" spec="StrictClockModel"/>
+                </distribution>
+                <distribution id="likelihood:gene2" data="@gene2" tree="@tree:gene2" spec="TreeLikelihood">
+                    <siteModel id="siteModel:gene2" mutationRate="1.0" spec="SiteModel">
+                        <substModel id="jc:gene2" spec="JukesCantor"/>
+                    </siteModel>
+                    <branchRateModel id="strictClock:gene2" clock.rate="@clockRate:gene" spec="StrictClockModel"/>
+                </distribution>
+                <distribution id="likelihood:gene3" data="@gene3" tree="@tree:gene3" spec="TreeLikelihood">
+                    <siteModel id="siteModel:gene3" mutationRate="1.0" spec="SiteModel">
+                        <substModel id="jc:gene3" spec="JukesCantor"/>
+                    </siteModel>
+                    <branchRateModel id="strictClock:gene3" clock.rate="@clockRate:gene" spec="StrictClockModel"/>
+                </distribution>
+            </distribution>
         </distribution>
-      </distribution>
-    </distribution>
 
-    <!-- operator id="rebuildEmbedding:gene1" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@network:species" geneTree="@tree:gene1" embedding="@embedding:gene1" weight="10.0"/ -->
-    <operator id="scaleAndRebuild:gene1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@reEmbed:gene1" weight="10.0">
-      <operator id="scale:gene1" scaleFactor="0.1" spec="ScaleOperator" tree="@tree:gene1" weight="0.0"/>
-    </operator>
+        <operator id="scaleAndEmbed:gene1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene1" weight="3.0">
+            <operator id="scale:gene1" spec="ScaleOperator" scaleFactor="0.5" tree="@tree:gene1" weight="0.0"/>
+        </operator>
+        <operator id="scaleRootAndEmbed:gene1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene1" weight="3.0">
+            <operator id="scaleRoot:gene1" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree:gene1" weight="0.0"/>
+        </operator>
+        <operator id="uniformAndEmbed:gene1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene1" weight="30.0">
+            <operator id="uniform:gene1" spec="Uniform" tree="@tree:gene1" weight="0.0"/>
+        </operator>
+        <operator id="subSlideAndEmbed:gene1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene1" weight="15.0">
+            <operator id="subSlide:gene1" spec="SubtreeSlide" tree="@tree:gene1" weight="0.0"/>
+        </operator>
+        <operator id="narrowAndEmbed:gene1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene1" weight="15.0">
+            <operator id="narrow:gene1" spec="Exchange" tree="@tree:gene1" weight="0.0"/>
+        </operator>
+        <operator id="wideAndEmbed:gene1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene1" weight="3.0">
+            <operator id="wide:gene1" spec="Exchange" isNarrow="false" tree="@tree:gene1" weight="0.0"/>
+        </operator>
+        <operator id="WBAndEmbed:gene1" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene1" weight="3.0">
+            <operator id="WilsonBalding:gene1" spec="WilsonBalding" tree="@tree:gene1" weight="0.0"/>
+        </operator>
 
-    <logger id="screenlog" logEvery="1000" model="@posterior">
-      <log idref="posterior"/>
-      <log idref="coalescent"/>
-      <log idref="prior"/>
-      <log idref="likelihood"/>
-    </logger>
-    <logger fileName="test.trace.log" id="tracelog" logEvery="100" model="@posterior" sort="smart">
-      <log idref="posterior"/>
-      <log idref="coalescent"/>
-      <log idref="prior"/>
-      <log idref="likelihood"/>
-    </logger>
-    <logger fileName="test.species.trees" id="treelog:species" logEvery="100" mode="tree">
-      <log id="networkLogger:species" spec="speciesnetwork.NetworkWithMetaDataLogger" speciesNetwork="@network:species"/>
-    </logger>
-    <logger fileName="test.gene1.embed.log" id="embedlog:gene1" logEvery="100" sort="smart">
-      <log idref="embedding:gene1"/>
-    </logger>
-    <logger fileName="test.gene1.trees" id="treelog:gene1" logEvery="100" mode="tree">
-      <log id="treeLogger:gene1" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree:gene1"/>
-    </logger>
-  </run>
+        <operator id="scaleAndEmbed:gene2" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene2" weight="3.0">
+            <operator id="scale:gene2" spec="ScaleOperator" scaleFactor="0.5" tree="@tree:gene2" weight="0.0"/>
+        </operator>
+        <operator id="scaleRootAndEmbed:gene2" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene2" weight="3.0">
+            <operator id="scaleRoot:gene2" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree:gene2" weight="0.0"/>
+        </operator>
+        <operator id="uniformAndEmbed:gene2" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene2" weight="30.0">
+            <operator id="uniform:gene2" spec="Uniform" tree="@tree:gene2" weight="0.0"/>
+        </operator>
+        <operator id="subSlideAndEmbed:gene2" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene2" weight="15.0">
+            <operator id="subSlide:gene2" spec="SubtreeSlide" tree="@tree:gene2" weight="0.0"/>
+        </operator>
+        <operator id="narrowAndEmbed:gene2" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene2" weight="15.0">
+            <operator id="narrow:gene2" spec="Exchange" tree="@tree:gene2" weight="0.0"/>
+        </operator>
+        <operator id="wideAndEmbed:gene2" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene2" weight="3.0">
+            <operator id="wide:gene2" spec="Exchange" isNarrow="false" tree="@tree:gene2" weight="0.0"/>
+        </operator>
+        <operator id="WBAndEmbed:gene2" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene2" weight="3.0">
+            <operator id="WilsonBalding:gene2" spec="WilsonBalding" tree="@tree:gene2" weight="0.0"/>
+        </operator>
+
+        <operator id="scaleAndEmbed:gene3" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene3" weight="3.0">
+            <operator id="scale:gene3" spec="ScaleOperator" scaleFactor="0.5" tree="@tree:gene3" weight="0.0"/>
+        </operator>
+        <operator id="scaleRootAndEmbed:gene3" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene3" weight="3.0">
+            <operator id="scaleRoot:gene3" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree:gene3" weight="0.0"/>
+        </operator>
+        <operator id="uniformAndEmbed:gene3" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene3" weight="30.0">
+            <operator id="uniform:gene3" spec="Uniform" tree="@tree:gene3" weight="0.0"/>
+        </operator>
+        <operator id="subSlideAndEmbed:gene3" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene3" weight="15.0">
+            <operator id="subSlide:gene3" spec="SubtreeSlide" tree="@tree:gene3" weight="0.0"/>
+        </operator>
+        <operator id="narrowAndEmbed:gene3" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene3" weight="15.0">
+            <operator id="narrow:gene3" spec="Exchange" tree="@tree:gene3" weight="0.0"/>
+        </operator>
+        <operator id="wideAndEmbed:gene3" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene3" weight="3.0">
+            <operator id="wide:gene3" spec="Exchange" isNarrow="false" tree="@tree:gene3" weight="0.0"/>
+        </operator>
+        <operator id="WBAndEmbed:gene3" spec="speciesnetwork.operators.JointReembedding" rebuildEmbedding="@rebuildEmbedding:gene3" weight="3.0">
+            <operator id="WilsonBalding:gene3" spec="WilsonBalding" tree="@tree:gene3" weight="0.0"/>
+        </operator>
+
+        <!--
+        <operator id="divrRateScaler" spec="ScaleOperator" parameter="@netDivRate:species" scaleFactor="0.75" weight="3.0"/>
+        <operator id="turnOverScaler" spec="ScaleOperator" parameter="@turnOverRate:species" scaleFactor="0.75" weight="3.0"/>
+        <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="10.0"/>
+        <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="5.0"/>
+        -->
+
+        <operator id="speciesOriginMultiplier" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="5.0"/>
+        <operator id="speciesNetworkMultiplier" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@network:species" weight="10.0">
+            <geneTree idref="tree:gene1"/>
+            <geneTree idref="tree:gene2"/>
+            <geneTree idref="tree:gene3"/>
+        </operator>
+
+        <operator id="speciesNodeUniformCooAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="80.0">
+            <operator id="nodeUniformCoordinated" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@network:species" weight="0.0">
+                <geneTree idref="tree:gene1"/> <embedding idref="embedding:gene1"/>
+                <geneTree idref="tree:gene2"/> <embedding idref="embedding:gene2"/>
+                <geneTree idref="tree:gene3"/> <embedding idref="embedding:gene3"/>
+            </operator>
+            <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
+        </operator>
+        <operator id="speciesNodeSliderCooAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+            <operator id="nodeSliderCoordinated" spec="speciesnetwork.operators.CoordinatedNodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.005" weight="0.0">
+                <geneTree idref="tree:gene1"/> <embedding idref="embedding:gene1"/>
+                <geneTree idref="tree:gene2"/> <embedding idref="embedding:gene2"/>
+                <geneTree idref="tree:gene3"/> <embedding idref="embedding:gene3"/>
+            </operator>
+            <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
+        </operator>
+
+        <!--
+        <operator id="speciesNodeUniformAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="65">
+            <operator id="nodeUniform" spec="speciesnetwork.operators.NodeUniform" speciesNetwork="@network:species" weight="0.0"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
+        </operator>
+        <operator id="speciesNodeSliderAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="130">
+            <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.005" weight="0.0"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
+        </operator>
+        <operator id="speciesEdgeRelocateWAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+            <operator id="edgeRelocatorW" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
+        </operator>
+        <operator id="speciesEdgeRelocateNAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="50.0">
+            <operator id="edgeRelocatorN" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="false" weight="0.0"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
+        </operator>
+        <operator id="speciesAddHybridAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+            <operator id="addReticulation" spec="speciesnetwork.operators.AddReticulation" speciesNetwork="@network:species" weight="0.0"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
+        </operator>
+        <operator id="speciesDeleteHybridAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+            <operator id="deleteReticulation" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@network:species" weight="0.0"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
+            <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
+        </operator>
+        -->
+
+        <logger id="screenlog" logEvery="20000" model="@posterior">
+            <log idref="posterior"/>
+            <log idref="likelihood"/>
+            <log idref="prior"/>
+            <log idref="coalescent"/>
+            <log id="ESS.0" spec="util.ESS" arg="@posterior"/>
+        </logger>
+        <logger fileName="3S_2H_3L.xml.trace.log" id="tracelog" logEvery="2000" model="@posterior" sort="smart">
+            <log idref="posterior"/>
+            <log idref="likelihood"/>
+            <log idref="prior"/>
+            <log idref="coalescent"/>
+            <log idref="netDivRate:species"/>
+            <log idref="turnOverRate:species"/>
+            <log idref="originTime:species"/>
+            <log id="networkLength" speciesNetwork="@network:species" spec="speciesnetwork.NetworkStatLogger"/>
+            <log id="height:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeStatLogger"/>
+            <log id="height:gene2" tree="@tree:gene2" spec="beast.evolution.tree.TreeStatLogger"/>
+            <log id="height:gene3" tree="@tree:gene3" spec="beast.evolution.tree.TreeStatLogger"/>
+            <log idref="clockRate:gene"/>
+        </logger>
+        <logger fileName="3S_2H_3L.xml.species.trees" id="treelog:species" logEvery="2000" mode="tree">
+            <log id="networkLogger:species" spec="speciesnetwork.NetworkWithMetaDataLogger" speciesNetwork="@network:species"/>
+        </logger>
+        <logger fileName="3S_2H_3L.xml.gene1.log" id="embedlog:gene1" logEvery="2000" sort="smart">
+            <log idref="embedding:gene1"/>
+        </logger>
+        <logger fileName="3S_2H_3L.xml.gene1.trees" id="treelog:gene1" logEvery="2000" mode="tree">
+            <log id="treeLogger:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeWithMetaDataLogger"/>
+        </logger>
+        <logger fileName="3S_2H_3L.xml.gene2.log" id="embedlog:gene2" logEvery="2000" sort="smart">
+            <log idref="embedding:gene2"/>
+        </logger>
+        <logger fileName="3S_2H_3L.xml.gene2.trees" id="treelog:gene2" logEvery="2000" mode="tree">
+            <log id="treeLogger:gene2" tree="@tree:gene2" spec="beast.evolution.tree.TreeWithMetaDataLogger"/>
+        </logger>
+        <logger fileName="3S_2H_3L.xml.gene3.log" id="embedlog:gene3" logEvery="2000" sort="smart">
+            <log idref="embedding:gene3"/>
+        </logger>
+        <logger fileName="3S_2H_3L.xml.gene3.trees" id="treelog:gene3" logEvery="2000" mode="tree">
+            <log id="treeLogger:gene3" tree="@tree:gene3" spec="beast.evolution.tree.TreeWithMetaDataLogger"/>
+        </logger>
+    </run>
 </beast>
