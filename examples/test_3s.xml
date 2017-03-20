@@ -214,12 +214,10 @@
             <operator id="WilsonBalding:gene3" spec="WilsonBalding" tree="@tree:gene3" weight="0.0"/>
         </operator>
 
-        <!--
         <operator id="divrRateScaler" spec="ScaleOperator" parameter="@netDivRate:species" scaleFactor="0.75" weight="3.0"/>
         <operator id="turnOverScaler" spec="ScaleOperator" parameter="@turnOverRate:species" scaleFactor="0.75" weight="3.0"/>
         <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="10.0"/>
         <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="5.0"/>
-        -->
 
         <operator id="speciesOriginMultiplier" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="5.0"/>
         <operator id="speciesNetworkMultiplier" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@network:species" weight="10.0">
@@ -250,13 +248,13 @@
         </operator>
 
         <!--
-        <operator id="speciesNodeUniformAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="65">
+        <operator id="speciesNodeUniformAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="80">
             <operator id="nodeUniform" spec="speciesnetwork.operators.NodeUniform" speciesNetwork="@network:species" weight="0.0"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
         </operator>
-        <operator id="speciesNodeSliderAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="130">
+        <operator id="speciesNodeSliderAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100">
             <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.005" weight="0.0"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
@@ -295,7 +293,7 @@
             <log idref="coalescent"/>
             <log id="ESS.0" spec="util.ESS" arg="@posterior"/>
         </logger>
-        <logger fileName="3S_2H_3L.xml.trace.log" id="tracelog" logEvery="2000" model="@posterior" sort="smart">
+        <logger fileName="test_3s.trace.log" id="tracelog" logEvery="2000" model="@posterior" sort="smart">
             <log idref="posterior"/>
             <log idref="likelihood"/>
             <log idref="prior"/>
@@ -309,25 +307,25 @@
             <log id="height:gene3" tree="@tree:gene3" spec="beast.evolution.tree.TreeStatLogger"/>
             <log idref="clockRate:gene"/>
         </logger>
-        <logger fileName="3S_2H_3L.xml.species.trees" id="treelog:species" logEvery="2000" mode="tree">
+        <logger fileName="test_3s.species.trees" id="treelog:species" logEvery="2000" mode="tree">
             <log id="networkLogger:species" spec="speciesnetwork.NetworkWithMetaDataLogger" speciesNetwork="@network:species"/>
         </logger>
-        <logger fileName="3S_2H_3L.xml.gene1.log" id="embedlog:gene1" logEvery="2000" sort="smart">
+        <logger fileName="test_3s.gene1.log" id="embedlog:gene1" logEvery="2000" sort="smart">
             <log idref="embedding:gene1"/>
         </logger>
-        <logger fileName="3S_2H_3L.xml.gene1.trees" id="treelog:gene1" logEvery="2000" mode="tree">
+        <logger fileName="test_3s.gene1.trees" id="treelog:gene1" logEvery="2000" mode="tree">
             <log id="treeLogger:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeWithMetaDataLogger"/>
         </logger>
-        <logger fileName="3S_2H_3L.xml.gene2.log" id="embedlog:gene2" logEvery="2000" sort="smart">
+        <logger fileName="test_3s.gene2.log" id="embedlog:gene2" logEvery="2000" sort="smart">
             <log idref="embedding:gene2"/>
         </logger>
-        <logger fileName="3S_2H_3L.xml.gene2.trees" id="treelog:gene2" logEvery="2000" mode="tree">
+        <logger fileName="test_3s.gene2.trees" id="treelog:gene2" logEvery="2000" mode="tree">
             <log id="treeLogger:gene2" tree="@tree:gene2" spec="beast.evolution.tree.TreeWithMetaDataLogger"/>
         </logger>
-        <logger fileName="3S_2H_3L.xml.gene3.log" id="embedlog:gene3" logEvery="2000" sort="smart">
+        <logger fileName="test_3s.gene3.log" id="embedlog:gene3" logEvery="2000" sort="smart">
             <log idref="embedding:gene3"/>
         </logger>
-        <logger fileName="3S_2H_3L.xml.gene3.trees" id="treelog:gene3" logEvery="2000" mode="tree">
+        <logger fileName="test_3s.gene3.trees" id="treelog:gene3" logEvery="2000" mode="tree">
             <log id="treeLogger:gene3" tree="@tree:gene3" spec="beast.evolution.tree.TreeWithMetaDataLogger"/>
         </logger>
     </run>

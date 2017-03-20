@@ -36,6 +36,9 @@ public class CoordinatedNodeUniform extends NodeUniform {
     public double proposal() {
         double logProposalRatio = super.proposal();
 
+        assert (lower < oldHeight && oldHeight < upper);
+        assert (lower < newHeight && newHeight < upper);
+
         // update the gene tree node heights accordingly
         logProposalRatio += updateRubberBand(snNode);
 
@@ -77,13 +80,13 @@ public class CoordinatedNodeUniform extends NodeUniform {
                         n++;
                     }
                 }
-                else if (gNodeHeight >= oldHeight) {
+                else if (oldHeight <= gNodeHeight && gNodeHeight < upper) {
                     if (snNode.isRoot()) {
-                        // also update the node height relative to 'lower' (as upper limit is infinity)
-                        final double gHeightNew = lower + (gNodeHeight - lower) * (newHeight - lower) / (oldHeight - lower);
+                        // update the node height relative to 'upper' (origin time)
+                        final double gHeightNew = upper - (upper - gNodeHeight) * (upper - newHeight) / (upper - oldHeight);
                         gNode.setHeight(gHeightNew);
-                        n++;
-                    } else if (gNodeHeight < upper) {
+                        m++;
+                    } else {
                         final Integer snBranchNr = snNode.gammaBranchNumber;
                         final int traversalNodeNr = snNode.getParentByBranch(snBranchNr).getTraversalNumber();
                         Node ancNode = gNode;
