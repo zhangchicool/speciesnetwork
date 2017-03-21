@@ -216,17 +216,17 @@
 
         <operator id="divrRateScaler" spec="ScaleOperator" parameter="@netDivRate:species" scaleFactor="0.75" weight="3.0"/>
         <operator id="turnOverScaler" spec="ScaleOperator" parameter="@turnOverRate:species" scaleFactor="0.75" weight="3.0"/>
-        <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="10.0"/>
-        <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="5.0"/>
+        <operator id="gammaProbUniform" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="5.0"/>
+        <operator id="gammaProbRndWalk" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="10.0"/>
 
-        <operator id="speciesOriginMultiplier" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="5.0"/>
         <operator id="speciesNetworkMultiplier" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@network:species" weight="10.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
         </operator>
 
-        <operator id="speciesNodeUniformCooAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="80.0">
+        <operator id="speciesOriginMultiplier" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="5.0"/>
+        <operator id="speciesNodeUniformCooAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="50.0">
             <operator id="nodeUniformCoordinated" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@network:species" weight="0.0">
                 <geneTree idref="tree:gene1"/> <embedding idref="embedding:gene1"/>
                 <geneTree idref="tree:gene2"/> <embedding idref="embedding:gene2"/>
@@ -248,18 +248,6 @@
         </operator>
 
         <!--
-        <operator id="speciesNodeUniformAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="80">
-            <operator id="nodeUniform" spec="speciesnetwork.operators.NodeUniform" speciesNetwork="@network:species" weight="0.0"/>
-            <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
-            <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
-            <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
-        </operator>
-        <operator id="speciesNodeSliderAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100">
-            <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.005" weight="0.0"/>
-            <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
-            <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
-            <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
-        </operator>
         <operator id="speciesEdgeRelocateWAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
             <operator id="edgeRelocatorW" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>

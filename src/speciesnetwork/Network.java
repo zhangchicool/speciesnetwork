@@ -248,7 +248,7 @@ public class Network extends StateNode {
 
     public void resetAllVisited() {
         for (NetworkNode node: nodes) {
-            node.visited = false;
+            node.setVisited(false);
         }
     }
 
