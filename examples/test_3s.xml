@@ -226,7 +226,7 @@
         </operator>
 
         <operator id="speciesOriginMultiplier" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="5.0"/>
-        <operator id="speciesNodeUniformCooAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="50.0">
+        <operator id="speciesNodeUniformCoordinated" spec="speciesnetwork.operators.JointReembedding" weight="50.0">
             <operator id="nodeUniformCoordinated" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@network:species" weight="0.0">
                 <geneTree idref="tree:gene1"/> <embedding idref="embedding:gene1"/>
                 <geneTree idref="tree:gene2"/> <embedding idref="embedding:gene2"/>
@@ -236,7 +236,7 @@
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
         </operator>
-        <operator id="speciesNodeSliderCooAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+        <operator id="speciesNodeSliderCoordinated" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
             <operator id="nodeSliderCoordinated" spec="speciesnetwork.operators.CoordinatedNodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.005" weight="0.0">
                 <geneTree idref="tree:gene1"/> <embedding idref="embedding:gene1"/>
                 <geneTree idref="tree:gene2"/> <embedding idref="embedding:gene2"/>
@@ -248,25 +248,25 @@
         </operator>
 
         <!--
-        <operator id="speciesEdgeRelocateWAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+        <operator id="speciesEdgeRelocateWide" spec="speciesnetwork.operators.JointReembedding" weight="150.0">
             <operator id="edgeRelocatorW" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
         </operator>
-        <operator id="speciesEdgeRelocateNAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="50.0">
+        <operator id="speciesEdgeRelocateNarrow" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
             <operator id="edgeRelocatorN" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="false" weight="0.0"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
         </operator>
-        <operator id="speciesAddHybridAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+        <operator id="speciesAddReticulation" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
             <operator id="addReticulation" spec="speciesnetwork.operators.AddReticulation" speciesNetwork="@network:species" weight="0.0"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene3"/>
         </operator>
-        <operator id="speciesDeleteHybridAndEmbed" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+        <operator id="speciesDeleteReticulation" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
             <operator id="deleteReticulation" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@network:species" weight="0.0"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene1"/>
             <rebuildEmbedding idref="rebuildEmbedding:gene2"/>
