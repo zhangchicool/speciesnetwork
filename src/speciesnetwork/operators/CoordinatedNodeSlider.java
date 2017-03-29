@@ -71,7 +71,7 @@ public class CoordinatedNodeSlider extends NodeSlider {
                     do {
                         snNextBrNr = embedding.getMatrixValue(traversalNodeNr, ancNode.getNr());
                         ancNode = ancNode.getParent();
-                    } while (snNextBrNr < 0 && ancNode.getHeight() < oldHeight);
+                    } while (snNextBrNr < 0 && ancNode != null && ancNode.getHeight() < oldHeight);
                     // check if gNode is in populations represented by snNode's children
                     if (snNode.childBranchNumbers.contains(snNextBrNr)) {
                         // update the node height relative to 'lower'
@@ -93,7 +93,7 @@ public class CoordinatedNodeSlider extends NodeSlider {
                         do {
                             snNextBrNr = embedding.getMatrixValue(traversalNodeNr, ancNode.getNr());
                             ancNode = ancNode.getParent();
-                        } while (snNextBrNr < 0 && ancNode.getHeight() < upper);
+                        } while (snNextBrNr < 0 && ancNode != null && ancNode.getHeight() < upper);
                         // check if gNode is in the population represented by snNode
                         if (snBranchNr.equals(snNextBrNr)) {
                             // update the node height relative to 'upper'
