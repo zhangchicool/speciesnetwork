@@ -891,8 +891,8 @@
             <geneTree idref="tree.t:sb16"/> <embedding idref="embedding:sb16"/>
             <geneTree idref="tree.t:sb29"/> <embedding idref="embedding:sb29"/>
             <geneTree idref="tree.t:sb62"/> <embedding idref="embedding:sb62"/>
-            <geneTree idref="tree.t:se1390"/> <embedding idref="embedding:se1390"/>
             <geneTree idref="tree.t:se1364"/> <embedding idref="embedding:se1364"/>
+            <geneTree idref="tree.t:se1390"/> <embedding idref="embedding:se1390"/>
             <geneTree idref="tree.t:xy1420"/> <embedding idref="embedding:xy1420"/>
         </coalescentSimulator> <!-- comment this out to start with caterpillar gene trees -->
         <geneTree idref="tree.t:4cl"/>
@@ -903,8 +903,8 @@
         <geneTree idref="tree.t:sb16"/>
         <geneTree idref="tree.t:sb29"/>
         <geneTree idref="tree.t:sb62"/>
-        <geneTree idref="tree.t:se1390"/>
         <geneTree idref="tree.t:se1364"/>
+        <geneTree idref="tree.t:se1390"/>
         <geneTree idref="tree.t:xy1420"/>
         <rebuildEmbedding id="rebuildEmbedding:4cl" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:4cl" embedding="@embedding:4cl" weight="0.0"/>
         <rebuildEmbedding id="rebuildEmbedding:ebs" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:ebs" embedding="@embedding:ebs" weight="0.0"/>
@@ -914,8 +914,8 @@
         <rebuildEmbedding id="rebuildEmbedding:sb16" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:sb16" embedding="@embedding:sb16" weight="0.0"/>
         <rebuildEmbedding id="rebuildEmbedding:sb29" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:sb29" embedding="@embedding:sb29" weight="0.0"/>
         <rebuildEmbedding id="rebuildEmbedding:sb62" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:sb62" embedding="@embedding:sb62" weight="0.0"/>
-        <rebuildEmbedding id="rebuildEmbedding:se1390" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:se1390" embedding="@embedding:se1390" weight="0.0"/>
         <rebuildEmbedding id="rebuildEmbedding:se1364" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:se1364" embedding="@embedding:se1364" weight="0.0"/>
+        <rebuildEmbedding id="rebuildEmbedding:se1390" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:se1390" embedding="@embedding:se1390" weight="0.0"/>
         <rebuildEmbedding id="rebuildEmbedding:xy1420" taxonSuperset="@taxonSuperset" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" geneTree="@tree.t:xy1420" embedding="@embedding:xy1420" weight="0.0"/>
     </init>
 
@@ -1134,8 +1134,8 @@
             <down idref="tree.t:sb16"/>
             <down idref="tree.t:sb29"/>
             <down idref="tree.t:sb62"/>
-            <down idref="tree.t:se1390"/>
             <down idref="tree.t:se1364"/>
+            <down idref="tree.t:se1390"/>
             <down idref="tree.t:xy1420"/>
         </operator>
         <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
@@ -1412,8 +1412,8 @@
         <geneTree idref="tree.t:sb16"/>
         <geneTree idref="tree.t:sb29"/>
         <geneTree idref="tree.t:sb62"/>
-        <geneTree idref="tree.t:se1390"/>
         <geneTree idref="tree.t:se1364"/>
+        <geneTree idref="tree.t:se1390"/>
         <geneTree idref="tree.t:xy1420"/>
     </operator>
 
@@ -1428,8 +1428,8 @@
             <geneTree idref="tree.t:sb16"/> <embedding idref="embedding:sb16"/>
             <geneTree idref="tree.t:sb29"/> <embedding idref="embedding:sb29"/>
             <geneTree idref="tree.t:sb62"/> <embedding idref="embedding:sb62"/>
-            <geneTree idref="tree.t:se1390"/> <embedding idref="embedding:se1390"/>
             <geneTree idref="tree.t:se1364"/> <embedding idref="embedding:se1364"/>
+            <geneTree idref="tree.t:se1390"/> <embedding idref="embedding:se1390"/>
             <geneTree idref="tree.t:xy1420"/> <embedding idref="embedding:xy1420"/>
         </operator>
         <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
@@ -1454,8 +1454,8 @@
             <geneTree idref="tree.t:sb16"/> <embedding idref="embedding:sb16"/>
             <geneTree idref="tree.t:sb29"/> <embedding idref="embedding:sb29"/>
             <geneTree idref="tree.t:sb62"/> <embedding idref="embedding:sb62"/>
-            <geneTree idref="tree.t:se1390"/> <embedding idref="embedding:se1390"/>
             <geneTree idref="tree.t:se1364"/> <embedding idref="embedding:se1364"/>
+            <geneTree idref="tree.t:se1390"/> <embedding idref="embedding:se1390"/>
             <geneTree idref="tree.t:xy1420"/> <embedding idref="embedding:xy1420"/>
         </operator>
         <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
@@ -1472,7 +1472,7 @@
     </operator>
 
     <!-- species network topology operators -->
-    <operator id="speciesEdgeRelocateWide" spec="speciesnetwork.operators.JointReembedding" weight="150.0">
+    <operator id="speciesEdgeRelocateWide" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
         <operator id="edgeRelocatorW" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
         <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
         <rebuildEmbedding idref="rebuildEmbedding:ebs"/>
@@ -1486,7 +1486,7 @@
         <rebuildEmbedding idref="rebuildEmbedding:se1390"/>
         <rebuildEmbedding idref="rebuildEmbedding:xy1420"/>
     </operator>
-    <operator id="speciesEdgeRelocateNarrow" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+    <operator id="speciesEdgeRelocateNarrow" spec="speciesnetwork.operators.JointReembedding" weight="80.0">
         <operator id="edgeRelocatorN" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="false" weight="0.0"/>
         <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
         <rebuildEmbedding idref="rebuildEmbedding:ebs"/>
@@ -1501,7 +1501,7 @@
         <rebuildEmbedding idref="rebuildEmbedding:xy1420"/>
     </operator>
 
-    <operator id="speciesAddHybridization" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+    <operator id="speciesAddHybridization" spec="speciesnetwork.operators.JointReembedding" weight="90.0">
         <operator id="addReticulation" spec="speciesnetwork.operators.AddReticulation" speciesNetwork="@network:species" weight="0.0"/>
         <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
         <rebuildEmbedding idref="rebuildEmbedding:ebs"/>
@@ -1515,7 +1515,7 @@
         <rebuildEmbedding idref="rebuildEmbedding:se1390"/>
         <rebuildEmbedding idref="rebuildEmbedding:xy1420"/>
     </operator>
-    <operator id="speciesDeleteHybridization" spec="speciesnetwork.operators.JointReembedding" weight="100.0">
+    <operator id="speciesDeleteHybridization" spec="speciesnetwork.operators.JointReembedding" weight="90.0">
         <operator id="deleteReticulation" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@network:species" weight="0.0"/>
         <rebuildEmbedding idref="rebuildEmbedding:4cl"/>
         <rebuildEmbedding idref="rebuildEmbedding:ebs"/>
