@@ -48,7 +48,7 @@ public class CoordinatedNodeUniform extends NodeUniform {
     /**
      * The RubberBand algorithm of Rannala & Yang, 2003 (Appendix Step 4)
      */
-    private double updateRubberBand(NetworkNode snNode) {
+    private double updateRubberBand(final NetworkNode snNode) {
         if (!snNode.isSpeciation())  // necessary only when speciation node
             return 0.0;
 

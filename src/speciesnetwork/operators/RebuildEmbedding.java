@@ -10,6 +10,7 @@ import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.Operator;
 import beast.core.parameter.IntegerParameter;
+import beast.core.StateNode;
 import beast.evolution.alignment.Taxon;
 import beast.evolution.alignment.TaxonSet;
 import beast.evolution.tree.Node;
@@ -25,97 +26,108 @@ import speciesnetwork.NetworkNode;
 
 @Description("Rebuild the embedding of a gene tree in the species network.")
 public class RebuildEmbedding extends Operator {
-    public final Input<Network> speciesNetworkInput =
-            new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
-    public final Input<Tree> geneTreeInput = new Input<>("geneTree", "The gene tree.", Validate.REQUIRED);
-    public final Input<TaxonSet> taxonSuperSetInput =
-            new Input<>("taxonSuperset", "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
-    public final Input<IntegerParameter> embeddingInput = new Input<>("embedding",
-            "The matrix to embed the gene tree within the species network.", Validate.REQUIRED);
+    public final Input<Network> speciesNetworkInput = new Input<>("speciesNetwork",
+            "The species network.", Validate.REQUIRED);
+    public final Input<TaxonSet> taxonSuperSetInput = new Input<>("taxonSuperset",
+            "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
+    public final Input<List<Tree>> geneTreesInput = new Input<>("geneTree",
+            "The gene tree within the species network.", new ArrayList<>());
+    public final Input<List<IntegerParameter>> embeddingsInput = new Input<>("embedding",
+            "The matrix to embed the gene tree within the species network.", new ArrayList<>());
+    // operator input can be null so that the species network and gene trees are unchanged
+    public final Input<Operator> operatorInput = new Input<>("operator",
+            "Tree/Network operator to combine into RebuildEmbedding.");
 
-    // map of gene tree tip names to species network tip number  // do not map to nodes directly as the value may change
-    private Map<String, Integer> geneTipMap;
     // heirs are the gene tree leaf tip numbers below each gene tree node or species network node
     private Multimap<Node, Integer> geneNodeHeirs;
     private Multimap<NetworkNode, Integer> speciesNodeHeirs;
-
-    private Tree geneTree;
-    private Network speciesNetwork;
-    private IntegerParameter embedding;
+    private int nLoci;
 
     @Override
     public void initAndValidate() {
-        speciesNetwork = speciesNetworkInput.get();
-        geneTipMap = new HashMap<>();
+        nLoci = geneTreesInput.get().size();
+        if (nLoci == 0 ) {
+            throw new RuntimeException("No gene tree input!");
+        } else if (embeddingsInput.get().size() != nLoci) {
+            throw new RuntimeException("Number of embeddings doesn't match number of gene trees!");
+        }
+
         geneNodeHeirs = HashMultimap.create();
         speciesNodeHeirs = HashMultimap.create();
-
-        final NetworkNode[] speciesLeafNodes = speciesNetwork.getLeafNodes();
-        // generate map of species network tip names to species network tip nodes
-        final Map<String, NetworkNode> speciesNodeMap = new HashMap<>();
-        for (NetworkNode leafNode: speciesLeafNodes) {
-            final String speciesName = leafNode.getLabel();
-            speciesNodeMap.put(speciesName, leafNode);
-        }
-        // generate map of gene tree tip names to species network tip numbers
-        final TaxonSet taxonSuperSet = taxonSuperSetInput.get();
-        for (Taxon species: taxonSuperSet.taxonsetInput.get()) {
-            final String speciesName = species.getID();
-            final NetworkNode speciesNode = speciesNodeMap.get(speciesName);
-            final TaxonSet speciesTaxonSet = (TaxonSet) species;
-            for (Taxon geneTip: speciesTaxonSet.taxonsetInput.get()) {
-                final String gTipName = geneTip.getID();
-                geneTipMap.put(gTipName, speciesNode.getNr());
-            }
-        }
     }
 
     @Override
     public double proposal() {
-        geneTree = geneTreeInput.get();
-        speciesNetwork = speciesNetworkInput.get();
-        embedding = embeddingInput.get();
-        // count the number of alternative traversing choices for the current state (n0)
-        getNodeHeirs();
-        final int oldChoices = recurseRebuild(geneTree.getRoot(), speciesNetwork.getRoot(), false);
+        // count the number of alternative traversing choices for the current state
+        final int oldChoices = initializeEmbedding(false);
         if (oldChoices < 0)
-            throw new RuntimeException("Developer ERROR: current embedding invalid!");
+            throw new RuntimeException("Developer ERROR: current embedding is invalid!");
 
-        // rebuild the embedding AND
-        // count the number of alternative traversing choices for the new state (n1)
-        resetEmbedding();
-        final int newChoices = recurseRebuild(geneTree.getRoot(), speciesNetwork.getRoot(), true);
+        // make the operation if possible
+        double logHR = 0.0;
+        if (operatorInput.get() != null) {
+            logHR = operatorInput.get().proposal();
+            if (logHR == Double.NEGATIVE_INFINITY)
+                return Double.NEGATIVE_INFINITY;
+        }
+        // Update calculation nodes as subsequent operators may depend on state nodes made dirty by this operation.
+        // if (!operator.listStateNodes().isEmpty())  // copied from JointOperator
+        //   operator.listStateNodes().get(0).getState().checkCalculationNodesDirtiness();
+
+        // then rebuild the embedding AND
+        // count the number of alternative traversing choices for the new state
+        final int newChoices = initializeEmbedding(true);
         if (newChoices < 0)
             return Double.NEGATIVE_INFINITY;
 
-        // the proposal ratio is (2^n1)/(2^n0)
-        return (newChoices - oldChoices) * Math.log(2);
+        return logHR + (newChoices - oldChoices) * Math.log(2);
     }
 
-    public int initializeEmbedding() {
-        geneTree = geneTreeInput.get();
-        speciesNetwork = speciesNetworkInput.get();
-        embedding = embeddingInput.get();
-        getNodeHeirs();
-        // rebuild the embedding
-        embedding.startEditing(this);
-        resetEmbedding();
-        return recurseRebuild(geneTree.getRoot(), speciesNetwork.getRoot(), true);
+    @Override
+    public List<StateNode> listStateNodes() {
+        List<StateNode> stateNodes = new ArrayList<>();
+
+        if (operatorInput.get() != null)
+            stateNodes.addAll(operatorInput.get().listStateNodes());
+        stateNodes.addAll(super.listStateNodes());
+
+        return stateNodes;
     }
 
-    protected int getNumberOfChoices() {
-        geneTree = geneTreeInput.get();
-        speciesNetwork = speciesNetworkInput.get();
-        embedding = embeddingInput.get();
-        getNodeHeirs();
-        return recurseRebuild(geneTree.getRoot(), speciesNetwork.getRoot(), false);
+    public int initializeEmbedding(boolean rebuild) {
+        final Network speciesNetwork = speciesNetworkInput.get();
+        final List<Tree> geneTrees = geneTreesInput.get();
+        final List<IntegerParameter> embeddings = embeddingsInput.get();
+
+        int nChoices = 0;
+        for (int i = 0; i < nLoci; i++) {
+            Tree geneTree = geneTrees.get(i);
+            IntegerParameter embedding = embeddings.get(i);
+
+            getNodeHeirs(speciesNetwork, geneTree);
+
+            final int n;
+            if (rebuild) {
+                resetEmbedding(speciesNetwork, geneTree, embedding);
+                n = recurseRebuild(geneTree.getRoot(), speciesNetwork.getRoot(), embedding, true);
+            } else {
+                n = recurseRebuild(geneTree.getRoot(), speciesNetwork.getRoot(), embedding, false);
+            }
+            // printEmbedding(speciesNetwork, geneTree, embedding);
+            if (n < 0)
+                return -(i + 1);
+            nChoices += n;
+        }
+
+        return nChoices;
     }
 
-    private void resetEmbedding() {
+    private void resetEmbedding(final Network speciesNetwork, final Tree geneTree, IntegerParameter embedding) {
         // nothing traverses through species leaf nodes
         final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
         final int geneNodeCount = geneTree.getNodeCount();
 
+        embedding.startEditing(this);
         embedding.setDimension(traversalNodeCount * geneNodeCount);
         embedding.setMinorDimension(geneNodeCount);
 
@@ -127,15 +139,33 @@ public class RebuildEmbedding extends Operator {
         }
     }
 
-    private void getNodeHeirs() {
+    private void getNodeHeirs(final Network speciesNetwork, final Tree geneTree) {
+        // map of species network tip names to species network tip nodes
+        final Map<String, NetworkNode> speciesNodeMap = new HashMap<>();
+        for (NetworkNode speciesNode: speciesNetwork.getLeafNodes()) {
+            final String speciesName = speciesNode.getLabel();
+            speciesNodeMap.put(speciesName, speciesNode);
+        }
+
+        // map of gene tree tip names to species network tip nodes
+        final Map<String, NetworkNode> geneTipMap = new HashMap<>();
+        final TaxonSet taxonSuperSet = taxonSuperSetInput.get();
+        for (Taxon species: taxonSuperSet.taxonsetInput.get()) {
+            final String speciesName = species.getID();
+            final NetworkNode speciesNode = speciesNodeMap.get(speciesName);
+            final TaxonSet speciesTaxonSet = (TaxonSet) species;
+            for (Taxon geneTip: speciesTaxonSet.taxonsetInput.get()) {
+                final String gTipName = geneTip.getID();
+                geneTipMap.put(gTipName, speciesNode);
+            }
+        }
+
         geneNodeHeirs.clear();
         speciesNodeHeirs.clear();
-
         for (final Node geneLeaf: geneTree.getExternalNodes()) {
             final int gLeafNr = geneLeaf.getNr();
             final String gLeafName = geneLeaf.getID();
-            final int speciesLeafNr = geneTipMap.get(gLeafName);
-            final NetworkNode speciesLeaf = speciesNetwork.getNode(speciesLeafNr);
+            final NetworkNode speciesLeaf = geneTipMap.get(gLeafName);
             // the heir for each gene leaf node is itself
             geneNodeHeirs.put(geneLeaf, gLeafNr);
             // the heirs for each species leaf node is the associated gene leaf nodes
@@ -155,22 +185,21 @@ public class RebuildEmbedding extends Operator {
         }
     }
 
-    private void recurseSpeciesHeirs(final NetworkNode snNode) {
-        for (NetworkNode child: snNode.getChildren()) {
-            speciesNodeHeirs.putAll(snNode, speciesNodeHeirs.get(child));
+    private void recurseSpeciesHeirs(final NetworkNode sNetNode) {
+        for (NetworkNode child: sNetNode.getChildren()) {
+            speciesNodeHeirs.putAll(sNetNode, speciesNodeHeirs.get(child));
         }
-        for (NetworkNode parent: snNode.getParents()) {
+        for (NetworkNode parent: sNetNode.getParents()) {
             recurseSpeciesHeirs(parent);
         }
     }
 
-    private int recurseRebuild(final Node geneTreeNode, final NetworkNode speciesNetworkNode, boolean rebuild) {
-        final double geneTreeNodeHeight = geneTreeNode.getHeight();
-        final double speciesNetworkNodeHeight = speciesNetworkNode.getHeight();
+    private int recurseRebuild(final Node geneTreeNode, final NetworkNode speciesNetworkNode,
+                               IntegerParameter embedding, boolean rebuild) {
         int nChoices = 0;
 
         // this coalescence node must be embedded in a descendant species network branch
-        if (geneTreeNodeHeight < speciesNetworkNodeHeight) {
+        if (geneTreeNode.getHeight() < speciesNetworkNode.getHeight()) {
             final int traversalNodeNumber = speciesNetworkNode.getTraversalNumber();
             final int geneTreeNodeNumber = geneTreeNode.getNr();
             final Collection<Integer> requiredHeirs = geneNodeHeirs.get(geneTreeNode);
@@ -198,7 +227,7 @@ public class RebuildEmbedding extends Operator {
             }
             assert (nextSpeciesBranchNumber >= 0);
             final NetworkNode nextSpecies = speciesNetworkNode.getChildByBranch(nextSpeciesBranchNumber);
-            final int moreChoices = recurseRebuild(geneTreeNode, nextSpecies, rebuild);
+            final int moreChoices = recurseRebuild(geneTreeNode, nextSpecies, embedding, rebuild);
             if (moreChoices < 0) return -1;
 
             return nChoices + moreChoices;
@@ -206,30 +235,27 @@ public class RebuildEmbedding extends Operator {
             return 0;
         } else {
             // embed both gene tree children
-            final int leftChoices = recurseRebuild(geneTreeNode.getLeft(), speciesNetworkNode, rebuild);
+            final int leftChoices = recurseRebuild(geneTreeNode.getLeft(), speciesNetworkNode, embedding, rebuild);
             if (leftChoices < 0) return -1;
-            final int rightChoices = recurseRebuild(geneTreeNode.getRight(), speciesNetworkNode, rebuild);
+            final int rightChoices = recurseRebuild(geneTreeNode.getRight(), speciesNetworkNode, embedding, rebuild);
             if (rightChoices < 0) return -1;
 
             return nChoices + leftChoices + rightChoices;
         }
     }
     
-    protected void printEmbedding() {
-        embedding = embeddingInput.get();
-        speciesNetwork = speciesNetworkInput.get();
-        geneTree = geneTreeInput.get();
+    private void printEmbedding(final Network sNetwork, final Tree gTree, IntegerParameter embedding) {
         StringBuffer embedStr = new StringBuffer();
-        final int nTraversalNodes = speciesNetwork.getTraversalNodeCount();
-        final int nGeneNodes = geneTree.getNodeCount();
+        final int nTraversalNodes = sNetwork.getTraversalNodeCount();
+        final int nGeneNodes = gTree.getNodeCount();
         for (int i = 0; i < nTraversalNodes; i++) {
-            final int speciesNodeNumber = i + speciesNetwork.getLeafNodeCount();
-            embedStr.append(String.format("%3s", speciesNetwork.getNode(speciesNodeNumber).getLabel()));
+            final int speciesNodeNumber = i + sNetwork.getLeafNodeCount();
+            embedStr.append(String.format("%3s", sNetwork.getNode(speciesNodeNumber).getLabel()));
             for (int j = 0; j < nGeneNodes; j++) {
                 embedStr.append(String.format("%3s", embedding.getMatrixValue(i, j)));
             }
             embedStr.append("\n");
         }
-        System.out.print(embedStr);
+        System.out.print(embedStr + "\n");
     }
 }

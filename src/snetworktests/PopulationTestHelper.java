@@ -83,16 +83,16 @@ abstract class PopulationTestHelper {
             geneTree.initByName("newick", geneTreeNewick, "IsLabelledNewick", true);
             geneTrees.add(geneTree);
             IntegerParameter embedding = geneTreeEmbeddings.get(i);
-            if (reembed) { // rebuild the embedding
-                RebuildEmbedding rebuildOperator = new RebuildEmbedding();
-                rebuildOperator.initByName("geneTree", geneTree, "speciesNetwork", speciesNetwork,
-                                           "taxonSuperset", speciesSuperset, "embedding", embedding);
-                assertTrue(rebuildOperator.initializeEmbedding() >= 0);
-            }
             GeneTreeInSpeciesNetwork geneTreeWrapper = new GeneTreeInSpeciesNetwork();
             geneTreeWrapper.initByName("geneTree", geneTree, "ploidy", ploidy, "speciesNetwork", speciesNetwork,
                                        "embedding", embedding);
             geneTreeWrappers.add(geneTreeWrapper);
+        }
+        if (reembed) { // rebuild the embedding
+            RebuildEmbedding rebuildOperator = new RebuildEmbedding();
+            rebuildOperator.initByName("speciesNetwork", speciesNetwork, "taxonSuperset", speciesSuperset,
+                                       "geneTree", geneTrees, "embedding", geneTreeEmbeddings);
+            assertTrue(rebuildOperator.initializeEmbedding(true) >= 0);
         }
     }
 }

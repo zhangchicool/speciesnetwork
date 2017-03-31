@@ -54,8 +54,8 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
             new Input<>("origin", "The time when the process started.", Validate.REQUIRED);
     public final Input<List<Tree>> geneTreesInput =
             new Input<>("geneTree", "Gene tree to initialize.", new ArrayList<>());
-    public final Input<List<RebuildEmbedding>> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
-            "Operator which rebuilds embedding of gene trees within species network.", new ArrayList<>());
+    public final Input<RebuildEmbedding> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
+            "Operator which rebuilds embedding of gene trees within species network.", Validate.REQUIRED);
     public final Input<RealParameter> birthRateInput =
             new Input<>("birthRate", "Network birth rate to initialize.");
     public final Input<RealParameter> hybridRateInput =
@@ -90,10 +90,8 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
             throw new IllegalArgumentException("Time of origin (" + tOrigin + ") < time of MRCA (" + tMRCA + ")!");
 
         // initialize embedding for all gene trees
-        for (RebuildEmbedding operator: rebuildEmbeddingInput.get()) {
-            if (operator.initializeEmbedding() < 0)
-                throw new RuntimeException("Failed to build gene tree embedding!");
-        }
+        if (rebuildEmbeddingInput.get().initializeEmbedding(true) < 0)
+            throw new RuntimeException("Failed to initialize gene tree embedding!");
     }
 
     private void userStates() {
@@ -325,9 +323,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
     @Override
     public void getInitialisedStateNodes(List<StateNode> stateNodes) {
         stateNodes.add(speciesNetworkInput.get());
-        for(final Tree gtree : geneTreesInput.get()) {
-            stateNodes.add(gtree);
-        }
+        stateNodes.addAll(geneTreesInput.get());
 
         final RealParameter brate = birthRateInput.get();
         if(brate != null) stateNodes.add(brate);
