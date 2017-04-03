@@ -11,9 +11,6 @@ import speciesnetwork.NetworkNode;
 import speciesnetwork.SanityChecks;
 
 /**
- * Randomly pick an internal network node including origin.
- * Change its height using a sliding window with reflection.
- *
  * @author Chi Zhang
  */
 
@@ -30,9 +27,6 @@ public class NodeSlider extends Operator {
     public final Input<Double> sigmaInput =
             new Input<>("sigma", "Standard deviation of the normal proposal (default is 0.01).", 0.01);
 
-    protected double upper, lower, oldHeight, newHeight;
-    protected NetworkNode snNode;
-
     @Override
     public void initAndValidate() {
     }
@@ -44,20 +38,23 @@ public class NodeSlider extends Operator {
         // pick an internal node randomly, including origin
         final NetworkNode[] internalNodes = speciesNetwork.getInternalNodesWithOrigin();
         final int randomIndex = Randomizer.nextInt(internalNodes.length);
-        snNode = internalNodes[randomIndex];
+        final NetworkNode pickedNode = internalNodes[randomIndex];
 
         // determine the lower and upper bounds
-        upper = Double.MAX_VALUE;
-        for (NetworkNode p: snNode.getParents()) {
+        double upper = Double.MAX_VALUE;
+        for (NetworkNode p: pickedNode.getParents()) {
             upper = Math.min(upper, p.getHeight());
         }
-        lower = 0.0;
-        for (NetworkNode c: snNode.getChildren()) {
+        double lower = 0.0;
+        for (NetworkNode c: pickedNode.getChildren()) {
             lower = Math.max(lower, c.getHeight());
         }
+        if (lower >= upper)
+            throw new RuntimeException("Developer ERROR: lower bound >= upper bound!");
 
         // propose a new height, reflect it back if it's outside the boundary
-        oldHeight = snNode.getHeight();
+        double oldHeight = pickedNode.getHeight();
+        double newHeight;
         if (isNormalInput.get()) {
             final double sigma = sigmaInput.get();
             newHeight = oldHeight + Randomizer.nextGaussian() * sigma;
@@ -73,7 +70,7 @@ public class NodeSlider extends Operator {
         }
 
         // update the new node height
-        if (snNode.isOrigin()) {
+        if (pickedNode.isOrigin()) {
             final RealParameter originTime = originInput.get();
             if (outsideBounds(newHeight, originTime))
                 return Double.NEGATIVE_INFINITY;
@@ -81,7 +78,7 @@ public class NodeSlider extends Operator {
             originTime.setValue(newHeight);
         }
         speciesNetwork.startEditing(this);
-        snNode.setHeight(newHeight);
+        pickedNode.setHeight(newHeight);
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
         return 0.0;

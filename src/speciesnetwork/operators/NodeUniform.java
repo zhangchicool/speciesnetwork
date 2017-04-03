@@ -10,9 +10,6 @@ import speciesnetwork.NetworkNode;
 import speciesnetwork.SanityChecks;
 
 /**
- * Randomly pick an internal network node (excluding origin).
- * Change its height uniformly between the lower and upper limit.
- *
  * @author Chi Zhang
  */
 
@@ -20,9 +17,6 @@ import speciesnetwork.SanityChecks;
 public class NodeUniform extends Operator {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
-
-    protected double upper, lower, oldHeight, newHeight;
-    protected NetworkNode snNode;
 
     @Override
     public void initAndValidate() {
@@ -35,23 +29,25 @@ public class NodeUniform extends Operator {
         // pick an internal node randomly
         final NetworkNode[] internalNodes = speciesNetwork.getInternalNodes();
         final int randomIndex = Randomizer.nextInt(internalNodes.length);
-        snNode = internalNodes[randomIndex];
+        final NetworkNode pickedNode = internalNodes[randomIndex];
 
         // determine the lower and upper bounds
-        upper = Double.MAX_VALUE;
-        for (NetworkNode p: snNode.getParents()) {
+        double upper = Double.MAX_VALUE;
+        for (NetworkNode p: pickedNode.getParents()) {
             upper = Math.min(upper, p.getHeight());
         }
-        lower = 0.0;
-        for (NetworkNode c: snNode.getChildren()) {
+        double lower = 0.0;
+        for (NetworkNode c: pickedNode.getChildren()) {
             lower = Math.max(lower, c.getHeight());
         }
+        if (lower >= upper)
+            throw new RuntimeException("Developer ERROR: lower bound >= upper bound!");
 
         // propose a new height uniformly
-        oldHeight = snNode.getHeight();
-        newHeight = Randomizer.nextDouble() * (upper - lower) + lower;
+        double oldHeight = pickedNode.getHeight();
+        double newHeight = Randomizer.nextDouble() * (upper - lower) + lower;
         speciesNetwork.startEditing(this);
-        snNode.setHeight(newHeight);
+        pickedNode.setHeight(newHeight);
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
         return 0.0;

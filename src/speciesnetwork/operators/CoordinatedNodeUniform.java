@@ -1,14 +1,10 @@
 package speciesnetwork.operators;
 
 import beast.core.Description;
-import beast.core.Input;
-import beast.core.parameter.IntegerParameter;
-import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
+import beast.util.Randomizer;
+import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
-
-import java.util.ArrayList;
-import java.util.List;
+import speciesnetwork.SanityChecks;
 
 /**
  * @author Chi Zhang
@@ -16,97 +12,36 @@ import java.util.List;
 
 @Description("Randomly select an internal network node and move its height uniformly." +
         "Also update the affected gene tree node heights at each locus to maintain the compatibility.")
-public class CoordinatedNodeUniform extends NodeUniform {
-    public final Input<List<Tree>> geneTreesInput =
-            new Input<>("geneTree", "Gene tree within the species network.", new ArrayList<>());
-    public final Input<List<IntegerParameter>> embeddingsInput =
-            new Input<>("embedding", "The embedding matrix.", new ArrayList<>());
-
-    private int nLoci;
-
-    @Override
-    public void initAndValidate() {
-        nLoci = geneTreesInput.get().size();
-        if (embeddingsInput.get().size() != nLoci) {
-            throw new RuntimeException("Number of embeddings doesn't match number of gene trees!");
-        }
-    }
+public class CoordinatedNodeUniform extends CoordinatedOperator {
 
     @Override
     public double proposal() {
-        double logProposalRatio = super.proposal();
+        final Network speciesNetwork = speciesNetworkInput.get();
 
-        assert (lower < oldHeight && oldHeight < upper);
-        assert (lower < newHeight && newHeight < upper);
+        // pick an internal node randomly
+        final NetworkNode[] internalNodes = speciesNetwork.getInternalNodes();
+        final int randomIndex = Randomizer.nextInt(internalNodes.length);
+        final NetworkNode pickedNode = internalNodes[randomIndex];
 
-        // update the gene tree node heights accordingly
-        logProposalRatio += updateRubberBand(snNode);
-
-        return logProposalRatio;
-    }
-
-    /**
-     * The RubberBand algorithm of Rannala & Yang, 2003 (Appendix Step 4)
-     */
-    private double updateRubberBand(final NetworkNode snNode) {
-        if (!snNode.isSpeciation())  // necessary only when speciation node
-            return 0.0;
-
-        int m = 0;  // # gene node heights changed relative to 'upper'
-        int n = 0;  // # gene node heights changed relative to 'lower'
-        final List<Tree> geneTrees = geneTreesInput.get();
-        final List<IntegerParameter> embeddings = embeddingsInput.get();
-
-        for (int i = 0; i < nLoci; i++) {  // loop over all loci
-            Tree gTree = geneTrees.get(i);
-            IntegerParameter embedding = embeddings.get(i);
-
-            for (Node gNode : gTree.getInternalNodes()) {  // loop over each gene node
-                final double gNodeHeight = gNode.getHeight();
-
-                Integer snNextBrNr;
-                if (lower < gNodeHeight && gNodeHeight < oldHeight) {
-                    final int traversalNodeNr = snNode.getTraversalNumber();
-                    Node ancNode = gNode;
-                    do {
-                        snNextBrNr = embedding.getMatrixValue(traversalNodeNr, ancNode.getNr());
-                        ancNode = ancNode.getParent();
-                    } while (snNextBrNr < 0 && ancNode != null && ancNode.getHeight() < oldHeight);
-                    // check if gNode is in populations represented by snNode's children
-                    if (snNode.childBranchNumbers.contains(snNextBrNr)) {
-                        // update the node height relative to 'lower'
-                        final double gHeightNew = lower + (gNodeHeight - lower) * (newHeight - lower) / (oldHeight - lower);
-                        gNode.setHeight(gHeightNew);
-                        n++;
-                    }
-                }
-                else if (oldHeight <= gNodeHeight && gNodeHeight < upper) {
-                    if (snNode.isRoot()) {
-                        // update the node height relative to 'upper' (origin time)
-                        final double gHeightNew = upper - (upper - gNodeHeight) * (upper - newHeight) / (upper - oldHeight);
-                        gNode.setHeight(gHeightNew);
-                        m++;
-                    } else {
-                        final Integer snBranchNr = snNode.gammaBranchNumber;
-                        final int traversalNodeNr = snNode.getParentByBranch(snBranchNr).getTraversalNumber();
-                        Node ancNode = gNode;
-                        do {
-                            snNextBrNr = embedding.getMatrixValue(traversalNodeNr, ancNode.getNr());
-                            ancNode = ancNode.getParent();
-                        } while (snNextBrNr < 0 && ancNode != null && ancNode.getHeight() < upper);
-                        // check if gNode is in the population represented by snNode
-                        if (snBranchNr.equals(snNextBrNr)) {
-                            // update the node height relative to 'upper'
-                            final double gHeightNew = upper - (upper - gNodeHeight) * (upper - newHeight) / (upper - oldHeight);
-                            gNode.setHeight(gHeightNew);
-                            m++;
-                        }
-                    }
-                }
-            }
+        // determine the lower and upper bounds
+        double upper = Double.MAX_VALUE;
+        for (NetworkNode p: pickedNode.getParents()) {
+            upper = Math.min(upper, p.getHeight());
         }
+        double lower = 0.0;
+        for (NetworkNode c: pickedNode.getChildren()) {
+            lower = Math.max(lower, c.getHeight());
+        }
+        if (lower >= upper)
+            throw new RuntimeException("Developer ERROR: lower bound >= upper bound!");
 
-        return m * Math.log((upper - newHeight)/(upper - oldHeight)) +
-               n * Math.log((newHeight - lower)/(oldHeight - lower));
+        // propose a new height uniformly
+        double oldHeight = pickedNode.getHeight();
+        double newHeight = Randomizer.nextDouble() * (upper - lower) + lower;
+        speciesNetwork.startEditing(this);
+        pickedNode.setHeight(newHeight);
+        SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
+
+        return updateRubberBand(pickedNode, oldHeight, newHeight, lower, upper);
     }
 }
