@@ -1,5 +1,6 @@
 package speciesnetwork;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import beast.core.Description;
@@ -23,7 +24,7 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
     public final Input<Boolean> adjustTipHeightsInput =
             new Input<>("adjustTipHeights", "Whether tipHeights shall be adjusted (default is true).", true);
 
-    private int nextLeafNr;
+    private List<String> leafOrder;
     private int nextSpeciationNr;
     private int nextReticulationNr;
 
@@ -41,6 +42,7 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
         final Node treeRoot = tree.getRoot();
 
         // Step (1) is to initialize the node counts and array
+        leafOrder = new ArrayList<>();
         leafNodeCount = 0;
         speciationNodeCount = 0;
         int hybridNodeCount = 0;
@@ -49,11 +51,14 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
             if (n.getID() != null && n.getID().startsWith("#H")) {
                 hybridNodeCount++;
             } else if (n.isLeaf()) {
+            	leafOrder.add(n.getID());
                 leafNodeCount++;
             } else if (!n.isRoot()) {
                 speciationNodeCount++;
             }
         }
+
+        leafOrder.sort(null);
 
         assert hybridNodeCount % 2 == 0;
         reticulationNodeCount = hybridNodeCount / 2;
@@ -63,7 +68,6 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
             nodes[i] = new NetworkNode(this); 
         }
 
-        nextLeafNr = 0;
         nextSpeciationNr = leafNodeCount;
         nextReticulationNr = leafNodeCount + speciationNodeCount;
 
@@ -103,8 +107,7 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
                 newNodeNumber = nextReticulationNr;
                 nextReticulationNr++;
             } else if (treeNode.isLeaf()) {
-                newNodeNumber = nextLeafNr;
-                nextLeafNr++;
+                newNodeNumber = leafOrder.indexOf(nodeLabel);
             } else {
                 newNodeNumber = nextSpeciationNr;
                 nextSpeciationNr++;
