@@ -1,10 +1,14 @@
 package speciesnetwork.tools;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
+import com.google.common.collect.Table;
 
 import beast.core.Description;
 import beast.core.Input;
@@ -27,20 +31,15 @@ public class SummarizePosterior extends Runnable {
             "If provided, write to this file rather than to standard out.");
     public final Input<Integer> burninInput = new Input<>("burnin", "The absolute burn-in.", 0);
 
-    // need to do this more efficiently - uses like 800MB of RAM
-    final private int initialArraySize = 10000;
-
-    private Integer[] rSubnetworks;
-    private Integer[][] sSubnetworks;
+    private Map<Integer, Integer> rSubnetworks;
+    private Table<Integer, Integer, Integer> sSubnetworks;
 
     private int nextSubnetworkNumber;
 
     @Override
     public void initAndValidate() {
-    	rSubnetworks = new Integer[initialArraySize];
-    	sSubnetworks = new Integer[initialArraySize][];
-    	for (int i = 0; i < sSubnetworks.length; i++)
-    		sSubnetworks[i] = new Integer[initialArraySize];
+    	rSubnetworks = new HashMap<>();
+    	sSubnetworks = HashBasedTable.create();
     }
 
     @Override
@@ -97,10 +96,10 @@ public class SummarizePosterior extends Runnable {
     	} else if (children.size() == 1) { // reticulation node
     		for (NetworkNode child: children) { // only runs once
     			final int childSubnetworkNr = findSubnetworks(child);
-    			subnetworkNr = rSubnetworks[childSubnetworkNr];
+    			subnetworkNr = rSubnetworks.get(childSubnetworkNr);
 	    		if (subnetworkNr == null) {
 	    			subnetworkNr = nextSubnetworkNumber;
-	    			rSubnetworks[childSubnetworkNr] = subnetworkNr;
+	    			rSubnetworks.put(childSubnetworkNr, subnetworkNr);
 	    			nextSubnetworkNumber++;
 	    		}
     		}
@@ -115,11 +114,11 @@ public class SummarizePosterior extends Runnable {
     				rightSubnetworkNr = childSubnetwork;
     		}
 
-    		subnetworkNr = sSubnetworks[leftSubnetworkNr][rightSubnetworkNr];
+    		subnetworkNr = sSubnetworks.get(leftSubnetworkNr, rightSubnetworkNr);
     		if (subnetworkNr == null) {
     			subnetworkNr = nextSubnetworkNumber;
-    			sSubnetworks[leftSubnetworkNr][rightSubnetworkNr] = subnetworkNr;
-    			sSubnetworks[rightSubnetworkNr][leftSubnetworkNr] = subnetworkNr;
+    			sSubnetworks.put(leftSubnetworkNr, rightSubnetworkNr, subnetworkNr);
+    			sSubnetworks.put(rightSubnetworkNr, leftSubnetworkNr, subnetworkNr);
     			nextSubnetworkNumber++;
     		} 
     	}
