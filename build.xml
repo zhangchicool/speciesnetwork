@@ -1,7 +1,7 @@
-<!-- Build speciesnetwork. It is also used by Hudson speciesnetwork project. JUnit test is available for this build. -->
-<project basedir="." default="build_jar_all_speciesnetwork" name="BUILD_speciesnetwork">
+<!-- Build SpeciesNetwork. JUnit test is available for this build. -->
+<project basedir="." default="build_jar_all_speciesnetwork" name="BUILD_SpeciesNetwork">
 	<description>
-	    Build speciesnetwork.
+	    Build SpeciesNetwork.
 	</description>
 
 	<!-- set global properties for this build -->
@@ -19,13 +19,13 @@
     <import file="${beast2path}/build.xml" />
 
 	<property name="main_class_BEAST" value="beast.app.BeastMCMC" />
-	<property name="report" value="${buildspeciesnetwork}/junitreport"/>
+	<property name="report" value="${buildspeciesnetwork}/junitreport" />
 
 	<path id="classpath">
-        <pathelement path="${buildspeciesnetwork}"/>
-		<fileset dir="${libBeast2}" includes="*.jar"/>
-		<fileset dir="${libspeciesnetwork}" includes="*.jar"/>
-        <pathelement path="${beast2classpath}"/>
+        <pathelement path="${buildspeciesnetwork}" />
+		<fileset dir="${libBeast2}" includes="*.jar" />
+		<fileset dir="${libspeciesnetwork}" includes="*.jar" />
+        <pathelement path="${beast2classpath}" />
 	</path>
 
 	<!-- start -->
@@ -42,12 +42,12 @@
         description="Clean and Build all run-time stuff">
 	</target>
 
-	<!-- clean previous build, compile Java source code, and Junit test, and make the beast.jar and beauti.jar -->
+	<!-- clean previous build, compile Java source code, and Junit test, and make the speciesnetwork.jar -->
 	<target name="build_jar_all_speciesnetwork" depends="cleanspeciesnetwork,compile-allspeciesnetwork,junitspeciesnetwork,dist_all_speciesnetwork"
         description="Clean and Build all run-time stuff">
 	</target>
 
-	<!-- No JUnit Test, clean previous build, compile Java source code, and make the speciesnetwork.jar and beauti.jar -->
+	<!-- No JUnit Test, clean previous build, compile Java source code, and make the speciesnetwork.jar -->
 	<target name="build_jar_all_speciesnetwork_NoJUnitTest" depends="cleanspeciesnetwork,compile-allspeciesnetwork,dist_all_speciesnetwork"
         description="Clean and Build all run-time stuff">
 	</target>
@@ -55,9 +55,9 @@
 	<!-- compile Java source code -->
 	<target name="compile-allspeciesnetwork" depends="initspeciesnetwork">
 	    <!-- Capture the path as a delimited property using the refid attribute -->
-	    <property name="myclasspath" refid="classpath"/>
+	    <property name="myclasspath" refid="classpath" />
 	    <!-- Emit the property to the ant console -->
-	    <echo message="Classpath = ${myclasspath}"/>
+	    <echo message="Classpath = ${myclasspath}" />
 
 		<mkdir dir="${buildspeciesnetwork}" />
 
@@ -122,8 +122,8 @@
 
     <target name="junitreport">
 		<junitreport todir="${report}">
-			<fileset dir="${report}" includes="*.xml"/>
-			<report format="frames" todir="${report}"/>
+			<fileset dir="${report}" includes="*.xml" />
+			<report format="frames" todir="${report}" />
 		</junitreport>
 		<echo message="JUnit test report finished." />
 	</target>
@@ -140,20 +140,20 @@
 		<mkdir dir="${Add_on_dir}/templates" />
 
 		<copy todir="${Add_on_dir}">
-			<fileset file="version.xml"/>
+			<fileset file="version.xml" />
 		</copy>
-		<copy todir="${Add_on_dir}/examples">
-			<fileset dir="examples" />
+		<copy todir="${Add_on_dir}">
+			<fileset dir="${distspeciesnetwork}" includes="speciesnetwork.src.jar" />
 		</copy>
 		<copy todir="${Add_on_dir}/lib">
 			<fileset dir="${distspeciesnetwork}" includes="speciesnetwork.addon.jar" />
 			<fileset dir="${libspeciesnetwork}" includes="guava-19.0.jar" />
 		</copy>
-		<copy todir="${Add_on_dir}">
-			<fileset dir="${distspeciesnetwork}" includes="speciesnetwork.src.jar" />
+		<copy todir="${Add_on_dir}/examples">
+			<fileset dir="examples" />
 		</copy>
 		<copy todir="${Add_on_dir}/templates">
-			<fileset file="templates/SpeciesNetwork.xml" />
+			<fileset dir="templates" />
 		</copy>
 
 		<jar jarfile="${distspeciesnetwork}/speciesnetwork.addon.zip">
