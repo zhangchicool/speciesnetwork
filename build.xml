@@ -152,9 +152,9 @@
 		<copy todir="${Add_on_dir}">
 			<fileset dir="${distspeciesnetwork}" includes="speciesnetwork.src.jar" />
 		</copy>
-		<!--<copy todir="${Add_on_dir}/templates">
-			<fileset file="templates/FBD.xml" />
-		</copy>-->
+		<copy todir="${Add_on_dir}/templates">
+			<fileset file="templates/SpeciesNetwork.xml" />
+		</copy>
 
 		<jar jarfile="${distspeciesnetwork}/speciesnetwork.addon.zip">
 			<fileset dir="${Add_on_dir}">
