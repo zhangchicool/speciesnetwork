@@ -49,6 +49,11 @@ public class NetworkNode {
 
     private DecimalFormat df;
 
+    /**
+     * used when summarizing posterior distribution
+     */
+    public Integer subnetworkNr;
+
     public void updateRelationships() {
         nodeNumber = -1;
         for (int i = 0; i < network.nodes.length; i++) {
