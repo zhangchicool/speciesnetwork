@@ -149,6 +149,9 @@ public class SummarizePosterior extends Runnable {
     	return subnetworkNr;
     }
 
+    /*
+     * Collate all node heights and reticulation node gammas, for networks sharing a common topology
+     */
     private void collateParameters(NetworkNode node, Integer parentSubnetworkNr, Integer parentBranchNr, Multimap<Integer, Double> heights, Table<Integer, Integer, List<Double>> gammas) {
     	Multiset<NetworkNode> children = node.getChildren();
 
