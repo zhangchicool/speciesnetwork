@@ -1391,22 +1391,9 @@
         <geneTree idref="tree.t:se1390"/>
         <geneTree idref="tree.t:xy1420"/>
     </operator>
-
     <operator id="speciesOriginMultiplier" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="5.0"/>
-    <operator id="speciesNodeUniformCoordinated" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@network:species" weight="60.0">
-        <operator id="nodeUniformCoordinated" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@network:species" weight="0.0">
-            <geneTree idref="tree.t:4cl"/> <embedding idref="embedding:4cl"/>
-            <geneTree idref="tree.t:ebs"/> <embedding idref="embedding:ebs"/>
-            <geneTree idref="tree.t:gi"/> <embedding idref="embedding:gi"/>
-            <geneTree idref="tree.t:m002"/> <embedding idref="embedding:m002"/>
-            <geneTree idref="tree.t:m7d1"/> <embedding idref="embedding:m7d1"/>
-            <geneTree idref="tree.t:sb16"/> <embedding idref="embedding:sb16"/>
-            <geneTree idref="tree.t:sb29"/> <embedding idref="embedding:sb29"/>
-            <geneTree idref="tree.t:sb62"/> <embedding idref="embedding:sb62"/>
-            <geneTree idref="tree.t:se1364"/> <embedding idref="embedding:se1364"/>
-            <geneTree idref="tree.t:se1390"/> <embedding idref="embedding:se1390"/>
-            <geneTree idref="tree.t:xy1420"/> <embedding idref="embedding:xy1420"/>
-        </operator>
+    <operator id="speciesNodeUniform" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@network:species" weight="60.0">
+        <operator id="nodeUniform" spec="speciesnetwork.operators.NodeUniform" speciesNetwork="@network:species" weight="0.0"/>
         <geneTree idref="tree.t:4cl"/> <embedding idref="embedding:4cl"/>
         <geneTree idref="tree.t:ebs"/> <embedding idref="embedding:ebs"/>
         <geneTree idref="tree.t:gi"/> <embedding idref="embedding:gi"/>
@@ -1419,20 +1406,8 @@
         <geneTree idref="tree.t:se1390"/> <embedding idref="embedding:se1390"/>
         <geneTree idref="tree.t:xy1420"/> <embedding idref="embedding:xy1420"/>
     </operator>
-    <operator id="speciesNodeSliderCoordinated" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@network:species" weight="100.0">
-        <operator id="nodeSliderCoordinated" spec="speciesnetwork.operators.CoordinatedNodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.0002" weight="0.0">
-            <geneTree idref="tree.t:4cl"/> <embedding idref="embedding:4cl"/>
-            <geneTree idref="tree.t:ebs"/> <embedding idref="embedding:ebs"/>
-            <geneTree idref="tree.t:gi"/> <embedding idref="embedding:gi"/>
-            <geneTree idref="tree.t:m002"/> <embedding idref="embedding:m002"/>
-            <geneTree idref="tree.t:m7d1"/> <embedding idref="embedding:m7d1"/>
-            <geneTree idref="tree.t:sb16"/> <embedding idref="embedding:sb16"/>
-            <geneTree idref="tree.t:sb29"/> <embedding idref="embedding:sb29"/>
-            <geneTree idref="tree.t:sb62"/> <embedding idref="embedding:sb62"/>
-            <geneTree idref="tree.t:se1364"/> <embedding idref="embedding:se1364"/>
-            <geneTree idref="tree.t:se1390"/> <embedding idref="embedding:se1390"/>
-            <geneTree idref="tree.t:xy1420"/> <embedding idref="embedding:xy1420"/>
-        </operator>
+    <operator id="speciesNodeSlider" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@network:species" weight="100.0">
+        <operator id="nodeSlider" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.0002" weight="0.0"/>
         <geneTree idref="tree.t:4cl"/> <embedding idref="embedding:4cl"/>
         <geneTree idref="tree.t:ebs"/> <embedding idref="embedding:ebs"/>
         <geneTree idref="tree.t:gi"/> <embedding idref="embedding:gi"/>
