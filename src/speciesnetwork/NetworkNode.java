@@ -49,6 +49,12 @@ public class NetworkNode {
 
     private DecimalFormat df;
 
+    /**
+     * used when summarizing posterior distribution
+     */
+    public Integer subnetworkNr;
+    public Double topologySupport;
+
     public void updateRelationships() {
         nodeNumber = -1;
         for (int i = 0; i < network.nodes.length; i++) {
@@ -332,6 +338,13 @@ public class NetworkNode {
             else
                 subtreeString.append("[&gamma=");
             subtreeString.append(df.format(inheritProb));
+            subtreeString.append("]");
+        } else if (parents.size() == 0 && topologySupport != null) {
+            if (inXML)
+                subtreeString.append("[&amp;topologySupport=");
+            else
+                subtreeString.append("[&topologySupport=");
+            subtreeString.append(df.format(topologySupport));
             subtreeString.append("]");
         }
 
