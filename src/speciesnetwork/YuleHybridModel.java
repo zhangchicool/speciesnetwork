@@ -15,7 +15,7 @@ import beast.math.distributions.Beta;
  * @author Chi Zhang
  */
 
-@Description("Pure birth model (i.e. no death) with hybridization")
+@Description("Birth hybridization model (i.e. no death)")
 public class YuleHybridModel extends Distribution {
     public final Input<Network> networkInput =
             new Input<>("network", "The species network.", Validate.REQUIRED);

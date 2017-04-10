@@ -44,8 +44,8 @@
 
     <init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false"
           newick="(((A:0.02,(B:0.01)#H1[&amp;gamma=0.3]:0.01)S1:0.03,(#H1:0.02,C:0.03)S2:0.02)R:0.05)"/>
-    <run chainLength="1000000" id="mcmc" spec="MCMC">
-        <state id="state" storeEvery="1000">
+    <run id="mcmc" spec="MCMC" chainLength="1000000" storeEvery="1000">
+        <state id="state">
             <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
                 <taxonset id="taxonSuperset" spec="TaxonSet">
                     <taxon id="A" spec="TaxonSet">

@@ -125,7 +125,7 @@
 
 		<partitiontemplate id="StarBEASTPartitionTemplate" spec="BeautiSubTemplate" class="beast.evolution.likelihood.TreeLikelihood" mainid="mcmc">
 <![CDATA[
-			<geneTree id="geneTree.t:$(n)" ploidy="2.0" spec="starbeast2.GeneTree" populationModel="@popModelBridge.Species" speciesTree="@Tree.t:Species" tree="@Tree.t:$(n)"/>
+			<!-- geneTree id="geneTree.t:$(n)" ploidy="2.0" spec="starbeast2.GeneTree" populationModel="@popModelBridge.Species" speciesTree="@network:species" tree="@Tree.t:$(n)"/ -->
 
 			<!-- site model -->
 			<plugin spec="SiteModel" id="SiteModel.s:$(n)" gammaCategoryCount="0">
@@ -240,16 +240,16 @@
 			Since "Species" is treated as a separate partition, we need the following
 			hacks to get rid of undesirable Tree.t:Species connections
 			-->
-			<connect srcID="Tree.t:Species" targetID="coordinatedUniform.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=XXX"/>
-			<connect srcID="Tree.t:Species" targetID="coordinatedExponential.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=XXX"/>
+			<connect srcID="network:species" targetID="coordinatedUniform.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=XXX"/>
+			<connect srcID="network:species" targetID="coordinatedExponential.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=XXX"/>
 			<!-- end hacks -->
 
-			<connect srcID="speciationRate.t:Species" targetID="updownAll:Species" inputName="up" if="inposterior(speciationRate.t:Species) and speciationRate.t:Species/estimate=true"/>
+			<!-- connect srcID="speciationRate.t:Species" targetID="updownAll:Species" inputName="up" if="inposterior(speciationRate.t:Species) and speciationRate.t:Species/estimate=true"/ -->
 
-			<connect srcID="SBI" targetID="mcmc" inputName="init" if="inposterior(Tree.t:Species)"/>
+			<connect srcID="SBI" targetID="mcmc" inputName="init" if="inposterior(network:species)"/>
 			<connect srcID="Tree.t:$(n)" targetID="SBI" inputName="geneTree" if="inposterior(Tree.t:$(n))"/>
-			<connect srcID="Tree.t:Species" targetID="SBI" inputName="geneTree" if="Tree.t:$(n)/estimate=XXX"/> <!-- another hack -->
-			<connect srcID="Tree.t:Species" targetID="SBI" inputName="speciesTree" if="inposterior(Tree.t:Species)"/>
+			<connect srcID="network:species" targetID="SBI" inputName="geneTree" if="Tree.t:$(n)/estimate=XXX"/> <!-- another hack -->
+			<connect srcID="network:species" targetID="SBI" inputName="speciesTree" if="inposterior(network:species)"/>
 
 			<mergepoint id="aux-partitiontemplate"/>
 		</partitiontemplate>
@@ -272,33 +272,40 @@
 		</taxon>
 	</taxonset>
 
-	<tree spec="starbeast2.SpeciesTree" id="Tree.t:Species" taxonset="@taxonsuperset" estimate="true"/>
+	<!--tree spec="starbeast2.SpeciesTree" id="Tree.t:Species" taxonset="@taxonsuperset" estimate="true"/ -->
+    <stateNode id="network:species" spec="speciesnetwork.Network" taxonset="@taxonsuperset" estimate="true"/>
 
 	<!-- framework for main model -->
 	<run spec="MCMC" id="mcmc" storeEvery="5000" chainLength="10000000">
 
-		<state storeEvery="5000" id="state">
-			<stateNode idref="Tree.t:Species"/>
-			<stateNode idref="popMean.Species"/>
-			<stateNode idref="popShape.Species"/>
-			<stateNode idref="speciationRate.t:Species"/>
-		</state>
+		<state id="state">
+			<stateNode idref="network:species"/>
+			<!-- stateNode idref="popMean.Species"/>
+			<stateNode idref="popShape.Species"/ -->
+			<stateNode idref="netDivRate:species"/>
+            <stateNode idref="turnOverRate:species"/>
+        </state>
 
 		<distribution spec="CompoundDistribution" id="posterior">
-			<distribution id="speciescoalescent" spec="starbeast2.MultispeciesCoalescent">
-				<populationMean spec="parameter.RealParameter" id="popMean.Species" value="1.0" lower="0.0" estimate="true"/>
-				<populationShape spec="parameter.RealParameter" id="popShape.Species" value="3.0" lower="0.0" estimate="false"/>
+			<distribution id="speciescoalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
+				<!-- populationMean spec="parameter.RealParameter" id="popMean.Species" value="1.0" lower="0.0" estimate="true"/>
+				<populationShape spec="parameter.RealParameter" id="popShape.Species" value="3.0" lower="0.0" estimate="false"/-->
+                <populationModel alpha="10.0" beta="0.2" id="popModel" spec="speciesnetwork.ConstantPopIntegrated"/>
 			</distribution>
 			<distribution spec="CompoundDistribution" id="prior">
 				<!-- species tree priors -->
-				<distribution id="YuleModel.t:Species" spec="beast.evolution.speciation.YuleModel" tree="@Tree.t:Species">
+				<!-- distribution id="YuleModel.t:Species" spec="beast.evolution.speciation.YuleModel" tree="@network:species">
 					<birthDiffRate spec="parameter.RealParameter" id="speciationRate.t:Species" value="1.0" lower="0.0" estimate="true"/>
+				</distribution -->
+                <distribution id="networkPrior.n" spec="speciesnetwork.YuleHybridModel" network="@network:species">
+                    <netDiversification spec="parameter.RealParameter" id="netDivRate:species" value="1.0" lower="0.0" estimate="true"/>
+                    <turnOver spec="parameter.RealParameter" id="turnOverRate:species" value="0.5" lower="0.0" upper="1.0" estimate="true"/>
+                </distribution>
+				<distribution id="netDivPrior.n" spec="beast.math.distributions.Prior" x="@netDivRate:species">
+                    <distr spec="beast.math.distributions.OneOnX"/>
 				</distribution>
-				<distribution id="speciationRatePrior.t:Species" spec="beast.math.distributions.Prior" x="@speciationRate.t:Species">
-					<distr spec="beast.math.distributions.Uniform" lower="0.0" upper="10000.0"/>
-				</distribution>
-				<distribution id="popMeanPrior.Species" spec="beast.math.distributions.Prior" x="@popMean.Species">
-					<distr spec="beast.math.distributions.OneOnX"/>
+				<distribution id="turnOverPrior.n" spec="beast.math.distributions.Prior" x="@turnOverRate:species">
+					<distr spec="beast.math.distributions.Beta"/>
 				</distribution>
 				<mergepoint id="aux-priors"/>
 			</distribution>
@@ -307,57 +314,64 @@
 			</distribution>
 		</distribution>
 
-		<operator id="popMeanScale.Species" parameter="@popMean.Species" scaleFactor="0.75" spec="ScaleOperator" weight="1.0"/>
+		<!-- operator id="popMeanScale.Species" parameter="@popMean.Species" scaleFactor="0.75" spec="ScaleOperator" weight="1.0"/ -->
 
-		<operator id="Reheight.t:Species" spec="starbeast2.NodeReheight2" taxonset="@taxonsuperset" tree="@Tree.t:Species" weight="75.0"/>
-		<operator id="coordinatedUniform.t:Species" spec="starbeast2.CoordinatedUniform" weight="15.0" speciesTree="@Tree.t:Species"/>
-		<operator id="coordinatedExponential.t:Species" spec="starbeast2.CoordinatedExponential" weight="15.0" speciesTree="@Tree.t:Species"/>
+		<!-- operator id="Reheight.t:Species" spec="starbeast2.NodeReheight2" taxonset="@taxonsuperset" tree="@network:species" weight="75.0"/>
+		<operator id="coordinatedUniform.t:Species" spec="starbeast2.CoordinatedUniform" weight="15.0" speciesTree="@network:species"/>
+		<operator id="coordinatedExponential.t:Species" spec="starbeast2.CoordinatedExponential" weight="15.0" speciesTree="@network:species"/>
 
-		<operator id="TreeScaler.t:Species" spec="ScaleOperator" scaleFactor="0.95" weight="3.0" tree="@Tree.t:Species"/>
-		<operator id="TreeRootScaler.t:Species" spec="ScaleOperator" scaleFactor="0.7" weight="3.0" tree="@Tree.t:Species" rootOnly="true"/>
-		<operator id="UniformOperator.t:Species" spec="Uniform" weight="15.0" tree="@Tree.t:Species"/>
-		<operator id="SubtreeSlide.t:Species" spec="SubtreeSlide" weight="15.0" gaussian="true" size="0.002" tree="@Tree.t:Species"/>
-		<operator id="Narrow.t:Species" spec="Exchange" isNarrow="true" weight="15.0" tree="@Tree.t:Species"/>
-		<operator id="Wide.t:Species" spec="Exchange" isNarrow="false" weight="15.0" tree="@Tree.t:Species"/>
-		<operator id="WilsonBalding.t:Species" spec="WilsonBalding" weight="15.0" tree="@Tree.t:Species"/>
+		<operator id="TreeScaler.t:Species" spec="ScaleOperator" scaleFactor="0.95" weight="3.0" tree="@network:species"/>
+		<operator id="TreeRootScaler.t:Species" spec="ScaleOperator" scaleFactor="0.7" weight="3.0" tree="@network:species" rootOnly="true"/>
+		<operator id="UniformOperator.t:Species" spec="Uniform" weight="15.0" tree="@network:species"/>
+		<operator id="SubtreeSlide.t:Species" spec="SubtreeSlide" weight="15.0" gaussian="true" size="0.002" tree="@network:species"/>
+		<operator id="Narrow.t:Species" spec="Exchange" isNarrow="true" weight="15.0" tree="@network:species"/>
+		<operator id="Wide.t:Species" spec="Exchange" isNarrow="false" weight="15.0" tree="@network:species"/>
+		<operator id="WilsonBalding.t:Species" spec="WilsonBalding" weight="15.0" tree="@network:species"/ -->
 
-		<operator id="updownAll:Species" spec="UpDownOperator" scaleFactor="0.75" weight="6.0">
+		<!-- operator id="updownAll:Species" spec="UpDownOperator" scaleFactor="0.75" weight="6.0">
 			<up idref="speciationRate.t:Species"/>
 			<down idref="popMean.Species"/>
 			<down idref="Tree.t:Species"/>
-		</operator>
+		</operator -->
 
-		<operator id="speciationRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="1.0" parameter="@speciationRate.t:Species"/>
+		<operator id="divrRateScaler:species" spec="ScaleOperator" scaleFactor="0.75" weight="3.0" parameter="@netDivRate:species"/>
+        <operator id="turnOverScaler:species" spec="ScaleOperator" scaleFactor="0.75" weight="3.0" parameter="@turnOverRate:species"/>
 
-		<logger id="tracelog" logEvery="5000" fileName="starbeast.log" sort="smart">
+        <logger id="screenlog" logEvery="5000">
 			<model idref="posterior"/>
 			<log idref="posterior"/>
 			<log idref="likelihood"/>
 			<log idref="prior"/>
 			<log idref="speciescoalescent"/>
-			<log idref="speciationRate.t:Species"/>
-			<log idref="YuleModel.t:Species"/>
-			<log idref="popMean.Species"/>
-			<log id="TreeHeight.Species" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.t:Species"/>
-			<log id="TreeLength.Species" spec="starbeast2.TreeLengthLogger" tree="@Tree.t:Species"/>
+			<ESS spec="ESS" name="log" arg="@posterior"/>
 		</logger>
 
-		<logger fileName="species.trees" id="speciesTreeLogger" logEvery="5000" mode="tree">
-			<log id="SpeciesTreeLoggerX" spec="starbeast2.SpeciesTreeLogger" speciesTree="@Tree.t:Species"/>
-		</logger>
-
-		<logger id="screenlog" logEvery="5000">
+		<logger id="tracelog" logEvery="5000" fileName="species.trace.log" sort="smart">
 			<model idref="posterior"/>
 			<log idref="posterior"/>
-			<ESS spec="ESS" name="log" arg="@posterior"/>
 			<log idref="likelihood"/>
 			<log idref="prior"/>
-		</logger>
+			<log idref="speciescoalescent"/>
+			<!-- log idref="speciationRate.t:Species"/>
+			<log idref="YuleModel.t:Species"/>
+			<log idref="popMean.Species"/ -->
+			<log idref="netDivRate:species"/>
+			<log idref="turnOverRate:species"/>
+			<!-- log idref="originTime:species"/ -->
+			<!-- log id="TreeHeight.Species" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.t:Species"/>
+			<log id="TreeLength.Species" spec="starbeast2.TreeLengthLogger" tree="@Tree.t:Species"/ -->
+            <log id="networkLength" speciesNetwork="@network:species" spec="speciesnetwork.NetworkStatLogger"/>
+        </logger>
 
-		<init id="SBI" estimate="false" spec="starbeast2.StarBeastInitializer" speciesTree="@Tree.t:Species" birthRate="@speciationRate.t:Species">
+		<!--logger fileName="species.trees" id="speciesTreeLogger" logEvery="5000" mode="tree">
+			<log id="SpeciesTreeLoggerX" spec="starbeast2.SpeciesTreeLogger" speciesTree="@network:species"/>
+		</logger -->
+
+
+		<!--init id="SBI" estimate="false" spec="starbeast2.StarBeastInitializer" speciesTree="@network:species" birthRate="@speciationRate.t:Species">
 			<populationModel id="popModelBridge.Species" spec="starbeast2.PassthroughModel">
 				<childModel id="constantPopIOModel.Species" spec="starbeast2.DummyModel"/>
 			</populationModel>
-		</init>
+		</init -->
 	</run>
 </beast>
