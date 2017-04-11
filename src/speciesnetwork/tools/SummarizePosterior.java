@@ -45,7 +45,7 @@ public class SummarizePosterior extends Runnable {
 
     private int nextSubnetworkNumber;
 
-    static PrintStream progressStream = Log.err;
+    private static PrintStream progressStream = Log.err;
 
     @Override
     public void initAndValidate() {
@@ -93,8 +93,8 @@ public class SummarizePosterior extends Runnable {
         final Multiset<Integer> allNetworkNrs = binnedNetworks.keys();
         final ImmutableMultiset<Integer> orderedNetworkNrs = Multisets.copyHighestCountFirst(allNetworkNrs);
         final Set<Integer> uniqueNetworkNrs = new LinkedHashSet<>();
-        for (Integer networkNr: orderedNetworkNrs)
-        	uniqueNetworkNrs.add(networkNr);
+        // for (Integer networkNr: orderedNetworkNrs) uniqueNetworkNrs.add(networkNr);
+		uniqueNetworkNrs.addAll(orderedNetworkNrs);
 
         progressStream.println("Writing summary networks with mean heights and gammas...");
         for (Integer networkNr: uniqueNetworkNrs) {
@@ -107,7 +107,7 @@ public class SummarizePosterior extends Runnable {
             	collateParameters(origin, null, null, networkHeights, networkGammas);
             }
 
-            for (Network network: binnedNetworks.get(networkNr)) {
+            for (Network network: binnedNetworks.get(networkNr)) {  // does not loop ??
             	NetworkNode origin = network.getOrigin();
             	origin.topologySupport = topologySupport;
             	averageParameters(origin, null, null, networkHeights, networkGammas);
@@ -192,7 +192,7 @@ public class SummarizePosterior extends Runnable {
     				gammas.put(subnetworkNr, parentSubnetworkNr, new ArrayList<>());
 
     			final Double nodeGamma = node.getGammaProb();
-    			if (parentBranchNr == node.gammaBranchNumber)
+    			if (parentBranchNr.equals(node.gammaBranchNumber))
     				gammas.get(subnetworkNr, parentSubnetworkNr).add(nodeGamma);
     			else
     				gammas.get(subnetworkNr, parentSubnetworkNr).add(1.0 - nodeGamma);
@@ -221,7 +221,7 @@ public class SummarizePosterior extends Runnable {
     			final NetworkNode child = node.getChildByBranch(branchNr);
     			averageParameters(child, subnetworkNr, branchNr, heights, gammas);
 
-    			if (parentBranchNr == node.gammaBranchNumber) {
+    			if (parentBranchNr.equals(node.gammaBranchNumber)) {
     		    	final List<Double> sampledGammas = gammas.get(subnetworkNr, parentSubnetworkNr);
     		    	final Double meanGamma = calculateMean(sampledGammas);
     				node.setGammaProb(meanGamma);
