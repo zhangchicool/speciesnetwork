@@ -22,7 +22,7 @@
 
 			<connect method="beast.app.beauti.SiteModelInputEditor.customConnector"/>
 
-            <!-- when FixMeanMutationRatesOperator, the prior is uniform due to the operator -->
+<!-- when FixMeanMutationRatesOperator, the prior is uniform due to the operator -->
 			<connect srcID="MutationRatePrior.s:$(n)" targetID="prior" inputName="distribution" if="nooperator(FixMeanMutationRatesOperator) and inlikelihood(mutationRate.s:$(n)) and mutationRate.s:$(n)/estimate=true"/>
 
 			<connect srcID="proportionInvariant.s:$(n)" targetID="state" inputName="stateNode" if="inlikelihood(proportionInvariant.s:$(n)) and proportionInvariant.s:$(n)/estimate=true"/>
@@ -55,31 +55,31 @@
 		<!-- JC69 substitution model -->
 		<subtemplate id="JC69" class="beast.evolution.substitutionmodel.JukesCantor" mainid="JC69.s:$(n)">
 <![CDATA[
-			<plugin spec="JukesCantor" id="JC69.s:$(n)"/>
+		<plugin spec="JukesCantor" id="JC69.s:$(n)"/>
 ]]>
 		</subtemplate>
 
 		<!-- HKY substitution model -->
 		<subtemplate id="HKY" class="beast.evolution.substitutionmodel.HKY" mainid="hky.s:$(n)">
-<![CDATA[
-			<plugin spec="HKY" id="hky.s:$(n)">
-				<parameter id="kappa.s:$(n)" name="kappa" value="2.0" lower="0.0" estimate="true"/>
-				<frequencies id="estimatedFreqs.s:$(n)" spec="Frequencies">
-					<frequencies id="freqParameter.s:$(n)" spec="parameter.RealParameter" dimension="4" value="0.25" lower="0" upper="1"/>
-				</frequencies>
-			</plugin>
+			<![CDATA[
+		<plugin spec="HKY" id="hky.s:$(n)">
+			<parameter id="kappa.s:$(n)" name="kappa" value="2.0" lower="0.0" estimate="true"/>
+			<frequencies id="estimatedFreqs.s:$(n)" spec="Frequencies">
+				<frequencies id="freqParameter.s:$(n)" spec="parameter.RealParameter" dimension="4" value="0.25" lower="0" upper="1"/>
+			</frequencies>
+		</plugin>
 
-			<plugin id="KappaScaler.s:$(n)" spec="ScaleOperator" scaleFactor="0.75" weight="1.0" parameter="@kappa.s:$(n)"/>
-			<plugin id="FrequenciesExchanger.s:$(n)" spec="DeltaExchangeOperator" delta="0.2" weight="1.5" parameter="@freqParameter.s:$(n)"/>
+		<plugin id="KappaScaler.s:$(n)" spec="ScaleOperator" scaleFactor="0.75" weight="1.0" parameter="@kappa.s:$(n)"/>
+		<plugin id="FrequenciesExchanger.s:$(n)" spec="DeltaExchangeOperator" delta="0.2" weight="1.5" parameter="@freqParameter.s:$(n)"/>
 
-			<prior id="KappaPrior.s:$(n)" x="@kappa.s:$(n)">
-				<distr spec="LogNormalDistributionModel" meanInRealSpace="false">
-					<parameter name="M" value="1.0" estimate="false"/>
-					<parameter name="S" value="1.25" estimate="false"/>
-				</distr>
-			</prior>
+		<prior id="KappaPrior.s:$(n)" x="@kappa.s:$(n)">
+			<distr spec="LogNormalDistributionModel" meanInRealSpace="false">
+				<parameter name="M" value="1.0" estimate="false"/>
+				<parameter name="S" value="1.25" estimate="false"/>
+			</distr>
+		</prior>
 <!--
-			<prior id="FrequenciesPrior.s:$(n)" x="@freqParameter.s:$(n)"><distr spec="beast.math.distributions.Uniform" lower="0" upper="1"/></prior>
+		<prior id="FrequenciesPrior.s:$(n)" x="@freqParameter.s:$(n)"><distr spec="beast.math.distributions.Uniform" lower="0" upper="1"/></prior>
 -->
 
 ]]>
@@ -108,40 +108,40 @@
 				parameter of partition s:$(n)
 			</connect>
 			<!--
-			<connect srcID="FrequenciesPrior.s:$(n)" targetID="prior" inputName="distribution" if="inposterior(hky.s:$(n)) and inposterior(freqParameter.s:$(n)) and freqParameter.s:$(n)/estimate=true"/>
+						<connect srcID="FrequenciesPrior.s:$(n)" targetID="prior" inputName="distribution" if="inposterior(hky.s:$(n)) and inposterior(freqParameter.s:$(n)) and freqParameter.s:$(n)/estimate=true"/>
 			-->
 		</subtemplate>
 
 
 		<!-- TN93 substitution model -->
 		<subtemplate id="TN93" class="beast.evolution.substitutionmodel.TN93" mainid="tn93.s:$(n)">
-<![CDATA[
-			<plugin spec="TN93" id="tn93.s:$(n)">
-				<parameter id="kappa1.s:$(n)" name="kappa1" value="2.0" lower="0.0" estimate="true"/>
-				<parameter id="kappa2.s:$(n)" name="kappa2" value="2.0" lower="0.0" estimate="true"/>
-				<frequencies id="estimatedFreqs.s:$(n)" spec="Frequencies">
-					<frequencies id="freqParameter.s:$(n)" spec="parameter.RealParameter" dimension="4" value="0.25" lower="0" upper="1"/>
-				</frequencies>
-			</plugin>
+			<![CDATA[
+		<plugin spec="TN93" id="tn93.s:$(n)">
+			<parameter id="kappa1.s:$(n)" name="kappa1" value="2.0" lower="0.0" estimate="true"/>
+			<parameter id="kappa2.s:$(n)" name="kappa2" value="2.0" lower="0.0" estimate="true"/>
+			<frequencies id="estimatedFreqs.s:$(n)" spec="Frequencies">
+				<frequencies id="freqParameter.s:$(n)" spec="parameter.RealParameter" dimension="4" value="0.25" lower="0" upper="1"/>
+			</frequencies>
+		</plugin>
 
-			<plugin id="kappa1Scaler.s:$(n)" spec="ScaleOperator" scaleFactor="0.75" weight="1.0" parameter="@kappa1.s:$(n)"/>
-			<plugin id="kappa2Scaler.s:$(n)" spec="ScaleOperator" scaleFactor="0.75" weight="1.0" parameter="@kappa2.s:$(n)"/>
-			<plugin id="FrequenciesExchanger.s:$(n)" spec="DeltaExchangeOperator" delta="0.2" weight="1.5" parameter="@freqParameter.s:$(n)"/>
+		<plugin id="kappa1Scaler.s:$(n)" spec="ScaleOperator" scaleFactor="0.75" weight="1.0" parameter="@kappa1.s:$(n)"/>
+		<plugin id="kappa2Scaler.s:$(n)" spec="ScaleOperator" scaleFactor="0.75" weight="1.0" parameter="@kappa2.s:$(n)"/>
+		<plugin id="FrequenciesExchanger.s:$(n)" spec="DeltaExchangeOperator" delta="0.2" weight="1.5" parameter="@freqParameter.s:$(n)"/>
 
-			<prior id="kappa1Prior.s:$(n)" x="@kappa1.s:$(n)">
-				<distr spec="LogNormalDistributionModel" meanInRealSpace="false">
-					<parameter name="M" value="1.0" estimate="false"/>
-					<parameter name="S" value="1.25" estimate="false"/>
-				</distr>
-			</prior>
-			<prior id="kappa2Prior.s:$(n)" x="@kappa2.s:$(n)">
-				<distr spec="LogNormalDistributionModel" meanInRealSpace="false">
-					<parameter name="M" value="1.0" estimate="false"/>
-					<parameter name="S" value="1.25" estimate="false"/>
-				</distr>
-			</prior>
+		<prior id="kappa1Prior.s:$(n)" x="@kappa1.s:$(n)">
+			<distr spec="LogNormalDistributionModel" meanInRealSpace="false">
+				<parameter name="M" value="1.0" estimate="false"/>
+				<parameter name="S" value="1.25" estimate="false"/>
+			</distr>
+	</prior>
+		<prior id="kappa2Prior.s:$(n)" x="@kappa2.s:$(n)">
+			<distr spec="LogNormalDistributionModel" meanInRealSpace="false">
+				<parameter name="M" value="1.0" estimate="false"/>
+				<parameter name="S" value="1.25" estimate="false"/>
+			</distr>
+	</prior>
 <!--
-			<prior id="FrequenciesPrior.s:$(n)" x="@freqParameter.s:$(n)"><distr spec="beast.math.distributions.Uniform" lower="0" upper="1"/></prior>
+		<prior id="FrequenciesPrior.s:$(n)" x="@freqParameter.s:$(n)"><distr spec="beast.math.distributions.Uniform" lower="0" upper="1"/></prior>
 -->
 
 ]]>
@@ -182,7 +182,7 @@
 				partition s:$(n)
 			</connect>
 			<!--
-			<connect srcID="FrequenciesPrior.s:$(n)" targetID="prior" inputName="distribution" if="inposterior(hky.s:$(n)) and inposterior(freqParameter.s:$(n)) and freqParameter.s:$(n)/estimate=true"/>
+						<connect srcID="FrequenciesPrior.s:$(n)" targetID="prior" inputName="distribution" if="inposterior(hky.s:$(n)) and inposterior(freqParameter.s:$(n)) and freqParameter.s:$(n)/estimate=true"/>
 			-->
 		</subtemplate>
 
@@ -346,7 +346,7 @@
 		<!-- frequency models -->
 		<subtemplate id="Estimated" class="beast.evolution.substitutionmodel.Frequencies"
 					 mainid="estimatedFreqs.s:$(n)">
-<![CDATA[
+			<![CDATA[
 			<frequencies id="estimatedFreqs.s:$(n)" spec="Frequencies">
 				<frequencies id="freqParameter.s:$(n)" spec="parameter.RealParameter" dimension="4" value="0.25" lower="0" upper="1"/>
 			</frequencies>
