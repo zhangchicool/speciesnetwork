@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 
-import beast.core.parameter.IntegerParameter;
 import beast.core.parameter.RealParameter;
 import beast.evolution.alignment.Taxon;
 import beast.evolution.alignment.TaxonSet;
@@ -36,19 +35,33 @@ public class ConstantPopIOTest extends PopulationTestHelper {
         newickSpeciesNetwork = "(((A:0.2,#H1[&gamma=0.4]:0.1)S1:0.3,((B:0.1)#H1:0.2,C:0.3)S2:0.2)R:0.1)";
         newickGeneTrees.add("(((a1:0.07,a2:0.07):0.48,(b1:0.25,b2:0.25):0.30):0.08,(b3:0.35,c1:0.35):0.28)");
         newickGeneTrees.add("((((a1:0.10,a2:0.10):0.50,(b1:0.05,b2:0.05):0.55):0.05,b3:0.65):0.05,c1:0.70)");
+        
+        embedding = new ArrayList<>();
+        final int[] embedding1 = {-1, -1, -1, -1,
+        -1, -1, -1, -1,
+        -1, 6, -1, 1,
+        -1, 6, -1, 1,
+        -1, -1, 7, 1,
+        -1, -1, 2, -1,
+        4, 0, -1, -1,
+        4, -1, -1, -1,
+        -1, -1, -1, -1,
+        5, -1, -1, -1,
+        -1, -1, -1, -1};
+        embedding.add(embedding1);
 
-        IntegerParameter embedding1 = new IntegerParameter();
-        IntegerParameter embedding2 = new IntegerParameter();
-        embedding1.initByName("value", "-1 -1 -1 -1 -1 -1  4  4 -1  5 -1 " +
-                                       "-1 -1  6  6 -1 -1  0 -1 -1 -1 -1 " +
-                                       "-1 -1 -1 -1  7  2 -1 -1 -1 -1 -1 " +
-                                       "-1 -1  1  1  1 -1 -1 -1 -1 -1 -1", "dimension", "44", "minordimension", "11");
-        embedding2.initByName("value", "-1 -1 -1 -1  5  5  4  5 -1 -1 -1 " +
-                                       "-1 -1 -1 -1 -1 -1  0 -1 -1 -1 -1 " +
-                                       "-1 -1 -1 -1  7  2 -1  7 -1 -1 -1 " +
-                                       "-1 -1 -1 -1  1 -1 -1  1 -1 -1 -1", "dimension", "44", "minordimension", "11");
-        geneTreeEmbeddings.add(embedding1);
-        geneTreeEmbeddings.add(embedding2);
+        final int[] embedding2 = {-1, -1, -1, -1,
+        -1, -1, -1, -1,
+        -1, -1, -1, -1,
+        -1, -1, -1, -1,
+        5, -1, 7, 1,
+        5, -1, 2, -1,
+        4, 0, -1, -1,
+        5, -1, 7, 1,
+        -1, -1, -1, -1,
+        -1, -1, -1, -1,
+        -1, -1, -1, -1};
+        embedding.add(embedding2);
     }
 
     @Test

@@ -7,10 +7,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import beast.core.State;
-import beast.core.parameter.IntegerParameter;
+import beast.core.StateNode;
 import beast.evolution.alignment.TaxonSet;
 import beast.util.TreeParser;
 import speciesnetwork.NetworkParser;
+import speciesnetwork.EmbeddableTree;
+import speciesnetwork.EmbeddedTreeParser;
 import speciesnetwork.GeneTreeInSpeciesNetwork;
 import speciesnetwork.MultispeciesCoalescent;
 import speciesnetwork.PopulationSizeModel;
@@ -19,12 +21,11 @@ import speciesnetwork.operators.RebuildEmbedding;
 abstract class PopulationTestHelper {
     String newickSpeciesNetwork;
     List<String> newickGeneTrees = new ArrayList<>();
-    List<IntegerParameter> geneTreeEmbeddings = new ArrayList<>();
 
     TaxonSet speciesSuperset;
     TreeParser speciesTree;
     NetworkParser speciesNetwork;
-    List<TreeParser> geneTrees = new ArrayList<>();
+    List<EmbeddableTree> geneTrees = new ArrayList<>();
     List<GeneTreeInSpeciesNetwork> geneTreeWrappers = new ArrayList<>();
 
     State state = null;
@@ -35,6 +36,7 @@ abstract class PopulationTestHelper {
     double popSize;
     double ploidy;
     double expectedLogP;
+    List<int[]> embedding;
 
     final double allowedError = 1e-6;
 
@@ -68,30 +70,33 @@ abstract class PopulationTestHelper {
 
     private void initializeStateNodes() {
         if (state == null) state = new State();
-        assertEquals(newickGeneTrees.size(), geneTreeEmbeddings.size());
-        for (int i = 0; i < newickGeneTrees.size(); i++) {
-            IntegerParameter embedding = geneTreeEmbeddings.get(i);
-            state.initByName("stateNode", embedding);
-        }
         state.initialise();
     }
 
     private void initializeGeneTrees(boolean reembed) {
         for (int i = 0; i < newickGeneTrees.size(); i++) {
             final String geneTreeNewick = newickGeneTrees.get(i);
-            TreeParser geneTree = new TreeParser();
-            geneTree.initByName("newick", geneTreeNewick, "IsLabelledNewick", true);
-            geneTrees.add(geneTree);
-            IntegerParameter embedding = geneTreeEmbeddings.get(i);
+            EmbeddableTree embeddedTree = new EmbeddedTreeParser();
+            ((StateNode) embeddedTree).initByName("newick", geneTreeNewick, "IsLabelledNewick", true);
+            final int[] embedding = this.embedding.get(i);
+            final int nRow = embeddedTree.getNodeCount();
+            final int nCol = embedding.length / nRow;
+            embeddedTree.resetEmbedding(nCol, -1);
+
+            for (int r = 0; r < nRow; r++) {
+            	for (int c = 0; c < nCol; c++)
+            		embeddedTree.setEmbedding(r, c, embedding[r * nCol + c]);
+            }
+
+            geneTrees.add(embeddedTree);
             GeneTreeInSpeciesNetwork geneTreeWrapper = new GeneTreeInSpeciesNetwork();
-            geneTreeWrapper.initByName("geneTree", geneTree, "ploidy", ploidy, "speciesNetwork", speciesNetwork,
-                                       "embedding", embedding);
+            geneTreeWrapper.initByName("geneTree", embeddedTree, "ploidy", ploidy, "speciesNetwork", speciesNetwork);
             geneTreeWrappers.add(geneTreeWrapper);
         }
         if (reembed) { // rebuild the embedding
             RebuildEmbedding rebuildOperator = new RebuildEmbedding();
             rebuildOperator.initByName("speciesNetwork", speciesNetwork, "taxonSuperset", speciesSuperset,
-                                       "geneTree", geneTrees, "embedding", geneTreeEmbeddings);
+                                       "geneTree", geneTrees);
             assertTrue(rebuildOperator.initializeEmbedding(true) >= 0);
         }
     }

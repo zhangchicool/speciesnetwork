@@ -10,10 +10,7 @@ import com.google.common.collect.HashMultiset;
 import beast.core.CalculationNode;
 import beast.core.Input;
 import beast.core.Input.Validate;
-import beast.core.parameter.IntegerParameter;
 import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
-import beast.evolution.tree.TreeInterface;
 
 /**
  * @author Huw Ogilvie
@@ -23,16 +20,15 @@ import beast.evolution.tree.TreeInterface;
 public class GeneTreeInSpeciesNetwork extends CalculationNode {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "Species network for embedding the gene tree.", Validate.REQUIRED);
-    public final Input<Tree> geneTreeInput =
+    public final Input<EmbeddableTree> geneTreeInput =
             new Input<>("geneTree", "Gene tree embedded in the species network.", Validate.REQUIRED);
-    public final Input<IntegerParameter> embeddingInput =
-            new Input<>("embedding", "Map of gene tree traversal within the species network.", Validate.REQUIRED);
     public final Input<Double> ploidyInput =
             new Input<>("ploidy", "Ploidy (copy number) for this gene (default is 2).", 2.0);
     protected double ploidy;
 
     private boolean needsUpdate;
-    private IntegerParameter embedding;
+    private EmbeddableTree geneTree;
+    private Network speciesNetwork;
 
     // the coalescent times of this gene tree for all species branches
     protected ListMultimap<Integer, Double> coalescentTimes = ArrayListMultimap.create();
@@ -48,7 +44,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
 
     @Override
     public boolean requiresRecalculation() {
-        needsUpdate = embeddingInput.isDirty() || geneTreeInput.isDirty() || speciesNetworkInput.isDirty();
+        needsUpdate = geneTreeInput.isDirty() || speciesNetworkInput.isDirty();
         return needsUpdate;
     }
 
@@ -90,6 +86,8 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
 
     public void initAndValidate() {
         ploidy = ploidyInput.get();
+        geneTree = geneTreeInput.get();
+        speciesNetwork = speciesNetworkInput.get();
         needsUpdate = true;
     }
 
@@ -100,9 +98,8 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
     }
 
     private void update() {
-        final Network speciesNetwork = speciesNetworkInput.get();
-        final TreeInterface geneTree = geneTreeInput.get();
-        embedding = embeddingInput.get();
+        speciesNetwork = speciesNetworkInput.get();
+        geneTree = geneTreeInput.get();
         logGammaSum = 0.0;
 
         final int geneTreeNodeCount = geneTree.getNodeCount();
@@ -145,7 +142,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
             }
             // traversal direction forward in time
             final int traversalNodeNumber = speciesNetworkNode.getTraversalNumber();
-            final Integer nextSpeciesBranchNumber = embedding.getMatrixValue(traversalNodeNumber, geneTreeNodeNumber);
+            final Integer nextSpeciesBranchNumber = geneTree.getEmbedding(geneTreeNodeNumber, traversalNodeNumber);
             assert (nextSpeciesBranchNumber >= 0);
             final NetworkNode nextSpeciesNode = speciesNetworkNode.getChildByBranch(nextSpeciesBranchNumber);
             recurseCoalescentEvents(geneTreeNode, nextSpeciesNode, nextSpeciesBranchNumber, speciesNodeHeight);
@@ -173,7 +170,6 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
      * this can be in Tree.java as gTreeNode.getGeneTreeTipDescendant()
      */
     public Node getGeneNodeDescendantTip(Node gTreeNode) {
-        final TreeInterface geneTree = geneTreeInput.get();
         final List<Node> gTreeTips = geneTree.getExternalNodes();  // tips
         for (Node tip : gTreeTips) {
             Node node = tip;

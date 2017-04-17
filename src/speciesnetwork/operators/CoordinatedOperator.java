@@ -1,6 +1,5 @@
 package speciesnetwork.operators;
 
-import beast.core.Description;
 import beast.core.Input;
 import beast.core.Operator;
 import beast.core.parameter.IntegerParameter;
@@ -10,9 +9,7 @@ import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Chi Zhang

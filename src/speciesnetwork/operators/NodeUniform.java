@@ -44,7 +44,7 @@ public class NodeUniform extends Operator {
             throw new RuntimeException("Developer ERROR: lower bound >= upper bound!");
 
         // propose a new height uniformly
-        double oldHeight = pickedNode.getHeight();
+        // double oldHeight = pickedNode.getHeight();
         double newHeight = Randomizer.nextDouble() * (upper - lower) + lower;
         speciesNetwork.startEditing(this);
         pickedNode.setHeight(newHeight);

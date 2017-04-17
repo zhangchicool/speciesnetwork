@@ -109,6 +109,7 @@
 		<partitiontemplate id="StarBEASTPartitionTemplate" spec="BeautiSubTemplate" class="beast.evolution.likelihood.TreeLikelihood" mainid="mcmc">
 <![CDATA[
 			<geneTree id="geneTree.t:$(n)" ploidy="2.0" spec="starbeast2.GeneTree" populationModel="@popModelBridge.Species" speciesTree="@Tree.t:Species" tree="@Tree.t:$(n)"/>
+			<stateNode id="embedding.t:$(n)" spec="parameter.IntegerParameter">-1</stateNode>
 
 			<!-- site model -->
 			<plugin spec="SiteModel" id="SiteModel.s:$(n)" gammaCategoryCount="0">
@@ -253,14 +254,16 @@
 		</taxon>
 	</taxonset>
 
-	<tree spec="starbeast2.SpeciesTree" id="Tree.t:Species" taxonset="@taxonsuperset" estimate="true"/>
-	<stateNode id="network:species" spec="speciesnetwork.Network" tree="@newick:species">
+	<stateNode spec="speciesnetwork.Network" id="Network.t:species" taxonset="@taxonsuperset" estimate="true"/>
+	<!--<parameter id="originTime:species" lower="0.0" name="stateNode">0.002</parameter>
+	<parameter id="netDivRate:species" lower="0.0" name="stateNode">100.0</parameter>
+	<parameter id="turnOverRate:species" lower="0.0" upper="1.0" name="stateNode">0.5</parameter>-->
 
 	<!-- framework for main model -->
 	<run spec="MCMC" id="mcmc" storeEvery="5000" chainLength="10000000">
 
 		<state storeEvery="5000" id="state">
-			<stateNode idref="Tree.t:Species"/>
+			<stateNode idref="Network.t:species"/>
 			<stateNode idref="popMean.Species"/>
 			<stateNode idref="popShape.Species"/>
 			<stateNode idref="speciationRate.t:Species"/>
