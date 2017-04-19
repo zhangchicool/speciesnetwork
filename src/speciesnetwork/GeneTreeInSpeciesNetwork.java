@@ -145,6 +145,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
             final Integer nextSpeciesBranchNumber = geneTree.getEmbedding(geneTreeNodeNumber, traversalNodeNumber);
             assert (nextSpeciesBranchNumber >= 0);
             final NetworkNode nextSpeciesNode = speciesNetworkNode.getChildByBranch(nextSpeciesBranchNumber);
+            assert nextSpeciesNode != null;
             recurseCoalescentEvents(geneTreeNode, nextSpeciesNode, nextSpeciesBranchNumber, speciesNodeHeight);
         } else if (geneTreeNode.isLeaf()) { // assumes tip node heights are always zero
             speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] += lastHeight;

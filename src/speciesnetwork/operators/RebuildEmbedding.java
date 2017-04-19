@@ -101,6 +101,8 @@ public class RebuildEmbedding extends Operator {
 
             final int n;
             if (rebuild) {
+                ((StateNode) geneTree).startEditing(this); // very important!
+
             	final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
                 geneTree.resetEmbedding(traversalNodeCount, -1);
                 n = recurseRebuild(geneTree.getRoot(), speciesNetwork.getRoot(), geneTree, true);

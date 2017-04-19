@@ -13,12 +13,11 @@ import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.Runnable;
 import beast.core.State;
-import beast.core.parameter.IntegerParameter;
 import beast.core.parameter.RealParameter;
 import beast.evolution.alignment.*;
 import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
 import beast.util.Randomizer;
+import speciesnetwork.EmbeddedTree;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 import speciesnetwork.SanityChecks;
@@ -41,10 +40,8 @@ public class CoalescentSimulator extends Runnable {
     public final Input<TaxonSet> taxonSuperSetInput =
             new Input<>("taxonSuperset", "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
 
-    public final Input<List<Tree>> geneTreesInput =
+    public final Input<List<EmbeddedTree>> geneTreesInput =
             new Input<>("geneTree", "Gene tree embedded in the species network.", new ArrayList<>());
-    public final Input<List<IntegerParameter>> embeddingsInput =
-            new Input<>("embedding", "Map of gene tree traversal within the species network.", new ArrayList<>());
     public final Input<RealParameter> ploidiesInput =
             new Input<>("ploidy", "Ploidy (copy number) for each gene (default is 2).");
     public final Input<List<SequenceSimulator>> seqSimulatorsInput =
@@ -61,8 +58,7 @@ public class CoalescentSimulator extends Runnable {
 
     private Network speciesNetwork;
     private RealParameter popSizes;
-    private List<Tree> geneTrees;
-    private List<IntegerParameter> embeddings;
+    private List<EmbeddedTree> geneTrees;
     private RealParameter ploidies;
 
     private int nrOfGeneTrees;
@@ -75,10 +71,9 @@ public class CoalescentSimulator extends Runnable {
     @Override
     public void initAndValidate() {
         geneTrees = geneTreesInput.get();
-        embeddings = embeddingsInput.get();
         // sanity check
-        if (geneTrees == null || embeddings == null || geneTrees.size() != embeddings.size())
-            throw new RuntimeException("Check gene tree and embedding input!");
+        if (geneTrees == null)
+            throw new RuntimeException("Check gene tree input!");
         nrOfGeneTrees = geneTrees.size();
 
         if ((ploidies = ploidiesInput.get()) == null)
@@ -128,16 +123,10 @@ public class CoalescentSimulator extends Runnable {
         final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
         // simulate each gene tree and alignment
         for (int ig = 0; ig < nrOfGeneTrees; ig++) {
-            Tree geneTree = geneTrees.get(ig);
-            IntegerParameter embedding = embeddings.get(ig);
+            EmbeddedTree geneTree = geneTrees.get(ig);
 
             // initialize embedding matrix to -1 (no traversal)
-            final int geneNodeCount = geneTree.getNodeCount();
-            embedding.setDimension(traversalNodeCount * geneNodeCount);
-            embedding.setMinorDimension(geneNodeCount);
-            for (int i = 0; i < traversalNodeCount; i++)
-                for (int j = 0; j < geneNodeCount; j++)
-                    embedding.setMatrixValue(i, j, -1);
+            geneTree.resetEmbedding(traversalNodeCount, -1);
 
             networkNodeGeneLineagesMap.clear();
             // generate map of tip names to tip nodes
@@ -166,7 +155,7 @@ public class CoalescentSimulator extends Runnable {
             speciesNetwork.resetAllVisited();
             // simulate the gene tree
             nodeIndex = 0;
-            simulateGeneTree(speciesNetwork.getRoot(), geneTree, embedding, ploidies.getValue(ig));
+            simulateGeneTree(speciesNetwork.getRoot(), geneTree, ploidies.getValue(ig));
 
             // simulate alignment on the gene tree
             if (seqSimulators.size() > ig) {
@@ -176,11 +165,11 @@ public class CoalescentSimulator extends Runnable {
     }
 
     // recursively simulate lineages coalescent in each population
-    private void simulateGeneTree(NetworkNode snNode, Tree geneTree, IntegerParameter embedding, double ploidy) {
+    private void simulateGeneTree(NetworkNode snNode, EmbeddedTree geneTree, double ploidy) {
         if (snNode.isVisited())
             return;
         for (NetworkNode c: snNode.getChildren()) {
-            simulateGeneTree(c, geneTree, embedding, ploidy);
+            simulateGeneTree(c, geneTree, ploidy);
         }
 
         snNode.setVisited(true);  // set visited indicator
@@ -217,10 +206,10 @@ public class CoalescentSimulator extends Runnable {
             // update embedding
             final int traversalLParentNr = lParent.getTraversalNumber();
             for (final Node geneNode : lineagesAtLTop)
-                embedding.setMatrixValue(traversalLParentNr, geneNode.getNr(), lBranchNumber);
+            	geneTree.setEmbedding(geneNode.getNr(), traversalLParentNr, lBranchNumber);
             final int traversalRParentNr = rParent.getTraversalNumber();
             for (final Node geneNode : lineagesAtRTop)
-                embedding.setMatrixValue(traversalRParentNr, geneNode.getNr(), rBranchNumber);
+            	geneTree.setEmbedding(geneNode.getNr(), traversalRParentNr, rBranchNumber);
         }
         else {
             final double bottomHeight = snNode.getHeight();
@@ -242,13 +231,13 @@ public class CoalescentSimulator extends Runnable {
                 // update embedding
                 final int traversalParentNr = sParent.getTraversalNumber();
                 for (final Node geneNode : lineagesAtTop)
-                    embedding.setMatrixValue(traversalParentNr, geneNode.getNr(), sBranchNumber);
+                	geneTree.setEmbedding(geneNode.getNr(), traversalParentNr, sBranchNumber);
             }
         }
     }
 
     private List<Node> simulateCoalescentEvents(Collection<Node> lineages, double bottomHeight,
-                                                double topHeight, double pNu, Tree geneTree) {
+                                                double topHeight, double pNu, EmbeddedTree geneTree) {
         // start from the lineages at the bottom
         List<Node> currentLineages = new ArrayList<>(lineages);
         double currentHeight = bottomHeight;
@@ -309,7 +298,7 @@ public class CoalescentSimulator extends Runnable {
                 for (Sequence seq : sequences)
                     out.println("        <sequence taxon=\"" + seq.getTaxon() + "\" value=\"" + seq.getData() + "\"/>");
             } else {
-                Tree geneTree = geneTrees.get(i);
+            	EmbeddedTree geneTree = geneTrees.get(i);
                 for (Node leaf : geneTree.getExternalNodes())
                     out.println("        <sequence taxon=\"" + leaf.getID() + "\" totalcount=\"4\" value=\"-\"/>");
             }
@@ -353,14 +342,11 @@ public class CoalescentSimulator extends Runnable {
             out.println("            <tree id=\"tree:gene" + (i+1) + "\" name=\"stateNode\">");
             out.println("                <taxonset id=\"taxonset:gene" + (i + 1) + "\" alignment=\"@gene" + (i+1) + "\" spec=\"TaxonSet\"/>");
             out.println("            </tree>");
-            // print true embedding (doesn't make sense as gene node number may change, so just print -1)
-            IntegerParameter embedding = embeddings.get(i);
-            out.println("            <stateNode id=\"embedding:gene" + (i+1) + "\" spec=\"parameter.IntegerParameter\">" + (-1) + "</stateNode>");
         }
         out.println("        </state>\n");  // end of states
         // print initial/true gene trees
         for (int i = 0; i < nrOfGeneTrees; i++) {
-            Tree geneTree = geneTrees.get(i);
+            EmbeddedTree geneTree = geneTrees.get(i);
             out.println("        <init spec=\"beast.util.TreeParser\" id=\"newick:gene" + (i+1) + "\" initial=\"@tree:gene" + (i+1) + "\" " +
                     "taxa=\"@gene" + (i+1) + "\" IsLabelledNewick=\"true\" newick=\"" + geneTree.getRoot().toNewick() + "\"/>");
         }
@@ -537,13 +523,13 @@ public class CoalescentSimulator extends Runnable {
     private void writeGeneTrees(String outputFileName) throws IOException {
         if (outputFileName == null) {
             for (int i = 0; i < nrOfGeneTrees; i++) {
-                Tree geneTree = geneTrees.get(i);
+            	EmbeddedTree geneTree = geneTrees.get(i);
                 System.out.println(geneTree.getRoot().toNewick() + ";");
             }
         } else {
             FileWriter fw = new FileWriter(outputFileName, true);
             for (int i = 0; i < nrOfGeneTrees; i++) {
-                Tree geneTree = geneTrees.get(i);
+            	EmbeddedTree geneTree = geneTrees.get(i);
                 fw.write(geneTree.getRoot().toNewick() + ";\n");
             }
             fw.close();
