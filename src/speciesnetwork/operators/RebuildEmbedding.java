@@ -93,6 +93,15 @@ public class RebuildEmbedding extends Operator {
         final Network speciesNetwork = speciesNetworkInput.get();
         final List<EmbeddableTree> geneTrees = geneTreesInput.get();
 
+        // Tell BEAST that *all* gene trees will be edited
+        // doing this for all trees avoids Trie combinatorial explosions
+        if (rebuild) {
+	        for (int i = 0; i < nLoci; i++) {
+	            EmbeddableTree geneTree = geneTrees.get(i);
+	            ((StateNode) geneTree).startEditing(this);
+	        }
+        }
+
         int nChoices = 0;
         for (int i = 0; i < nLoci; i++) {
             EmbeddableTree geneTree = geneTrees.get(i);
@@ -101,8 +110,6 @@ public class RebuildEmbedding extends Operator {
 
             final int n;
             if (rebuild) {
-                ((StateNode) geneTree).startEditing(this); // very important!
-
             	final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
                 geneTree.resetEmbedding(traversalNodeCount, -1);
                 n = recurseRebuild(geneTree.getRoot(), speciesNetwork.getRoot(), geneTree, true);
