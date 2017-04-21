@@ -83,7 +83,7 @@
 
 		<panel spec="BeautiPanelConfig" panelname="Taxon sets" tiptext="Specify taxon sets that make up species" path="operator[id='Reheight.t:Species']/taxonset" hasPartitions="none" icon="1.pngx" forceExpansion="TRUE"/>
 
-		<panel spec="BeautiPanelConfig" panelname="Gene Ploidy" tiptext="The ploidy for each gene (locus)" path="distribution/distribution[id='speciescoalescent']/distribution" hasPartitions="none" icon="2.pngx" forceExpansion="TRUE"/>
+		<panel spec="BeautiPanelConfig" panelname="Gene Ploidy" tiptext="The ploidy for each gene (locus)" path="distribution/distribution[id='coalescent']/distribution" hasPartitions="none" icon="2.pngx" forceExpansion="TRUE"/>
 
 		<panel spec="BeautiPanelConfig" panelname="Site Model" tiptext="Site model and substitution model specifications" path="siteModel" hasPartitions="SiteModel" icon="3.pngx" forceExpansion="TRUE"/>
 		<mergepoint id="aux-sitemodel-panels"/>
@@ -103,13 +103,12 @@
 		<panel spec="BeautiPanelConfig" panelname="MCMC" tiptext="MCMC parameters" path="" hasPartitions="none" icon="9.pngx" forceExpansion="TRUE"/>
 		<mergepoint id="aux-panels"/>
 
-		<alignmentProvider id="Import Alignment" spec="StarBeastAlignmentProvider" template="@StarBEASTPartitionTemplate"/>
+		<alignmentProvider id="Import Alignment" spec="StarBeastAlignmentProvider" template="@SpeciesNetworkPartitionTemplate"/>
 
 
-		<partitiontemplate id="StarBEASTPartitionTemplate" spec="BeautiSubTemplate" class="beast.evolution.likelihood.TreeLikelihood" mainid="mcmc">
+		<partitiontemplate id="SpeciesNetworkPartitionTemplate" spec="BeautiSubTemplate" class="beast.evolution.likelihood.TreeLikelihood" mainid="mcmc">
 <![CDATA[
-			<geneTree id="geneTree.t:$(n)" ploidy="2.0" spec="starbeast2.GeneTree" populationModel="@popModelBridge.Species" speciesTree="@Tree.t:Species" tree="@Tree.t:$(n)"/>
-			<stateNode id="embedding.t:$(n)" spec="parameter.IntegerParameter">-1</stateNode>
+			<geneTreeWithin id="geneTree.t:$(n)" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)"/>
 
 			<!-- site model -->
 			<plugin spec="SiteModel" id="SiteModel.s:$(n)" gammaCategoryCount="0">
@@ -134,7 +133,7 @@
 
 			<!-- tree and its properties -->
 			<taxonset id="TaxonSet.$(n)" spec="beast.evolution.alignment.TaxonSet" alignment="@$(n)"/>
-			<plugin spec="beast.evolution.tree.Tree" id="Tree.t:$(n)" taxonset="@TaxonSet.$(n)"/>
+			<plugin spec="speciesnetwork.EmbeddedTree" id="Tree.t:$(n)" taxonset="@TaxonSet.$(n)"/>
 
 			<plugin id="TreeHeight.t:$(n)" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.t:$(n)"/>
 
@@ -157,13 +156,27 @@
 				<down idref="Tree.t:$(n)"/>
 			</upDownOperator>
 
-			<operator id="TreeScaler.t:$(n)" spec="ScaleOperator" scaleFactor="0.95" weight="3.0" tree="@Tree.t:$(n)"/>
-			<operator id="TreeRootScaler.t:$(n)" spec="ScaleOperator" scaleFactor="0.7" weight="3.0" tree="@Tree.t:$(n)" rootOnly="true"/>
-			<operator id="UniformOperator.t:$(n)" spec="Uniform" weight="15.0" tree="@Tree.t:$(n)"/>
-			<operator id="SubtreeSlide.t:$(n)" spec="SubtreeSlide" weight="15.0" gaussian="true" size="0.002" tree="@Tree.t:$(n)"/>
-			<operator id="Narrow.t:$(n)" spec="Exchange" isNarrow="true" weight="15.0" tree="@Tree.t:$(n)"/>
-			<operator id="Wide.t:$(n)" spec="Exchange" isNarrow="false" weight="15.0" tree="@Tree.t:$(n)"/>
-			<operator id="WilsonBalding.t:$(n)" spec="WilsonBalding" weight="15.0" tree="@Tree.t:$(n)"/>
+			<operator id="scaleAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@Network.t:Species" geneTree="@tree.t:$(n)" weight="3.0">
+				<operator id="scale.t:$(n)" spec="ScaleOperator" scaleFactor="0.5" tree="@tree.t:$(n)" weight="0.0"/>
+			</operator>
+			<operator id="scaleRootAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@Network.t:Species" geneTree="@tree.t:$(n)" weight="3.0">
+				<operator id="scaleRoot.t:$(n)" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree.t:$(n)" weight="0.0"/>
+			</operator>
+			<operator id="uniformAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@Network.t:Species" geneTree="@tree.t:$(n)" weight="30.0">
+				<operator id="uniform.t:$(n)" spec="Uniform" tree="@tree.t:$(n)" weight="0.0"/>
+			</operator>
+			<operator id="subSlideAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@Network.t:Species" geneTree="@tree.t:$(n)" weight="15.0">
+				<operator id="subSlide.t:$(n)" spec="SubtreeSlide" tree="@tree.t:$(n)" weight="0.0"/>
+			</operator>
+			<operator id="narrowAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@Network.t:Species" geneTree="@tree.t:$(n)" weight="15.0">
+				<operator id="narrow.t:$(n)" spec="Exchange" tree="@tree.t:$(n)" weight="0.0"/>
+			</operator>
+			<operator id="wideAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@Network.t:Species" geneTree="@tree.t:$(n)" weight="3.0">
+				<operator id="wide.t:$(n)" spec="Exchange" isNarrow="false" tree="@tree.t:$(n)" weight="0.0"/>
+			</operator>
+			<operator id="WBAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@Network.t:Species" geneTree="@tree.t:$(n)" weight="3.0">
+				<operator id="WilsonBalding.t:$(n)" spec="WilsonBalding" tree="@tree.t:$(n)" weight="0.0"/>
+			</operator>
 
 			<logger id="treelog.t:$(n)" spec="beast.core.Logger" logEvery="5000" fileName="$(tree).trees" mode="tree">
 				<log id="TreeWithMetaDataLogger.t:$(n)" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:$(n)"/>
@@ -174,8 +187,8 @@
 
 			<connect srcID="treelog.t:$(n)" targetID="mcmc" inputName="logger" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
 
-			<connect srcID="geneTree.t:$(n)" targetID="speciescoalescent" inputName="distribution" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
-			<!-- hack to ensure that treePrior.$(n) is always deleted from prior, since it is already part of speciescoalescent -->
+			<connect srcID="geneTree.t:$(n)" targetID="coalescent" inputName="distribution" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<!-- hack to ensure that treePrior.$(n) is always deleted from prior, since it is already part of coalescent -->
 			<connect srcID="geneTree.t:$(n)" targetID="prior" inputName="distribution" if="Tree.t:$(n)/estimate=XXX"/>
 
 			<connect srcID="MutationRatePrior.s:$(n)" targetID="prior" inputName="distribution" if="inposterior(mutationRate.s:$(n)) and mutationRate.s:$(n)/estimate=true"/>
@@ -195,13 +208,13 @@
 			</connect>
 			<connect srcID="strictClockRate.c:$(n)" targetID="clockUpDownOperator.c:$(n)" inputName="up" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
 
-			<connect srcID="TreeScaler.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
-			<connect srcID="TreeRootScaler.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
-			<connect srcID="UniformOperator.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
-			<connect srcID="SubtreeSlide.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Narrow.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Wide.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
-			<connect srcID="WilsonBalding.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="scaleAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="scaleRootAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="uniformAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="subSlideAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="narrowAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="wideAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="WBAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
 
 			<connect srcID="treeLikelihood.$(n)" targetID="tracelog" inputName="log" if="inlikelihood(treeLikelihood.$(n))"/>
 			<connect srcID="treePrior.t:$(n)" targetID="tracelog" inputName="log" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
@@ -214,26 +227,20 @@
 			<connect srcID="GammaShapePrior.s:$(n)" targetID="prior" inputName="distribution" if="inlikelihood(gammaShape.s:$(n)) and gammaShape.s:$(n)/estimate=true"/>
 			<connect srcID="PropInvariantPrior.s:$(n)" targetID="prior" inputName="distribution" if="inlikelihood(proportionInvariant.s:$(n)) and proportionInvariant.s:$(n)/estimate=true"/>
 
-			<connect srcID="geneTree.t:$(n)" targetID="Reheight.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Tree.t:$(n)" targetID="coordinatedUniform.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Tree.t:$(n)" targetID="coordinatedExponential.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Tree.t:$(n)" targetID="updownAll:Species" inputName="down" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
-			<connect srcID="strictClockRate.c:$(n)" targetID="updownAll:Species" inputName="up" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="speciesNetworkMultiplier.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="speciesNodeUniform.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="speciesNodeSlider.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="speciesEdgeRelocateWide.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="speciesEdgeRelocateNarrow.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="speciesAddHybridization.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="speciesDeleteHybridization.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 
-			<!--
-			Since "Species" is treated as a separate partition, we need the following
-			hacks to get rid of undesirable Tree.t:Species connections
-			-->
-			<connect srcID="Tree.t:Species" targetID="coordinatedUniform.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=XXX"/>
-			<connect srcID="Tree.t:Species" targetID="coordinatedExponential.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=XXX"/>
-			<!-- end hacks -->
+			<connect srcID="netDivRate.t:Species" targetID="updownAll:Species" inputName="up" if="inposterior(netDivRate.t:Species) and netDivRate.t:Species/estimate=true"/>
 
-			<connect srcID="speciationRate.t:Species" targetID="updownAll:Species" inputName="up" if="inposterior(speciationRate.t:Species) and speciationRate.t:Species/estimate=true"/>
-
-			<connect srcID="SBI" targetID="mcmc" inputName="init" if="inposterior(Tree.t:Species)"/>
-			<connect srcID="Tree.t:$(n)" targetID="SBI" inputName="geneTree" if="inposterior(Tree.t:$(n))"/>
-			<connect srcID="Tree.t:Species" targetID="SBI" inputName="geneTree" if="Tree.t:$(n)/estimate=XXX"/> <!-- another hack -->
-			<connect srcID="Tree.t:Species" targetID="SBI" inputName="speciesTree" if="inposterior(Tree.t:Species)"/>
+			<connect srcID="SNI" targetID="mcmc" inputName="init" if="inposterior(Network.t:Species)"/>
+			<connect srcID="Tree.t:$(n)" targetID="SNI" inputName="geneTree" if="inposterior(Tree.t:$(n))"/>
+			<connect srcID="Tree.t:$(n)" targetID="initEmbed" inputName="geneTree" if="inposterior(Tree.t:$(n))"/>
+			<connect srcID="Tree.t:$(n)" targetID="coalSim" inputName="geneTree" if="inposterior(Tree.t:$(n))"/>
 
 			<mergepoint id="aux-partitiontemplate"/>
 		</partitiontemplate>
@@ -254,34 +261,39 @@
 		</taxon>
 	</taxonset>
 
-	<stateNode spec="speciesnetwork.Network" id="Network.t:species" taxonset="@taxonsuperset" estimate="true"/>
-	<!--<parameter id="originTime:species" lower="0.0" name="stateNode">0.002</parameter>
-	<parameter id="netDivRate:species" lower="0.0" name="stateNode">100.0</parameter>
-	<parameter id="turnOverRate:species" lower="0.0" upper="1.0" name="stateNode">0.5</parameter>-->
+	<stateNode spec="speciesnetwork.Network" id="Network.t:Species" taxonset="@taxonsuperset" estimate="true"/>
 
 	<!-- framework for main model -->
 	<run spec="MCMC" id="mcmc" storeEvery="5000" chainLength="10000000">
 
 		<state storeEvery="5000" id="state">
-			<stateNode idref="Network.t:species"/>
+			<stateNode idref="Network.t:Species"/>
 			<stateNode idref="popMean.Species"/>
 			<stateNode idref="popShape.Species"/>
-			<stateNode idref="speciationRate.t:Species"/>
+			<stateNode idref="netDivRate.t:Species"/>
+			<stateNode idref="turnOverRate.t:Species"/>
+			<stateNode idref="originTime.t:Species"/>
 		</state>
 
 		<distribution spec="CompoundDistribution" id="posterior">
-			<distribution id="speciescoalescent" spec="starbeast2.MultispeciesCoalescent">
-				<populationMean spec="parameter.RealParameter" id="popMean.Species" value="1.0" lower="0.0" estimate="true"/>
-				<populationShape spec="parameter.RealParameter" id="popShape.Species" value="3.0" lower="0.0" estimate="false"/>
+			<distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@Network.t:Species">
+	            <populationModel alpha="3.0" beta="popMean.Species" id="popModel" spec="speciesnetwork.ConstantPopIntegrated"/>
 			</distribution>
 			<distribution spec="CompoundDistribution" id="prior">
 				<!-- species tree priors -->
-				<distribution id="YuleModel.t:Species" spec="beast.evolution.speciation.YuleModel" tree="@Tree.t:Species">
-					<birthDiffRate spec="parameter.RealParameter" id="speciationRate.t:Species" value="1.0" lower="0.0" estimate="true"/>
+				<distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" network="@Network.t:Species" betaShape="1.0">
+					<netDiversification id="netDivRate.t:Species" lower="0.0" name="stateNode">100.0</netDiversification>
+					<turnOver id="turnOverRate.t:Species" lower="0.0" upper="1.0" name="stateNode">0.5</turnOver>
 				</distribution>
-				<distribution id="speciationRatePrior.t:Species" spec="beast.math.distributions.Prior" x="@speciationRate.t:Species">
+				<distribution id="netDivRatePrior.t:Species" spec="beast.math.distributions.Prior" x="@netDivRate.t:Species">
 					<distr spec="beast.math.distributions.Uniform" lower="0.0" upper="10000.0"/>
 				</distribution>
+				<prior id="turnOverRatePrior.t:Species" name="distribution" x="@turnOverRate.t:Species">
+					<distr spec="beast.math.distributions.Beta" alpha="1.0" beta="4.0"/>
+				</prior>
+				<prior id="originTimePrior.t:Species" name="distribution" x="@originTime.t:Species">
+					<distr spec="beast.math.distributions.OneOnX"/>
+				</prior>
 				<distribution id="popMeanPrior.Species" spec="beast.math.distributions.Prior" x="@popMean.Species">
 					<distr spec="beast.math.distributions.OneOnX"/>
 				</distribution>
@@ -293,42 +305,53 @@
 		</distribution>
 
 		<operator id="popMeanScale.Species" parameter="@popMean.Species" scaleFactor="0.75" spec="ScaleOperator" weight="1.0"/>
+		<operator id="netDivRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="1.0" parameter="@netDivRate.t:Species"/>
+		<operator id="turnOverRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="1.0" parameter="@turnOverRate.t:Species"/>
 
-		<operator id="Reheight.t:Species" spec="starbeast2.NodeReheight2" taxonset="@taxonsuperset" tree="@Tree.t:Species" weight="75.0"/>
-		<operator id="coordinatedUniform.t:Species" spec="starbeast2.CoordinatedUniform" weight="15.0" speciesTree="@Tree.t:Species"/>
-		<operator id="coordinatedExponential.t:Species" spec="starbeast2.CoordinatedExponential" weight="15.0" speciesTree="@Tree.t:Species"/>
+		<operator id="gammaProbUniform.t:Species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@Network.t:Species" weight="5.0"/>
+		<operator id="gammaProbRndWalk.t:Species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@Network.t:Species" weight="10.0"/>
+		<operator id="speciesOriginMultiplier.t:Species" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="5.0"/>
 
-		<operator id="TreeScaler.t:Species" spec="ScaleOperator" scaleFactor="0.95" weight="3.0" tree="@Tree.t:Species"/>
-		<operator id="TreeRootScaler.t:Species" spec="ScaleOperator" scaleFactor="0.7" weight="3.0" tree="@Tree.t:Species" rootOnly="true"/>
-		<operator id="UniformOperator.t:Species" spec="Uniform" weight="15.0" tree="@Tree.t:Species"/>
-		<operator id="SubtreeSlide.t:Species" spec="SubtreeSlide" weight="15.0" gaussian="true" size="0.002" tree="@Tree.t:Species"/>
-		<operator id="Narrow.t:Species" spec="Exchange" isNarrow="true" weight="15.0" tree="@Tree.t:Species"/>
-		<operator id="Wide.t:Species" spec="Exchange" isNarrow="false" weight="15.0" tree="@Tree.t:Species"/>
-		<operator id="WilsonBalding.t:Species" spec="WilsonBalding" weight="15.0" tree="@Tree.t:Species"/>
+		<operator id="speciesNetworkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@Network.t:Species" weight="10.0"/>
 
-		<operator id="updownAll:Species" spec="UpDownOperator" scaleFactor="0.75" weight="6.0">
-			<up idref="speciationRate.t:Species"/>
-			<down idref="popMean.Species"/>
-			<down idref="Tree.t:Species"/>
+		<operator id="speciesNodeUniform.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@Network.t:Species" weight="60.0">
+			<operator id="nodeUniform.t:Species" spec="speciesnetwork.operators.NodeUniform" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
-		<operator id="speciationRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="1.0" parameter="@speciationRate.t:Species"/>
+		<operator id="speciesNodeSlider.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@Network.t:Species" weight="100.0">
+			<operator id="nodeSlider.t:Species" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" isNormal="true" sigma="0.0002" weight="0.0"/>
+		</operator>
+
+		<operator id="speciesEdgeRelocateWide.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@Network.t:Species" weight="80.0">
+			<operator id="edgeRelocatorW.t:Species" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@Network.t:Species" isWide="true" weight="0.0"/>
+		</operator>
+
+		<operator id="speciesEdgeRelocateNarrow.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@Network.t:Species" weight="60.0">
+			<operator id="edgeRelocatorN.t:Species" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@Network.t:Species" isWide="false" weight="0.0"/>
+		</operator>
+
+		<operator id="speciesAddHybridization.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@Network.t:Species" weight="80.0">
+			<operator id="addReticulation.t:Species" spec="speciesnetwork.operators.AddReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
+		</operator>
+
+		<operator id="speciesDeleteHybridization.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonSuperset" speciesNetwork="@Network.t:Species" weight="80.0">
+			<operator id="deleteReticulation.t:Species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
+		</operator>
 
 		<logger id="tracelog" logEvery="5000" fileName="starbeast.log" sort="smart">
 			<model idref="posterior"/>
 			<log idref="posterior"/>
 			<log idref="likelihood"/>
 			<log idref="prior"/>
-			<log idref="speciescoalescent"/>
-			<log idref="speciationRate.t:Species"/>
-			<log idref="YuleModel.t:Species"/>
+			<log id="NetworkLength.Species" spec="speciesnetwork.NetworkStatLogger" speciesNetwork="@Network.t:Species"/>
 			<log idref="popMean.Species"/>
-			<log id="TreeHeight.Species" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.t:Species"/>
-			<log id="TreeLength.Species" spec="starbeast2.TreeLengthLogger" tree="@Tree.t:Species"/>
+			<!--<log idref="coalescent"/>
+			<log idref="netDivRate.t:Species"/>
+			<log idref="YuleModel.t:Species"/>-->
 		</logger>
 
-		<logger fileName="species.trees" id="speciesTreeLogger" logEvery="5000" mode="tree">
-			<log id="SpeciesTreeLoggerX" spec="starbeast2.SpeciesTreeLogger" speciesTree="@Tree.t:Species"/>
+		<logger fileName="species.trees" id="speciesNetworkLogger" logEvery="5000" mode="tree">
+			<log id="SpeciesNetworkLoggerX" spec="speciesnetwork.NetworkWithMetaDataLogger" speciesTree="@Network.t:Species"/>
 		</logger>
 
 		<logger id="screenlog" logEvery="5000">
@@ -339,10 +362,9 @@
 			<log idref="prior"/>
 		</logger>
 
-		<init id="SBI" estimate="false" spec="starbeast2.StarBeastInitializer" speciesTree="@Tree.t:Species" birthRate="@speciationRate.t:Species">
-			<populationModel id="popModelBridge.Species" spec="starbeast2.PassthroughModel">
-				<childModel id="constantPopIOModel.Species" spec="starbeast2.DummyModel"/>
-			</populationModel>
+		<init id="SNI" estimate="false" method="random" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species">
+			<coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" popSizes="0.0005"/>
+			<rebuildEmbedding id="initEmbed" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</init>
 	</run>
 </beast>
