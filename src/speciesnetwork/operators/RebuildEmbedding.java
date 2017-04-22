@@ -43,10 +43,6 @@ public class RebuildEmbedding extends Operator {
     @Override
     public void initAndValidate() {
         nLoci = geneTreesInput.get().size();
-        if (nLoci == 0 ) {
-            throw new RuntimeException("No gene tree input!");
-        }
-
         geneNodeHeirs = HashMultimap.create();
         speciesNodeHeirs = HashMultimap.create();
     }

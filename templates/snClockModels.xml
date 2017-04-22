@@ -29,7 +29,7 @@
 
 			<connect srcID="strictClockRate.c:$(n)" targetID="tracelog" inputName="log" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
 
-			<connect srcID="strictClockRate.c:$(n)" targetID="updownAll:Species" inputName="up" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
+			<!-- <connect srcID="strictClockRate.c:$(n)" targetID="updownAll:Species" inputName="up" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/> -->
 			<connect srcID="strictClockRate.c:$(n)" targetID="clockUpDownOperator.c:$(n)" inputName="up" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
 		</subtemplate>
 
@@ -93,7 +93,7 @@
 
 			<connect srcID="GeneTreeUCLN.c:$(n)" targetID="TreeWithMetaDataLogger.t:$(n)" inputName="branchratemodel" if="inlikelihood(GeneTreeUCLN.c:$(n))"/>
 
-			<connect srcID="uclnClockRate.c:$(n)" targetID="updownAll:Species" inputName="up" if="inlikelihood(uclnClockRate.c:$(n)) and uclnClockRate.c:$(n)/estimate=true"/>
+			<!-- <connect srcID="uclnClockRate.c:$(n)" targetID="updownAll:Species" inputName="up" if="inlikelihood(uclnClockRate.c:$(n)) and uclnClockRate.c:$(n)/estimate=true"/> -->
 			<connect srcID="uclnClockRate.c:$(n)" targetID="clockUpDownOperator.c:$(n)" inputName="up" if="inlikelihood(uclnClockRate.c:$(n)) and uclnClockRate.c:$(n)/estimate=true"/>
 		</subtemplate>
 
@@ -148,7 +148,7 @@
 
 			<connect srcID="GeneTreeUCED.c:$(n)" targetID="TreeWithMetaDataLogger.t:$(n)" inputName="branchratemodel" if="inlikelihood(GeneTreeUCED.c:$(n))"/>
 
-			<connect srcID="ucedClockRate.c:$(n)" targetID="updownAll:Species" inputName="up" if="inlikelihood(ucedClockRate.c:$(n)) and ucedClockRate.c:$(n)/estimate=true"/>
+			<!-- <connect srcID="ucedClockRate.c:$(n)" targetID="updownAll:Species" inputName="up" if="inlikelihood(ucedClockRate.c:$(n)) and ucedClockRate.c:$(n)/estimate=true"/> -->
 			<connect srcID="ucedClockRate.c:$(n)" targetID="clockUpDownOperator.c:$(n)" inputName="up" if="inlikelihood(ucedClockRate.c:$(n)) and ucedClockRate.c:$(n)/estimate=true"/>
 		</subtemplate>
 	</mergewith>
