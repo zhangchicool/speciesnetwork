@@ -81,7 +81,7 @@
 		<panel spec="BeautiPanelConfig" panelname="Partitions" tiptext="Data Partitions" path="distribution/distribution[id='likelihood']/distribution/data" hasPartitions="none" icon="2220.pngx" forceExpansion="FALSE" type="beast.evolution.alignment.Alignment"/>
 		<mergepoint id="aux-partitions-panels"/>
 
-		<panel spec="BeautiPanelConfig" panelname="Taxon sets" tiptext="Specify taxon sets that make up species" path="operator[id='speciesNodeUniform.t:Species']/taxonSuperset" hasPartitions="none" icon="1.pngx" forceExpansion="TRUE"/>
+		<panel spec="BeautiPanelConfig" panelname="Taxon sets" tiptext="Specify taxon sets that make up species" path="operator[id='nodeUniformAndEmbed.t:Species']/taxonSuperset" hasPartitions="none" icon="1.pngx" forceExpansion="TRUE"/>
 
 		<panel spec="BeautiPanelConfig" panelname="Gene Ploidy" tiptext="The ploidy for each gene (locus)" path="distribution/distribution[id='coalescent']/geneTreeWithin" hasPartitions="none" icon="2.pngx" forceExpansion="TRUE"/>
 
@@ -103,8 +103,7 @@
 		<panel spec="BeautiPanelConfig" panelname="MCMC" tiptext="MCMC parameters" path="" hasPartitions="none" icon="9.pngx" forceExpansion="TRUE"/>
 		<mergepoint id="aux-panels"/>
 
-		<alignmentProvider id="Import Alignment" spec="StarBeastAlignmentProvider" template="@SpeciesNetworkPartitionTemplate"/>
-
+		<alignmentProvider id="Import Alignment" spec="BeautiAlignmentProvider" template="@SpeciesNetworkPartitionTemplate"/>
 
 		<partitiontemplate id="SpeciesNetworkPartitionTemplate" spec="BeautiSubTemplate" class="beast.evolution.likelihood.TreeLikelihood" mainid="mcmc">
 <![CDATA[
@@ -151,10 +150,12 @@
 			<operator id="mutationRateScaler.s:$(n)" spec="ScaleOperator" scaleFactor="0.75" weight="1.0" parameter="@mutationRate.s:$(n)"/>
 			<operator id="gammaShapeScaler.s:$(n)" scaleFactor="0.75" spec="ScaleOperator" weight="1.0" parameter="@gammaShape.s:$(n)"/>
 			<operator id="clockRateScaler.c:$(n)" spec="ScaleOperator" scaleFactor="0.5" weight="3.0" parameter="@strictClockRate.c:$(n)"/>
-			<upDownOperator id="clockUpDownOperator.c:$(n)" spec="UpDownOperator" scaleFactor="0.95" weight="3.0">
-				<up idref="strictClockRate.c:$(n)"/>
-				<down idref="Tree.t:$(n)"/>
-			</upDownOperator>
+			<operator id="strictUpDownAndEmbed.c:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
+				<operator id="strictUpDown.c:$(n)" spec="UpDownOperator" scaleFactor="0.95" weight="0.0">
+					<up idref="strictClockRate.c:$(n)"/>
+					<down idref="Tree.t:$(n)"/>
+				</operator>
+			</operator>
 
 			<operator id="scaleAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
 				<operator id="scale.t:$(n)" spec="ScaleOperator" scaleFactor="0.5" tree="@Tree.t:$(n)" weight="0.0"/>
@@ -174,7 +175,7 @@
 			<operator id="wideAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
 				<operator id="wide.t:$(n)" spec="Exchange" isNarrow="false" tree="@Tree.t:$(n)" weight="0.0"/>
 			</operator>
-			<operator id="WBAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
+			<operator id="WilsonBaldingAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
 				<operator id="WilsonBalding.t:$(n)" spec="WilsonBalding" tree="@Tree.t:$(n)" weight="0.0"/>
 			</operator>
 
@@ -203,10 +204,10 @@
 			<connect srcID="mutationRateScaler.s:$(n)" targetID="mcmc" inputName="operator" if="inposterior(mutationRate.s:$(n)) and mutationRate.s:$(n)/estimate=true"/>
 			<connect srcID="gammaShapeScaler.s:$(n)" targetID="mcmc" inputName="operator" if="inposterior(gammaShape.s:$(n)) and gammaShape.s:$(n)/estimate=true"/>
 			<connect srcID="clockRateScaler.c:$(n)" targetID="mcmc" inputName="operator" if="inposterior(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
-			<connect srcID="clockUpDownOperator.c:$(n)" targetID="mcmc" inputName="operator" if="inlikelihood(Tree.t:$(n)) and Tree.t:$(n)/estimate=true">
+			<connect srcID="strictUpDownAndEmbed.c:$(n)" targetID="mcmc" inputName="operator" if="inlikelihood(Tree.t:$(n)) and strictClockRate.c:$(n)/estimate=true and Tree.t:$(n)/estimate=true">
 				Scale up substitution rate c:$(n) and scale down tree t:($n)
 			</connect>
-			<connect srcID="strictClockRate.c:$(n)" targetID="clockUpDownOperator.c:$(n)" inputName="up" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
+			<connect srcID="strictClockRate.c:$(n)" targetID="strictUpDown.c:$(n)" inputName="up" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
 
 			<connect srcID="scaleAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
 			<connect srcID="scaleRootAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
@@ -214,7 +215,7 @@
 			<connect srcID="subSlideAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
 			<connect srcID="narrowAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
 			<connect srcID="wideAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
-			<connect srcID="WBAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="WilsonBaldingAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
 
 			<connect srcID="treeLikelihood.$(n)" targetID="tracelog" inputName="log" if="inlikelihood(treeLikelihood.$(n))"/>
 			<connect srcID="treePrior.t:$(n)" targetID="tracelog" inputName="log" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
@@ -227,13 +228,13 @@
 			<connect srcID="GammaShapePrior.s:$(n)" targetID="prior" inputName="distribution" if="inlikelihood(gammaShape.s:$(n)) and gammaShape.s:$(n)/estimate=true"/>
 			<connect srcID="PropInvariantPrior.s:$(n)" targetID="prior" inputName="distribution" if="inlikelihood(proportionInvariant.s:$(n)) and proportionInvariant.s:$(n)/estimate=true"/>
 
-			<connect srcID="Tree.t:$(n)" targetID="speciesNetworkMultiplier.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Tree.t:$(n)" targetID="speciesNodeUniform.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Tree.t:$(n)" targetID="speciesNodeSlider.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Tree.t:$(n)" targetID="speciesEdgeRelocateWide.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Tree.t:$(n)" targetID="speciesEdgeRelocateNarrow.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Tree.t:$(n)" targetID="speciesAddHybridization.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Tree.t:$(n)" targetID="speciesDeleteHybridization.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="networkMultiplierAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="nodeUniformAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="nodeSliderAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="edgeRelocateWideAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="edgeRelocateNarrowAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="addHybridizationAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="deleteHybridizationAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 
 			<connect srcID="SNI" targetID="mcmc" inputName="init" if="inposterior(Network.t:Species)"/>
 			<connect srcID="Tree.t:$(n)" targetID="SNI" inputName="geneTree" if="inposterior(Tree.t:$(n))"/>
@@ -305,37 +306,36 @@
 			</distribution>
 		</distribution>
 
-		<operator id="popMeanScale.Species" parameter="@popMean.Species" scaleFactor="0.75" spec="ScaleOperator" weight="1.0"/>
+		<operator id="popMeanScale.Species" spec="ScaleOperator" scaleFactor="0.75" weight="1.0" parameter="@popMean.Species"/>
 		<operator id="netDivRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="1.0" parameter="@netDivRate.t:Species"/>
 		<operator id="turnOverRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="1.0" parameter="@turnOverRate.t:Species"/>
 
 		<operator id="gammaProbUniform.t:Species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@Network.t:Species" weight="5.0"/>
 		<operator id="gammaProbRndWalk.t:Species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@Network.t:Species" weight="10.0"/>
-		<operator id="speciesOriginMultiplier.t:Species" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="5.0"/>
+		<operator id="originMultiplier.t:Species" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="5.0"/>
+		<operator id="networkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@Network.t:Species" weight="10.0"/>
 
-		<operator id="speciesNetworkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@Network.t:Species" weight="10.0"/>
-
-		<operator id="speciesNodeUniform.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="60.0">
+		<operator id="nodeUniformAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="60.0">
 			<operator id="nodeUniform.t:Species" spec="speciesnetwork.operators.NodeUniform" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
-		<operator id="speciesNodeSlider.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="100.0">
+		<operator id="nodeSliderAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="100.0">
 			<operator id="nodeSlider.t:Species" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" isNormal="true" sigma="0.0002" weight="0.0"/>
 		</operator>
 
-		<operator id="speciesEdgeRelocateWide.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="80.0">
+		<operator id="edgeRelocateWideAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="80.0">
 			<operator id="edgeRelocatorW.t:Species" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@Network.t:Species" isWide="true" weight="0.0"/>
 		</operator>
 
-		<operator id="speciesEdgeRelocateNarrow.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="60.0">
+		<operator id="edgeRelocateNarrowAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="60.0">
 			<operator id="edgeRelocatorN.t:Species" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@Network.t:Species" isWide="false" weight="0.0"/>
 		</operator>
 
-		<operator id="speciesAddHybridization.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="80.0">
+		<operator id="addHybridizationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="80.0">
 			<operator id="addReticulation.t:Species" spec="speciesnetwork.operators.AddReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
-		<operator id="speciesDeleteHybridization.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="80.0">
+		<operator id="deleteHybridizationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="80.0">
 			<operator id="deleteReticulation.t:Species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
@@ -344,6 +344,10 @@
 			<log idref="posterior"/>
 			<log idref="likelihood"/>
 			<log idref="prior"/>
+			<log idref="coalescent"/>
+			<log idref="netDivRate.t:Species"/>
+			<log idref="turnOverRate.t:Species"/>
+			<log idref="originTime.t:Species"/>
 			<log id="NetworkLength.Species" spec="speciesnetwork.NetworkStatLogger" speciesNetwork="@Network.t:Species"/>
 			<log idref="popMean.Species"/>
 			<!--<log idref="coalescent"/>
@@ -352,7 +356,7 @@
 		</logger>
 
 		<logger fileName="species.trees" id="speciesNetworkLogger" logEvery="5000" mode="tree">
-			<log id="SpeciesNetworkLoggerX" spec="speciesnetwork.NetworkWithMetaDataLogger" speciesNetwork="@Network.t:Species"/>
+			<log id="speciesNetworkLoggerX" spec="speciesnetwork.NetworkWithMetaDataLogger" speciesNetwork="@Network.t:Species"/>
 		</logger>
 
 		<logger id="screenlog" logEvery="5000">
