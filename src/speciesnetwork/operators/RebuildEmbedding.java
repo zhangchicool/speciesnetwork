@@ -49,6 +49,10 @@ public class RebuildEmbedding extends Operator {
 
     @Override
     public double proposal() {
+    	if (nLoci == 0) {
+            throw new RuntimeException(String.format("ERROR: no gene trees specified for the operator %s!", getID()));
+    	}
+
         // count the number of alternative traversing choices for the current state
         final int oldChoices = initializeEmbedding(false);
         if (oldChoices < 0)
