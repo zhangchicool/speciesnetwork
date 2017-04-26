@@ -327,7 +327,8 @@ public class Network extends StateNode {
 
     @Override
     public String toString() {
-        return getOrigin().toString();
+    	final String newick = getOrigin().toString();
+        return newick;
     }
 
     /**
@@ -369,6 +370,7 @@ public class Network extends StateNode {
         dst.reticulationNodeCount = src.reticulationNodeCount;
 
         dst.nodes = new NetworkNode[copyNodeCount];
+        dst.storedNodes = new NetworkNode[copyNodeCount];
         for (int i = 0; i < copyNodeCount; i++) {
             dst.nodes[i] = new NetworkNode(dst);
             dst.nodes[i].copyFrom(src.nodes[i]);
@@ -384,10 +386,25 @@ public class Network extends StateNode {
     public void assignFromFragile(final StateNode other) {
         final Network src = (Network) other;
 
-        for (int i = 0; i < nodeCount; i++) {
-            nodes[i].copyFrom(src.nodes[i]);
+        if (src.nodeCount == nodeCount) {
+	        for (int i = 0; i < nodeCount; i++) {
+	            nodes[i].copyFrom(src.nodes[i]);
+	        }
+	        updateRelationships();
+        } else {
+            nodeCount = src.nodeCount;
+            speciationNodeCount = src.speciationNodeCount;
+            leafNodeCount = src.leafNodeCount;
+            reticulationNodeCount = src.reticulationNodeCount;
+
+            nodes = new NetworkNode[src.nodeCount];
+            storedNodes = new NetworkNode[src.nodeCount];
+            for (int i = 0; i < src.nodeCount; i++) {
+                nodes[i] = new NetworkNode(this);
+                nodes[i].copyFrom(src.nodes[i]);
+            }
+            updateRelationships();
         }
-        updateRelationships();
     }
 
     /**
@@ -396,18 +413,10 @@ public class Network extends StateNode {
     @Override
     public void fromXML(final org.w3c.dom.Node node) {
         final String newick = node.getTextContent();
-        final TreeParser parser = new TreeParser();
-        try {
-            parser.thresholdInput.setValue(1e-10, parser);
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-        try {
-            parser.offsetInput.setValue(0, parser);
-            parser.parseNewick(newick); // TODO covert to network
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        final TreeParser treeParser = new TreeParser(newick);
+        final NetworkParser networkParser = new NetworkParser(treeParser);
+        assignFrom(networkParser);
+        // networkParser.setID("dummy");
     }
 
     @Override

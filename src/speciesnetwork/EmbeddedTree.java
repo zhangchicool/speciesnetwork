@@ -46,7 +46,8 @@ public class EmbeddedTree extends Tree implements EmbeddableTree {
 		return embedding[row][col];
 	}
 
-	/* private void printEmbedding() {
+	private void printEmbedding() {
+		System.out.println(String.format("EMBEDDING: %s", getID()));
 		for (int r = 0; r < embedding.length; r++) {
 			final StringBuffer rowStr = new StringBuffer();
 			final int rowLen = embedding[r].length;
@@ -57,7 +58,7 @@ public class EmbeddedTree extends Tree implements EmbeddableTree {
 			rowStr.append(embedding[r][rowLen - 1]);
 			System.out.println(rowStr);
 		}
-	} */
+	}
 
 	// based on Tree.copy()
     @Override
@@ -125,6 +126,7 @@ public class EmbeddedTree extends Tree implements EmbeddableTree {
 
     @Override
     public String toString() {
+    	//printEmbedding();
     	for (int i = 0; i < nodeCount; i++) {
     		final int lastTraversalNode = embedding[i].length - 1;
     		final StringBuffer embeddingBuf = new StringBuffer();
@@ -154,5 +156,7 @@ public class EmbeddedTree extends Tree implements EmbeddableTree {
     		for(int n = 0; n < parts.length; n++) n1[n] = Integer.parseInt(parts[n]);
     		embedding[i] = n1;
     	}
+    	System.out.println(getID() + "\n" + toString());
+    	//printEmbedding();
     }
 }
