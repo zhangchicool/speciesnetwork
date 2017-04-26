@@ -75,7 +75,13 @@
 			beast.evolution.branchratemodel.UCRelaxedClockModel.rateCategories,
 			beast.evolution.operators.ScaleOperator.indicator,
 			beast.core.Operator.weight,
-			beast.core.Logger.model"
+			beast.core.Logger.model,
+			speciesnetwork.GeneTreeInSpeciesNetwork.speciesNetwork,
+			speciesnetwork.GeneTreeInSpeciesNetwork.geneTree,
+			speciesnetwork.YuleHybridModel.network,
+			speciesnetwork.YuleHybridModel.birthRate,
+			speciesnetwork.YuleHybridModel.hybridRate,
+			speciesnetwork.YuleHybridModel.rho"
 		buttonLabelMap="beast.app.beauti.BeautiInitDlg.&gt;&gt; details=Edit parameters">
 
 		<panel spec="BeautiPanelConfig" panelname="Partitions" tiptext="Data Partitions" path="distribution/distribution[id='likelihood']/distribution/data" hasPartitions="none" icon="2220.pngx" forceExpansion="FALSE" type="beast.evolution.alignment.Alignment"/>
@@ -103,7 +109,7 @@
 		<panel spec="BeautiPanelConfig" panelname="MCMC" tiptext="MCMC parameters" path="" hasPartitions="none" icon="9.pngx" forceExpansion="TRUE"/>
 		<mergepoint id="aux-panels"/>
 
-		<alignmentProvider id="Import Alignment" spec="BeautiAlignmentProvider" template="@SpeciesNetworkPartitionTemplate"/>
+		<alignmentProvider id="Import Alignment" spec="SpeciesNetworkAlignmentProvider" template="@SpeciesNetworkPartitionTemplate"/>
 
 		<partitiontemplate id="SpeciesNetworkPartitionTemplate" spec="BeautiSubTemplate" class="beast.evolution.likelihood.TreeLikelihood" mainid="mcmc">
 <![CDATA[
@@ -131,8 +137,9 @@
 			</prior>
 
 			<!-- tree and its properties -->
-			<taxonset id="TaxonSet.$(n)" spec="beast.evolution.alignment.TaxonSet" alignment="@$(n)"/>
-			<plugin spec="speciesnetwork.EmbeddedTree" id="Tree.t:$(n)" taxonset="@TaxonSet.$(n)"/>
+			<plugin spec="speciesnetwork.EmbeddedTree" id="Tree.t:$(n)">
+				<taxonset spec="beast.evolution.alignment.TaxonSet" alignment="@$(n)"/>
+			</plugin>
 
 			<plugin id="TreeHeight.t:$(n)" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.t:$(n)"/>
 
@@ -228,7 +235,7 @@
 			<connect srcID="GammaShapePrior.s:$(n)" targetID="prior" inputName="distribution" if="inlikelihood(gammaShape.s:$(n)) and gammaShape.s:$(n)/estimate=true"/>
 			<connect srcID="PropInvariantPrior.s:$(n)" targetID="prior" inputName="distribution" if="inlikelihood(proportionInvariant.s:$(n)) and proportionInvariant.s:$(n)/estimate=true"/>
 
-			<connect srcID="Tree.t:$(n)" targetID="networkMultiplierAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="networkMultiplier.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 			<connect srcID="Tree.t:$(n)" targetID="nodeUniformAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 			<connect srcID="Tree.t:$(n)" targetID="nodeSliderAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 			<connect srcID="Tree.t:$(n)" targetID="edgeRelocateWideAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
