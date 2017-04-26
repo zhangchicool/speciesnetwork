@@ -122,7 +122,7 @@ public class EmbeddedTree extends Tree implements EmbeddableTree {
 			}
 		}
     }
-    
+
     @Override
     public String toString() {
     	for (int i = 0; i < nodeCount; i++) {
