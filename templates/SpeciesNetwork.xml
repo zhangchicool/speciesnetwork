@@ -84,7 +84,7 @@
 			speciesnetwork.YuleHybridModel.rho"
 		buttonLabelMap="beast.app.beauti.BeautiInitDlg.&gt;&gt; details=Edit parameters">
 
-		<panel spec="BeautiPanelConfig" panelname="Partitions" tiptext="Data Partitions" path="distribution/distribution[id='likelihood']/distribution/data" hasPartitions="none" icon="2220.pngx" forceExpansion="FALSE" type="beast.evolution.alignment.Alignment"/>
+		<panel spec="BeautiPanelConfig" panelname="Partitions" tiptext="Data Partitions" path="distribution/distribution[id='likelihood']/distribution/data" hasPartitions="none" icon="0.pngx" forceExpansion="FALSE" type="beast.evolution.alignment.Alignment"/>
 		<mergepoint id="aux-partitions-panels"/>
 
 		<panel spec="BeautiPanelConfig" panelname="Taxon sets" tiptext="Specify taxon sets that make up species" path="operator[id='nodeUniformAndEmbed.t:Species']/taxonSuperset" hasPartitions="none" icon="1.pngx" forceExpansion="TRUE"/>
@@ -211,7 +211,7 @@
 			<connect srcID="mutationRateScaler.s:$(n)" targetID="mcmc" inputName="operator" if="inposterior(mutationRate.s:$(n)) and mutationRate.s:$(n)/estimate=true"/>
 			<connect srcID="gammaShapeScaler.s:$(n)" targetID="mcmc" inputName="operator" if="inposterior(gammaShape.s:$(n)) and gammaShape.s:$(n)/estimate=true"/>
 			<connect srcID="clockRateScaler.c:$(n)" targetID="mcmc" inputName="operator" if="inposterior(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
-			<connect srcID="strictUpDownAndEmbed.c:$(n)" targetID="mcmc" inputName="operator" if="inlikelihood(Tree.t:$(n)) and strictClockRate.c:$(n)/estimate=true and Tree.t:$(n)/estimate=true">
+			<connect srcID="strictUpDownAndEmbed.c:$(n)" targetID="mcmc" inputName="operator" if="inlikelihood(strictClockRate.c:$(n)) and inlikelihood(Tree.t:$(n)) and strictClockRate.c:$(n)/estimate=true and Tree.t:$(n)/estimate=true">
 				Scale up substitution rate c:$(n) and scale down tree t:($n)
 			</connect>
 			<connect srcID="strictClockRate.c:$(n)" targetID="strictUpDown.c:$(n)" inputName="up" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
@@ -274,8 +274,7 @@
 
 		<state storeEvery="5000" id="state">
 			<stateNode idref="Network.t:Species"/>
-			<stateNode idref="popMean.Species"/>
-			<stateNode idref="popShape.Species"/>
+			<stateNode idref="popMean.t:Species"/>
 			<stateNode idref="netDivRate.t:Species"/>
 			<stateNode idref="turnOverRate.t:Species"/>
 			<stateNode idref="originTime.t:Species"/>
@@ -284,14 +283,14 @@
 		<distribution spec="CompoundDistribution" id="posterior">
 			<distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@Network.t:Species">
 				<populationModel id="popModel" spec="speciesnetwork.ConstantPopIntegrated">
-					<alpha spec="parameter.RealParameter" id="popShape.Species" value="3.0" estimate="false"/>
-					<beta spec="parameter.RealParameter" id="popMean.Species" value="1.0" estimate="true"/>
+					<alpha spec="parameter.RealParameter" id="popShape.t:Species" value="3.0" estimate="false"/>
+					<mean spec="parameter.RealParameter" id="popMean.t:Species" value="0.01" estimate="true"/>
 				</populationModel>
 			</distribution>
 			<distribution spec="CompoundDistribution" id="prior">
 				<!-- species tree priors -->
 				<distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" network="@Network.t:Species" betaShape="1.0">
-					<netDiversification id="netDivRate.t:Species" lower="0.0" spec="parameter.RealParameter">100.0</netDiversification>
+					<netDiversification id="netDivRate.t:Species" lower="0.0" spec="parameter.RealParameter">10.0</netDiversification>
 					<turnOver id="turnOverRate.t:Species" lower="0.0" upper="1.0" spec="parameter.RealParameter">0.5</turnOver>
 				</distribution>
 				<distribution id="netDivRatePrior.t:Species" spec="beast.math.distributions.Prior" x="@netDivRate.t:Species">
@@ -303,7 +302,7 @@
 				<prior id="originTimePrior.t:Species" name="distribution" x="@originTime.t:Species">
 					<distr spec="beast.math.distributions.OneOnX"/>
 				</prior>
-				<distribution id="popMeanPrior.Species" spec="beast.math.distributions.Prior" x="@popMean.Species">
+				<distribution id="popMeanPrior.t:Species" spec="beast.math.distributions.Prior" x="@popMean.t:Species">
 					<distr spec="beast.math.distributions.OneOnX"/>
 				</distribution>
 				<mergepoint id="aux-priors"/>
@@ -313,15 +312,15 @@
 			</distribution>
 		</distribution>
 
-		<operator id="popMeanScale.Species" spec="ScaleOperator" scaleFactor="0.75" weight="1.0" parameter="@popMean.Species"/>
+		<operator id="popMeanScale.t:Species" spec="ScaleOperator" scaleFactor="0.75" weight="1.0" parameter="@popMean.t:Species"/>
 		<operator id="netDivRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="1.0" parameter="@netDivRate.t:Species"/>
 		<operator id="turnOverRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="1.0" parameter="@turnOverRate.t:Species"/>
 
 		<operator id="gammaProbUniform.t:Species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@Network.t:Species" weight="5.0"/>
 		<operator id="gammaProbRndWalk.t:Species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@Network.t:Species" weight="10.0"/>
-		<operator id="originMultiplier.t:Species" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="5.0"/>
 		<operator id="networkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@Network.t:Species" weight="10.0"/>
 
+        <operator id="originMultiplier.t:Species" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="5.0"/>
 		<operator id="nodeUniformAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="60.0">
 			<operator id="nodeUniform.t:Species" spec="speciesnetwork.operators.NodeUniform" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
@@ -363,7 +362,8 @@
 			<log idref="netDivRate.t:Species"/>
 			<log idref="turnOverRate.t:Species"/>
 			<log idref="originTime.t:Species"/>
-			<log id="NetworkLength.Species" spec="speciesnetwork.NetworkStatLogger" speciesNetwork="@Network.t:Species"/>
+			<log id="NetworkLength.t:Species" spec="speciesnetwork.NetworkStatLogger" speciesNetwork="@Network.t:Species"/>
+            <log idref="popMean.t:Species"/>
 		</logger>
 
 		<logger id="speciesLog" logEvery="5000" fileName="speciesnetwork.trees" mode="tree">
@@ -372,7 +372,7 @@
 
 		<init id="SNI" estimate="false" method="random" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@Network.t:Species">
 			<origin id="originTime.t:Species" spec="parameter.RealParameter" value="1.0"/>
-			<coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" popSizes="0.0005"/>
+			<coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" popSizes="0.01"/>
 			<rebuildEmbedding id="initEmbed" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</init>
 	</run>

@@ -16,6 +16,8 @@ public class ConstantPopIntegrated extends PopulationSizeModel {
             "Shape of the inverse gamma distribution on population sizes.", Validate.REQUIRED);
     public final Input<RealParameter> invgammaScaleInput = new Input<>("beta",
             "Scale of the inverse gamma distribution on population sizes.", Validate.REQUIRED);
+    public final Input<RealParameter> invgammaMeanInput = new Input<>("mean",
+            "Mean of the inverse gamma distribution on population sizes.", Validate.XOR, invgammaScaleInput);
 
     @Override
     public void initAndValidate() {
@@ -47,8 +49,13 @@ public class ConstantPopIntegrated extends PopulationSizeModel {
         // debug(speciesBranchNumber, perGenePloidy, branchCoalescentTimes, branchLineageCounts, branchEventCounts);
         final RealParameter invgammaShape = invgammaShapeInput.get();
         final RealParameter invgammaScale = invgammaScaleInput.get();
+        final RealParameter invgammaMean = invgammaMeanInput.get();
         final double alpha = invgammaShape.getValue();
-        final double beta = invgammaScale.getValue();
+        final double beta;
+        if (invgammaScale != null)
+            beta = invgammaScale.getValue();
+        else
+            beta = invgammaMean.getValue() * (alpha - 1.0);
         final int nGenes = perGenePloidy.length;
 
         int branchQ = 0;
