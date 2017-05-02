@@ -36,7 +36,7 @@ abstract class PopulationTestHelper {
     double popSize;
     double ploidy;
     double expectedLogP;
-    List<int[]> embedding;
+    List<int[]> embeddings;
 
     final double allowedError = 1e-6;
 
@@ -78,7 +78,7 @@ abstract class PopulationTestHelper {
             final String geneTreeNewick = newickGeneTrees.get(i);
             EmbeddableTree embeddedTree = new EmbeddedTreeParser();
             ((StateNode) embeddedTree).initByName("newick", geneTreeNewick, "IsLabelledNewick", true);
-            final int[] embedding = this.embedding.get(i);
+            final int[] embedding = this.embeddings.get(i);
             final int nRow = embeddedTree.getNodeCount();
             final int nCol = embedding.length / nRow;
             embeddedTree.resetEmbedding(nCol, -1);

@@ -147,7 +147,7 @@
 		</copy>
 		<copy todir="${Add_on_dir}/lib">
 			<fileset dir="${distspeciesnetwork}" includes="speciesnetwork.addon.jar" />
-			<fileset dir="${libspeciesnetwork}" includes="guava-19.0.jar" />
+			<fileset dir="${libspeciesnetwork}" includes="guava-21.0.jar" />
 		</copy>
 		<copy todir="${Add_on_dir}/examples">
 			<fileset dir="examples" />

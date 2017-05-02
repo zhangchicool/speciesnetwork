@@ -36,7 +36,7 @@ public class ConstantPopIOTest extends PopulationTestHelper {
         newickGeneTrees.add("(((a1:0.07,a2:0.07):0.48,(b1:0.25,b2:0.25):0.30):0.08,(b3:0.35,c1:0.35):0.28)");
         newickGeneTrees.add("((((a1:0.10,a2:0.10):0.50,(b1:0.05,b2:0.05):0.55):0.05,b3:0.65):0.05,c1:0.70)");
         
-        embedding = new ArrayList<>();
+        embeddings = new ArrayList<>();
         final int[] embedding1 = {-1, -1, -1, -1,
         -1, -1, -1, -1,
         -1, 6, -1, 1,
@@ -48,7 +48,7 @@ public class ConstantPopIOTest extends PopulationTestHelper {
         -1, -1, -1, -1,
         5, -1, -1, -1,
         -1, -1, -1, -1};
-        embedding.add(embedding1);
+        embeddings.add(embedding1);
 
         final int[] embedding2 = {-1, -1, -1, -1,
         -1, -1, -1, -1,
@@ -61,7 +61,7 @@ public class ConstantPopIOTest extends PopulationTestHelper {
         -1, -1, -1, -1,
         -1, -1, -1, -1,
         -1, -1, -1, -1};
-        embedding.add(embedding2);
+        embeddings.add(embedding2);
     }
 
     @Test
