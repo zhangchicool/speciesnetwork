@@ -44,7 +44,7 @@
 			<branchRateModel id="GeneTreeUCLN.c:$(n)" spec="beast.evolution.branchratemodel.UCRelaxedClockModel" tree="@Tree.t:$(n)">
 				<clock.rate id="uclnClockRate.c:$(n)" spec="parameter.RealParameter" lower="0.0" value="1.0" estimate="true"/>
 				<rateCategories dimension="10" value="1" estimate="true" id="uclnBranchRates.c:$(n)" spec="parameter.IntegerParameter"/>
-				<distr spec="beast.math.distributions.LogNormal" meanInRealSpace="true" M="1.0">
+				<distr spec="beast.math.distributions.LogNormalDistributionModel" meanInRealSpace="true" M="1.0">
 					<parameter name="S" id="uclnBranchRatesStdev.c:$(n)" lower="0.01" value="0.3" estimate="false" />
 				</distr>
 			</branchRateModel>

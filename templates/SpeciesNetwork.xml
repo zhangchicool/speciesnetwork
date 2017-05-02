@@ -1,4 +1,4 @@
-<beast version="2.0" namespace="beast.app.beauti:beast.core:beast.evolution.branchratemodel:beast.evolution.speciation:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood:beast.evolution:beast.math.distributions" templateinfo="StarBEAST2 template for strict or gene tree relaxed clocks.">
+<beast version="2.0" namespace="beast.app.beauti:beast.core:beast.evolution.branchratemodel:beast.evolution.speciation:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood:beast.evolution:beast.math.distributions" templateinfo="SpeciesNetwork template for strict or gene tree relaxed clocks.">
 
 <map name="connect" reserved="true">beast.app.beauti.BeautiConnector</map>
 <map name="subtemplate" reserved="true">beast.app.beauti.BeautiSubTemplate</map>
@@ -141,7 +141,7 @@
 				<taxonset spec="beast.evolution.alignment.TaxonSet" alignment="@$(n)"/>
 			</plugin>
 
-			<plugin id="TreeHeight.t:$(n)" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.t:$(n)"/>
+			<plugin id="TreeHeight.t:$(n)" spec="beast.evolution.tree.TreeStatLogger" tree="@Tree.t:$(n)"/>
 
 			<prior id="GammaShapePrior.s:$(n)" x="@gammaShape.s:$(n)">
 				<distr spec="beast.math.distributions.Exponential">
@@ -295,7 +295,7 @@
 					<turnOver id="turnOverRate.t:Species" lower="0.0" upper="1.0" spec="parameter.RealParameter">0.5</turnOver>
 				</distribution>
 				<distribution id="netDivRatePrior.t:Species" spec="beast.math.distributions.Prior" x="@netDivRate.t:Species">
-					<distr spec="beast.math.distributions.Uniform" lower="0.0" upper="10000.0"/>
+					<distr spec="beast.math.distributions.OneOnX"/>
 				</distribution>
 				<prior id="turnOverRatePrior.t:Species" name="distribution" x="@turnOverRate.t:Species">
 					<distr spec="beast.math.distributions.Beta" alpha="1.0" beta="4.0"/>
@@ -346,7 +346,15 @@
 			<operator id="deleteReticulation.t:Species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
-		<logger id="tracelog" logEvery="5000" fileName="starbeast.log" sort="smart">
+		<logger id="screenlog" logEvery="5000">
+			<model idref="posterior"/>
+			<log idref="posterior"/>
+			<ESS spec="ESS" name="log" arg="@posterior"/>
+			<log idref="likelihood"/>
+			<log idref="prior"/>
+		</logger>
+
+		<logger id="tracelog" logEvery="5000" fileName="speciesnetwork.log" sort="smart">
 			<model idref="posterior"/>
 			<log idref="posterior"/>
 			<log idref="likelihood"/>
@@ -356,22 +364,10 @@
 			<log idref="turnOverRate.t:Species"/>
 			<log idref="originTime.t:Species"/>
 			<log id="NetworkLength.Species" spec="speciesnetwork.NetworkStatLogger" speciesNetwork="@Network.t:Species"/>
-			<log idref="popMean.Species"/>
-			<!--<log idref="coalescent"/>
-			<log idref="netDivRate.t:Species"/>
-			<log idref="YuleModel.t:Species"/>-->
 		</logger>
 
-		<logger fileName="species.trees" id="speciesNetworkLogger" logEvery="5000" mode="tree">
+		<logger id="speciesLog" logEvery="5000" fileName="speciesnetwork.trees" mode="tree">
 			<log id="speciesNetworkLoggerX" spec="speciesnetwork.NetworkWithMetaDataLogger" speciesNetwork="@Network.t:Species"/>
-		</logger>
-
-		<logger id="screenlog" logEvery="5000">
-			<model idref="posterior"/>
-			<log idref="posterior"/>
-			<ESS spec="ESS" name="log" arg="@posterior"/>
-			<log idref="likelihood"/>
-			<log idref="prior"/>
 		</logger>
 
 		<init id="SNI" estimate="false" method="random" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@Network.t:Species">
