@@ -16,12 +16,14 @@ public class EmbeddedTreeParser extends TreeParser implements EmbeddableTree {
         setRoot(rootNode);
         initArrays();
 		embedding = new int[nodeCount][];
+		storedEmbedding = new int[nodeCount][];
     }
 
 	@Override
 	public void initAndValidate() {
 		super.initAndValidate();
 		embedding = new int[nodeCount][];
+		storedEmbedding = new int[nodeCount][];
 	}
 
 	@Override

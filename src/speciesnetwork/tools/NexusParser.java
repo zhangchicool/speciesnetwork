@@ -42,10 +42,9 @@ import beast.util.NexusParserListener;
 import beast.util.TreeParser;
 import beast.util.XMLProducer;
 
-
 /**
  * parses nexus file and grabs alignment and calibration from the file
- * Modified from NexusParser built into BEAST2 to support networks
+ * Modified parseTreesBlock from NexusParser built into BEAST2 to support networks
  */
 public class NexusParser {
     /**
@@ -136,18 +135,35 @@ public class NexusParser {
                 }
             }
             processSets();
+
+        } catch (TreeParser.TreeParsingException e) {
+            int errorLine = lineNr + 1;
+
+            if (e.getLineNum() != null)
+                errorLine += e.getLineNum()-1;
+
+            String errorMsg = "Encountered error interpreting the Newick string found around line " +
+                    errorLine + " of the input file.";
+
+            if (e.getCharacterNum() != null)
+                errorMsg += "\nThe parser reports that the error occurred at character " + (e.getCharacterNum()+1)
+                        + " of the Newick string on this line.";
+
+            errorMsg += "\nThe parser gives the following clue:\n" + e.getMessage();
+
+            throw new IOException(errorMsg);
+
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new IOException("Around line " + lineNr + "\n" + e.getMessage());
+            throw new IOException("Around line " + (lineNr+1) + "\n" + e.getMessage());
         }
     } // parseFile
 
 	private void parseTreesBlock(final BufferedReader fin) throws IOException {
         trees = new ArrayList<>();
         // read to first non-empty line within trees block
-        String str = fin.readLine().trim();
+        String str = readLine(fin).trim();
         while (str.equals("")) {
-            str = fin.readLine().trim();
+            str = readLine(fin).trim();
         }
 
         int origin = -1;
@@ -169,7 +185,16 @@ public class NexusParser {
                     str = str.substring(i);
                 }
                 final TreeParser treeParser = new TreeParser(str);
-
+// modified here
+//                 if (origin != -1) {
+//                     treeParser = new TreeParser(taxa, str, origin, false);
+//                 } else {
+//                     try {
+//                         treeParser = new TreeParser(taxa, str, 0, false);
+//                     } catch (ArrayIndexOutOfBoundsException e) {
+//                         treeParser = new TreeParser(taxa, str, 1, false);
+//                     }
+//                 }
 //                catch (NullPointerException e) {
 //                    treeParser = new TreeParser(m_taxa, str, 1);
 //                }
@@ -237,11 +262,11 @@ public class NexusParser {
 
         final Map<String, String> translationMap = new HashMap<>();
 
-        String line = reader.readLine();
+        String line = readLine(reader);
         final StringBuilder translateBlock = new StringBuilder();
         while (line != null && !line.trim().toLowerCase().equals(";")) {
             translateBlock.append(line.trim());
-            line = reader.readLine();
+            line = readLine(reader);
         }
         final String[] taxaTranslations = translateBlock.toString().split(",");
         for (final String taxaTranslation : taxaTranslations) {

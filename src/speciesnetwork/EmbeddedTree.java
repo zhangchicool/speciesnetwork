@@ -5,8 +5,8 @@ import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
 
 public class EmbeddedTree extends Tree implements EmbeddableTree {
-	int[][] embedding;
-	int[][] storedEmbedding;
+	protected int[][] embedding;
+	private int[][] storedEmbedding;
 
 	public EmbeddedTree() {
 	}
@@ -42,22 +42,7 @@ public class EmbeddedTree extends Tree implements EmbeddableTree {
 
 	@Override
 	public int getEmbedding(int row, int col) {
-		//printEmbedding();
 		return embedding[row][col];
-	}
-
-	private void printEmbedding() {
-		System.out.println(String.format("EMBEDDING: %s", getID()));
-		for (int r = 0; r < embedding.length; r++) {
-			final StringBuffer rowStr = new StringBuffer();
-			final int rowLen = embedding[r].length;
-			for (int c = 0; c < rowLen - 1; c++) {
-				rowStr.append(embedding[r][c]);
-				rowStr.append(" ");
-			}
-			rowStr.append(embedding[r][rowLen - 1]);
-			System.out.println(rowStr);
-		}
 	}
 
 	// based on Tree.copy()
@@ -114,15 +99,28 @@ public class EmbeddedTree extends Tree implements EmbeddableTree {
 		if (dst == null) dst = new int[src.length][];
 
 		if (src[0] != null) {
-			final int geneNodeCount = src.length;
 			final int traversalNodeCount = src[0].length;
-			final boolean reinitialize = dst[0] == null || dst[0].length != traversalNodeCount;
-			for (int i = 0; i < geneNodeCount; i++) {
+			final boolean reinitialize = dst[0] == null || dst[0].length != src[0].length;
+			for (int i = 0; i < src.length; i++) {
 				if (reinitialize) dst[i] = new int[traversalNodeCount];
 				System.arraycopy(src[i], 0, dst[i], 0, traversalNodeCount);
 			}
 		}
     }
+
+	private void printEmbedding() {
+		System.out.println(String.format("EMBEDDING: %s", getID()));
+		for (int r = 0; r < embedding.length; r++) {
+			final StringBuffer rowStr = new StringBuffer();
+			final int rowLen = embedding[r].length;
+			for (int c = 0; c < rowLen - 1; c++) {
+				rowStr.append(embedding[r][c]);
+				rowStr.append(" ");
+			}
+			rowStr.append(embedding[r][rowLen - 1]);
+			System.out.println(rowStr);
+		}
+	}
 
     @Override
     public String toString() {
