@@ -14,7 +14,7 @@ import beast.evolution.alignment.Taxon;
 import beast.evolution.alignment.TaxonSet;
 import beast.evolution.tree.Node;
 import beast.util.Randomizer;
-import speciesnetwork.EmbeddableTree;
+import speciesnetwork.EmbeddedTree;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 
@@ -27,9 +27,9 @@ import speciesnetwork.NetworkNode;
 public class RebuildEmbedding extends Operator {
     public final Input<Network> speciesNetworkInput = new Input<>("speciesNetwork",
             "The species network.", Validate.REQUIRED);
-    public final Input<TaxonSet> taxonSuperSetInput = new Input<>("taxonSuperset",
+    public final Input<TaxonSet> taxonSuperSetInput = new Input<>("taxonset",
             "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
-    public final Input<List<EmbeddableTree>> geneTreesInput = new Input<>("geneTree",
+    public final Input<List<EmbeddedTree>> geneTreesInput = new Input<>("geneTree",
             "The gene tree within the species network.", new ArrayList<>());
     // operator input can be null so that the species network and gene trees are unchanged
     public final Input<Operator> operatorInput = new Input<>("operator",
@@ -91,20 +91,20 @@ public class RebuildEmbedding extends Operator {
 
     public int initializeEmbedding(boolean rebuild) {
         final Network speciesNetwork = speciesNetworkInput.get();
-        final List<EmbeddableTree> geneTrees = geneTreesInput.get();
+        final List<EmbeddedTree> geneTrees = geneTreesInput.get();
 
         // Tell BEAST that *all* gene trees will be edited
         // doing this for all trees avoids Trie combinatorial explosions
         if (rebuild) {
 	        for (int i = 0; i < nLoci; i++) {
-	            EmbeddableTree geneTree = geneTrees.get(i);
-	            ((StateNode) geneTree).startEditing(this);
+                EmbeddedTree geneTree = geneTrees.get(i);
+	            geneTree.startEditing(this);
 	        }
         }
 
         int nChoices = 0;
         for (int i = 0; i < nLoci; i++) {
-            EmbeddableTree geneTree = geneTrees.get(i);
+            EmbeddedTree geneTree = geneTrees.get(i);
 
             getNodeHeirs(speciesNetwork, geneTree);
 
@@ -125,7 +125,7 @@ public class RebuildEmbedding extends Operator {
         return nChoices;
     }
 
-    private void getNodeHeirs(final Network speciesNetwork, final EmbeddableTree geneTree) {
+    private void getNodeHeirs(final Network speciesNetwork, final EmbeddedTree geneTree) {
         // map of species network tip names to species network tip nodes
         final Map<String, NetworkNode> speciesNodeMap = new HashMap<>();
         for (NetworkNode speciesNode: speciesNetwork.getLeafNodes()) {
@@ -181,7 +181,7 @@ public class RebuildEmbedding extends Operator {
     }
 
     private int recurseRebuild(final Node geneTreeNode, final NetworkNode speciesNetworkNode,
-                               EmbeddableTree geneTree, boolean rebuild) {
+                               EmbeddedTree geneTree, boolean rebuild) {
         int nChoices = 0;
 
         // this coalescence node must be embedded in a descendant species network branch

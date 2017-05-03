@@ -9,7 +9,7 @@
 			</branchRateModel>
 
 			<operator id="clockRateScaler.c:$(n)" spec="ScaleOperator" scaleFactor="0.5" weight="3.0" parameter="@strictClockRate.c:$(n)"/>
-			<operator id="strictUpDownAndEmbed.c:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
+			<operator id="strictUpDownAndEmbed.c:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
 				<operator id="strictUpDown.c:$(n)" spec="UpDownOperator" scaleFactor="0.95" weight="0.0">
 					<up idref="strictClockRate.c:$(n)"/>
 					<down idref="Tree.t:$(n)"/>
@@ -52,7 +52,7 @@
 			<operator id="uclnClockRateScaler.c:$(n)" spec="ScaleOperator" scaleFactor="0.5" weight="3.0" parameter="@uclnClockRate.c:$(n)"/>
 			<operator id="uclnBranchRatesStdevScaler.c:$(n)" spec="ScaleOperator" scaleFactor="0.75" weight="3.0" parameter="@uclnBranchRatesStdev.c:$(n)"/>
 
-			<operator id="uclnUpDownAndEmbed.c:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
+			<operator id="uclnUpDownAndEmbed.c:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
 				<operator id="uclnUpDown.c:$(n)" spec="UpDownOperator" scaleFactor="0.95" weight="0.0">
 					<up idref="uclnClockRate.c:$(n)"/>
 					<down idref="Tree.t:$(n)"/>
@@ -122,7 +122,7 @@
 
 			<operator id="ucedClockRateScaler.c:$(n)" spec="ScaleOperator" scaleFactor="0.5" weight="3.0" parameter="@ucedClockRate.c:$(n)"/>
 
-			<operator id="ucedUpDownAndEmbed.c:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonSuperset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
+			<operator id="ucedUpDownAndEmbed.c:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
 				<operator id="ucedUpDown.c:$(n)" spec="UpDownOperator" scaleFactor="0.95" weight="0.0">
 					<up idref="ucedClockRate.c:$(n)"/>
 					<down idref="Tree.t:$(n)"/>

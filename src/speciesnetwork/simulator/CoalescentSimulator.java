@@ -38,7 +38,7 @@ public class CoalescentSimulator extends Runnable {
     public final Input<RealParameter> popSizesInput =
             new Input<>("popSizes", "Constant per-branch population sizes.", Validate.REQUIRED);
     public final Input<TaxonSet> taxonSuperSetInput =
-            new Input<>("taxonSuperset", "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
+            new Input<>("taxonset", "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
 
     public final Input<List<EmbeddedTree>> geneTreesInput =
             new Input<>("geneTree", "Gene tree embedded in the species network.", new ArrayList<>());
