@@ -63,21 +63,21 @@ public class EmbeddedTreeParser extends TreeParser implements EmbeddableTree {
     @Override
     public void assignTo(final StateNode other) {
     	super.assignTo(other);
-        final EmbeddedTree etree = (EmbeddedTree) other;
+        final EmbeddedTreeParser etree = (EmbeddedTreeParser) other;
         copyEmbedding(embedding, etree.embedding);
     }
 
     @Override
     public void assignFrom(final StateNode other) {
     	super.assignFrom(other);
-        final EmbeddedTree etree = (EmbeddedTree) other;
+        final EmbeddedTreeParser etree = (EmbeddedTreeParser) other;
         copyEmbedding(etree.embedding, embedding);
     }
 
     @Override
     public void assignFromFragile(final StateNode other) {
     	super.assignFromFragile(other);
-        final EmbeddedTree etree = (EmbeddedTree) other;
+        final EmbeddedTreeParser etree = (EmbeddedTreeParser) other;
         copyEmbedding(etree.embedding, embedding);
     }
 
@@ -95,7 +95,7 @@ public class EmbeddedTreeParser extends TreeParser implements EmbeddableTree {
     	storedEmbedding = tmpEmbedding;
     }
 
-    static void copyEmbedding(int[][] src, int[][] dst) {
+    private static void copyEmbedding(int[][] src, int[][] dst) {
 		if (dst == null) dst = new int[src.length][];
 
 		if (src[0] != null) {

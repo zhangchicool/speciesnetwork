@@ -95,7 +95,7 @@ public class EmbeddedTree extends Tree implements EmbeddableTree {
     	storedEmbedding = tmpEmbedding;
     }
 
-    static void copyEmbedding(int[][] src, int[][] dst) {
+    private static void copyEmbedding(int[][] src, int[][] dst) {
 		if (dst == null) dst = new int[src.length][];
 
 		if (src[0] != null) {

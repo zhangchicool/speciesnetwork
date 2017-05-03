@@ -2,8 +2,11 @@ package speciesnetwork;
 
 import beast.evolution.tree.TreeInterface;
 
-// each row represents the corresponding gene tree node
-// each column represents the corresponding species network traversal node
+/**
+ * each row represents the corresponding gene tree node
+ * each column represents the corresponding species network traversal node
+ */
+
 public interface EmbeddableTree extends TreeInterface {
 	public void resetEmbedding(int nCol, int value);
 

@@ -116,7 +116,7 @@ public class RebuildEmbedding extends Operator {
             } else {
                 n = recurseRebuild(geneTree.getRoot(), speciesNetwork.getRoot(), geneTree, false);
             }
-            // printEmbedding(speciesNetwork, geneTree, embedding);
+            // geneTree.printEmbedding();
             if (n < 0)
                 return -(i + 1);
             nChoices += n;
@@ -229,19 +229,4 @@ public class RebuildEmbedding extends Operator {
             return nChoices + leftChoices + rightChoices;
         }
     }
-    
-    /* private void printEmbedding(final Network sNetwork, final EmbeddedTree gTree) {
-        StringBuffer embedStr = new StringBuffer();
-        final int nTraversalNodes = sNetwork.getTraversalNodeCount();
-        final int nGeneNodes = gTree.getNodeCount();
-        for (int i = 0; i < nTraversalNodes; i++) {
-            final int speciesNodeNumber = i + sNetwork.getLeafNodeCount();
-            embedStr.append(String.format("%3s", sNetwork.getNode(speciesNodeNumber).getLabel()));
-            for (int j = 0; j < nGeneNodes; j++) {
-                embedStr.append(String.format("%3s", gTree.getMatrixValue(i, j)));
-            }
-            embedStr.append("\n");
-        }
-        System.out.print(embedStr + "\n");
-    } */
 }
