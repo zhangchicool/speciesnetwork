@@ -175,10 +175,10 @@
 			<operator id="narrowAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="15.0">
 				<operator id="narrow.t:$(n)" spec="Exchange" tree="@Tree.t:$(n)" weight="0.0"/>
 			</operator>
-			<operator id="wideAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
+			<operator id="wideAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="5.0">
 				<operator id="wide.t:$(n)" spec="Exchange" isNarrow="false" tree="@Tree.t:$(n)" weight="0.0"/>
 			</operator>
-			<operator id="WilsonBaldingAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
+			<operator id="WilsonBaldingAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="5.0">
 				<operator id="WilsonBalding.t:$(n)" spec="WilsonBalding" tree="@Tree.t:$(n)" weight="0.0"/>
 			</operator>
 
@@ -309,8 +309,8 @@
 		</distribution>
 
 		<operator id="popMeanScale.t:Species" spec="ScaleOperator" scaleFactor="0.75" weight="1.0" parameter="@popMean.t:Species"/>
-		<operator id="netDivRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="1.0" parameter="@netDivRate.t:Species"/>
-		<operator id="turnOverRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="1.0" parameter="@turnOverRate.t:Species"/>
+		<operator id="netDivRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="3.0" parameter="@netDivRate.t:Species"/>
+		<operator id="turnOverRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="3.0" parameter="@turnOverRate.t:Species"/>
 
 		<operator id="gammaProbUniform.t:Species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@Network.t:Species" weight="5.0"/>
 		<operator id="gammaProbRndWalk.t:Species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@Network.t:Species" weight="10.0"/>
@@ -333,11 +333,11 @@
 			<operator id="edgeRelocatorN.t:Species" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@Network.t:Species" isWide="false" weight="0.0"/>
 		</operator>
 
-		<operator id="addHybridizationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="80.0">
+		<operator id="addReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="80.0">
 			<operator id="addReticulation.t:Species" spec="speciesnetwork.operators.AddReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
-		<operator id="deleteHybridizationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="80.0">
+		<operator id="deleteReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="80.0">
 			<operator id="deleteReticulation.t:Species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
@@ -347,6 +347,7 @@
 			<ESS spec="ESS" name="log" arg="@posterior"/>
 			<log idref="likelihood"/>
 			<log idref="prior"/>
+			<log idref="coalescent"/>
 		</logger>
 
 		<logger id="tracelog" logEvery="5000" fileName="speciesnetwork.log" sort="smart">

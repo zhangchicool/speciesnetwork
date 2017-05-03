@@ -1,5 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<beast namespace="beast.core:beast.app" version="2.0">
-    <run id="network.summary" spec="speciesnetwork.tools.SummarizeNetwork"
-         inputFileName="summary/3S_net.trees" outputFileName="summary/3S_net.sum.log"/>
-</beast>

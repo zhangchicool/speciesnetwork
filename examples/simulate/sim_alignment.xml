@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<beast namespace="beast.core:beast.evolution.alignment:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.app" version="2.0">
+<beast namespace="beast.core:beast.evolution.alignment:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.app" version="2.4">
     <data id="gene1" name="alignment">
         <sequence id="gene1_a1" taxon="a1" totalcount="4" value="-"/>
         <sequence id="gene1_a2" taxon="a2" totalcount="4" value="-"/>
@@ -36,9 +36,10 @@
     </siteModel>
 
     <init spec='beast.util.TreeParser' id='newick:species' IsLabelledNewick="true" adjustTipHeights="false"
-          newick="((((A:0.02,(B:0.01)#H1[&amp;gamma=0.4]:0.01)S1:0.01,(#H1:0.01)#H2[&amp;gamma=0.7]:0.01)S2:0.02,(#H2:0.02,C:0.04)S3:0.01)R:0.05)"/>
+          newick="(((A:0.02,(B:0.01)#H1[&amp;gamma=0.3]:0.01)S1:0.03,(#H1:0.02,C:0.03)S2:0.02)R:0.05)"/>
+    <!-- newick="((((A:0.02,(B:0.01)#H1[&amp;gamma=0.4]:0.01)S1:0.01,(#H1:0.01)#H2[&amp;gamma=0.7]:0.01)S2:0.02,(#H2:0.02,C:0.04)S3:0.01)R:0.05)" -->
 
-    <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="3S_2H_3L.xml" networkOperator="true" initMethod="random">
+    <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="test_3s.xml" networkOperator="true" initMethod="random">
         <state id="state">
             <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
                 <taxonset id="taxonSuperset" spec="TaxonSet">
@@ -58,18 +59,15 @@
                     </taxon>
                 </taxonset>
             </stateNode>
-            <tree id="tree:gene1" name="stateNode">
-                <taxonset alignment="@gene1" id="taxonset:gene1" spec="TaxonSet"/>
-            </tree>
-            <tree id="tree:gene2" name="stateNode">
-                <taxonset alignment="@gene2" id="taxonset:gene2" spec="TaxonSet"/>
-            </tree>
-            <tree id="tree:gene3" name="stateNode">
-                <taxonset alignment="@gene3" id="taxonset:gene3" spec="TaxonSet"/>
-            </tree>
-            <stateNode id="embedding:gene1" spec="parameter.IntegerParameter">-1</stateNode>
-            <stateNode id="embedding:gene2" spec="parameter.IntegerParameter">-1</stateNode>
-            <stateNode id="embedding:gene3" spec="parameter.IntegerParameter">-1</stateNode>
+            <stateNode id="tree:gene1" spec="speciesnetwork.EmbeddedTree">
+                <taxonset id="taxonset:gene1" spec="TaxonSet" alignment="@gene1"/>
+            </stateNode>
+            <stateNode id="tree:gene2" spec="speciesnetwork.EmbeddedTree">
+                <taxonset id="taxonset:gene2" spec="TaxonSet" alignment="@gene2"/>
+            </stateNode>
+            <stateNode id="tree:gene3" spec="speciesnetwork.EmbeddedTree">
+                <taxonset id="taxonset:gene3" spec="TaxonSet" alignment="@gene3"/>
+            </stateNode>
         </state>
 
         <speciesNetwork idref="network:species"/>
@@ -78,10 +76,10 @@
                           tmrca="0.05" nHybrid="2" spec="speciesnetwork.simulator.YuleHybridSimulator"/>  
         --> <!-- origin="0.1" -->
         <parameter id="popsizes" name="popSizes">0.02</parameter>
-        <taxonSuperset idref="taxonSuperset"/>
-        <geneTree idref="tree:gene1"/> <embedding idref="embedding:gene1"/>
-        <geneTree idref="tree:gene2"/> <embedding idref="embedding:gene2"/>
-        <geneTree idref="tree:gene3"/> <embedding idref="embedding:gene3"/>
+        <taxonset idref="taxonSuperset"/>
+        <geneTree idref="tree:gene1"/>
+        <geneTree idref="tree:gene2"/>
+        <geneTree idref="tree:gene3"/>
         <sequenceSimulator id="seqgen:gene1" spec="seqgen.SequenceSimulator" data="@gene1" tree="@tree:gene1" siteModel="@siteModel:genex" sequencelength="200"/>
         <sequenceSimulator id="seqgen:gene2" spec="seqgen.SequenceSimulator" data="@gene2" tree="@tree:gene2" siteModel="@siteModel:genex" sequencelength="200"/>
         <sequenceSimulator id="seqgen:gene3" spec="seqgen.SequenceSimulator" data="@gene3" tree="@tree:gene3" siteModel="@siteModel:genex" sequencelength="200"/>

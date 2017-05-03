@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<beast namespace="beast.core:beast.evolution.alignment:beast.app" version="2.0">
+<beast namespace="beast.core:beast.evolution.alignment:beast.app" version="2.4">
     <data id="gene1" name="alignment">
         <sequence id="gene1_a1" taxon="a1" totalcount="4" value="-"/>
         <sequence id="gene1_a2" taxon="a2" totalcount="4" value="-"/>
@@ -12,9 +12,9 @@
     </data>
 
     <init spec='beast.util.TreeParser' id='newick:species' IsLabelledNewick="true" adjustTipHeights="false"
-        newick="((((A:0.02,(B:0.01)#H1[&amp;gamma=0.4]:0.01)S1:0.01,(#H1:0.01)#H2[&amp;gamma=0.7]:0.01)S2:0.02,(#H2:0.02,C:0.04)S3:0.01)R:0.03)"/>
+        newick="((((A:0.02,(B:0.01)#H1[&amp;gamma=0.4]:0.01)S1:0.01,(#H1:0.01)#H2[&amp;gamma=0.7]:0.01)S2:0.02,(#H2:0.02,C:0.04)S3:0.01)R:0.05)"/>
 
-    <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="3S_2H_C2.sim.trees" iterations="100">
+    <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="test_gene.trees" iterations="100">
         <state id="state">
             <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
                 <taxonset id="taxonSuperset" spec="TaxonSet">
@@ -34,16 +34,14 @@
                     </taxon>
                 </taxonset>
             </stateNode>
-            <tree id="tree:gene1" name="stateNode">
-                <taxonset alignment="@gene1" id="taxonset:gene1" spec="TaxonSet"/>
-            </tree>
-            <stateNode id="embedding:gene1" spec="parameter.IntegerParameter">-1</stateNode>
+            <stateNode id="tree:gene1" spec="speciesnetwork.EmbeddedTree">
+                <taxonset id="taxonset:gene1" spec="TaxonSet" alignment="@gene1"/>
+            </stateNode>
         </state>
 
         <speciesNetwork idref="network:species"/>
-        <parameter id="pop.sizes" name="popSizes">0.01</parameter>
-        <taxonSuperset idref="taxonSuperset"/>
+        <parameter id="popsizes" name="popSizes">0.01</parameter>
+        <taxonset idref="taxonSuperset"/>
         <geneTree idref="tree:gene1"/>
-        <embedding idref="embedding:gene1"/>
     </run>
 </beast>

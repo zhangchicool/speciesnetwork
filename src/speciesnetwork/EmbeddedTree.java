@@ -4,7 +4,7 @@ import beast.core.StateNode;
 import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
 
-public class EmbeddedTree extends Tree implements EmbeddableTree {
+public class EmbeddedTree extends Tree {
 	protected int[][] embedding;
 	private int[][] storedEmbedding;
 
@@ -26,7 +26,6 @@ public class EmbeddedTree extends Tree implements EmbeddableTree {
 		storedEmbedding = new int[nodeCount][];
 	}
 
-	@Override
 	public void resetEmbedding(int nCol, int value) {
 		final boolean reinitialize = embedding[0] == null || embedding[0].length != nCol;
 		for (int r = 0; r < nodeCount; r++) {
@@ -35,12 +34,10 @@ public class EmbeddedTree extends Tree implements EmbeddableTree {
 		}
 	}
 
-	@Override
 	public void setEmbedding(int row, int col, int value) {
 		embedding[row][col] = value;
 	}
 
-	@Override
 	public int getEmbedding(int row, int col) {
 		return embedding[row][col];
 	}
@@ -108,7 +105,7 @@ public class EmbeddedTree extends Tree implements EmbeddableTree {
 		}
     }
 
-	private void printEmbedding() {
+	public void printEmbedding() {
 		System.out.println(String.format("EMBEDDING: %s", getID()));
 		for (int r = 0; r < embedding.length; r++) {
 			final StringBuffer rowStr = new StringBuffer();
