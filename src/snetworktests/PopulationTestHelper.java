@@ -7,12 +7,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import beast.core.State;
-import beast.core.StateNode;
 import beast.evolution.alignment.TaxonSet;
 import beast.util.TreeParser;
 import speciesnetwork.NetworkParser;
-import speciesnetwork.EmbeddableTree;
-import speciesnetwork.EmbeddedTreeParser;
+import speciesnetwork.EmbeddedTree;
 import speciesnetwork.GeneTreeInSpeciesNetwork;
 import speciesnetwork.MultispeciesCoalescent;
 import speciesnetwork.PopulationSizeModel;
@@ -25,7 +23,7 @@ abstract class PopulationTestHelper {
     TaxonSet speciesSuperset;
     TreeParser speciesTree;
     NetworkParser speciesNetwork;
-    List<EmbeddableTree> geneTrees = new ArrayList<>();
+    List<EmbeddedTree> geneTrees = new ArrayList<>();
     List<GeneTreeInSpeciesNetwork> geneTreeWrappers = new ArrayList<>();
 
     State state = null;
@@ -74,14 +72,15 @@ abstract class PopulationTestHelper {
 
     private void initializeGeneTrees(boolean reembed) {
         for (int i = 0; i < newickGeneTrees.size(); i++) {
-            final String geneTreeNewick = newickGeneTrees.get(i);
-            EmbeddableTree embeddedTree = new EmbeddedTreeParser();
-            ((StateNode) embeddedTree).initByName("newick", geneTreeNewick, "IsLabelledNewick", true);
+            final String newick = newickGeneTrees.get(i);
+            TreeParser treeParser = new TreeParser();
+            treeParser.initByName("newick", newick, "IsLabelledNewick", true);
+            EmbeddedTree embeddedTree = new EmbeddedTree(treeParser.getRoot());
+
             final int[] embedding = this.embeddings.get(i);
-            final int nRow = embeddedTree.getNodeCount();
+            final int nRow = treeParser.getNodeCount();
             final int nCol = embedding.length / nRow;
             embeddedTree.resetEmbedding(nCol, -1);
-
             for (int r = 0; r < nRow; r++) {
             	for (int c = 0; c < nCol; c++)
             		embeddedTree.setEmbedding(r, c, embedding[r * nCol + c]);
