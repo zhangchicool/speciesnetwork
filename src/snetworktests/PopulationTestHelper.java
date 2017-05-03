@@ -32,7 +32,6 @@ abstract class PopulationTestHelper {
     MultispeciesCoalescent msc;
     int nSpecies;
     int nBranches;
-    int individualsPerSpecies;
     double popSize;
     double ploidy;
     double expectedLogP;
