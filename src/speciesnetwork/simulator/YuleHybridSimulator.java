@@ -39,9 +39,6 @@ public class YuleHybridSimulator extends Runnable {
     public final Input<Integer> iterationsInput =
             new Input<>("iterations", "Number of iterations to simulate (default is 1).");
 
-    public final Input<SummarizeNetwork> summaryInput =
-            new Input<>("summary", "Print summary statistics of the networks.");
-
     @Override
     public void initAndValidate() {
     }
@@ -72,10 +69,6 @@ public class YuleHybridSimulator extends Runnable {
             out.println("tree SIM_" + iteration + " =" + simulate().toString() + ";");
         }
         out.println("End;");
-
-        if (summaryInput.get() != null) {
-            summaryInput.get().run();
-        }
     }
 
     protected Network simulate() {

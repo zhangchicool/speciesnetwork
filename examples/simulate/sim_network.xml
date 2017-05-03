@@ -18,7 +18,5 @@
         <parameter id="time.origin" name="origin">0.06</parameter>
         <parameter id="rate.birth" name="birthRate">30.0</parameter>
         <parameter id="rate.hybrid" name="hybridRate">20</parameter>
-
-        <!-- summary id="network.summary" inputFileName="test_net.trees" outputFileName="test_net.sum.log" spec="speciesnetwork.tools.SummarizeNetwork"/ -->
     </run>
 </beast>
