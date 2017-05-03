@@ -16,8 +16,7 @@
 	<beauticonfig spec="BeautiConfig"
 		inputLabelMap="beast.core.MCMC.operator=Operators,
 			beast.core.MCMC.logger=Loggers,
-			beast.evolution.sitemodel.SiteModel.mutationRate=Substitution Rate,
-			beast.evolution.speciation.SpeciesTreePrior.gammaParameter=Population Mean"
+			beast.evolution.sitemodel.SiteModel.mutationRate=Substitution Rate"
 		inlinePlugins ="beast.core.MCMC.distribution,
 			beast.evolution.sitemodel.SiteModel.substModel,
 			beast.evolution.tree.coalescent.ExponentialGrowth,
@@ -138,7 +137,7 @@
 
 			<!-- tree and its properties -->
 			<plugin spec="speciesnetwork.EmbeddedTree" id="Tree.t:$(n)">
-				<taxonset spec="beast.evolution.alignment.TaxonSet" alignment="@$(n)"/>
+				<taxonset id="TaxonSet.$(n)" spec="beast.evolution.alignment.TaxonSet" alignment="@$(n)"/>
 			</plugin>
 
 			<plugin id="TreeHeight.t:$(n)" spec="beast.evolution.tree.TreeStatLogger" tree="@Tree.t:$(n)"/>
