@@ -368,15 +368,15 @@ public class CoalescentSimulator extends Runnable {
         out.println("        </init>\n");
         // print posterior, prior, and likelihood stuff
         out.println("        <distribution id=\"posterior\" spec=\"util.CompoundDistribution\">");
-        out.println("            <distribution id=\"prior\" spec=\"util.CompoundDistribution\">");  // prior
         // coalescent
-        out.println("                <distribution id=\"coalescent\" spec=\"speciesnetwork.MultispeciesCoalescent\" speciesNetwork=\"@network:species\">");
+        out.println("            <distribution id=\"coalescent\" spec=\"speciesnetwork.MultispeciesCoalescent\" speciesNetwork=\"@network:species\">");
         for (int i = 0; i < nrOfGeneTrees; i++) {
-            out.println("                    <geneTreeWithin id=\"geneTree:gene" + (i+1) + "\" spec=\"speciesnetwork.GeneTreeInSpeciesNetwork\" speciesNetwork=\"@network:species\" geneTree=\"@tree:gene" + (i+1) + "\"/>");
+            out.println("                <geneTreeWithin id=\"geneTree:gene" + (i+1) + "\" spec=\"speciesnetwork.GeneTreeInSpeciesNetwork\" speciesNetwork=\"@network:species\" geneTree=\"@tree:gene" + (i+1) + "\"/>");
         }
-        out.println("                    <!-- populationModel id=\"popModel\" popSizes=\"@popSizes\" spec=\"speciesnetwork.ConstantPopulation\"/ -->");
-        out.println("                    <populationModel id=\"popModel\" alpha=\"10.0\" mean=\"" + popSizes.getValue() + "\" spec=\"speciesnetwork.ConstantPopIntegrated\"/>");
-        out.println("                </distribution>");
+        out.println("                <!-- populationModel id=\"popModel\" popSizes=\"@popSizes\" spec=\"speciesnetwork.ConstantPopulation\"/ -->");
+        out.println("                <populationModel id=\"popModel\" alpha=\"10.0\" mean=\"" + popSizes.getValue() + "\" spec=\"speciesnetwork.ConstantPopIntegrated\"/>");
+        out.println("            </distribution>");
+        out.println("            <distribution id=\"prior\" spec=\"util.CompoundDistribution\">");  // prior
         // network prior
         out.println("                <distribution id=\"networkPrior\" spec=\"speciesnetwork.YuleHybridModel\" network=\"@network:species\" netDiversification=\"@netDivRate:species\" turnOver=\"@turnOverRate:species\" betaShape=\"1.0\"/>");
         out.println("                <prior id=\"networkOrigin\" name=\"distribution\" x=\"@originTime:species\">");

@@ -29,18 +29,21 @@
 			beast.core.MCMC.state,
 			beast.core.MCMC.distribution,
 			beast.core.MCMC.init,
-			beast.evolution.speciation.BirthDeathGernhard08Model.treeIntervals,
-			beast.evolution.speciation.BirthDeathGernhard08Model.type,
-			beast.evolution.speciation.BirthDeathGernhard08Model.sampleProbability,
-			beast.evolution.speciation.BirthDeathGernhard08Model.tree,
 			beast.evolution.tree.Tree,
 			beast.evolution.tree.Tree.taxa,
 			beast.evolution.tree.Tree.taxonset,
 			beast.evolution.tree.Tree.trait,
+	        beast.evolution.tree.RandomTree.initial,
+	        beast.evolution.tree.RandomTree.taxa,
+	        beast.evolution.tree.RandomTree.taxonset,
+	        beast.evolution.tree.RandomTree.trait,
+	        beast.evolution.tree.RandomTree.estimate,
+	        beast.util.TreeParser.initial,
 			beast.util.TreeParser.taxa,
 			beast.util.TreeParser.taxonset,
 			beast.util.TreeParser.trait,
 			beast.util.TreeParser.estimate,
+	        beast.util.ClusterTree.initial,
 			beast.util.ClusterTree.taxa,
 			beast.util.ClusterTree.taxonset,
 			beast.util.ClusterTree.trait,
@@ -236,8 +239,8 @@
 			<connect srcID="Tree.t:$(n)" targetID="nodeSliderAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 			<connect srcID="Tree.t:$(n)" targetID="edgeRelocateWideAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 			<connect srcID="Tree.t:$(n)" targetID="edgeRelocateNarrowAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Tree.t:$(n)" targetID="addHybridizationAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Tree.t:$(n)" targetID="deleteHybridizationAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="addReticulationAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="deleteReticulationAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 
 			<connect srcID="SNI" targetID="mcmc" inputName="init" if="inposterior(Network.t:Species)"/>
 			<connect srcID="Tree.t:$(n)" targetID="SNI" inputName="geneTree" if="inposterior(Tree.t:$(n))"/>

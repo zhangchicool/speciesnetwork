@@ -105,14 +105,14 @@
         </init>
 
         <distribution id="posterior" spec="util.CompoundDistribution">
+            <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
+                <geneTreeWithin id="geneTree:gene1" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene1"/>
+                <geneTreeWithin id="geneTree:gene2" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene2"/>
+                <geneTreeWithin id="geneTree:gene3" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene3"/>
+                <!-- populationModel id="popModel" popSizes="@popSizes" spec="speciesnetwork.ConstantPopulation"/ -->
+                <populationModel id="popModel" alpha="10.0" mean="0.02" spec="speciesnetwork.ConstantPopIntegrated"/>
+            </distribution>
             <distribution id="prior" spec="util.CompoundDistribution">
-                <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
-                    <geneTreeWithin id="geneTree:gene1" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene1"/>
-                    <geneTreeWithin id="geneTree:gene2" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene2"/>
-                    <geneTreeWithin id="geneTree:gene3" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene3"/>
-                    <!-- populationModel id="popModel" popSizes="@popSizes" spec="speciesnetwork.ConstantPopulation"/ -->
-                    <populationModel id="popModel" alpha="10.0" mean="0.02" spec="speciesnetwork.ConstantPopIntegrated"/>
-                </distribution>
                 <distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" network="@network:species" netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" betaShape="1.0"/>
                 <prior id="networkOrigin" name="distribution" x="@originTime:species">
                     <Exponential id="exponential.0" name="distr" mean="0.1"/>
@@ -257,7 +257,6 @@
                 <geneTree idref="tree:gene3"/>
             <operator id="nodeSlider:species" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.004" weight="0.0"/>
         </operator>
-        <!--
         <operator id="edgeRelocateWideAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="80.0">
                 <geneTree idref="tree:gene1"/>
                 <geneTree idref="tree:gene2"/>
@@ -282,7 +281,7 @@
                 <geneTree idref="tree:gene3"/>
             <operator id="deleteReticulation:species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@network:species" weight="0.0"/>
         </operator>
--->
+
         <logger id="screenlog" logEvery="20000" model="@posterior">
             <log idref="posterior"/>
             <log id="ESS.0" spec="util.ESS" arg="@posterior"/>
