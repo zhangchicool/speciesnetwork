@@ -336,7 +336,6 @@ public class CoalescentSimulator extends Runnable {
         out.println("            <parameter id=\"originTime:species\" lower=\"0.0\" name=\"stateNode\">" + df.format(speciesNetwork.getOrigin().getHeight()) + "</parameter>");
         out.println("            <parameter id=\"netDivRate:species\" lower=\"0.0\" name=\"stateNode\">1.0</parameter>");
         out.println("            <parameter id=\"turnOverRate:species\" lower=\"0.0\" upper=\"1.0\" name=\"stateNode\">0.5</parameter>");
-        out.println("            <parameter id=\"clockRate:gene\" name=\"stateNode\">1.0</parameter>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <stateNode id=\"tree:gene" + (i+1) + "\" spec=\"speciesnetwork.EmbeddedTree\">");
             out.println("                <taxonset id=\"taxonset:gene" + (i + 1) + "\" spec=\"TaxonSet\" alignment=\"@gene" + (i + 1) + "\"/>");
@@ -388,10 +387,6 @@ public class CoalescentSimulator extends Runnable {
         out.println("                <prior id=\"turnOverPrior\" name=\"distribution\" x=\"@turnOverRate:species\">");
         out.println("                    <Beta id=\"betadistr.01\" name=\"distr\" alpha=\"1.0\" beta=\"2.0\"/>");
         out.println("                </prior>");
-        // clock rate prior
-        out.println("                <prior id=\"clockPrior\" name=\"distribution\" x=\"@clockRate:gene\">");
-        out.println("                    <Gamma id=\"gamma.01\" name=\"distr\" alpha=\"1.0\" beta=\"1.0\"/>");
-        out.println("                </prior>");
         out.println("            </distribution>");
         // likelihood
         out.println("            <distribution id=\"likelihood\" spec=\"util.CompoundDistribution\">");  // likelihood
@@ -400,7 +395,7 @@ public class CoalescentSimulator extends Runnable {
             out.println("                    <siteModel id=\"siteModel:gene" + (i+1) + "\" mutationRate=\"1.0\" spec=\"SiteModel\">");
             out.println("                        <substModel id=\"jc:gene" + (i+1) + "\" spec=\"JukesCantor\"/>");
             out.println("                    </siteModel>");
-            out.println("                    <branchRateModel id=\"strictClock:gene" + (i+1) + "\" clock.rate=\"@clockRate:gene\" spec=\"StrictClockModel\"/>");
+            out.println("                    <branchRateModel id=\"strictClock:gene" + (i+1) + "\" clock.rate=\"1.0\" spec=\"StrictClockModel\"/>");
             out.println("                </distribution>");
         }
         out.println("            </distribution>");
@@ -495,7 +490,6 @@ public class CoalescentSimulator extends Runnable {
         out.println("            <log idref=\"likelihood\"/>");
         out.println("            <log idref=\"prior\"/>");
         out.println("            <log idref=\"coalescent\"/>");
-        out.println("            <log idref=\"clockRate:gene\"/>");
         out.println("            <log idref=\"netDivRate:species\"/>");
         out.println("            <log idref=\"turnOverRate:species\"/>");
         out.println("            <log idref=\"originTime:species\"/>");
