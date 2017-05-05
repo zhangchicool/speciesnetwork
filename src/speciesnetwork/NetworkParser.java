@@ -20,7 +20,7 @@ import beast.core.Input.Validate;
 public class NetworkParser extends Network implements StateNodeInitialiser {
     public final Input<Network> networkInput = new Input<>("initial", "Network to initialize.");
     public final Input<Tree> treeInput =
-            new Input<>("tree", "Tree initialized from extended newick string", Validate.REQUIRED);
+            new Input<>("tree", "Tree initialized from extended newick string.", Validate.REQUIRED);
     public final Input<Boolean> adjustTipHeightsInput =
             new Input<>("adjustTipHeights", "Whether tipHeights shall be adjusted (default is true).", true);
 

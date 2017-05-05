@@ -282,15 +282,16 @@
 		<distribution spec="CompoundDistribution" id="posterior">
 			<distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@Network.t:Species">
 				<populationModel id="popModel" spec="speciesnetwork.ConstantPopIntegrated">
-					<alpha spec="parameter.RealParameter" id="popShape.t:Species" value="3.0" estimate="false"/>
-					<mean spec="parameter.RealParameter" id="popMean.t:Species" value="0.01" estimate="true"/>
+					<alpha id="popShape.t:Species" spec="parameter.RealParameter" value="3.0" estimate="false"/>
+					<mean id="popMean.t:Species" spec="parameter.RealParameter" value="0.01" lower="0.0" estimate="true"/>
 				</populationModel>
 			</distribution>
 			<distribution spec="CompoundDistribution" id="prior">
-				<!-- species tree priors -->
-				<distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" network="@Network.t:Species" betaShape="1.0">
-					<netDiversification id="netDivRate.t:Species" lower="0.0" spec="parameter.RealParameter">10.0</netDiversification>
-					<turnOver id="turnOverRate.t:Species" lower="0.0" upper="1.0" spec="parameter.RealParameter">0.5</turnOver>
+				<!-- species network priors -->
+				<distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" network="@Network.t:Species">
+					<betaShape id="betaShape.t:Species" spec="parameter.RealParameter" value="1.0" estimate="false"/>
+					<netDiversification id="netDivRate.t:Species" spec="parameter.RealParameter" value="10.0" lower="0.0" estimate="true"/>
+					<turnOver id="turnOverRate.t:Species" spec="parameter.RealParameter" value="0.5" lower="0.0" upper="1.0" estimate="true"/>
 				</distribution>
 				<distribution id="netDivRatePrior.t:Species" spec="beast.math.distributions.Prior" x="@netDivRate.t:Species">
 					<distr spec="beast.math.distributions.OneOnX"/>
@@ -371,7 +372,7 @@
 		</logger>
 
 		<init id="SNI" estimate="false" method="random" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@Network.t:Species">
-			<origin id="originTime.t:Species" spec="parameter.RealParameter" value="1.0"/>
+			<origin id="originTime.t:Species" spec="parameter.RealParameter" value="1.0" lower="0.0" estimate="true"/>
 			<coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" popSizes="0.01"/>
 			<rebuildEmbedding id="initEmbed" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</init>
