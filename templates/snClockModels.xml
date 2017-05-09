@@ -1,5 +1,5 @@
 <beast version="2.0" namespace="beast.app.beauti:beast.core:beast.evolution.branchratemodel:beast.evolution.speciation:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood:beast.evolution:beast.math.distributions">
-	<!-- Clock models -->
+
 	<mergewith point="snClockModelTemplates">
 		<!-- Plain ol' strict clock -->
 		<subtemplate id="StrictClock" class="beast.evolution.branchratemodel.StrictClockModel" mainid="StrictClock.c:$(n)">
@@ -75,6 +75,7 @@
 				</distr>
 			</prior>
 ]]>
+
 			<connect srcID="uclnClockRate.c:$(n)" targetID="state" inputName="stateNode" if="inposterior(GeneTreeUCLN.c:$(n)) and uclnClockRate.c:$(n)/estimate=true"/>
 			<connect srcID="uclnBranchRates.c:$(n)" targetID="state" inputName="stateNode" if="inposterior(GeneTreeUCLN.c:$(n)) and uclnBranchRates.c:$(n)/estimate=true"/>
 			<connect srcID="uclnBranchRatesStdev.c:$(n)" targetID="state" inputName="stateNode" if="inposterior(GeneTreeUCLN.c:$(n)) and uclnBranchRatesStdev.c:$(n)/estimate=true"/>
@@ -139,6 +140,7 @@
 				</distr>
 			</prior>
 ]]>
+
 			<connect srcID="ucedClockRate.c:$(n)" targetID="state" inputName="stateNode" if="inposterior(GeneTreeUCED.c:$(n)) and ucedClockRate.c:$(n)/estimate=true"/>
 			<connect srcID="ucedBranchRates.c:$(n)" targetID="state" inputName="stateNode" if="inposterior(GeneTreeUCED.c:$(n)) and ucedBranchRates.c:$(n)/estimate=true"/>
 
@@ -167,4 +169,5 @@
 			<connect srcID="GeneTreeUCED.c:$(n)" targetID="TreeWithMetaDataLogger.t:$(n)" inputName="branchratemodel" if="inlikelihood(GeneTreeUCED.c:$(n))"/>
 		</subtemplate>
 	</mergewith>
+
 </beast>

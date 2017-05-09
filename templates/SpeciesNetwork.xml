@@ -377,4 +377,5 @@
 			<rebuildEmbedding id="initEmbed" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</init>
 	</run>
+
 </beast>
