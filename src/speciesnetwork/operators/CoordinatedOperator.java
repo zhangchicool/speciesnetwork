@@ -2,9 +2,8 @@ package speciesnetwork.operators;
 
 import beast.core.Input;
 import beast.core.Operator;
-import beast.core.parameter.IntegerParameter;
 import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
+import speciesnetwork.EmbeddedTree;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 
@@ -18,19 +17,11 @@ import java.util.List;
 public abstract class CoordinatedOperator extends Operator {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Input.Validate.REQUIRED);
-    public final Input<List<Tree>> geneTreesInput =
-            new Input<>("geneTree", "Gene tree within the species network.", new ArrayList<>());
-    public final Input<List<IntegerParameter>> embeddingsInput =
-            new Input<>("embedding", "The embedding matrix.", new ArrayList<>());
-
-    private int nLoci;
+    public final Input<List<EmbeddedTree>> geneTreesInput = new Input<>("geneTree",
+            "The gene tree within the species network.", new ArrayList<>());
 
     @Override
     public void initAndValidate() {
-        nLoci = geneTreesInput.get().size();  // if nLoci == 0 (no input), gene trees are not changed
-        if (embeddingsInput.get().size() != nLoci) {
-            throw new RuntimeException("Number of embeddings doesn't match number of gene trees!");
-        }
     }
 
     /**
@@ -44,27 +35,27 @@ public abstract class CoordinatedOperator extends Operator {
         final Integer speciesBrNr = networkNode.gammaBranchNumber;
         final NetworkNode parentNode = networkNode.getParentByBranch(speciesBrNr);
 
-        final List<Tree> geneTrees = geneTreesInput.get();
-        final List<IntegerParameter> embeddings = embeddingsInput.get();
+        final int nLoci = geneTreesInput.get().size();  // if nLoci == 0 (no input), gene trees are not changed
+
+        final List<EmbeddedTree> geneTrees = geneTreesInput.get();
         int m = 0;  // # gene node heights changed relative to 'upper'
         int n = 0;  // # gene node heights changed relative to 'lower'
         for (int i = 0; i < nLoci; i++) {  // loop over all loci
-            Tree gTree = geneTrees.get(i);
-            IntegerParameter embedding = embeddings.get(i);
+            EmbeddedTree geneTree = geneTrees.get(i);
 
             // update the gene tree node heights  TODO: will this introduce negative branch lengths?
-            for (Node gNode : gTree.getInternalNodes()) {
+            for (Node gNode : geneTree.getInternalNodes()) {
                 final double gNodeHeight = gNode.getHeight();
 
                 if (oldHeight <= gNodeHeight && gNodeHeight < upper) {
-                    if (networkNode.isRoot() || isWithinChildBranch(parentNode, gNode, embedding, upper)) {
+                    if (networkNode.isRoot() || isWithinChildBranch(parentNode, gNode, geneTree, upper)) {
                         // update the node height relative to 'upper'
                         final double gNewNodeHeight = upper - (upper - gNodeHeight) * (upper - newHeight) / (upper - oldHeight);
                         gNode.setHeight(gNewNodeHeight);
                         m++;
                     }
                 } else if (lower < gNodeHeight && gNodeHeight < oldHeight) {
-                    if (isWithinChildBranch(networkNode, gNode, embedding, upper)) {
+                    if (isWithinChildBranch(networkNode, gNode, geneTree, upper)) {
                         // update the node height relative to 'lower'
                         final double gNewNodeHeight = lower + (gNodeHeight - lower) * (newHeight - lower) / (oldHeight - lower);
                         gNode.setHeight(gNewNodeHeight);
@@ -79,11 +70,11 @@ public abstract class CoordinatedOperator extends Operator {
     }
 
     // check if a gene tree node is within a child branch of the network node
-    private boolean isWithinChildBranch(NetworkNode snNode, Node gNode, IntegerParameter embedding, double upper) {
+    private boolean isWithinChildBranch(NetworkNode snNode, Node gNode, EmbeddedTree geneTree, double upper) {
         final int traversalNodeNr = snNode.getTraversalNumber();
         Integer withinBrNr;  Node ancNode = gNode;
         do {
-            withinBrNr = embedding.getMatrixValue(traversalNodeNr, ancNode.getNr());
+            withinBrNr = geneTree.getEmbedding(ancNode.getNr(), traversalNodeNr);
             ancNode = ancNode.getParent();
         } while (withinBrNr < 0 && ancNode != null && ancNode.getHeight() < upper);
 
