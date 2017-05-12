@@ -1,14 +1,13 @@
 package speciesnetwork.operators;
 
+import java.util.*;
+
 import beast.core.Input;
 import beast.core.Operator;
 import beast.evolution.tree.Node;
 import speciesnetwork.EmbeddedTree;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Chi Zhang
@@ -35,27 +34,28 @@ public abstract class CoordinatedOperator extends Operator {
         final Integer speciesBrNr = networkNode.gammaBranchNumber;
         final NetworkNode parentNode = networkNode.getParentByBranch(speciesBrNr);
 
-        final int nLoci = geneTreesInput.get().size();  // if nLoci == 0 (no input), gene trees are not changed
-
         final List<EmbeddedTree> geneTrees = geneTreesInput.get();
+        final int nLoci = geneTrees.size();  // if nLoci == 0 (no input), gene trees are not changed
+
         int m = 0;  // # gene node heights changed relative to 'upper'
         int n = 0;  // # gene node heights changed relative to 'lower'
         for (int i = 0; i < nLoci; i++) {  // loop over all loci
             EmbeddedTree geneTree = geneTrees.get(i);
 
-            // update the gene tree node heights  TODO: will this introduce negative branch lengths?
+            // update the gene tree node heights
             for (Node gNode : geneTree.getInternalNodes()) {
                 final double gNodeHeight = gNode.getHeight();
 
                 if (oldHeight <= gNodeHeight && gNodeHeight < upper) {
-                    if (networkNode.isRoot() || isWithinChildBranch(parentNode, gNode, geneTree, upper)) {
+                    if (networkNode.isRoot() ||
+                        isWithinChildBranch(parentNode, Collections.singletonList(speciesBrNr), gNode, geneTree, upper)) {
                         // update the node height relative to 'upper'
                         final double gNewNodeHeight = upper - (upper - gNodeHeight) * (upper - newHeight) / (upper - oldHeight);
                         gNode.setHeight(gNewNodeHeight);
                         m++;
                     }
                 } else if (lower < gNodeHeight && gNodeHeight < oldHeight) {
-                    if (isWithinChildBranch(networkNode, gNode, geneTree, upper)) {
+                    if (isWithinChildBranch(networkNode, networkNode.childBranchNumbers, gNode, geneTree, upper)) {
                         // update the node height relative to 'lower'
                         final double gNewNodeHeight = lower + (gNodeHeight - lower) * (newHeight - lower) / (oldHeight - lower);
                         gNode.setHeight(gNewNodeHeight);
@@ -69,15 +69,16 @@ public abstract class CoordinatedOperator extends Operator {
                n * Math.log((newHeight - lower)/(oldHeight - lower));
     }
 
-    // check if a gene tree node is within a child branch of the network node
-    private boolean isWithinChildBranch(NetworkNode snNode, Node gNode, EmbeddedTree geneTree, double upper) {
+    /* check if a gene tree node is within certain child branches of the network node */
+    private boolean isWithinChildBranch(NetworkNode snNode, List<Integer> childBrNrs,
+                                        Node gNode, EmbeddedTree geneTree, final double upper) {
         final int traversalNodeNr = snNode.getTraversalNumber();
-        Integer withinBrNr;  Node ancNode = gNode;
+        Integer withinBrNr;  Node treNode = gNode;
         do {
-            withinBrNr = geneTree.getEmbedding(ancNode.getNr(), traversalNodeNr);
-            ancNode = ancNode.getParent();
-        } while (withinBrNr < 0 && ancNode != null && ancNode.getHeight() < upper);
+            withinBrNr = geneTree.getEmbedding(treNode.getNr(), traversalNodeNr);
+            treNode = treNode.getParent();
+        } while (withinBrNr < 0 && treNode != null && treNode.getHeight() < upper);
 
-        return snNode.childBranchNumbers.contains(withinBrNr);
+        return childBrNrs.contains(withinBrNr);
     }
 }

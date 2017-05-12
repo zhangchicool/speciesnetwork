@@ -188,13 +188,13 @@ public class CoalescentSimulator extends Runnable {
             }
 
             final double bottomHeight = snNode.getHeight();
-            final int lBranchNumber = snNode.gammaBranchNumber;
+            final Integer lBranchNumber = snNode.gammaBranchNumber;
             NetworkNode lParent = snNode.getParentByBranch(lBranchNumber);
             final double lPopSize = popSizes.getValue(lBranchNumber);
             final double lTopHeight = lParent.getHeight();
             List<Node> lineagesAtLTop =
                     simulateCoalescentEvents(lineagesAtLBottom, bottomHeight, lTopHeight, ploidy*lPopSize, geneTree);
-            final int rBranchNumber = snNode.gammaBranchNumber + 1;
+            final Integer rBranchNumber = snNode.gammaBranchNumber + 1;
             NetworkNode rParent = snNode.getParentByBranch(rBranchNumber);
             final double rPopSize = popSizes.getValue(rBranchNumber);
             final double rTopHeight = rParent.getHeight();
@@ -213,7 +213,7 @@ public class CoalescentSimulator extends Runnable {
         }
         else {
             final double bottomHeight = snNode.getHeight();
-            final int sBranchNumber = snNode.gammaBranchNumber;
+            final Integer sBranchNumber = snNode.gammaBranchNumber;
             NetworkNode sParent = snNode.getParentByBranch(sBranchNumber);
             final double popSize = popSizes.getValue(sBranchNumber);
             final double topHeight;
@@ -443,6 +443,7 @@ public class CoalescentSimulator extends Runnable {
             out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
         out.println("        <operator id=\"originMultiplier:species\" spec=\"speciesnetwork.operators.OriginMultiplier\" speciesNetwork=\"@network:species\" origin=\"@originTime:species\" weight=\"5.0\"/>");
+        /*
         out.println("        <operator id=\"nodeUniformAndEmbed:species\" spec=\"speciesnetwork.operators.RebuildEmbedding\" speciesNetwork=\"@network:species\" taxonset=\"@taxonsuperset\" weight=\"60.0\">");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
@@ -452,6 +453,22 @@ public class CoalescentSimulator extends Runnable {
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
         out.println("            <operator id=\"nodeSlider:species\" spec=\"speciesnetwork.operators.NodeSlider\" speciesNetwork=\"@network:species\" origin=\"@originTime:species\" isNormal=\"true\" sigma=\"0.004\" weight=\"0.0\"/>");
+        out.println("        </operator>");  */
+        out.println("        <operator id=\"coordNodeUniformAndEmbed:species\" spec=\"speciesnetwork.operators.RebuildEmbedding\" speciesNetwork=\"@network:species\" taxonset=\"@taxonsuperset\" weight=\"60.0\">");
+        for (int i = 0; i < nrOfGeneTrees; i++)
+            out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
+        out.println("            <operator id=\"coordNodeUniform:species\" spec=\"speciesnetwork.operators.CoordinatedNodeUniform\" speciesNetwork=\"@network:species\" weight=\"0.0\">");
+        for (int i = 0; i < nrOfGeneTrees; i++)
+            out.println("                <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
+        out.println("            </operator>");
+        out.println("        </operator>");
+        out.println("        <operator id=\"coordNodeSliderAndEmbed:species\" spec=\"speciesnetwork.operators.RebuildEmbedding\" speciesNetwork=\"@network:species\" taxonset=\"@taxonsuperset\" weight=\"120.0\">");
+        for (int i = 0; i < nrOfGeneTrees; i++)
+            out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
+        out.println("            <operator id=\"coordNodeSlider:species\" spec=\"speciesnetwork.operators.CoordinatedNodeSlider\" speciesNetwork=\"@network:species\" origin=\"@originTime:species\" isNormal=\"true\" sigma=\"0.004\" weight=\"0.0\">");
+        for (int i = 0; i < nrOfGeneTrees; i++)
+            out.println("                <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
+        out.println("            </operator>");
         out.println("        </operator>");
         // whether or not to write network topology operators
         if (!networkOperatorInput.get())  out.println("        <!--");
