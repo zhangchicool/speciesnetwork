@@ -19,10 +19,6 @@ public abstract class CoordinatedOperator extends Operator {
     public final Input<List<EmbeddedTree>> geneTreesInput = new Input<>("geneTree",
             "The gene tree within the species network.", new ArrayList<>());
 
-    @Override
-    public void initAndValidate() {
-    }
-
     /**
      * The RubberBand algorithm of Rannala & Yang, 2003 (Appendix Step 4)
      */

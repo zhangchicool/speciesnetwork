@@ -26,6 +26,10 @@ public class CoordinatedNodeSlider extends CoordinatedOperator {
             new Input<>("sigma", "Standard deviation of the normal proposal (default is 0.01).", 0.01);
 
     @Override
+    public void initAndValidate() {
+    }
+
+    @Override
     public double proposal() {
         final Network speciesNetwork = speciesNetworkInput.get();
 

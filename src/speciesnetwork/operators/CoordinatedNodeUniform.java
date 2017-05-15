@@ -15,6 +15,10 @@ import speciesnetwork.SanityChecks;
 public class CoordinatedNodeUniform extends CoordinatedOperator {
 
     @Override
+    public void initAndValidate() {
+    }
+
+    @Override
     public double proposal() {
         final Network speciesNetwork = speciesNetworkInput.get();
 
