@@ -261,7 +261,7 @@
                 <geneTree idref="tree:gene3"/>
             </operator>
         </operator>
-        <!--
+
         <operator id="edgeRelocateWideAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="80.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
@@ -286,7 +286,6 @@
             <geneTree idref="tree:gene3"/>
             <operator id="deleteReticulation:species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@network:species" weight="0.0"/>
         </operator>
-		-->
 
         <logger id="screenlog" logEvery="10000" model="@posterior">
             <log idref="posterior"/>

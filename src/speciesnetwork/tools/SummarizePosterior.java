@@ -34,7 +34,10 @@ public class SummarizePosterior extends Runnable {
             "Name of the file that contains networks in extended newick format.", Validate.REQUIRED);
     public final Input<String> outputFileNameInput = new Input<>("outputFileName",
             "If provided, write to this file rather than to standard out.");
-    public final Input<Integer> burninInput = new Input<>("burnin", "The absolute burn-in.", 0);
+    public final Input<Double> burninInput = new Input<>("burnin",
+            "Absolute burn-in if >=1, or relative burn-in if <1.", 0.);
+    public final Input<Boolean> medianInput = new Input<>("useMedian",
+            "Use median instead of mean for node heights and gamma probs in summary networks.", false);
 
     private Map<Integer, Integer> rSubnetworks;
     private Table<Integer, Integer, Integer> sSubnetworks;
@@ -65,18 +68,26 @@ public class SummarizePosterior extends Runnable {
             out = new PrintStream(outputFileName);
         }
 
-        final int burnin = burninInput.get();
+        progressStream.println("Reading in posterior network samples...");
         NexusParser nexusParser = new NexusParser();
         nexusParser.parseFile(new File(inputFileName));
         List<Tree> parsedTrees = nexusParser.trees;
+        final int numNetworks = parsedTrees.size();
+
+        // get the absolute burn-in
+        final double burnin = burninInput.get();
+        int absoluteBurnin = 0;
+        if (burnin > 0.0 && burnin < 1.0)
+            absoluteBurnin = (int)(burnin * numNetworks);
+        else if (burnin >= 1.0)
+            absoluteBurnin = (int) burnin;
 
         nextSubnetworkNumber = nexusParser.taxa.size();
         final Multimap<Integer, Network> binnedNetworks = HashMultimap.create(); // binned by topology
 
         // bin networks by topology
-        progressStream.println("Reading in posterior network samples...");
-        for (int i = 0; i < parsedTrees.size(); i++) {
-        	if (i >= burnin) {
+        for (int i = 0; i < numNetworks; i++) {
+        	if (i >= absoluteBurnin) {
         		final Tree tree = parsedTrees.get(i);
         		final Network network = new NetworkParser(tree);
         		final NetworkNode origin = network.getOrigin();
@@ -84,6 +95,7 @@ public class SummarizePosterior extends Runnable {
     			binnedNetworks.put(networkNr, network);
         	}
         }
+        progressStream.println("Parsed " + numNetworks + " networks totally, " + absoluteBurnin + " discarded as burn-in.");
 
         // in descending order of frequency, calculate mean node heights by topology
         final Multiset<Integer> allNetworkNrs = binnedNetworks.keys();
@@ -232,7 +244,7 @@ public class SummarizePosterior extends Runnable {
     	for (Double v : sample){
     		avg += (v - avg) / n;
     		n++;
-		}
+		}  // more numerically stable
 		return avg;
     }
 
