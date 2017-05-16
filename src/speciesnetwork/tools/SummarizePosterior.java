@@ -1,12 +1,7 @@
 package speciesnetwork.tools;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashBasedTable;
@@ -24,6 +19,7 @@ import beast.core.Input.Validate;
 import beast.core.util.Log;
 import beast.core.Runnable;
 import beast.evolution.tree.Tree;
+import beast.util.HeapSort;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 import speciesnetwork.NetworkParser;
@@ -45,7 +41,7 @@ public class SummarizePosterior extends Runnable {
 
     private int nextSubnetworkNumber;
 
-    private static PrintStream progressStream = Log.err;
+    private static PrintStream progressStream = Log.info;
 
     @Override
     public void initAndValidate() {
@@ -62,9 +58,9 @@ public class SummarizePosterior extends Runnable {
         if (outputFileName == null) {
             out = System.out;
         } else {
-            String msg = "Will write to";
+            String msg = "Writing to";
             if (new File(outputFileName).exists())
-                msg = "Warning: will overwrite";
+                msg = "Warning: Overwriting";
             progressStream.println(msg + " file " + outputFileName);
             out = new PrintStream(outputFileName);
         }
@@ -231,9 +227,49 @@ public class SummarizePosterior extends Runnable {
     }
 
     private double calculateMean(List<Double> sample) {
-    	double sumValues = 0.0;
-    	for (Double v: sample) sumValues += v;
+        double avg = 0.0;
+    	int n = 1;
+    	for (Double v : sample){
+    		avg += (v - avg) / n;
+    		n++;
+		}
+		return avg;
+    }
 
-    	return sumValues / sample.size();
+    private double calculateMedian(List<Double> sample) {
+        final int length = sample.size();
+        int[] indices = new int[length];
+        HeapSort.sort(sample, indices);
+
+        int pos = length / 2;
+        if (length % 2 == 1) {
+            return sample.get(indices[pos]);
+        } else {
+            return (sample.get(indices[pos - 1]) + sample.get(indices[pos])) / 2.0;
+        }
+    }
+
+    private double[] calculateHPDInterval(double prop, List<Double> sample) {
+        final int length = sample.size();
+        int[] indices = new int[length];
+        HeapSort.sort(sample, indices);
+
+        double minRange = Double.MAX_VALUE;
+        int hpdIndex = 0;
+
+        int diff = (int) Math.round(prop * length);
+        for (int i = 0; i <= (length - diff); i++) {
+            double minValue = sample.get(indices[i]);
+            double maxValue = sample.get(indices[i + diff - 1]);
+            double range = Math.abs(maxValue - minValue);
+            if (range < minRange) {
+                minRange = range;
+                hpdIndex = i;
+            }
+        }
+        double lower = sample.get(indices[hpdIndex]);
+        double upper = sample.get(indices[hpdIndex + diff - 1]);
+
+        return new double[]{lower, upper};
     }
 }
