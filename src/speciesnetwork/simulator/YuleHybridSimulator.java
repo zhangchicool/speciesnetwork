@@ -13,7 +13,6 @@ import beast.evolution.alignment.TaxonSet;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
-import speciesnetwork.tools.SummarizeNetwork;
 
 /**
  * @author Chi Zhang

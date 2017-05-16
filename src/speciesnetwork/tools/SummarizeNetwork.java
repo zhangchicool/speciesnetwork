@@ -24,6 +24,7 @@ import speciesnetwork.NodeHeightComparator;
  */
 
 @Description("Summarize the posterior distribution of species networks.")
+@Deprecated
 public class SummarizeNetwork extends Runnable {
     public final Input<String> inputFileNameInput = new Input<>("inputFileName",
             "Name of the file that contains networks in extended newick format.", Validate.REQUIRED);
