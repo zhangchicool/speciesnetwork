@@ -69,7 +69,7 @@ public class SummarizePosterior extends Runnable {
         }
 
         progressStream.println("Reading in posterior network samples...");
-        NexusParser nexusParser = new NexusParser();
+        ExtNexusParser nexusParser = new ExtNexusParser();
         nexusParser.parseFile(new File(inputFileName));
         List<Tree> parsedTrees = nexusParser.trees;
         final int numNetworks = parsedTrees.size();
