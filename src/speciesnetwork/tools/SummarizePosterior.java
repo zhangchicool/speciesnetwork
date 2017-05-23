@@ -41,15 +41,16 @@ public class SummarizePosterior extends Runnable {
 
     private Map<Integer, Integer> rSubnetworks;
     private Table<Integer, Integer, Integer> sSubnetworks;
-
     private int nextSubnetworkNumber;
 
+    private boolean useMedian;
     private static PrintStream progressStream = Log.info;
 
     @Override
     public void initAndValidate() {
     	rSubnetworks = new HashMap<>(); // subnetworks defined by a reticulation node
     	sSubnetworks = HashBasedTable.create(); // subnetworks defined by a speciation node
+        useMedian = medianInput.get();
     }
 
     @Override
@@ -90,21 +91,19 @@ public class SummarizePosterior extends Runnable {
         	if (i >= absoluteBurnin) {
         		final Tree tree = parsedTrees.get(i);
         		final Network network = new NetworkParser(tree);
-        		final NetworkNode origin = network.getOrigin();
-        		final int networkNr = findSubnetworks(origin, true);
+        		final int networkNr = findSubnetworks(network.getOrigin());
     			binnedNetworks.put(networkNr, network);
         	}
         }
         progressStream.println("Parsed " + numNetworks + " networks totally, " + absoluteBurnin + " discarded as burn-in.");
 
-        // in descending order of frequency, calculate mean node heights by topology
+        // in descending order of topology frequencies, calculate node summaries
         final Multiset<Integer> allNetworkNrs = binnedNetworks.keys();
         final ImmutableMultiset<Integer> orderedNetworkNrs = Multisets.copyHighestCountFirst(allNetworkNrs);
         final Set<Integer> uniqueNetworkNrs = new LinkedHashSet<>();
-        // for (Integer networkNr: orderedNetworkNrs) uniqueNetworkNrs.add(networkNr);
 		uniqueNetworkNrs.addAll(orderedNetworkNrs);
 
-        progressStream.println("Writing summary networks with mean heights and gammas...");
+        progressStream.println("Writing summary networks with heights and gamma probs...");
         for (Integer networkNr: uniqueNetworkNrs) {
         	final double topologySupport = (double) allNetworkNrs.count(networkNr) / (double) allNetworkNrs.size();
             final ListMultimap<Integer, Double> networkHeights = ArrayListMultimap.create();
@@ -112,6 +111,7 @@ public class SummarizePosterior extends Runnable {
 
             for (Network network: binnedNetworks.get(networkNr)) {
             	NetworkNode origin = network.getOrigin();
+            	network.resetAllVisited();
             	collateParameters(origin, null, null, networkHeights, networkGammas);
             }
 
@@ -127,27 +127,24 @@ public class SummarizePosterior extends Runnable {
         out.close();
     }
 
-    /* Figure out what subnetwork this node defines,
-     * and whether it already has an assigned number.
-     * If not, assign nextSubnetworkNumber.
+    /*
+     * Figure out what subnetwork this node defines. If it doesn't have an assigned number, assign nextSubnetworkNumber.
      */
-    private Integer findSubnetworks(NetworkNode node, boolean isOrigin) {
-    	Multiset<NetworkNode> children = node.getChildren();
-
+    private Integer findSubnetworks(NetworkNode node) {
     	Integer subnetworkNr = -1;
-    	if (children.size() == 2 || isOrigin) { // speciation or origin node
+    	if (node.isSpeciation() || node.isOrigin()) {  // speciation or origin node
     		int leftSubnetworkNr = -1;
     		int rightSubnetworkNr = -1;
-    		for (Integer branchNr: node.childBranchNumbers) { // only runs twice
+    		for (Integer branchNr: node.childBranchNumbers) {
     			final NetworkNode child = node.getChildByBranch(branchNr);
-    			final int childSubnetwork = findSubnetworks(child, false);
+    			final int childSubnetworkNr = findSubnetworks(child);
 
     			// "left" subnetwork is always the larger number
-    			if (leftSubnetworkNr < childSubnetwork) {
+    			if (leftSubnetworkNr < childSubnetworkNr) {
     				rightSubnetworkNr = leftSubnetworkNr;
-    				leftSubnetworkNr = childSubnetwork;
+    				leftSubnetworkNr = childSubnetworkNr;
     			} else {
-    				rightSubnetworkNr = childSubnetwork;
+    				rightSubnetworkNr = childSubnetworkNr;
     			}
     		}
 
@@ -157,17 +154,17 @@ public class SummarizePosterior extends Runnable {
     			sSubnetworks.put(leftSubnetworkNr, rightSubnetworkNr, subnetworkNr);
     			nextSubnetworkNumber++;
     		}
-    	} else if (children.size() == 1) { // reticulation node
-    		for (Integer branchNr: node.childBranchNumbers) { // only runs once
-    			final NetworkNode child = node.getChildByBranch(branchNr);
-    			final int childSubnetworkNr = findSubnetworks(child, false);
-    			subnetworkNr = rSubnetworks.get(childSubnetworkNr);
-	    		if (subnetworkNr == null) {
-	    			subnetworkNr = nextSubnetworkNumber;
-	    			rSubnetworks.put(childSubnetworkNr, subnetworkNr);
-	    			nextSubnetworkNumber++;
-	    		}
-    		}
+    	} else if (node.isReticulation()) {  // reticulation node
+    		Integer branchNr = node.childBranchNumbers.get(0); // one child
+            final NetworkNode child = node.getChildByBranch(branchNr);
+            final int childSubnetworkNr = findSubnetworks(child);
+
+            subnetworkNr = rSubnetworks.get(childSubnetworkNr);
+            if (subnetworkNr == null) {
+                subnetworkNr = nextSubnetworkNumber;
+                rSubnetworks.put(childSubnetworkNr, subnetworkNr);
+                nextSubnetworkNumber++;
+            }
     	} else { // is a leaf node
     		subnetworkNr = node.getNr();
     	}
@@ -179,57 +176,55 @@ public class SummarizePosterior extends Runnable {
     /*
      * Collate all node heights and reticulation node gammas, for networks sharing a common topology
      */
-    private void collateParameters(NetworkNode node, Integer parentSubnetworkNr, Integer parentBranchNr, Multimap<Integer, Double> heights, Table<Integer, Integer, List<Double>> gammas) {
-    	Multiset<NetworkNode> children = node.getChildren();
-
+    private void collateParameters(NetworkNode node, Integer parentSubnetworkNr, Integer parentBranchNr,
+                                   ListMultimap<Integer, Double> heights, Table<Integer, Integer, List<Double>> gammas) {
     	final Integer subnetworkNr = node.subnetworkNr;
-    	final Double nodeHeight = node.getHeight();
-		heights.put(subnetworkNr, nodeHeight);
 
-		if (children.size() == 2 || parentSubnetworkNr == null) { // speciation node or origin
-    		for (Integer branchNr: node.childBranchNumbers) { // only runs twice
-    			final NetworkNode child = node.getChildByBranch(branchNr);
-    			collateParameters(child, subnetworkNr, branchNr, heights, gammas);
-    		}
-    	} else if (children.size() == 1) { // reticulation node
-    		for (Integer branchNr: node.childBranchNumbers) { // only runs once
-    			final NetworkNode child = node.getChildByBranch(branchNr);
-    			collateParameters(child, subnetworkNr, branchNr, heights, gammas);
+		if (node.isReticulation()) {
+            if (!gammas.contains(subnetworkNr, parentSubnetworkNr))
+                gammas.put(subnetworkNr, parentSubnetworkNr, new ArrayList<>());
+            final double nodeGamma = node.getGammaProb();
+            if (node.gammaBranchNumber.equals(parentBranchNr))
+                gammas.get(subnetworkNr, parentSubnetworkNr).add(nodeGamma);
+            else
+                gammas.get(subnetworkNr, parentSubnetworkNr).add(1.0 - nodeGamma);
+        }
 
-    			if (!gammas.contains(subnetworkNr, parentSubnetworkNr))
-    				gammas.put(subnetworkNr, parentSubnetworkNr, new ArrayList<>());
+        if (node.isVisited())
+            return;
+        // mark visited to avoid duplicated recursion
+        node.setVisited(true);
 
-    			final Double nodeGamma = node.getGammaProb();
-    			if (parentBranchNr.equals(node.gammaBranchNumber))
-    				gammas.get(subnetworkNr, parentSubnetworkNr).add(nodeGamma);
-    			else
-    				gammas.get(subnetworkNr, parentSubnetworkNr).add(1.0 - nodeGamma);
-    		}
-    	}
+        final Double nodeHeight = node.getHeight();
+        heights.put(subnetworkNr, nodeHeight);
+
+        for (Integer branchNr : node.childBranchNumbers) {
+            final NetworkNode child = node.getChildByBranch(branchNr);
+            collateParameters(child, subnetworkNr, branchNr, heights, gammas);
+        }
     }
 
     /*
      * Sets the node heights and gammas to the mean average across all samples sharing the same network topology
      */
-    private void averageParameters(NetworkNode node, Integer parentSubnetworkNr, Integer parentBranchNr, ListMultimap<Integer, Double> heights, Table<Integer, Integer, List<Double>> gammas) {
-    	Multiset<NetworkNode> children = node.getChildren();
-
+    private void averageParameters(NetworkNode node, Integer parentSubnetworkNr, Integer parentBranchNr,
+                                   ListMultimap<Integer, Double> heights, Table<Integer, Integer, List<Double>> gammas) {
     	final Integer subnetworkNr = node.subnetworkNr;
     	final List<Double> sampledHeights = heights.get(subnetworkNr);
     	final Double meanHeight = calculateMean(sampledHeights);
 		node.setHeight(meanHeight);
 
-		if (children.size() == 2 || parentSubnetworkNr == null) { // speciation or origin node
+		if (node.isSpeciation() || node.isOrigin()) {  // speciation or origin node
     		for (Integer branchNr: node.childBranchNumbers) { // only runs twice
     			final NetworkNode child = node.getChildByBranch(branchNr);
     			averageParameters(child, subnetworkNr, branchNr, heights, gammas);
     		}
-    	} else if (children.size() == 1) { // reticulation node
+    	} else if (node.isReticulation()) {  // reticulation node
     		for (Integer branchNr: node.childBranchNumbers) { // only runs once
     			final NetworkNode child = node.getChildByBranch(branchNr);
     			averageParameters(child, subnetworkNr, branchNr, heights, gammas);
 
-    			if (parentBranchNr.equals(node.gammaBranchNumber)) {
+    			if (node.gammaBranchNumber.equals(parentBranchNr)) {
     		    	final List<Double> sampledGammas = gammas.get(subnetworkNr, parentSubnetworkNr);
     		    	final Double meanGamma = calculateMean(sampledGammas);
     				node.setGammaProb(meanGamma);
