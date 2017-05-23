@@ -351,7 +351,7 @@
             <geneTreeWithin id="geneTree:xy1420" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree.t:xy1420"/>
         </distribution>
         <distribution id="prior" spec="util.CompoundDistribution">
-            <distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" network="@network:species" netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" betaShape="1.0"/>
+            <distribution id="networkPrior" spec="speciesnetwork.BirthHybridizationModel" network="@network:species" netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" betaShape="1.0"/>
             <prior id="networkOrigin" name="distribution" x="@originTime:species">
                 <Exponential id="Exponential.0" name="distr" mean="0.002"/>
             </prior>
@@ -836,7 +836,7 @@
 
     <!-- species network topology operators -->
     <operator id="edgeRelocateWide:species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonSuperset" speciesNetwork="@network:species" weight="80.0">
-        <operator id="edgeRelocatorW" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
+        <operator id="edgeRelocatorW" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
         <geneTree idref="tree.t:4cl"/>
         <geneTree idref="tree.t:ebs"/>
         <geneTree idref="tree.t:gi"/>
@@ -850,7 +850,7 @@
         <geneTree idref="tree.t:xy1420"/>
     </operator>
     <operator id="edgeRelocateNarrow:species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonSuperset" speciesNetwork="@network:species" weight="60.0">
-        <operator id="edgeRelocatorN" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="false" weight="0.0"/>
+        <operator id="edgeRelocatorN" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@network:species" isWide="false" weight="0.0"/>
         <geneTree idref="tree.t:4cl"/>
         <geneTree idref="tree.t:ebs"/>
         <geneTree idref="tree.t:gi"/>

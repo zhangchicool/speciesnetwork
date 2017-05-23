@@ -11,12 +11,12 @@ import beast.core.Distribution;
 import beast.math.distributions.Beta;
 
 /**
- * Pure birth model for the species network.
+ * Birth hybridization model for the species network.
  * @author Chi Zhang
  */
 
 @Description("Birth hybridization model (i.e. no death)")
-public class YuleHybridModel extends Distribution {
+public class BirthHybridizationModel extends Distribution {
     public final Input<Network> networkInput =
             new Input<>("network", "The species network.", Validate.REQUIRED);
     public final Input<RealParameter> birthRateInput =
@@ -55,13 +55,13 @@ public class YuleHybridModel extends Distribution {
         assert (lambda > 0.0 && nu > 0.0);
         // rho = rhoProbInput.get() == null ? 1.0 : rhoProbInput.get().getValue();
 
-        // make sure that all tips are at the same height, otherwise this Yule Model is not appropriate
+        // make sure that all tips are at the same height, otherwise this Model is not appropriate
         final Network network = networkInput.get();
         final double firstHeight = network.nodes[0].height;
         for (int i = 1; i < network.leafNodeCount; i++) {
             final double height = network.nodes[i].height;
             if (Math.abs(firstHeight - height) > 1e-8) {
-                throw new RuntimeException("Yule Model cannot handle dated tips!");
+                throw new RuntimeException("Birth hybridization model cannot handle dated tips!");
             }
         }
 

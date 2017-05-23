@@ -7,9 +7,9 @@ import org.junit.Test;
 
 import beast.util.TreeParser;
 import speciesnetwork.NetworkParser;
-import speciesnetwork.YuleHybridModel;
+import speciesnetwork.BirthHybridizationModel;
 
-public class YuleHybridModelTest {
+public class BirthHybridizationTest {
     TreeParser treeParser;
     NetworkParser networkParser;
 
@@ -27,7 +27,7 @@ public class YuleHybridModelTest {
     final double expectedLogP = -59.80067558;
     final double allowedError = 1e-6;
 
-    public YuleHybridModelTest() {
+    public BirthHybridizationTest() {
         treeParser = new TreeParser();
         networkParser = new NetworkParser();
 
@@ -43,7 +43,7 @@ public class YuleHybridModelTest {
     public void testLogP() {
         System.out.println(networkParser.toString());
 
-        YuleHybridModel networkPrior = new YuleHybridModel();
+        BirthHybridizationModel networkPrior = new BirthHybridizationModel();
         networkPrior.initByName("network", networkParser, "birthRate", birthRate, "hybridRate", hybridRate);
 
         final double calculatedLogP = networkPrior.calculateLogP();

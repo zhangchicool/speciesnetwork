@@ -10,9 +10,9 @@ import beast.evolution.alignment.TaxonSet;
 import speciesnetwork.ConstantPopIntegrated;
 import speciesnetwork.PopulationSizeModel;
 
-public class ConstantPopIOTest extends PopulationTestHelper {
+public class ConstantPopIntegratedTest extends PopulationTestHelper {
 
-    public ConstantPopIOTest() {
+    public ConstantPopIntegratedTest() {
         /*
         alpha  <- 5.0
         beta   <- 1.0

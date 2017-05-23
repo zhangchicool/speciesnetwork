@@ -78,10 +78,10 @@
 			speciesnetwork.EmbeddedTree.estimate,
 			speciesnetwork.GeneTreeInSpeciesNetwork.speciesNetwork,
 			speciesnetwork.GeneTreeInSpeciesNetwork.geneTree,
-			speciesnetwork.YuleHybridModel.network,
-			speciesnetwork.YuleHybridModel.birthRate,
-			speciesnetwork.YuleHybridModel.hybridRate,
-			speciesnetwork.YuleHybridModel.rho"
+			speciesnetwork.BirthHybridizationModel.network,
+			speciesnetwork.BirthHybridizationModel.birthRate,
+			speciesnetwork.BirthHybridizationModel.hybridRate,
+			speciesnetwork.BirthHybridizationModel.rho"
 		buttonLabelMap="beast.app.beauti.BeautiInitDlg.&gt;&gt; details=Edit parameters">
 
 		<panel spec="BeautiPanelConfig" panelname="Partitions" tiptext="Data Partitions" path="distribution/distribution[id='likelihood']/distribution/data" hasPartitions="none" icon="0.pngx" forceExpansion="FALSE" type="beast.evolution.alignment.Alignment"/>
@@ -288,7 +288,7 @@
 			</distribution>
 			<distribution spec="CompoundDistribution" id="prior">
 				<!-- species network priors -->
-				<distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" network="@Network.t:Species">
+				<distribution id="networkPrior" spec="speciesnetwork.BirthHybridizationModel" network="@Network.t:Species">
 					<betaShape id="betaShape.t:Species" spec="parameter.RealParameter" value="1.0" estimate="false"/>
 					<netDiversification id="netDivRate.t:Species" spec="parameter.RealParameter" value="10.0" lower="0.0" estimate="true"/>
 					<turnOver id="turnOverRate.t:Species" spec="parameter.RealParameter" value="0.5" lower="0.0" upper="1.0" estimate="true"/>
@@ -330,11 +330,11 @@
 		</operator>
 
 		<operator id="edgeRelocateWideAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="80.0">
-			<operator id="edgeRelocatorW.t:Species" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@Network.t:Species" isWide="true" weight="0.0"/>
+			<operator id="edgeRelocatorW.t:Species" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@Network.t:Species" isWide="true" weight="0.0"/>
 		</operator>
 
 		<operator id="edgeRelocateNarrowAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="60.0">
-			<operator id="edgeRelocatorN.t:Species" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@Network.t:Species" isWide="false" weight="0.0"/>
+			<operator id="edgeRelocatorN.t:Species" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@Network.t:Species" isWide="false" weight="0.0"/>
 		</operator>
 
 		<operator id="addReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="80.0">

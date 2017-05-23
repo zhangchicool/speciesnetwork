@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <beast namespace="beast.core:beast.evolution.alignment:beast.app" version="2.4">
     <run id="networkSimulator" outputFileName="test_net.trees" iterations="100"
-         spec="speciesnetwork.simulator.YuleHybridSimulator">
+         spec="speciesnetwork.simulator.BirthHybridSimulator">
         <speciesNetwork id="network:species" spec="speciesnetwork.Network">
             <taxonset id="taxonSuperset" spec="TaxonSet">
                 <taxon id="A" spec="TaxonSet">

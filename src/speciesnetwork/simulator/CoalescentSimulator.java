@@ -33,7 +33,7 @@ public class CoalescentSimulator extends Runnable {
 
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "Species network for embedding the gene trees.", Validate.REQUIRED);
-    public final Input<YuleHybridSimulator> networkSimulatorInput =
+    public final Input<BirthHybridSimulator> networkSimulatorInput =
             new Input<>("networkSimulator", "Species network simulator.", Validate.XOR, speciesNetworkInput);
     public final Input<RealParameter> popSizesInput =
             new Input<>("popSizes", "Constant per-branch population sizes.", Validate.REQUIRED);
@@ -377,7 +377,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("            </distribution>");
         out.println("            <distribution id=\"prior\" spec=\"util.CompoundDistribution\">");  // prior
         // network prior
-        out.println("                <distribution id=\"networkPrior\" spec=\"speciesnetwork.YuleHybridModel\" network=\"@network:species\" netDiversification=\"@netDivRate:species\" turnOver=\"@turnOverRate:species\" betaShape=\"1.0\"/>");
+        out.println("                <distribution id=\"networkPrior\" spec=\"speciesnetwork.BirthHybridizationModel\" network=\"@network:species\" netDiversification=\"@netDivRate:species\" turnOver=\"@turnOverRate:species\" betaShape=\"1.0\"/>");
         out.println("                <prior id=\"networkOrigin\" name=\"distribution\" x=\"@originTime:species\">");
         out.println("                    <Exponential id=\"exponential.0\" name=\"distr\" mean=\"" + df.format(speciesNetwork.getOrigin().getHeight()) + "\"/>");
         out.println("                </prior>");
@@ -475,12 +475,12 @@ public class CoalescentSimulator extends Runnable {
         out.println("        <operator id=\"edgeRelocateWideAndEmbed:species\" spec=\"speciesnetwork.operators.RebuildEmbedding\" speciesNetwork=\"@network:species\" taxonset=\"@taxonsuperset\" weight=\"80.0\">");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
-        out.println("            <operator id=\"edgeRelocatorW:species\" spec=\"speciesnetwork.operators.EdgeRelocator\" speciesNetwork=\"@network:species\" isWide=\"true\" weight=\"0.0\"/>");
+        out.println("            <operator id=\"edgeRelocatorW:species\" spec=\"speciesnetwork.operators.BranchRelocator\" speciesNetwork=\"@network:species\" isWide=\"true\" weight=\"0.0\"/>");
         out.println("        </operator>");
         out.println("        <operator id=\"edgeRelocateNarrowAndEmbed:species\" spec=\"speciesnetwork.operators.RebuildEmbedding\" speciesNetwork=\"@network:species\" taxonset=\"@taxonsuperset\" weight=\"60.0\">");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
-        out.println("            <operator id=\"edgeRelocatorN:species\" spec=\"speciesnetwork.operators.EdgeRelocator\" speciesNetwork=\"@network:species\" isWide=\"false\" weight=\"0.0\"/>");
+        out.println("            <operator id=\"edgeRelocatorN:species\" spec=\"speciesnetwork.operators.BranchRelocator\" speciesNetwork=\"@network:species\" isWide=\"false\" weight=\"0.0\"/>");
         out.println("        </operator>");
         out.println("        <operator id=\"addReticulationAndEmbed:species\" spec=\"speciesnetwork.operators.RebuildEmbedding\" speciesNetwork=\"@network:species\" taxonset=\"@taxonsuperset\" weight=\"80.0\">");
         for (int i = 0; i < nrOfGeneTrees; i++)

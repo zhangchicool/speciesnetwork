@@ -112,7 +112,7 @@
                 <populationModel id="popModel" alpha="10.0" mean="0.02" spec="speciesnetwork.ConstantPopIntegrated"/>
             </distribution>
             <distribution id="prior" spec="util.CompoundDistribution">
-                <distribution id="networkPrior" spec="speciesnetwork.YuleHybridModel" network="@network:species" netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" betaShape="1.0"/>
+                <distribution id="networkPrior" spec="speciesnetwork.BirthHybridizationModel" network="@network:species" netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" betaShape="1.0"/>
                 <prior id="networkOrigin" name="distribution" x="@originTime:species">
                     <Exponential id="exponential.0" name="distr" mean="0.1"/>
                 </prior>
@@ -266,13 +266,13 @@
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
-            <operator id="edgeRelocatorW:species" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
+            <operator id="edgeRelocatorW:species" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
         </operator>
         <operator id="edgeRelocateNarrowAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="60.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
-            <operator id="edgeRelocatorN:species" spec="speciesnetwork.operators.EdgeRelocator" speciesNetwork="@network:species" isWide="false" weight="0.0"/>
+            <operator id="edgeRelocatorN:species" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@network:species" isWide="false" weight="0.0"/>
         </operator>
         <operator id="addReticulationAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="80.0">
             <geneTree idref="tree:gene1"/>
