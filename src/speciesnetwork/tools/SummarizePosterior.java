@@ -105,7 +105,6 @@ public class SummarizePosterior extends Runnable {
 
         progressStream.println("Writing summary networks with heights and gamma probs...");
         for (Integer networkNr: uniqueNetworkNrs) {
-        	final double topologySupport = (double) allNetworkNrs.count(networkNr) / (double) allNetworkNrs.size();
             final ListMultimap<Integer, Double> networkHeights = ArrayListMultimap.create();
             final Table<Integer, Integer, List<Double>> networkGammas = HashBasedTable.create();
 
@@ -117,8 +116,7 @@ public class SummarizePosterior extends Runnable {
 
             for (Network network: binnedNetworks.get(networkNr)) {  // does not loop ??
             	NetworkNode origin = network.getOrigin();
-            	origin.topologySupport = topologySupport;
-
+                origin.topologySupport = (double) allNetworkNrs.count(networkNr) / (double) allNetworkNrs.size();
                 network.resetAllVisited();
                 summarizeParameters(origin, null, null, networkHeights, networkGammas);
 
