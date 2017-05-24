@@ -60,7 +60,7 @@ public class NetworkWithMetaDataLogger extends BEASTObject implements Loggable {
         // PopulationSizeModel populationModel = populationModelInput.get();
         // write out the log tree with meta data
         out.print("tree STATE_" + nSample + " = ");
-        out.print(network.toString());
+        out.print(network.toString(df));
         out.print(";");
     }
 

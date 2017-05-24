@@ -108,7 +108,7 @@ public class EmbeddedTree extends Tree {
 	public void printEmbedding() {
 		System.out.println(String.format("EMBEDDING: %s", getID()));
 		for (int r = 0; r < embedding.length; r++) {
-			final StringBuffer rowStr = new StringBuffer();
+			final StringBuilder rowStr = new StringBuilder();
 			final int rowLen = embedding[r].length;
 			for (int c = 0; c < rowLen - 1; c++) {
 				rowStr.append(embedding[r][c]);
@@ -124,7 +124,7 @@ public class EmbeddedTree extends Tree {
     	//printEmbedding();
     	for (int i = 0; i < nodeCount; i++) {
     		final int lastTraversalNode = embedding[i].length - 1;
-    		final StringBuffer embeddingBuf = new StringBuffer();
+    		final StringBuilder embeddingBuf = new StringBuilder();
     		embeddingBuf.append("embedding=\"");
     		for (int j = 0; j < lastTraversalNode; j++) {
     			embeddingBuf.append(embedding[i][j]);

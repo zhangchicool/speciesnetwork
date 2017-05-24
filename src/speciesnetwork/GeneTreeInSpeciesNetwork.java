@@ -133,11 +133,11 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
             speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] += lastHeight - speciesNodeHeight;
             coalescentLineageCounts.add(speciesBranchNumber);
             if (speciesNetworkNode.isReticulation()) {
-                final double gammaP = speciesNetworkNode.inheritProb;
+                final double gamma = speciesNetworkNode.inheritProb;
                 if (speciesNetworkNode.gammaBranchNumber.equals(speciesBranchNumber)) {
-                    logGammaSum += Math.log(gammaP);
+                    logGammaSum += Math.log(gamma);
                 } else {
-                    logGammaSum += Math.log(1.0 - gammaP);
+                    logGammaSum += Math.log(1.0 - gamma);
                 }
             }
             // traversal direction forward in time

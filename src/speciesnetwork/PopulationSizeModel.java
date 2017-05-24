@@ -26,5 +26,5 @@ public abstract class PopulationSizeModel extends CalculationNode {
 
     // Per-branch population size information which will be added to a Newick string.
     // If no information is available, do not override the superclass method
-    abstract public void serialize(NetworkNode speciesNetworkNode, StringBuffer buf, DecimalFormat df);
+    abstract public void serialize(NetworkNode speciesNetworkNode, StringBuilder buf, DecimalFormat df);
 }

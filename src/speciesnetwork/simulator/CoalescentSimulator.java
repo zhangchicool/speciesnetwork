@@ -317,7 +317,7 @@ public class CoalescentSimulator extends Runnable {
                     "    <map name=\"prior\">beast.math.distributions.Prior</map>\n");
         // print initial species network
         out.println("    <init spec=\"beast.util.TreeParser\" id=\"newick:species\" IsLabelledNewick=\"true\" adjustTipHeights=\"false\"\n" +
-                    "          newick=\"" + speciesNetwork.getOrigin().toString(true) + "\"/>");
+                    "          newick=\"" + speciesNetwork.getOrigin().toString(df, true) + "\"/>");
         out.println("    <run id=\"mcmc\" spec=\"MCMC\" chainLength=\"40000000\" storeEvery=\"1000\">");  // MCMC block
         out.println("        <state id=\"state\">");  // states
         // print state nodes

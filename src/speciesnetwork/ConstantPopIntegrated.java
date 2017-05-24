@@ -101,7 +101,7 @@ public class ConstantPopIntegrated extends PopulationSizeModel {
     }
 
     @Override
-    public void serialize(NetworkNode speciesNetworkNode, StringBuffer buf, DecimalFormat df) {
+    public void serialize(NetworkNode speciesNetworkNode, StringBuilder buf, DecimalFormat df) {
         // do nothing
     }
 }

@@ -118,8 +118,11 @@ public class SummarizePosterior extends Runnable {
             for (Network network: binnedNetworks.get(networkNr)) {  // does not loop ??
             	NetworkNode origin = network.getOrigin();
             	origin.topologySupport = topologySupport;
-            	averageParameters(origin, null, null, networkHeights, networkGammas);
-            	out.println(String.format("%s;", network.toString()));
+
+                network.resetAllVisited();
+                summarizeParameters(origin, null, null, networkHeights, networkGammas);
+
+                out.println(String.format("%s;", network.toString()));
             	break;
             }
         }
@@ -205,32 +208,55 @@ public class SummarizePosterior extends Runnable {
     }
 
     /*
-     * Sets the node heights and gammas to the mean average across all samples sharing the same network topology
+     * Summarize the node heights and gammas across all samples sharing the same network topology
      */
-    private void averageParameters(NetworkNode node, Integer parentSubnetworkNr, Integer parentBranchNr,
+    private void summarizeParameters(NetworkNode node, Integer parentSubnetworkNr, Integer parentBranchNr,
                                    ListMultimap<Integer, Double> heights, Table<Integer, Integer, List<Double>> gammas) {
     	final Integer subnetworkNr = node.subnetworkNr;
-    	final List<Double> sampledHeights = heights.get(subnetworkNr);
-    	final Double meanHeight = calculateMean(sampledHeights);
-		node.setHeight(meanHeight);
 
-		if (node.isSpeciation() || node.isOrigin()) {  // speciation or origin node
-    		for (Integer branchNr: node.childBranchNumbers) { // only runs twice
-    			final NetworkNode child = node.getChildByBranch(branchNr);
-    			averageParameters(child, subnetworkNr, branchNr, heights, gammas);
-    		}
-    	} else if (node.isReticulation()) {  // reticulation node
-    		for (Integer branchNr: node.childBranchNumbers) { // only runs once
-    			final NetworkNode child = node.getChildByBranch(branchNr);
-    			averageParameters(child, subnetworkNr, branchNr, heights, gammas);
+        if (node.isReticulation() && node.gammaBranchNumber.equals(parentBranchNr)) {
+            final List<Double> sampledGammas = gammas.get(subnetworkNr, parentSubnetworkNr);
+            final double meanGamma = calculateMean(sampledGammas);
+            final double medianGamma = calculateMedian(sampledGammas);
+            final double[] hpdGamma = calculateHPDInterval(0.95, sampledGammas);
+            final double[] rangeGamma = calculateRange(sampledGammas);
+            node.setMetaData("gamma_mean", meanGamma);
+            node.setMetaData("gamma_median", medianGamma);
+            node.setMetaData("gamma_95%HPD", new Object[]{hpdGamma[0], hpdGamma[1]});
+            node.setMetaData("gamma_range", new Object[]{rangeGamma[0], rangeGamma[1]});
 
-    			if (node.gammaBranchNumber.equals(parentBranchNr)) {
-    		    	final List<Double> sampledGammas = gammas.get(subnetworkNr, parentSubnetworkNr);
-    		    	final Double meanGamma = calculateMean(sampledGammas);
-    				node.setGammaProb(meanGamma);
-    			}
-    		}
-    	}
+            if (useMedian) {
+                node.setGammaProb(medianGamma);
+            } else {
+                node.setGammaProb(meanGamma);
+            }
+        }
+
+        if (node.isVisited())
+            return;
+        // mark visited to avoid duplicated recursion
+        node.setVisited(true);
+
+        final List<Double> sampledHeights = heights.get(subnetworkNr);
+        final double meanHeight = calculateMean(sampledHeights);
+        final double medianHeight = calculateMedian(sampledHeights);
+        final double[] hpdHeight = calculateHPDInterval(0.95, sampledHeights);
+        final double[] rangeHeight = calculateRange(sampledHeights);
+        node.setMetaData("height_mean", meanHeight);
+        node.setMetaData("height_median", medianHeight);
+        node.setMetaData("height_95%HPD", new Object[]{hpdHeight[0],hpdHeight[1]});
+        node.setMetaData("height_range", new Object[]{rangeHeight[0], rangeHeight[1]});
+
+        if (useMedian) {
+            node.setHeight(medianHeight);
+        } else {
+            node.setHeight(meanHeight);
+        }
+
+        for (Integer branchNr: node.childBranchNumbers) {
+            final NetworkNode child = node.getChildByBranch(branchNr);
+            summarizeParameters(child, subnetworkNr, branchNr, heights, gammas);
+        }
     }
 
     private double calculateMean(List<Double> sample) {
@@ -278,5 +304,15 @@ public class SummarizePosterior extends Runnable {
         double upper = sample.get(indices[hpdIndex + diff - 1]);
 
         return new double[]{lower, upper};
+    }
+
+    private double[] calculateRange(List<Double> sample) {
+        double min = sample.get(0);
+        double max = min;
+        for (Double v : sample) {
+            if (v > max) max = v;
+            if (v < min) min = v;
+        }
+        return new double[]{min, max};
     }
 }

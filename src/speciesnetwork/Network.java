@@ -1,6 +1,7 @@
 package speciesnetwork;
 
 import java.io.PrintStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -327,8 +328,11 @@ public class Network extends StateNode {
 
     @Override
     public String toString() {
-    	final String newick = getOrigin().toString();
-        return newick;
+    	return getOrigin().toString();
+    }
+
+    public String toString(DecimalFormat df) {
+        return getOrigin().toString(df, false);
     }
 
     /**
@@ -421,7 +425,7 @@ public class Network extends StateNode {
 
     @Override
     protected void store() {
-        // System.out.println(String.format("Storing network state... %d = %d + %d + %d", nodeCount, leafNodeCount, speciationNodeCount, reticulationNodeCount));
+        // System.out.println("Storing network state...");
         storedNodeCount = nodeCount;
         storedSpeciationNodeCount = speciationNodeCount;
         storedLeafNodeCount = leafNodeCount;

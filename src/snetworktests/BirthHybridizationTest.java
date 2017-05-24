@@ -1,10 +1,9 @@
 package snetworktests;
 
+import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import beast.core.parameter.RealParameter;
-import org.junit.Test;
-
 import beast.util.TreeParser;
 import speciesnetwork.NetworkParser;
 import speciesnetwork.BirthHybridizationModel;
@@ -41,8 +40,7 @@ public class BirthHybridizationTest {
 
     @Test
     public void testLogP() {
-        System.out.println(networkParser.toString());
-
+        // System.out.println(networkParser.toString());
         BirthHybridizationModel networkPrior = new BirthHybridizationModel();
         networkPrior.initByName("network", networkParser, "birthRate", birthRate, "hybridRate", hybridRate);
 

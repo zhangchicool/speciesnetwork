@@ -44,10 +44,12 @@ public class NetworkNode {
 
     /**
      * status of this node after an operation is performed on the state
+     *
+     * A Node IS_DIRTY if its value (like height) has changed.
+     * A Node IS_FILTHY if its parent or child has changed.
+     * Otherwise the node IS_CLEAN.
      */
     protected int isDirty;
-
-    private DecimalFormat df;
 
     /**
      * used when summarizing posterior distribution
@@ -107,7 +109,6 @@ public class NetworkNode {
         parents = HashMultiset.create();
         nodeNumber = -1;
         isDirty = Network.IS_DIRTY;
-        df = new DecimalFormat("0.########");
     }
 
     /* instantiate a new network node with the same height, labels and metadata as a tree node
@@ -166,16 +167,18 @@ public class NetworkNode {
     }
 
     /**
-     * A Node IS_DIRTY if its value (like height) has changed.
-     * A Node IS_FILTHY if its parent or child has changed.
-     * Otherwise the node IS_CLEAN.
+     * set meta-data according to pattern.
      */
-    public int isDirty() {
-        return isDirty;
+    public void setMetaData(final String pattern, final Object value) {
+        metaData.put(pattern, value);
     }
 
-    public void makeDirty(final int nDirty) {
-        isDirty |= nDirty;
+    public Object getMetaData(final String pattern) {
+        return metaData.get(pattern);
+    }
+
+    public Set<String> getMetaDataNames() {
+        return metaData.keySet();
     }
 
     public int getParentCount() {
@@ -228,7 +231,7 @@ public class NetworkNode {
         return null;
     }
 
-    public NetworkNode getChildByBranch(int childBranchNr) {
+    public NetworkNode getChildByBranch(Integer childBranchNr) {
         if (childBranchNumbers.contains(childBranchNr)) {
             final int childNodeNumber = network.getNodeNumber(childBranchNr);
             return network.nodes[childNodeNumber];
@@ -293,7 +296,7 @@ public class NetworkNode {
         }
     }
 
-    public String toString(boolean inXML) {
+    public String toString(DecimalFormat df, boolean inXML) {
         resetAllTouched();
         NetworkNode parent = getParentByBranch(gammaBranchNumber);
         final double parentHeight;
@@ -302,59 +305,91 @@ public class NetworkNode {
         } else {
             parentHeight = parent.getHeight();
         }
-        return buildNewick(parentHeight, gammaBranchNumber, inXML);
+        return buildNewick(parentHeight, gammaBranchNumber, df, inXML);
     }
 
     public String toString() {
-        return toString(false);
+        return toString(null, false);
     }
 
-    private String buildNewick(double parentHeight, Integer branchNumber, boolean inXML) {
-        final StringBuilder subtreeString = new StringBuilder();
+    private String buildNewick(double parentHeight, Integer branchNumber, DecimalFormat df, boolean inXML) {
+        final StringBuilder subStr = new StringBuilder();
         // only add children to a reticulation node once
         if (children.size() > 0 && !touched) {
             touched = true;
-            subtreeString.append("(");
+            subStr.append("(");
             int i = 0;
-            for (Integer childBranchNumber: childBranchNumbers) {
-                if (i > 0) subtreeString.append(",");
-                final int childNodeNumber = network.getNodeNumber(childBranchNumber);
-                NetworkNode childNode = network.nodes[childNodeNumber];
-                subtreeString.append(childNode.buildNewick(height, childBranchNumber, inXML));
+            for (Integer childBranchNr: childBranchNumbers) {
+                if (i > 0) subStr.append(",");
+                NetworkNode childNode = getChildByBranch(childBranchNr);
+                subStr.append(childNode.buildNewick(height, childBranchNr, df, inXML));
                 i++;
             }
-            subtreeString.append(")");
+            subStr.append(")");
         }
 
         if (label != null)
-            subtreeString.append(label);
+            subStr.append(label);
         // else
         //  subtreeString.append(nodeNumber);
 
-        // add inheritance probabilities to reticulation nodes
-        if (parents.size() == 2 && gammaBranchNumber.equals(branchNumber)) {
-            if (inXML)
-                subtreeString.append("[&amp;gamma=");
-            else
-                subtreeString.append("[&gamma=");
-            subtreeString.append(df.format(inheritProb));
-            subtreeString.append("]");
-        } else if (parents.size() == 0 && topologySupport != null) {
-            if (inXML)
-                subtreeString.append("[&amp;topologySupport=");
-            else
-                subtreeString.append("[&topologySupport=");
-            subtreeString.append(df.format(topologySupport));
-            subtreeString.append("]");
+        if (isOrigin() && topologySupport != null)
+            setMetaData("topologySupport", topologySupport);
+
+        if (isReticulation() && gammaBranchNumber.equals(branchNumber)) {
+            setMetaData("gamma", inheritProb);
+            processMetaData(true);  // write gamma prob associated with the branch
+        } else {
+            processMetaData(false); // do not write gamma prob
         }
+        subStr.append(getNewickMetaData(inXML));
 
         if (parentHeight < Double.POSITIVE_INFINITY) {
             final double branchLength = parentHeight - height;
-            subtreeString.append(":");
-            subtreeString.append(df.format(branchLength));
+            subStr.append(":");
+            if (df == null) subStr.append(branchLength);
+            else subStr.append(df.format(branchLength));
         }
 
-        return subtreeString.toString();
+        return subStr.toString();
+    }
+
+    /* put meta data in metaDataString */
+    private void processMetaData(boolean withGamma) {
+        StringBuilder metaStr = new StringBuilder();
+        for (String name : getMetaDataNames()) {
+            if (!name.contains("gamma") || withGamma) {
+                Object value = getMetaData(name);
+                metaStr.append(name).append("=");
+                if (value instanceof Object[]) {
+                    Object[] values = (Object[]) value;
+                    metaStr.append("{");
+                    for (int i = 0; i < values.length; i++) {
+                        if (i > 0) metaStr.append(",");
+                        metaStr.append(values[i].toString());
+                    }
+                    metaStr.append("}");
+                } else {
+                    metaStr.append(value.toString());
+                }
+                metaStr.append(",");
+            }
+        }
+        if (metaStr.length() > 0)
+            metaDataString = metaStr.toString().substring(0, metaStr.length() - 1);
+        else
+            metaDataString = "";
+    }
+
+    private String getNewickMetaData(boolean inXML) {
+        if (metaDataString != null && metaDataString.length() > 0) {
+            if (inXML)
+                return "[&amp;" + metaDataString + ']';
+            else
+                return "[&" + metaDataString + ']';
+        } else {
+            return "";
+        }
     }
 
     public double getGammaProb() {

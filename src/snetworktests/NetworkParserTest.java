@@ -1,7 +1,8 @@
 package snetworktests;
 
-import static org.junit.Assert.assertEquals;
+import java.text.DecimalFormat;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import beast.util.TreeParser;
 import speciesnetwork.NetworkParser;
@@ -29,6 +30,7 @@ public class NetworkParserTest {
 
     @Test
     public void testParser() {
-        assertEquals(testNetwork, networkParser.toString());
+        DecimalFormat df = new DecimalFormat("0.####");;
+        assertEquals(testNetwork, networkParser.toString(df));
     }
 }
