@@ -1,6 +1,8 @@
 package speciesnetwork.tools;
 
 import java.io.*;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -26,6 +28,7 @@ import speciesnetwork.NetworkParser;
 
 /**
  * @author Huw Ogilvie
+ * @author Chi Zhang
  */
 
 @Description("Summarize the posterior distribution of species networks.")
@@ -38,12 +41,15 @@ public class SummarizePosterior extends Runnable {
             "Absolute burn-in if >=1, or relative burn-in if <1.", 0.);
     public final Input<Boolean> medianInput = new Input<>("useMedian",
             "Use median instead of mean for node heights and gamma probs in summary networks.", false);
+    public final Input<Integer> decimalPlacesInput = new Input<>("dp",
+            "The number of decimal places to use (default -1 for full precision)", -1);
 
     private Map<Integer, Integer> rSubnetworks;
     private Table<Integer, Integer, Integer> sSubnetworks;
     private int nextSubnetworkNumber;
 
     private boolean useMedian;
+    private DecimalFormat df;
     private static PrintStream progressStream = Log.info;
 
     @Override
@@ -51,6 +57,15 @@ public class SummarizePosterior extends Runnable {
     	rSubnetworks = new HashMap<>(); // subnetworks defined by a reticulation node
     	sSubnetworks = HashBasedTable.create(); // subnetworks defined by a speciation node
         useMedian = medianInput.get();
+
+        int dp = decimalPlacesInput.get();
+        if (dp < 0) {
+            df = null;
+        } else {
+            // just new DecimalFormat("#.######") (with dp time '#' after the decimal)
+            df = new DecimalFormat("#." + new String(new char[dp]).replace('\0', '#'));
+            df.setRoundingMode(RoundingMode.HALF_UP);
+        }
     }
 
     @Override
@@ -114,13 +129,13 @@ public class SummarizePosterior extends Runnable {
             	collateParameters(origin, null, null, networkHeights, networkGammas);
             }
 
-            for (Network network: binnedNetworks.get(networkNr)) {  // does not loop ??
+            for (Network network: binnedNetworks.get(networkNr)) {
             	NetworkNode origin = network.getOrigin();
                 origin.topologySupport = (double) allNetworkNrs.count(networkNr) / (double) allNetworkNrs.size();
                 network.resetAllVisited();
                 summarizeParameters(origin, null, null, networkHeights, networkGammas);
 
-                out.println(String.format("%s;", network.toString()));
+                out.println(network.toString(df));
             	break;
             }
         }

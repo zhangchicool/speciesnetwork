@@ -122,7 +122,7 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
         } else {
             newNode = nodes[matchingNodeNr];
             if (treeNode.getMetaDataNames().contains("gamma"))
-                newNode.inheritProb = 1.0 - (Double) treeNode.getMetaData("gamma");
+                newNode.inheritProb = 1.0 - (double)treeNode.getMetaData("gamma");
 
             branchNumber = getBranchNumber(matchingNodeNr) + 1;
         }

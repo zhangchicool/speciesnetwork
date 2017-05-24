@@ -354,7 +354,7 @@ public class NetworkNode {
         return subStr.toString();
     }
 
-    /* put meta data in metaDataString */
+    /* put meta data in metaDataString TODO: decimal format for meta data */
     private void processMetaData(boolean withGamma) {
         StringBuilder metaStr = new StringBuilder();
         for (String name : getMetaDataNames()) {

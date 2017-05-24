@@ -18,8 +18,6 @@ import beast.core.StateNode;
 public class NetworkWithMetaDataLogger extends BEASTObject implements Loggable {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network to be logged.", Validate.REQUIRED);
-    public final Input<PopulationSizeModel> populationModelInput =
-            new Input<>("populationmodel", "Population sizes to be logged for branches.");
     public final Input<List<Function>> parameterInput =
             new Input<>("metadata", "meta data to be logged with the nodes.",new ArrayList<>());
     public final Input<Integer> decimalPlacesInput = new Input<>("dp",
@@ -30,7 +28,6 @@ public class NetworkWithMetaDataLogger extends BEASTObject implements Loggable {
     @Override
     public void initAndValidate() {
         int dp = decimalPlacesInput.get();
-
         if (dp < 0) {
             df = null;
         } else {
