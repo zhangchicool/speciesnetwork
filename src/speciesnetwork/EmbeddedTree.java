@@ -78,6 +78,14 @@ public class EmbeddedTree extends Tree {
         copyEmbedding(etree.embedding, embedding);
     }
 
+	public void assignFromTree(final StateNode other) {
+		super.assignFrom(other);
+	}
+
+    public void assignToTree(final StateNode other) {
+        super.assignTo(other);
+    }
+
     @Override
     public void store() {
     	super.store();

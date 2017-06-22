@@ -86,7 +86,7 @@
         <init spec="beast.util.TreeParser" id="newick:gene3" initial="@tree:gene3" taxa="@gene3" IsLabelledNewick="true"
               newick="(((c2:0.03335151661826598,(b4:0.027190452259781853,b3:0.027190452259781853):0.006161064358484125):0.03623148308931505,(((b2:0.005073631027769405,b1:0.005073631027769405):0.022171351530035716,a2:0.027244982557805122):0.010875973599979598,a1:0.03812095615778472):0.03146204354979631):0.0032023815417494828,c1:0.07278538124933051):0.0"/>
         -->
-        <init id="SNI" spec="speciesnetwork.SpeciesNetworkInitializer" estimate="false" method="random" speciesNetwork="@network:species" origin="@originTime:species">
+        <init id="SNI" spec="speciesnetwork.SpeciesNetworkInitializer" estimate="false" method="point" speciesNetwork="@network:species" origin="@originTime:species">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
@@ -95,12 +95,14 @@
                 <geneTree idref="tree:gene2"/>
                 <geneTree idref="tree:gene3"/>
             </rebuildEmbedding>
+            <!--
             <coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species" taxonset="@taxonsuperset">
                 <parameter id="popSizes" estimate="false" name="popSizes">0.02</parameter>
                 <geneTree idref="tree:gene1"/>
                 <geneTree idref="tree:gene2"/>
                 <geneTree idref="tree:gene3"/>
             </coalescentSimulator>
+            -->
         </init>
 
         <distribution id="posterior" spec="util.CompoundDistribution">

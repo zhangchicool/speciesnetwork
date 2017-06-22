@@ -52,7 +52,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
             = new Input<>("speciesNetwork", "Species network to initialize.", Validate.REQUIRED);
     public final Input<RealParameter> originInput =
             new Input<>("origin", "The time when the process started.", Validate.REQUIRED);
-    public final Input<List<Tree>> geneTreesInput =
+    public final Input<List<EmbeddedTree>> geneTreesInput =
             new Input<>("geneTree", "Gene tree to initialize.", new ArrayList<>());
     public final Input<RebuildEmbedding> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
             "Operator which rebuilds embedding of gene trees within species network.", Validate.REQUIRED);
@@ -109,8 +109,8 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
         if (coalSimulatorInput.get() == null) {
             final double rootHeight = sNetwork.getRoot().getHeight();
             // initialize caterpillar gene trees
-            final List<Tree> geneTrees = geneTreesInput.get();
-            for (final Tree gtree : geneTrees) {
+            final List<EmbeddedTree> geneTrees = geneTreesInput.get();
+            for (final EmbeddedTree gtree : geneTrees) {
                 gtree.makeCaterpillar(rootHeight, rootHeight / gtree.getInternalNodeCount(), true);
             }
         }
@@ -131,12 +131,14 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
         final List<String> speciesNames = species.asStringList();
         final int speciesCount = speciesNames.size();
 
-        final List<Tree> geneTrees = geneTreesInput.get();
+        final List<EmbeddedTree> geneTrees = geneTreesInput.get();
         double maxNsites = 0;
-        for (final Tree gtree : geneTrees) {
+        for (final EmbeddedTree gtree : geneTrees) {
             final Alignment alignment = gtree.m_taxonset.get().alignmentInput.get();
             final ClusterTree ctree = new ClusterTree();
-            ctree.initByName("initial", gtree, "clusterType", "upgma", "taxa", alignment);
+            final Tree tempTree = new Tree();
+            ctree.initByName("initial", tempTree, "clusterType", "upgma", "taxa", alignment);
+            gtree.assignFromTree(tempTree);
             gtree.scale(1 / clockRate);
             maxNsites = max(maxNsites, alignment.getSiteCount());
         }
@@ -154,8 +156,8 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
         final double[] dg = new double[speciesCount*(speciesCount-1)/2];
         final double[][] genesDmins = new double[geneTrees.size()][];
         for(int ng = 0; ng < geneTrees.size(); ++ng) {
-            final Tree g = geneTrees.get(ng);
-            final double[] dmin = firstMeetings(g, geneTips2Species, speciesCount);
+            final EmbeddedTree gtree = geneTrees.get(ng);
+            final double[] dmin = firstMeetings(gtree, geneTips2Species, speciesCount);
             genesDmins[ng] = dmin;
 
             for(int i = 0; i < dmin.length; ++i) {
@@ -178,7 +180,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
                             id = sNetwork.nodes[0].label;
                         }
                     }
-                    throw new RuntimeException("Gene tree " + g.getID() + " has no lineages for species taxon " + id + " ");
+                    throw new RuntimeException("Gene tree " + gtree.getID() + " has no lineages for species taxon " + id + " ");
                 }
             }
         }
@@ -202,7 +204,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
                 return dg[i];
             }
         };
-        Tree speciesTree = new Tree();
+        final Tree speciesTree = new Tree();
         stree.initByName("initial", speciesTree, "taxonset", species,"clusterType", "upgma", "distance", distance);
 
         final Map<String, Integer> sptips2SpeciesIndex = new LinkedHashMap<>();
@@ -221,7 +223,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
                 }
             }
             if( ! compatible ) {
-                final Tree gtree = geneTrees.get(ng);
+                final EmbeddedTree gtree = geneTrees.get(ng);
                 final TaxonSet gtreeTaxa = gtree.m_taxonset.get();
                 final Alignment alignment = gtreeTaxa.alignmentInput.get();
                 final List<String> taxaNames = alignment.getTaxaNames();
@@ -251,7 +253,9 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
                     }
                 };
                 final ClusterTree ctree = new ClusterTree();
-                ctree.initByName("initial", gtree, "taxonset", gtreeTaxa, "clusterType", "upgma", "distance", gdistance);
+                final Tree tempTree = new Tree();
+                ctree.initByName("initial", tempTree, "taxonset", gtreeTaxa, "clusterType", "upgma", "distance", gdistance);
+                gtree.assignFromTree(tempTree);
             }
         }
 

@@ -96,8 +96,7 @@ public class RebuildEmbedding extends Operator {
         // Tell BEAST that *all* gene trees will be edited
         // doing this for all trees avoids Trie combinatorial explosions
         if (rebuild) {
-	        for (int i = 0; i < nLoci; i++) {
-                EmbeddedTree geneTree = geneTrees.get(i);
+	        for (EmbeddedTree geneTree : geneTrees) {
 	            geneTree.startEditing(this);
 	        }
         }
