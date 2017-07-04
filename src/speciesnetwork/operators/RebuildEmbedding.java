@@ -54,9 +54,9 @@ public class RebuildEmbedding extends Operator {
     	}
 
         // count the number of alternative traversing choices for the current state
-        final int oldChoices = initializeEmbedding(false);
-        if (oldChoices < 0)
-            throw new RuntimeException("Developer ERROR: current embedding is invalid!");
+        // final int oldChoices = initializeEmbedding(false);
+        // if (oldChoices < 0)
+        //     throw new RuntimeException("Developer ERROR: current embedding is invalid!");
 
         // make the operation if possible
         double logHR = 0.0;
@@ -75,7 +75,7 @@ public class RebuildEmbedding extends Operator {
         if (newChoices < 0)
             return Double.NEGATIVE_INFINITY;
 
-        return logHR + (newChoices - oldChoices) * Math.log(2);
+        return logHR;  // + (newChoices - oldChoices) * Math.log(2);
     }
 
     @Override

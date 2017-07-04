@@ -237,8 +237,8 @@
 			<connect srcID="Tree.t:$(n)" targetID="networkMultiplier.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 			<connect srcID="Tree.t:$(n)" targetID="nodeUniformAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 			<connect srcID="Tree.t:$(n)" targetID="nodeSliderAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Tree.t:$(n)" targetID="edgeRelocateWideAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Tree.t:$(n)" targetID="edgeRelocateNarrowAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="branchRelocateWideAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="branchRelocateNarrowAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 			<connect srcID="Tree.t:$(n)" targetID="addReticulationAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 			<connect srcID="Tree.t:$(n)" targetID="deleteReticulationAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 
@@ -321,7 +321,7 @@
 		<operator id="networkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@Network.t:Species" weight="10.0"/>
 
         <operator id="originMultiplier.t:Species" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="5.0"/>
-		<operator id="nodeUniformAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="60.0">
+		<operator id="nodeUniformAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="100.0">
 			<operator id="nodeUniform.t:Species" spec="speciesnetwork.operators.NodeUniform" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
@@ -329,19 +329,19 @@
 			<operator id="nodeSlider.t:Species" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" isNormal="true" sigma="0.0002" weight="0.0"/>
 		</operator>
 
-		<operator id="edgeRelocateWideAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="80.0">
-			<operator id="edgeRelocatorW.t:Species" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@Network.t:Species" isWide="true" weight="0.0"/>
+		<operator id="branchRelocateWideAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="150.0">
+			<operator id="branchRelocatorW.t:Species" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@Network.t:Species" isWide="true" weight="0.0"/>
 		</operator>
 
-		<operator id="edgeRelocateNarrowAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="60.0">
-			<operator id="edgeRelocatorN.t:Species" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@Network.t:Species" isWide="false" weight="0.0"/>
+		<operator id="branchRelocateNarrowAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="30.0">
+			<operator id="branchRelocatorN.t:Species" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@Network.t:Species" isWide="false" weight="0.0"/>
 		</operator>
 
-		<operator id="addReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="80.0">
+		<operator id="addReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="100.0">
 			<operator id="addReticulation.t:Species" spec="speciesnetwork.operators.AddReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
-		<operator id="deleteReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="80.0">
+		<operator id="deleteReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="100.0">
 			<operator id="deleteReticulation.t:Species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
