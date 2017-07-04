@@ -269,7 +269,7 @@
 	<stateNode spec="speciesnetwork.Network" id="Network.t:Species" taxonset="@taxonsuperset" estimate="true"/>
 
 	<!-- framework for main model -->
-	<run spec="MCMC" id="mcmc" storeEvery="5000" chainLength="10000000">
+	<run spec="MCMC" id="mcmc" storeEvery="5000" chainLength="50000000">
 
 		<state storeEvery="5000" id="state">
 			<stateNode idref="Network.t:Species"/>
@@ -371,7 +371,7 @@
 			<log id="speciesNetworkLoggerX" spec="speciesnetwork.NetworkWithMetaDataLogger" speciesNetwork="@Network.t:Species"/>
 		</logger>
 
-		<init id="SNI" estimate="false" method="random" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@Network.t:Species">
+		<init id="SNI" estimate="false" method="point" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@Network.t:Species">
 			<origin id="originTime.t:Species" spec="parameter.RealParameter" value="1.0" lower="0.0" estimate="true"/>
 			<coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" popSizes="0.01"/>
 			<rebuildEmbedding id="initEmbed" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="0.0"/>
