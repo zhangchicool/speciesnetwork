@@ -137,6 +137,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
             final Alignment alignment = gtree.m_taxonset.get().alignmentInput.get();
             final ClusterTree ctree = new ClusterTree();
             final Tree tempTree = new Tree();
+            tempTree.setID(gtree.getID());
             ctree.initByName("initial", tempTree, "clusterType", "upgma", "taxa", alignment);
             gtree.assignFromTree(tempTree);
             gtree.scale(1 / clockRate);
@@ -254,6 +255,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
                 };
                 final ClusterTree ctree = new ClusterTree();
                 final Tree tempTree = new Tree();
+                tempTree.setID(gtree.getID());
                 ctree.initByName("initial", tempTree, "taxonset", gtreeTaxa, "clusterType", "upgma", "distance", gdistance);
                 gtree.assignFromTree(tempTree);
             }

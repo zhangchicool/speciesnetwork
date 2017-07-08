@@ -10,17 +10,16 @@ import beast.core.Input.Validate;
 import beast.core.util.Log;
 import beast.core.Loggable;
 
-
-@Description("Logger to report statistics of a network")
+@Description("Logs statistics of a species network")
 public class NetworkStatLogger extends CalculationNode implements Loggable, Function {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network to be logged.", Validate.REQUIRED);
-    public final Input<Boolean> logHeigthInput = new Input<>("logHeigth", "If true, root height will be logged.", true);
+    public final Input<Boolean> logHeightInput = new Input<>("logHeight", "If true, root height will be logged.", true);
     public final Input<Boolean> logLengthInput = new Input<>("logLength", "If true, network length will be logged.", true);
 
     @Override
     public void initAndValidate() {
-    	if (!logHeigthInput.get() && !logLengthInput.get()) {
+    	if (!logHeightInput.get() && !logLengthInput.get()) {
     		Log.warning.println("NetworkStatLogger " + getID() + " logs nothing. Set logHeigth=true or logLength=true");
     	}
     }
@@ -28,7 +27,7 @@ public class NetworkStatLogger extends CalculationNode implements Loggable, Func
     @Override
     public void init(PrintStream out) {
         final Network speciesNetwork = speciesNetworkInput.get();
-        if (logHeigthInput.get()) {
+        if (logHeightInput.get()) {
             out.print(speciesNetwork.getID() + ".height\t");
         }
         if (logLengthInput.get()) {
@@ -39,7 +38,7 @@ public class NetworkStatLogger extends CalculationNode implements Loggable, Func
     @Override
     public void log(int sample, PrintStream out) {
         final Network speciesNetwork = speciesNetworkInput.get();
-        if (logHeigthInput.get()) {
+        if (logHeightInput.get()) {
             // network root height
         	out.print(speciesNetwork.getRoot().getHeight() + "\t");
         }
@@ -57,7 +56,7 @@ public class NetworkStatLogger extends CalculationNode implements Loggable, Func
 
     @Override
     public int getDimension() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -67,6 +66,9 @@ public class NetworkStatLogger extends CalculationNode implements Loggable, Func
 
     @Override
     public double getArrayValue(int dim) {
-        return speciesNetworkInput.get().getRoot().getHeight();
+        if (dim == 0)
+            return speciesNetworkInput.get().getRoot().getHeight();
+        else
+            return speciesNetworkInput.get().getNetworkLength();
     }
 }

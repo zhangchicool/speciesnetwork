@@ -103,12 +103,12 @@ public class SummarizePosterior extends Runnable {
 
         // bin networks by topology
         for (int i = 0; i < numNetworks; i++) {
-        	if (i >= absoluteBurnin) {
-        		final Tree tree = parsedTrees.get(i);
-        		final Network network = new NetworkParser(tree);
-        		final int networkNr = findSubnetworks(network.getOrigin());
-    			binnedNetworks.put(networkNr, network);
-        	}
+            if (i >= absoluteBurnin) {
+                final Tree tree = parsedTrees.get(i);
+                final Network network = new NetworkParser(tree);
+                final int networkNr = findSubnetworks(network.getOrigin());
+                binnedNetworks.put(networkNr, network);
+            }
         }
         progressStream.println("Parsed " + numNetworks + " networks totally, " + absoluteBurnin + " discarded as burn-in.");
 
@@ -116,7 +116,7 @@ public class SummarizePosterior extends Runnable {
         final Multiset<Integer> allNetworkNrs = binnedNetworks.keys();
         final ImmutableMultiset<Integer> orderedNetworkNrs = Multisets.copyHighestCountFirst(allNetworkNrs);
         final Set<Integer> uniqueNetworkNrs = new LinkedHashSet<>();
-		uniqueNetworkNrs.addAll(orderedNetworkNrs);
+        uniqueNetworkNrs.addAll(orderedNetworkNrs);
 
         progressStream.println("Writing summary networks with heights and gamma probs...");
         for (Integer networkNr: uniqueNetworkNrs) {
@@ -124,19 +124,19 @@ public class SummarizePosterior extends Runnable {
             final Table<Integer, Integer, List<Double>> networkGammas = HashBasedTable.create();
 
             for (Network network: binnedNetworks.get(networkNr)) {
-            	NetworkNode origin = network.getOrigin();
-            	network.resetAllVisited();
-            	collateParameters(origin, null, null, networkHeights, networkGammas);
+                NetworkNode origin = network.getOrigin();
+                network.resetAllVisited();
+                collateParameters(origin, null, null, networkHeights, networkGammas);
             }
 
             for (Network network: binnedNetworks.get(networkNr)) {
-            	NetworkNode origin = network.getOrigin();
+                NetworkNode origin = network.getOrigin();
                 origin.topologySupport = (double) allNetworkNrs.count(networkNr) / (double) allNetworkNrs.size();
                 network.resetAllVisited();
                 summarizeParameters(origin, null, null, networkHeights, networkGammas);
 
                 out.println(network.toString(df));
-            	break;
+                break;
             }
         }
 
@@ -181,12 +181,12 @@ public class SummarizePosterior extends Runnable {
                 rSubnetworks.put(childSubnetworkNr, subnetworkNr);
                 nextSubnetworkNumber++;
             }
-    	} else { // is a leaf node
-    		subnetworkNr = node.getNr();
-    	}
+        } else { // is a leaf node
+            subnetworkNr = node.getNr();
+        }
 
-    	node.subnetworkNr = subnetworkNr;
-    	return subnetworkNr;
+        node.subnetworkNr = subnetworkNr;
+        return subnetworkNr;
     }
 
     /*
@@ -194,9 +194,9 @@ public class SummarizePosterior extends Runnable {
      */
     private void collateParameters(NetworkNode node, Integer parentSubnetworkNr, Integer parentBranchNr,
                                    ListMultimap<Integer, Double> heights, Table<Integer, Integer, List<Double>> gammas) {
-    	final Integer subnetworkNr = node.subnetworkNr;
+        final Integer subnetworkNr = node.subnetworkNr;
 
-		if (node.isReticulation()) {
+        if (node.isReticulation()) {
             if (!gammas.contains(subnetworkNr, parentSubnetworkNr))
                 gammas.put(subnetworkNr, parentSubnetworkNr, new ArrayList<>());
             final double nodeGamma = node.getGammaProb();
@@ -224,8 +224,8 @@ public class SummarizePosterior extends Runnable {
      * Summarize the node heights and gammas across all samples sharing the same network topology
      */
     private void summarizeParameters(NetworkNode node, Integer parentSubnetworkNr, Integer parentBranchNr,
-                                   ListMultimap<Integer, Double> heights, Table<Integer, Integer, List<Double>> gammas) {
-    	final Integer subnetworkNr = node.subnetworkNr;
+                                     ListMultimap<Integer, Double> heights, Table<Integer, Integer, List<Double>> gammas) {
+        final Integer subnetworkNr = node.subnetworkNr;
 
         if (node.isReticulation() && node.gammaBranchNumber.equals(parentBranchNr)) {
             final List<Double> sampledGammas = gammas.get(subnetworkNr, parentSubnetworkNr);
@@ -274,12 +274,12 @@ public class SummarizePosterior extends Runnable {
 
     private double calculateMean(List<Double> sample) {
         double avg = 0.0;
-    	int n = 1;
-    	for (Double v : sample){
-    		avg += (v - avg) / n;
-    		n++;
-		}  // more numerically stable
-		return avg;
+        int n = 1;
+        for (Double v : sample){
+            avg += (v - avg) / n;
+            n++;
+        }  // more numerically stable
+        return avg;
     }
 
     private double calculateMedian(List<Double> sample) {
@@ -327,5 +327,25 @@ public class SummarizePosterior extends Runnable {
             if (v < min) min = v;
         }
         return new double[]{min, max};
+    }
+
+    // 1st and 3rd quartiles
+    private double[] calculateQuartiles(List<Double> sample) {
+        final int length = sample.size();
+        int[] indices = new int[length];
+        HeapSort.sort(sample, indices);
+
+        int mid = length / 2;
+        int pos = mid / 2;
+        double first, third;
+        if (mid % 2 == 1 || length == 1) {
+            first = sample.get(indices[pos]);
+            third = sample.get(indices[length - pos - 1]);
+        } else {
+            first = (sample.get(indices[pos - 1]) + sample.get(indices[pos])) / 2.0;
+            third = (sample.get(indices[length - pos - 1]) + sample.get(indices[length - pos])) / 2.0;
+        }
+
+        return new double[]{first, third};
     }
 }

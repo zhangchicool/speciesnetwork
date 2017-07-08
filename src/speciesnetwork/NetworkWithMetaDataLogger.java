@@ -14,7 +14,7 @@ import beast.core.Input.Validate;
 import beast.core.Loggable;
 import beast.core.StateNode;
 
-@Description("Based on the TreeWithMetaDataLogger class, but with support for network")
+@Description("Logs network annotated with metadata")
 public class NetworkWithMetaDataLogger extends BEASTObject implements Loggable {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network to be logged.", Validate.REQUIRED);
@@ -63,7 +63,6 @@ public class NetworkWithMetaDataLogger extends BEASTObject implements Loggable {
 
     @Override
     public void close(PrintStream out) {
-        Network speciesNetwork = speciesNetworkInput.get();
-        speciesNetwork.close(out);
+        speciesNetworkInput.get().close(out);
     }
 }
