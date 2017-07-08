@@ -20,8 +20,8 @@ import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.util.Log;
 import beast.core.Runnable;
-import beast.evolution.tree.Tree;
 import beast.util.HeapSort;
+import beast.util.TreeParser;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 import speciesnetwork.NetworkParser;
@@ -37,8 +37,7 @@ public class SummarizePosterior extends Runnable {
             "Name of the file that contains networks in extended newick format.", Validate.REQUIRED);
     public final Input<String> outputFileNameInput = new Input<>("outputFileName",
             "If provided, write to this file rather than to standard out.");
-    public final Input<Double> burninInput = new Input<>("burnin",
-            "Absolute burn-in if >=1, or relative burn-in if <1.", 0.);
+    public final Input<Integer> burninInput = new Input<>("burnin", "The absolute burn-in.", 0);
     public final Input<Boolean> medianInput = new Input<>("useMedian",
             "Use median instead of mean for node heights and gamma probs in summary networks.", false);
     public final Input<Integer> decimalPlacesInput = new Input<>("dp",
@@ -70,9 +69,47 @@ public class SummarizePosterior extends Runnable {
 
     @Override
     public void run() throws IOException {
-        final String inputFileName = inputFileNameInput.get();
-        final String outputFileName = outputFileNameInput.get();
+        // get the absolute burn-in
+        final int burnin = burninInput.get();
+        final Multimap<Integer, Network> binnedNetworks = HashMultimap.create();
 
+        progressStream.print("Parsing network samples ");
+        final String inputFileName = inputFileNameInput.get();
+
+        int numNetworks = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader(inputFileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().toLowerCase().startsWith("tree ")) {
+                    // process the line (newick network string)
+                    final int i = line.indexOf('(');
+                    if (i > 0) line = line.substring(i);
+                    TreeParser tree = new TreeParser(line);
+                    NetworkParser network = new NetworkParser(tree);
+                    numNetworks++;
+
+                    if (numNetworks == 1)  // assume equal number of tips in the networks
+                        nextSubnetworkNumber = network.getLeafNodeCount();
+                    if (numNetworks > burnin) {
+                        final int networkNr = findSubnetworks(network.getOrigin());
+                        binnedNetworks.put(networkNr, network);  // bin networks by topology
+                    }
+                    if (numNetworks % 10000 == 0) progressStream.print(".");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        progressStream.println("\nParsed " + numNetworks + " networks totally, " + burnin + " discarded as burn-in.");
+
+        // in descending order of topology frequencies, calculate node summaries
+        final Multiset<Integer> allNetworkNrs = binnedNetworks.keys();
+        final ImmutableMultiset<Integer> orderedNetworkNrs = Multisets.copyHighestCountFirst(allNetworkNrs);
+        final Set<Integer> uniqueNetworkNrs = new LinkedHashSet<>();
+        uniqueNetworkNrs.addAll(orderedNetworkNrs);
+
+        progressStream.println("Writing summary networks with heights and gamma probs");
+        final String outputFileName = outputFileNameInput.get();
         PrintStream out;  // where to print
         if (outputFileName == null) {
             out = System.out;
@@ -84,41 +121,6 @@ public class SummarizePosterior extends Runnable {
             out = new PrintStream(outputFileName);
         }
 
-        progressStream.println("Reading in posterior network samples...");
-        ExtNexusParser nexusParser = new ExtNexusParser();
-        nexusParser.parseFile(new File(inputFileName));
-        List<Tree> parsedTrees = nexusParser.trees;
-        final int numNetworks = parsedTrees.size();
-
-        // get the absolute burn-in
-        final double burnin = burninInput.get();
-        int absoluteBurnin = 0;
-        if (burnin > 0.0 && burnin < 1.0)
-            absoluteBurnin = (int)(burnin * numNetworks);
-        else if (burnin >= 1.0)
-            absoluteBurnin = (int) burnin;
-
-        nextSubnetworkNumber = nexusParser.taxa.size();
-        final Multimap<Integer, Network> binnedNetworks = HashMultimap.create(); // binned by topology
-
-        // bin networks by topology
-        for (int i = 0; i < numNetworks; i++) {
-            if (i >= absoluteBurnin) {
-                final Tree tree = parsedTrees.get(i);
-                final Network network = new NetworkParser(tree);
-                final int networkNr = findSubnetworks(network.getOrigin());
-                binnedNetworks.put(networkNr, network);
-            }
-        }
-        progressStream.println("Parsed " + numNetworks + " networks totally, " + absoluteBurnin + " discarded as burn-in.");
-
-        // in descending order of topology frequencies, calculate node summaries
-        final Multiset<Integer> allNetworkNrs = binnedNetworks.keys();
-        final ImmutableMultiset<Integer> orderedNetworkNrs = Multisets.copyHighestCountFirst(allNetworkNrs);
-        final Set<Integer> uniqueNetworkNrs = new LinkedHashSet<>();
-        uniqueNetworkNrs.addAll(orderedNetworkNrs);
-
-        progressStream.println("Writing summary networks with heights and gamma probs...");
         for (Integer networkNr: uniqueNetworkNrs) {
             final ListMultimap<Integer, Double> networkHeights = ArrayListMultimap.create();
             final Table<Integer, Integer, List<Double>> networkGammas = HashBasedTable.create();
