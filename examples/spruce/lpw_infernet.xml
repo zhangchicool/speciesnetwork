@@ -935,11 +935,11 @@
                 <Exponential id="Exponential.01" name="distr" mean="50.0"/>
             </prior>
             <prior id="turnOverPrior" name="distribution" x="@turnOverRate:species">
-                <Beta id="BetaDistr.01" name="distr" alpha="1.0" beta="4.0"/>
+                <Beta id="BetaDistr.01" name="distr" alpha="1.0" beta="2.0"/>
             </prior>
             <!-- prior for population sizes if using speciesnetwork.ConstantPopulation -->
             <!-- prior id="popSizesPrior" name="distribution" x="@popSizes:species">
-                <Gamma id="Gamma.01" name="distr" alpha="2.0" beta="0.0005"/>
+                <InverseGamma id="InverseGamma.01" name="distr" alpha="3.0" beta="0.003"/>
             </prior -->
             <prior id="clockPrior.c" name="distribution" x="@clockRate.c:gene">
                 <Gamma id="Gamma.0" name="distr" alpha="1.0" beta="1.0"/>
@@ -1381,7 +1381,7 @@
         <geneTree idref="tree.t:xy1420"/>
     </operator>
     <operator id="originMultiplier:species" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="5.0"/>
-    <operator id="nodeUniform:species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonSuperset" speciesNetwork="@network:species" weight="60.0">
+    <operator id="nodeUniform:species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonSuperset" speciesNetwork="@network:species" weight="100.0">
         <operator id="nodeUniform" spec="speciesnetwork.operators.NodeUniform" speciesNetwork="@network:species" weight="0.0"/>
         <geneTree idref="tree.t:4cl"/>
         <geneTree idref="tree.t:ebs"/>
@@ -1411,8 +1411,8 @@
     </operator>
 
     <!-- species network topology operators -->
-    <operator id="edgeRelocateWide:species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonSuperset" speciesNetwork="@network:species" weight="80.0">
-        <operator id="edgeRelocatorW" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
+    <operator id="branchRelocateWide:species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonSuperset" speciesNetwork="@network:species" weight="80.0">
+        <operator id="branchRelocatorW" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
         <geneTree idref="tree.t:4cl"/>
         <geneTree idref="tree.t:ebs"/>
         <geneTree idref="tree.t:gi"/>
@@ -1425,8 +1425,8 @@
         <geneTree idref="tree.t:se1390"/>
         <geneTree idref="tree.t:xy1420"/>
     </operator>
-    <operator id="edgeRelocateNarrow:species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonSuperset" speciesNetwork="@network:species" weight="60.0">
-        <operator id="edgeRelocatorN" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@network:species" isWide="false" weight="0.0"/>
+    <operator id="branchRelocateNarrow:species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonSuperset" speciesNetwork="@network:species" weight="60.0">
+        <operator id="branchRelocatorN" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@network:species" isWide="false" weight="0.0"/>
         <geneTree idref="tree.t:4cl"/>
         <geneTree idref="tree.t:ebs"/>
         <geneTree idref="tree.t:gi"/>

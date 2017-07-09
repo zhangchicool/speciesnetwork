@@ -359,11 +359,11 @@
                 <Exponential id="Exponential.01" name="distr" mean="50.0"/>
             </prior>
             <prior id="turnOverPrior" name="distribution" x="@turnOverRate:species">
-                <Beta id="BetaDistr.01" name="distr" alpha="1.0" beta="4.0"/>
+                <Beta id="BetaDistr.01" name="distr" alpha="1.0" beta="2.0"/>
             </prior>
             <!-- prior for population sizes if using speciesnetwork.ConstantPopulation -->
             <!-- prior id="popSizesPrior" name="distribution" x="@popSizes:species">
-                <Gamma id="Gamma.01" name="distr" alpha="2.0" beta="0.0005"/>
+                <InverseGamma id="InverseGamma.01" name="distr" alpha="3.0" beta="0.003"/>
             </prior -->
             <prior id="clockPrior.c" name="distribution" x="@clockRate.c:gene">
                 <Gamma id="Gamma.0" name="distr" alpha="1.0" beta="1.0"/>
@@ -805,7 +805,7 @@
         <geneTree idref="tree.t:xy1420"/>
     </operator>
     <operator id="originMultiplier:species" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="5.0"/>
-    <operator id="nodeUniform:species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonSuperset" speciesNetwork="@network:species" weight="60.0">
+    <operator id="nodeUniform:species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonSuperset" speciesNetwork="@network:species" weight="100.0">
         <operator id="nodeUniform" spec="speciesnetwork.operators.NodeUniform" speciesNetwork="@network:species" weight="0.0"/>
         <geneTree idref="tree.t:4cl"/>
         <geneTree idref="tree.t:ebs"/>
@@ -835,8 +835,8 @@
     </operator>
 
     <!-- species network topology operators -->
-    <operator id="edgeRelocateWide:species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonSuperset" speciesNetwork="@network:species" weight="80.0">
-        <operator id="edgeRelocatorW" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
+    <operator id="branchRelocateWide:species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonSuperset" speciesNetwork="@network:species" weight="80.0">
+        <operator id="branchRelocatorW" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@network:species" isWide="true" weight="0.0"/>
         <geneTree idref="tree.t:4cl"/>
         <geneTree idref="tree.t:ebs"/>
         <geneTree idref="tree.t:gi"/>
@@ -849,8 +849,8 @@
         <geneTree idref="tree.t:se1390"/>
         <geneTree idref="tree.t:xy1420"/>
     </operator>
-    <operator id="edgeRelocateNarrow:species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonSuperset" speciesNetwork="@network:species" weight="60.0">
-        <operator id="edgeRelocatorN" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@network:species" isWide="false" weight="0.0"/>
+    <operator id="branchRelocateNarrow:species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonSuperset" speciesNetwork="@network:species" weight="60.0">
+        <operator id="branchRelocatorN" spec="speciesnetwork.operators.BranchRelocator" speciesNetwork="@network:species" isWide="false" weight="0.0"/>
         <geneTree idref="tree.t:4cl"/>
         <geneTree idref="tree.t:ebs"/>
         <geneTree idref="tree.t:gi"/>
@@ -901,7 +901,7 @@
         <log idref="coalescent"/>
     </logger>
 
-    <logger id="tracelog" fileName="lpw_infernet.trace.log" logEvery="10000" model="@posterior" sort="smart">
+    <logger id="tracelog" fileName="lpw_infernet.trace.log" logEvery="1000" model="@posterior" sort="smart">
         <log idref="posterior"/>
         <log idref="likelihood"/>
         <log idref="prior"/>
@@ -958,41 +958,41 @@
         <log idref="freqParameter.s:xy1420"/>
     </logger>
 
-    <logger id="treelog.t:species" fileName="lpw_infernet.species.trees" logEvery="10000" mode="tree">
+    <logger id="treelog.t:species" fileName="lpw_infernet.species.trees" logEvery="1000" mode="tree">
         <log id="networkLogger:species" spec="speciesnetwork.NetworkWithMetaDataLogger" speciesNetwork="@network:species"/>
     </logger>
 
-    <logger id="treelog.t:4cl" fileName="lpw_infernet.4cl.trees" logEvery="10000" mode="tree">
+    <logger id="treelog.t:4cl" fileName="lpw_infernet.4cl.trees" logEvery="1000" mode="tree">
         <log id="treeLogger.t:4cl" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:4cl"/>
     </logger>
-    <logger id="treelog.t:ebs" fileName="lpw_infernet.ebs.trees" logEvery="10000" mode="tree">
+    <logger id="treelog.t:ebs" fileName="lpw_infernet.ebs.trees" logEvery="1000" mode="tree">
         <log id="treeLogger.t:ebs" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:ebs"/>
     </logger>
-    <logger id="treelog.t:gi" fileName="lpw_infernet.gi.trees" logEvery="10000" mode="tree">
+    <logger id="treelog.t:gi" fileName="lpw_infernet.gi.trees" logEvery="1000" mode="tree">
         <log id="treeLogger.t:gi" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:gi"/>
     </logger>
-    <logger id="treelog.t:m002" fileName="lpw_infernet.m002.trees" logEvery="10000" mode="tree">
+    <logger id="treelog.t:m002" fileName="lpw_infernet.m002.trees" logEvery="1000" mode="tree">
         <log id="treeLogger.t:m002" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:m002"/>
     </logger>
-    <logger id="treelog.t:m7d1" fileName="lpw_infernet.m7d1.trees" logEvery="10000" mode="tree">
+    <logger id="treelog.t:m7d1" fileName="lpw_infernet.m7d1.trees" logEvery="1000" mode="tree">
         <log id="treeLogger.t:m7d1" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:m7d1"/>
     </logger>
-    <logger id="treelog.t:sb16" fileName="lpw_infernet.sb16.trees" logEvery="10000" mode="tree">
+    <logger id="treelog.t:sb16" fileName="lpw_infernet.sb16.trees" logEvery="1000" mode="tree">
         <log id="treeLogger.t:sb16" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:sb16"/>
     </logger>
-    <logger id="treelog.t:sb29" fileName="lpw_infernet.sb29.trees" logEvery="10000" mode="tree">
+    <logger id="treelog.t:sb29" fileName="lpw_infernet.sb29.trees" logEvery="1000" mode="tree">
         <log id="treeLogger.t:sb29" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:sb29"/>
     </logger>
-    <logger id="treelog.t:sb62" fileName="lpw_infernet.sb62.trees" logEvery="10000" mode="tree">
+    <logger id="treelog.t:sb62" fileName="lpw_infernet.sb62.trees" logEvery="1000" mode="tree">
         <log id="treeLogger.t:sb62" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:sb62"/>
     </logger>
-    <logger id="treelog.t:se1364" fileName="lpw_infernet.se1364.trees" logEvery="10000" mode="tree">
+    <logger id="treelog.t:se1364" fileName="lpw_infernet.se1364.trees" logEvery="1000" mode="tree">
         <log id="treeLogger.t:se1364" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:se1364"/>
     </logger>
-    <logger id="treelog.t:se1390" fileName="lpw_infernet.se1390.trees" logEvery="10000" mode="tree">
+    <logger id="treelog.t:se1390" fileName="lpw_infernet.se1390.trees" logEvery="1000" mode="tree">
         <log id="treeLogger.t:se1390" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:se1390"/>
     </logger>
-    <logger id="treelog.t:xy1420" fileName="lpw_infernet.xy1420.trees" logEvery="10000" mode="tree">
+    <logger id="treelog.t:xy1420" fileName="lpw_infernet.xy1420.trees" logEvery="1000" mode="tree">
         <log id="treeLogger.t:xy1420" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@tree.t:xy1420"/>
     </logger>
 </run>

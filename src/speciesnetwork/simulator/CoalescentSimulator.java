@@ -54,7 +54,7 @@ public class CoalescentSimulator extends Runnable {
     public final Input<Boolean> networkOperatorInput =
             new Input<>("networkOperator", "Whether to write network topology operators (default false).", false);
     public final Input<String> initMethodInput =
-            new Input<>("initMethod", "Initializing method (point, random, user).", "user");
+            new Input<>("initMethod", "Initializing method (point, random, user).", "random");
 
     private Network speciesNetwork;
     private RealParameter popSizes;
