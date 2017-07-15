@@ -385,7 +385,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("                    <Exponential id=\"exponential.01\" name=\"distr\" mean=\"10.0\"/>");
         out.println("                </prior>");
         out.println("                <prior id=\"turnOverPrior\" name=\"distribution\" x=\"@turnOverRate:species\">");
-        out.println("                    <Beta id=\"betadistr.01\" name=\"distr\" alpha=\"1.0\" beta=\"2.0\"/>");
+        out.println("                    <Beta id=\"betadistr.01\" name=\"distr\" alpha=\"1.0\" beta=\"1.0\"/>");
         out.println("                </prior>");
         out.println("            </distribution>");
         // likelihood
