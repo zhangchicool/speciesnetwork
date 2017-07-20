@@ -38,28 +38,22 @@ public class RebuildEmbedding extends Operator {
     // heirs are the gene tree leaf tip numbers below each gene tree node or species network node
     private Multimap<Node, Integer> geneNodeHeirs;
     private Multimap<NetworkNode, Integer> speciesNodeHeirs;
-    private int nLoci;
 
     @Override
     public void initAndValidate() {
-        nLoci = geneTreesInput.get().size();
-        if (nLoci == 0) {
-            throw new RuntimeException(String.format("ERROR: no gene trees specified for the operator %s!", getID()));
-        }
+        // nLoci = geneTreesInput.get().size();
         geneNodeHeirs = HashMultimap.create();
         speciesNodeHeirs = HashMultimap.create();
     }
 
     @Override
     public double proposal() {
-        // count the number of alternative traversing choices for the current state
         final List<EmbeddedTree> geneTrees = geneTreesInput.get();
 
+        // count the number of alternative traversing choices for the current state
         int oldChoices = 0;
-        int oldEmbedCount = 0;
         for (EmbeddedTree geneTree : geneTrees) {
             oldChoices += geneTree.choicesCount;
-            oldEmbedCount += geneTree.embeddingCount;
         }
 
         // make the operation if possible
@@ -73,22 +67,17 @@ public class RebuildEmbedding extends Operator {
         // if (!operator.listStateNodes().isEmpty())  // copied from JointOperator
         //   operator.listStateNodes().get(0).getState().checkCalculationNodesDirtiness();
 
-        // then rebuild the embedding AND
+        // then rebuild the embedding
         if (rebuildEmbedding() < 0)
             return Double.NEGATIVE_INFINITY;
 
+        // count the number of alternative traversing choices for the new state
         int newChoices = 0;
-        int newEmbedCount = 0;
         for (EmbeddedTree geneTree : geneTrees) {
             newChoices += geneTree.choicesCount;
-            newEmbedCount += geneTree.embeddingCount;
         }
 
-        // the prior ratio for gene tree embeddings, leave it here just for convenience
-        // this is needed only when the embedding is changed
-        final double logPR = Math.log(oldEmbedCount) - Math.log(newEmbedCount);
-
-        return logPR + logHR + (newChoices - oldChoices) * Math.log(2) ;
+        return logHR + (newChoices - oldChoices) * Math.log(2);
     }
 
     @Override
