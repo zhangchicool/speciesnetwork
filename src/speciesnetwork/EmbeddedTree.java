@@ -8,23 +8,37 @@ public class EmbeddedTree extends Tree {
 	protected int[][] embedding;
 	private int[][] storedEmbedding;
 
-	public EmbeddedTree() {
-	}
+	// for the RebuildEmbedding operator
+	public int embeddingCount;  // the number of possible embeddings
+    protected int storedEmbeddingCount;
+    public int choicesCount;  // the number of alternative traversing choices
+    protected int storedChoicesCount;
+
+    public EmbeddedTree() {
+    }
 
 	// based on Tree(final Node rootNode)
     public EmbeddedTree(final Node rootNode) {
         setRoot(rootNode);
         initArrays();
-		embedding = new int[nodeCount][];
-		storedEmbedding = new int[nodeCount][];
+        embedding = new int[nodeCount][];
+        storedEmbedding = new int[nodeCount][];
+        embeddingCount = -1;
+        storedEmbeddingCount = -1;
+        choicesCount = -1;
+        storedChoicesCount = -1;
     }
 
 	@Override
 	public void initAndValidate() {
-		super.initAndValidate();
-		embedding = new int[nodeCount][];
-		storedEmbedding = new int[nodeCount][];
-	}
+        super.initAndValidate();
+        embedding = new int[nodeCount][];
+        storedEmbedding = new int[nodeCount][];
+        embeddingCount = -1;
+        storedEmbeddingCount = -1;
+        choicesCount = -1;
+        storedChoicesCount = -1;
+    }
 
 	public void resetEmbedding(int nCol, int value) {
 		final boolean reinitialize = embedding[0] == null || embedding[0].length != nCol;
@@ -52,9 +66,13 @@ public class EmbeddedTree extends Tree {
         etree.nodeCount = nodeCount;
         etree.internalNodeCount = internalNodeCount;
         etree.leafNodeCount = leafNodeCount;
-    	copyEmbedding(embedding, etree.embedding);
-
-    	return etree;
+        copyEmbedding(embedding, etree.embedding);
+        copyEmbedding(storedEmbedding, etree.storedEmbedding);
+        etree.embeddingCount = embeddingCount;
+        etree.storedEmbeddingCount = storedEmbeddingCount;
+        etree.choicesCount = choicesCount;
+        etree.storedChoicesCount = storedChoicesCount;
+        return etree;
     }
 
     @Override
@@ -62,6 +80,11 @@ public class EmbeddedTree extends Tree {
     	super.assignTo(other);
         final EmbeddedTree etree = (EmbeddedTree) other;
         copyEmbedding(embedding, etree.embedding);
+        copyEmbedding(storedEmbedding, etree.storedEmbedding);
+        etree.embeddingCount = embeddingCount;
+        etree.storedEmbeddingCount = storedEmbeddingCount;
+        etree.choicesCount = choicesCount;
+        etree.storedChoicesCount = storedChoicesCount;
     }
 
     @Override
@@ -69,6 +92,11 @@ public class EmbeddedTree extends Tree {
     	super.assignFrom(other);
         final EmbeddedTree etree = (EmbeddedTree) other;
         copyEmbedding(etree.embedding, embedding);
+        copyEmbedding(etree.storedEmbedding, storedEmbedding);
+        embeddingCount = etree.embeddingCount;
+        storedEmbeddingCount = etree.storedEmbeddingCount;
+        choicesCount = etree.choicesCount;
+        storedChoicesCount = etree.storedChoicesCount;
     }
 
     @Override
@@ -76,6 +104,11 @@ public class EmbeddedTree extends Tree {
     	super.assignFromFragile(other);
         final EmbeddedTree etree = (EmbeddedTree) other;
         copyEmbedding(etree.embedding, embedding);
+        copyEmbedding(etree.storedEmbedding, storedEmbedding);
+        embeddingCount = etree.embeddingCount;
+        storedEmbeddingCount = etree.storedEmbeddingCount;
+        choicesCount = etree.choicesCount;
+        storedChoicesCount = etree.storedChoicesCount;
     }
 
 	public void assignFromTree(final StateNode other) {
@@ -90,6 +123,8 @@ public class EmbeddedTree extends Tree {
     public void store() {
     	super.store();
     	copyEmbedding(embedding, storedEmbedding);
+        storedEmbeddingCount = embeddingCount;
+        storedChoicesCount = choicesCount;
     }
 
     @Override
@@ -98,6 +133,12 @@ public class EmbeddedTree extends Tree {
     	final int[][] tmpEmbedding = embedding;
     	embedding = storedEmbedding;
     	storedEmbedding = tmpEmbedding;
+    	int tmpCount = embeddingCount;
+        embeddingCount = storedEmbeddingCount;
+        storedEmbeddingCount = tmpCount;
+        tmpCount = choicesCount;
+        choicesCount = storedChoicesCount;
+        storedChoicesCount = tmpCount;
     }
 
     private static void copyEmbedding(int[][] src, int[][] dst) {

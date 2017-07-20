@@ -95,7 +95,7 @@ abstract class PopulationTestHelper {
             RebuildEmbedding rebuildOperator = new RebuildEmbedding();
             rebuildOperator.initByName("speciesNetwork", speciesNetwork, "taxonSuperset", speciesSuperset,
                                        "geneTree", geneTrees);
-            assertTrue(rebuildOperator.initializeEmbedding(true) >= 0);
+            assertTrue(rebuildOperator.rebuildEmbedding() == 0);
         }
     }
 }

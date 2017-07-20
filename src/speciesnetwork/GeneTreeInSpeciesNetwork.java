@@ -118,6 +118,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         needsUpdate = false;
     }
 
