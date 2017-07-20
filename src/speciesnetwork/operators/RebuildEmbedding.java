@@ -54,9 +54,10 @@ public class RebuildEmbedding extends Operator {
     	}
 
         // count the number of alternative traversing choices for the current state
-        // final int oldChoices = initializeEmbedding(false);
-        // if (oldChoices < 0)
-        //     throw new RuntimeException("Developer ERROR: current embedding is invalid!");
+        final int oldChoices = initializeEmbedding(false);
+        if (oldChoices < 0)
+            throw new RuntimeException("Developer ERROR: current embedding is invalid!");
+        final int oldEmbedCount = countEmbedding();
 
         // make the operation if possible
         double logHR = 0.0;
@@ -71,11 +72,12 @@ public class RebuildEmbedding extends Operator {
 
         // then rebuild the embedding AND
         // count the number of alternative traversing choices for the new state
+        final int newEmbedCount = countEmbedding();
         final int newChoices = initializeEmbedding(true);
         if (newChoices < 0)
             return Double.NEGATIVE_INFINITY;
 
-        return logHR;  // + (newChoices - oldChoices) * Math.log(2);
+        return logHR + (newChoices - oldChoices) * Math.log(2) - Math.log(newEmbedCount) + Math.log(oldEmbedCount);
     }
 
     @Override
@@ -226,6 +228,55 @@ public class RebuildEmbedding extends Operator {
             if (rightChoices < 0) return -1;
 
             return nChoices + leftChoices + rightChoices;
+        }
+    }
+
+    public int countEmbedding (){
+        final Network speciesNetwork = speciesNetworkInput.get();
+        final List<EmbeddedTree> geneTrees = geneTreesInput.get();
+
+        int nEmbeddings = 0;
+        for (int i = 0; i < nLoci; i++) {
+            EmbeddedTree geneTree = geneTrees.get(i);
+            getNodeHeirs(speciesNetwork, geneTree);
+
+            final int n = countEmbedding(geneTree.getRoot(), speciesNetwork.getRoot());
+            if (n < 0)
+                return -(i + 1);  // return which gene tree goes wrong
+
+            nEmbeddings += n;
+        }
+        return nEmbeddings;
+    }
+
+    // recursive
+    private int countEmbedding(final Node geneTreeNode, final NetworkNode speciesNetworkNode) {
+        if (geneTreeNode.getHeight() < speciesNetworkNode.getHeight()) {
+            int nEmbeddings = 0;
+            for (Integer childBranchNr: speciesNetworkNode.childBranchNumbers) {
+                final NetworkNode childSpeciesNode = speciesNetworkNode.getChildByBranch(childBranchNr);
+                final Collection<Integer> requiredHeirs = geneNodeHeirs.get(geneTreeNode);
+                if (speciesNodeHeirs.get(childSpeciesNode).containsAll(requiredHeirs)) {
+                    final NetworkNode nextSpecies = speciesNetworkNode.getChildByBranch(childBranchNr);
+                    final int nNext = countEmbedding(geneTreeNode, nextSpecies);
+                    if (nNext < 0)
+                        return -1;
+                    nEmbeddings += nNext;
+                }
+            }
+            if (nEmbeddings == 0)
+                return -1;  // for a valid embedding, should never go here
+            return nEmbeddings;
+        } else if (geneTreeNode.isLeaf()) {
+            return 1;
+        } else {
+            int nEmbeddings = 1;
+            for (Node childTreeNode : geneTreeNode.getChildren()) {
+                nEmbeddings *= countEmbedding(childTreeNode, speciesNetworkNode);
+                if (nEmbeddings < 0)
+                    return -1;
+            }
+            return nEmbeddings;
         }
     }
 }
