@@ -90,10 +90,6 @@ public class MultispeciesCoalescent extends Distribution {
             geneTree.computeCoalescentTimes();
             logP += geneTree.logGammaSum;
 
-            // prior for the gene tree embedding
-            final int embedCount = geneTree.geneTreeInput.get().embeddingCount;
-            logP -= Math.log(embedCount);  // TODO check correctness
-
             for (int i = 0; i < speciesBranchCount; i++) { // for each species network branch "i"
                 final List<Double> timesView = geneTree.coalescentTimes.get(i);
                 final int geneBranchEventCount = timesView.size();

@@ -106,13 +106,11 @@ public class RebuildEmbedding extends Operator {
             geneTree.resetEmbedding(traversalNodeCount, -1);
             final int nChoices = recurseRebuild(geneTree.getRoot(), speciesNetwork.getRoot(), geneTree);
             if (nChoices < 0)
-                return -1;
+                return -1;  // no valid embedding
             geneTree.choicesCount = nChoices;
 
-            final int nEmbeddings = countEmbedding(geneTree.getRoot(), speciesNetwork.getRoot());
-            if (nEmbeddings < 0)
-                return -1;
-            geneTree.embeddingCount = nEmbeddings;
+            // final int nEmbeddings = countEmbedding(geneTree.getRoot(), speciesNetwork.getRoot());
+            // geneTree.embeddingCount = nEmbeddings;
         }
 
         return 0;
@@ -225,8 +223,7 @@ public class RebuildEmbedding extends Operator {
                 final NetworkNode childSpeciesNode = speciesNetworkNode.getChildByBranch(childBranchNr);
                 final Collection<Integer> requiredHeirs = geneNodeHeirs.get(geneTreeNode);
                 if (speciesNodeHeirs.get(childSpeciesNode).containsAll(requiredHeirs)) {
-                    final NetworkNode nextSpecies = speciesNetworkNode.getChildByBranch(childBranchNr);
-                    final int nNext = countEmbedding(geneTreeNode, nextSpecies);
+                    final int nNext = countEmbedding(geneTreeNode, childSpeciesNode);
                     if (nNext < 0)
                         return -1;
                     nEmbeddings += nNext;
