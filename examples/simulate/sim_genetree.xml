@@ -1,46 +1,49 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <beast namespace="beast.core:beast.evolution.alignment:beast.app" version="2.4">
-    <data id="gene1" name="alignment">
-        <sequence id="gene1_a1" taxon="a1" totalcount="4" value="-"/>
-        <sequence id="gene1_a2" taxon="a2" totalcount="4" value="-"/>
-        <sequence id="gene1_b1" taxon="b1" totalcount="4" value="-"/>
-        <sequence id="gene1_b2" taxon="b2" totalcount="4" value="-"/>
-        <sequence id="gene1_b3" taxon="b3" totalcount="4" value="-"/>
-        <sequence id="gene1_b4" taxon="b4" totalcount="4" value="-"/>
-        <sequence id="gene1_c1" taxon="c1" totalcount="4" value="-"/>
-        <sequence id="gene1_c2" taxon="c2" totalcount="4" value="-"/>
+    <data id="gene" name="alignment">
+        <sequence id="gene_a1" taxon="a1" totalcount="4" value="-"/>
+        <sequence id="gene_a2" taxon="a2" totalcount="4" value="-"/>
+        <sequence id="gene_b1" taxon="b1" totalcount="4" value="-"/>
+        <sequence id="gene_b2" taxon="b2" totalcount="4" value="-"/>
+        <sequence id="gene_c1" taxon="c1" totalcount="4" value="-"/>
+        <sequence id="gene_c2" taxon="c2" totalcount="4" value="-"/>
+        <sequence id="gene_d1" taxon="d1" totalcount="4" value="-"/>
+        <sequence id="gene_d2" taxon="d2" totalcount="4" value="-"/>
     </data>
 
     <init spec='beast.util.TreeParser' id='newick:species' IsLabelledNewick="true" adjustTipHeights="false"
-        newick="((((A:0.02,(B:0.01)#H1[&amp;gamma=0.4]:0.01)S1:0.01,(#H1:0.01)#H2[&amp;gamma=0.7]:0.01)S2:0.02,(#H2:0.02,C:0.04)S3:0.01)R:0.05)"/>
+          newick="(((A:0.035,((B:0.012,(C:0.01)#H2[&amp;gamma=0.7]:0.002)S3:0.018)#H1[&amp;gamma=0.6]:0.005)S1:0.015,(#H1:0.01,(#H2:0.005,D:0.015)S4:0.025)S2:0.01)R:0.05)"/>
 
+<!-- run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="test_gene.xml" networkOperator="false" initMethod="random" -->
     <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="test_gene.trees" iterations="100">
         <state id="state">
             <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
-                <taxonset id="taxonSuperset" spec="TaxonSet">
-                    <taxon id="A" spec="TaxonSet">
-                        <taxon id="a1" spec="Taxon"/>
-                        <taxon id="a2" spec="Taxon"/>
-                    </taxon>
-                    <taxon id="B" spec="TaxonSet">
-                        <taxon id="b1" spec="Taxon"/>
-                        <taxon id="b2" spec="Taxon"/>
-                        <taxon id="b3" spec="Taxon"/>
-                        <taxon id="b4" spec="Taxon"/>
-                    </taxon>
-                    <taxon id="C" spec="TaxonSet">
-                        <taxon id="c1" spec="Taxon"/>
-                        <taxon id="c2" spec="Taxon"/>
-                    </taxon>
-                </taxonset>
-            </stateNode>
-            <stateNode id="tree:gene1" spec="speciesnetwork.EmbeddedTree">
-                <taxonset id="taxonset:gene1" spec="TaxonSet" alignment="@gene1"/>
+				<taxonset id="taxonSuperset" spec="TaxonSet">
+					<taxon id="A" spec="TaxonSet">
+						<taxon id="a1" spec="Taxon"/>
+						<taxon id="a2" spec="Taxon"/>
+					</taxon>
+					<taxon id="B" spec="TaxonSet">
+						<taxon id="b1" spec="Taxon"/>
+						<taxon id="b2" spec="Taxon"/>
+					</taxon>
+					<taxon id="C" spec="TaxonSet">
+						<taxon id="c1" spec="Taxon"/>
+						<taxon id="c2" spec="Taxon"/>
+					</taxon>
+					<taxon id="D" spec="TaxonSet">
+						<taxon id="d1" spec="Taxon"/>
+						<taxon id="d2" spec="Taxon"/>
+					</taxon>
+				</taxonset>
+			</stateNode>
+            <stateNode id="tree:gene" spec="speciesnetwork.EmbeddedTree">
+                <taxonset id="taxonset:gene" spec="TaxonSet" alignment="@gene"/>
             </stateNode>
         </state>
         <speciesNetwork idref="network:species"/>
         <parameter id="popsizes" name="popSizes">0.01</parameter>
         <taxonset idref="taxonSuperset"/>
-        <geneTree idref="tree:gene1"/>
+        <geneTree idref="tree:gene"/>
     </run>
 </beast>

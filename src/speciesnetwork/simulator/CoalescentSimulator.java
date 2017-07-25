@@ -100,11 +100,13 @@ public class CoalescentSimulator extends Runnable {
             simulate();
 
             String outputFileName = outputFileNameInput.get();
-            if (nrOfIterations == 1) {
+            if (nrOfIterations == 1)
                 writeXMLOutput(outputFileName);  // generate an XML file for a single iteration
-            } else {
-                writeGeneTrees(outputFileName);  // otherwise, only output the gene trees
-            }
+            else
+                writeGeneTrees(outputFileName + ".gene.trees");  // otherwise, only output the gene trees
+
+            if (networkSimulatorInput.get() != null)
+                writeSpeciesNetworks(outputFileName + ".species.trees");  // output simulated species networks
         }
     }
 
@@ -496,7 +498,7 @@ public class CoalescentSimulator extends Runnable {
         if (!networkOperatorInput.get())  out.println("        -->");
         // print loggers
         out.println("");
-        out.println("        <logger id=\"screenlog\" logEvery=\"20000\" model=\"@posterior\">");
+        out.println("        <logger id=\"screenlog\" logEvery=\"50000\" model=\"@posterior\">");
         out.println("            <log idref=\"posterior\"/>");
         out.println("            <log id=\"ESS.0\" spec=\"util.ESS\" arg=\"@posterior\"/>");
         out.println("            <log idref=\"likelihood\"/>");
@@ -540,6 +542,16 @@ public class CoalescentSimulator extends Runnable {
             	EmbeddedTree geneTree = geneTrees.get(i);
                 fw.write(geneTree.getRoot().toNewick() + ";\n");
             }
+            fw.close();
+        }
+    }
+
+    private void writeSpeciesNetworks(String outputFileName) throws IOException {
+        if (outputFileName == null) {
+            System.out.println(speciesNetwork.toString() + ";");
+        } else {
+            FileWriter fw = new FileWriter(outputFileName, true);
+            fw.write(speciesNetwork.toString() + ";\n");
             fw.close();
         }
     }

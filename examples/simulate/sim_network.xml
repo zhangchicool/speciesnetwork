@@ -16,7 +16,7 @@
             </taxonset>
         </speciesNetwork>
         <parameter id="time.origin" name="origin">0.1</parameter>
-        <parameter id="rate.birth" name="birthRate">30.0</parameter>
-        <parameter id="rate.hybrid" name="hybridRate">20</parameter>
+        <parameter id="rate.birth" name="birthRate">20</parameter>
+        <parameter id="rate.hybrid" name="hybridRate">10</parameter>
     </run>
 </beast>

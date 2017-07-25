@@ -31,7 +31,7 @@ public class BirthHybridSimulator extends Runnable {
             new Input<>("birthRate", "Speciation rate, lambda.", Validate.REQUIRED);
     public final Input<RealParameter> hybridRateInput =
             new Input<>("hybridRate", "Hybridization rate, nu.", Validate.REQUIRED);
-    public final Input<Integer> nHybridizationInput = new Input<>("nHybrid", "Number of Hybridization.");
+    // public final Input<Integer> nHybridizationInput = new Input<>("nHybrid", "Number of Hybridization.");
 
     public final Input<String> outputFileNameInput =
             new Input<>("outputFileName", "If provided, write to this file rather than to standard out.");
@@ -82,11 +82,7 @@ public class BirthHybridSimulator extends Runnable {
         } else {
             numTips = -1;
         }
-        final int numHybrid; // number of hybridization (-1 for no such condition)
-        if (nHybridizationInput.get() != null)
-            numHybrid = nHybridizationInput.get();
-        else
-            numHybrid = -1;
+        final int numHybrid = -1; // number of hybridization (-1 for no such condition)
 
         if (numTips < 0) {
             simulate(speciesNetwork);
@@ -101,7 +97,7 @@ public class BirthHybridSimulator extends Runnable {
                 leaf.setLabel(speciesNames.get(i));
             }
         }
-        else {  // condition on numTips and numHybrid, and no bubble in this case
+        /* else {  // condition on numTips and numHybrid, and no bubble in this case
             do {  // simulate until we get the desired condition (caution!)
                 simulate(speciesNetwork);
             } while (speciesNetwork.getLeafNodeCount() != numTips ||
@@ -111,7 +107,7 @@ public class BirthHybridSimulator extends Runnable {
                 NetworkNode leaf = speciesNetwork.getNode(i);
                 leaf.setLabel(speciesNames.get(i));
             }
-        }
+        } */
 
         return speciesNetwork;
     }

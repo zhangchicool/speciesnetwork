@@ -70,10 +70,11 @@ public class SummarizeNetwork extends Runnable {
         try (BufferedReader br = new BufferedReader(new FileReader(inputFileName))) {
             String line;
             while ((line = br.readLine()) != null) {
-                if (line.trim().toLowerCase().startsWith("tree ")) {
-                    // process the line (newick network string)
-                    final int i = line.indexOf('(');
-                    if (i > 0) line = line.substring(i);
+                // process the line (newick network string)
+                //if (line.trim().toLowerCase().startsWith("tree ")) {
+                final int i = line.indexOf('(');
+                if (i >= 0) {
+                    line = line.substring(i);
                     TreeParser tree = new TreeParser(line);
                     NetworkParser network = new NetworkParser(tree);
                     numNetworks++;
@@ -89,7 +90,7 @@ public class SummarizeNetwork extends Runnable {
         }
         progressStream.println("\nParsed " + numNetworks + " networks totally, " + burnin + " discarded as burn-in.");
 
-        printSummary_h2(networks, out);
+        printSummary_net(networks, out);
 
         out.close();
     }

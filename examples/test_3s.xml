@@ -122,7 +122,7 @@
                     <Exponential id="exponential.01" name="distr" mean="10.0"/>
                 </prior>
                 <prior id="turnOverPrior" name="distribution" x="@turnOverRate:species">
-                    <Beta id="betadistr.01" name="distr" alpha="2.0" beta="1.0"/>
+                    <Beta id="betadistr.01" name="distr" alpha="1.0" beta="1.0"/>
                 </prior>
             </distribution>
             <distribution id="likelihood" spec="util.CompoundDistribution">
