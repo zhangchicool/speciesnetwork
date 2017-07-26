@@ -91,16 +91,16 @@ public class CoalescentSimulator extends Runnable {
             throw new RuntimeException("Input 'state' must be specified!");
         state.initialise();
 
-        final int nrOfIterations;
+        final int nIterations;
         if (iterationsInput.get() == null)
-            nrOfIterations = 1;
+            nIterations = 1;
         else
-            nrOfIterations = iterationsInput.get();
-        for (int iteration = 0; iteration < nrOfIterations; iteration++) {
+            nIterations = iterationsInput.get();
+        for (int i = 0; i < nIterations; i++) {
             simulate();
 
             String outputFileName = outputFileNameInput.get();
-            if (nrOfIterations == 1)
+            if (nIterations == 1)
                 writeXMLOutput(outputFileName);  // generate an XML file for a single iteration
             else
                 writeGeneTrees(outputFileName + ".gene.trees");  // otherwise, only output the gene trees
@@ -336,7 +336,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("                </taxonset>");
         out.println("            </stateNode>");
         out.println("            <parameter id=\"originTime:species\" lower=\"0.0\" name=\"stateNode\">" + df.format(speciesNetwork.getOrigin().getHeight()) + "</parameter>");
-        out.println("            <parameter id=\"netDivRate:species\" lower=\"0.0\" name=\"stateNode\">1.0</parameter>");
+        out.println("            <parameter id=\"netDivRate:species\" lower=\"0.0\" name=\"stateNode\">10.0</parameter>");
         out.println("            <parameter id=\"turnOverRate:species\" lower=\"0.0\" upper=\"1.0\" name=\"stateNode\">0.5</parameter>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <stateNode id=\"tree:gene" + (i+1) + "\" spec=\"speciesnetwork.EmbeddedTree\">");
@@ -375,7 +375,7 @@ public class CoalescentSimulator extends Runnable {
             out.println("                <geneTreeWithin id=\"geneTree:gene" + (i+1) + "\" spec=\"speciesnetwork.GeneTreeInSpeciesNetwork\" speciesNetwork=\"@network:species\" geneTree=\"@tree:gene" + (i+1) + "\"/>");
         }
         out.println("                <!-- populationModel id=\"popModel\" popSizes=\"@popSizes\" spec=\"speciesnetwork.ConstantPopulation\"/ -->");
-        out.println("                <populationModel id=\"popModel\" alpha=\"10.0\" mean=\"" + popSizes.getValue() + "\" spec=\"speciesnetwork.ConstantPopIntegrated\"/>");
+        out.println("                <populationModel id=\"popModel\" alpha=\"5.0\" mean=\"" + popSizes.getValue() + "\" spec=\"speciesnetwork.ConstantPopIntegrated\"/>");
         out.println("            </distribution>");
         out.println("            <distribution id=\"prior\" spec=\"util.CompoundDistribution\">");  // prior
         // network prior
