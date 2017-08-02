@@ -158,7 +158,7 @@ public class Network extends StateNode {
     }
 
     /**
-     * @return get the total number of branches in the tree
+     * @return get the total number of branches in the network
      */
     public int getBranchCount() {
         return reticulationNodeCount + nodeCount - 1;
