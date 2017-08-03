@@ -21,23 +21,15 @@ import speciesnetwork.SanityChecks;
  * @author Chi Zhang
  */
 
+@Deprecated
 @Description("Relocate the source of an edge starting with speciation node, " +
              "or the destination of an edge ending with hybridization node.")
-public class BranchRelocator extends Operator {
+public class RelocateBranchNarrow extends Operator {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
-    public final Input<Boolean> isWideInput =
-            new Input<>("isWide", "If true, change the node height (default is false).", false);
-
-    private boolean isWide;
-
-    // empty constructor to facilitate construction by XML + initAndValidate
-    public BranchRelocator() {
-    }
 
     @Override
     public void initAndValidate() {
-        isWide = isWideInput.get();
     }
 
     @Override
@@ -54,6 +46,7 @@ public class BranchRelocator extends Operator {
         speciesNetwork.startEditing(this);
 
         double logProposalRatio = 0.0;
+
         if (pickedNode.isReticulation()) {
             // move the end of either the two parent branches
             final Integer pickedParentBrNr, otherParentBrNr;
@@ -74,6 +67,7 @@ public class BranchRelocator extends Operator {
 
             // look for all the candidate branches to attach to
             List<Integer> candidateBranchNumbers = new ArrayList<>();
+            /*
             if (isWide) {
                 for (NetworkNode node : speciesNetwork.getAllNodesExceptOrigin()) {
                     // do not attach to the original position
@@ -87,17 +81,16 @@ public class BranchRelocator extends Operator {
                     logProposalRatio -= Math.log(otherParent.getHeight() - pickedChild.getHeight());
                 else
                     logProposalRatio -= Math.log(upperLimit - pickedChild.getHeight());
-            } else {
-                for (NetworkNode node : speciesNetwork.getAllNodesExceptOrigin()) {
-                    // do not attach to the original position
-                    if (node != pickedNode && node != pickedChild && node.getHeight() < pickedNode.getHeight()) {
-                        NetworkNode gParent = node.getParentByBranch(node.gammaBranchNumber);
-                        NetworkNode oParent = node.getParentByBranch(node.gammaBranchNumber + 1);
-                        if (gParent.getHeight() > pickedNode.getHeight())
-                            candidateBranchNumbers.add(node.gammaBranchNumber);
-                        if (node.isReticulation() && oParent.getHeight() > pickedNode.getHeight())
-                            candidateBranchNumbers.add(node.gammaBranchNumber + 1);
-                    }
+            } */
+            for (NetworkNode node : speciesNetwork.getAllNodesExceptOrigin()) {
+                // do not attach to the original position
+                if (node != pickedNode && node != pickedChild && node.getHeight() < pickedNode.getHeight()) {
+                    NetworkNode gParent = node.getParentByBranch(node.gammaBranchNumber);
+                    NetworkNode oParent = node.getParentByBranch(node.gammaBranchNumber + 1);
+                    if (gParent.getHeight() > pickedNode.getHeight())
+                        candidateBranchNumbers.add(node.gammaBranchNumber);
+                    if (node.isReticulation() && oParent.getHeight() > pickedNode.getHeight())
+                        candidateBranchNumbers.add(node.gammaBranchNumber + 1);
                 }
             }
 
@@ -111,6 +104,7 @@ public class BranchRelocator extends Operator {
             NetworkNode attachChild = speciesNetwork.getNode(attachChildNr);
             NetworkNode attachParent = attachChild.getParentByBranch(attachBranchNr);
 
+            /*
             if (isWide) {
                 final double upper;
                 if (upperLimit > attachParent.getHeight())
@@ -123,7 +117,7 @@ public class BranchRelocator extends Operator {
                 // set new height
                 pickedNode.setHeight(newHeight);
                 logProposalRatio += Math.log(upper - lower);
-            }
+            } */
 
             // deal with the node relationships
             otherParent.childBranchNumbers.remove(otherParentBrNr);
@@ -158,6 +152,7 @@ public class BranchRelocator extends Operator {
 
             // look for all the candidate branches to attach to
             List<Integer> candidateBranchNumbers = new ArrayList<>();
+            /*
             if (isWide) {
                 for (NetworkNode node : speciesNetwork.getInternalNodesWithOrigin()) {
                     // do not attach to the original position
@@ -172,15 +167,14 @@ public class BranchRelocator extends Operator {
                     logProposalRatio -= Math.log(pickedParent.getHeight() - otherChild.getHeight());
                 else
                     logProposalRatio -= Math.log(pickedParent.getHeight() - lowerLimit);
-            } else {
-                for (NetworkNode node : speciesNetwork.getInternalNodes()) {
-                    // do not attach to the original position
-                    if (node != pickedNode && node.getHeight() > pickedNode.getHeight()) {
-                        for (Integer childBrNr : node.childBranchNumbers) {
-                            NetworkNode gChild = node.getChildByBranch(childBrNr);
-                            if (gChild != pickedNode && gChild.getHeight() < pickedNode.getHeight())
-                                candidateBranchNumbers.add(childBrNr);
-                        }
+            } */
+            for (NetworkNode node : speciesNetwork.getInternalNodes()) {
+                // do not attach to the original position
+                if (node != pickedNode && node.getHeight() > pickedNode.getHeight()) {
+                    for (Integer childBrNr : node.childBranchNumbers) {
+                        NetworkNode gChild = node.getChildByBranch(childBrNr);
+                        if (gChild != pickedNode && gChild.getHeight() < pickedNode.getHeight())
+                            candidateBranchNumbers.add(childBrNr);
                     }
                 }
             }
@@ -195,6 +189,7 @@ public class BranchRelocator extends Operator {
             NetworkNode attachChild = speciesNetwork.getNode(attachChildNr);
             NetworkNode attachParent = attachChild.getParentByBranch(attachBranchNr);
 
+            /*
             if (isWide) {
                 // propose an attachment height
                 final double lower;
@@ -207,7 +202,7 @@ public class BranchRelocator extends Operator {
                 // set new height
                 pickedNode.setHeight(newHeight);
                 logProposalRatio += Math.log(upper - lower);
-            }
+            } */
 
             // deal with the node relationships
             pickedParent.childBranchNumbers.remove(pickedParentBrNr);
