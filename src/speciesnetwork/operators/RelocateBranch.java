@@ -65,13 +65,20 @@ public class RelocateBranch extends Operator {
                 pickedBranchNr = pN.gammaBranchNumber + 1;
                 pNpNPBranchNr = pN.gammaBranchNumber;
             }
-            // determine nodes around pN
-            final NetworkNode pP = pN.getParentByBranch(pickedBranchNr);
-            final NetworkNode pNP = pN.getParentByBranch(pNpNPBranchNr);
+            // determine nodes around pN                                  // pN: picked node
+            final NetworkNode pP = pN.getParentByBranch(pickedBranchNr);  // pP: parent of pN by picked branch
+            final NetworkNode pNP = pN.getParentByBranch(pNpNPBranchNr);  // pNP: another parent of pN
             final Integer pNpCBranchNr = pN.childBranchNumbers.get(0);
-            final NetworkNode pC = pN.getChildByBranch(pNpCBranchNr);
+            final NetworkNode pC = pN.getChildByBranch(pNpCBranchNr);     // pC: (only) child of pN
             // upper and lower bounds for the backward move
             final double bounds = pNP.getHeight() - pC.getHeight();
+
+            // join pC and pNP with a single branch
+            pNP.childBranchNumbers.remove(pNpNPBranchNr);
+            pNP.childBranchNumbers.add(pNpCBranchNr);
+            pN.childBranchNumbers.remove(pNpCBranchNr);
+            pNP.updateRelationships();
+            pC.updateRelationships();
 
             // pick a candidate branch randomly
             Integer attachBranchNr;
@@ -79,8 +86,8 @@ public class RelocateBranch extends Operator {
                 attachBranchNr = Randomizer.nextInt(branchCount);
             } while (attachBranchNr.equals(pickedBranchNr) || attachBranchNr.equals(pNpNPBranchNr));
             final int aCNodeNr = speciesNetwork.getNodeNumber(attachBranchNr);
-            final NetworkNode aC = speciesNetwork.getNode(aCNodeNr);
-            final NetworkNode aP = aC.getParentByBranch(attachBranchNr);
+            final NetworkNode aC = speciesNetwork.getNode(aCNodeNr);      // aC: child at attaching branch
+            final NetworkNode aP = aC.getParentByBranch(attachBranchNr);  // aP: parent at attaching branch
 
             final double upper = aP.getHeight();
             final double lower = aC.getHeight();
@@ -91,17 +98,10 @@ public class RelocateBranch extends Operator {
             if (newHeight < pP.getHeight()) {
                 // the reticulation direction is not changed
                 pN.setHeight(newHeight);
-                // join pC and pNP
-                pNP.childBranchNumbers.remove(pNpNPBranchNr);
-                pNP.childBranchNumbers.add(pNpCBranchNr);
                 // separate aC and aP by pN
                 aP.childBranchNumbers.remove(attachBranchNr);
                 aP.childBranchNumbers.add(pNpNPBranchNr);
-                pN.childBranchNumbers.remove(pNpCBranchNr);
                 pN.childBranchNumbers.add(attachBranchNr);
-                // update relationships
-                pNP.updateRelationships();
-                pC.updateRelationships();
                 aP.updateRelationships();
                 pN.updateRelationships();
                 aC.updateRelationships();
@@ -111,41 +111,39 @@ public class RelocateBranch extends Operator {
                 return Double.NEGATIVE_INFINITY;
             }
             else {
-                // the reticulation direction is changed
+                // pP is a bifurcation node and the reticulation direction is changed
                 pN.setHeight(pP.getHeight());
                 pP.setHeight(newHeight);
                 // determine nodes around pP
                 final Integer pPpPPBranchNr = pP.gammaBranchNumber;
-                final NetworkNode pPP = pP.getParentByBranch(pPpPPBranchNr);
+                final NetworkNode pPP = pP.getParentByBranch(pPpPPBranchNr); // pPP: parent of pP
                 final Integer pPpPCBranchNr;
                 if (pP.childBranchNumbers.get(0).equals(pickedBranchNr))
                     pPpPCBranchNr = pP.childBranchNumbers.get(1);
                 else
                     pPpPCBranchNr = pP.childBranchNumbers.get(0);
-                final NetworkNode pPC = pP.getChildByBranch(pPpPCBranchNr);
+                final NetworkNode pPC = pP.getChildByBranch(pPpPCBranchNr);  // pPC: another child of pP
 
-                // join pC and pNP
-                pNP.childBranchNumbers.remove(pNpNPBranchNr);
-                pNP.childBranchNumbers.add(pNpCBranchNr);
-                // replace pP by pN
-                pPP.childBranchNumbers.remove(pPpPPBranchNr);
-                pPP.childBranchNumbers.add(pNpNPBranchNr);
-                pN.childBranchNumbers.remove(pNpCBranchNr);
-                pN.childBranchNumbers.add(pPpPCBranchNr);
-                // separate aC and aP by pP
-                aP.childBranchNumbers.remove(attachBranchNr);
-                aP.childBranchNumbers.add(pPpPPBranchNr);
                 pP.childBranchNumbers.remove(pPpPCBranchNr);
-                pP.childBranchNumbers.add(attachBranchNr);
-                // update relationships
-                pNP.updateRelationships();
-                pC.updateRelationships();
-                pPP.updateRelationships();
+                pN.childBranchNumbers.add(pPpPCBranchNr);
+                if (pP == aC) {
+                    // the attaching branch is pP-pPP
+                    pP.childBranchNumbers.add(pNpNPBranchNr);
+                } else {
+                    pPP.childBranchNumbers.remove(pPpPPBranchNr);
+                    pPP.childBranchNumbers.add(pNpNPBranchNr);
+                    // separate aC and aP by pP
+                    aP.childBranchNumbers.remove(attachBranchNr);
+                    aP.childBranchNumbers.add(pPpPPBranchNr);
+                    pP.childBranchNumbers.add(attachBranchNr);
+                    pPP.updateRelationships();
+                    aP.updateRelationships();
+                    aC.updateRelationships();
+                }
+                // speciesNetwork.updateRelationships();
+                pP.updateRelationships();
                 pN.updateRelationships();
                 pPC.updateRelationships();
-                aP.updateRelationships();
-                pP.updateRelationships();
-                aC.updateRelationships();
             }
 
             logProposalRatio = Math.log(upper - lower) - Math.log(bounds);
@@ -160,13 +158,20 @@ public class RelocateBranch extends Operator {
                 pickedBranchNr = pN.childBranchNumbers.get(1);
                 pNpNCBranchNr = pN.childBranchNumbers.get(0);
             }
-            // determine nodes around pN
-            final NetworkNode pC = pN.getChildByBranch(pickedBranchNr);
-            final NetworkNode pNC = pN.getChildByBranch(pNpNCBranchNr);
+            // determine nodes around pN                                  // pN: picked node
+            final NetworkNode pC = pN.getChildByBranch(pickedBranchNr);   // pC: child of pN by picked branch
+            final NetworkNode pNC = pN.getChildByBranch(pNpNCBranchNr);   // pNC: another child of pN
             final Integer pNpPBranchNr = pN.gammaBranchNumber;
-            final NetworkNode pP = pN.getParentByBranch(pNpPBranchNr);
+            final NetworkNode pP = pN.getParentByBranch(pNpPBranchNr);    // pP: (only) parent of pN
             // upper and lower bounds for the backward move
             final double bounds = pP.getHeight() - pNC.getHeight();
+
+            // join pP and pNC with a single branch
+            pP.childBranchNumbers.remove(pNpPBranchNr);
+            pP.childBranchNumbers.add(pNpNCBranchNr);
+            pN.childBranchNumbers.remove(pNpNCBranchNr);
+            pP.updateRelationships();
+            pNC.updateRelationships();
 
             // pick a candidate branch randomly
             Integer attachBranchNr;
@@ -174,8 +179,8 @@ public class RelocateBranch extends Operator {
                 attachBranchNr = Randomizer.nextInt(branchCount);
             } while (attachBranchNr.equals(pickedBranchNr) || attachBranchNr.equals(pNpPBranchNr));
             final int aCNodeNr = speciesNetwork.getNodeNumber(attachBranchNr);
-            final NetworkNode aC = speciesNetwork.getNode(aCNodeNr);
-            final NetworkNode aP = aC.getParentByBranch(attachBranchNr);
+            final NetworkNode aC = speciesNetwork.getNode(aCNodeNr);      // aC: child at attaching branch
+            final NetworkNode aP = aC.getParentByBranch(attachBranchNr);  // aP: parent at attaching branch
 
             final double upper = aP.getHeight();
             final double lower = aC.getHeight();
@@ -185,61 +190,53 @@ public class RelocateBranch extends Operator {
             // relocate the picked node and branch
             if (newHeight > pC.getHeight()) {
                 pN.setHeight(newHeight);
-                // join pP and pNC
-                pP.childBranchNumbers.remove(pNpPBranchNr);
-                pP.childBranchNumbers.add(pNpNCBranchNr);
                 // separate aC and aP by pN
                 aP.childBranchNumbers.remove(attachBranchNr);
                 aP.childBranchNumbers.add(pNpPBranchNr);
-                pN.childBranchNumbers.remove(pNpNCBranchNr);
                 pN.childBranchNumbers.add(attachBranchNr);
-                // update relationships
-                pP.updateRelationships();
-                pNC.updateRelationships();
+                // speciesNetwork.updateRelationships();
                 aP.updateRelationships();
                 pN.updateRelationships();
                 aC.updateRelationships();
             }
-            else if (pC.isSpeciation()) {
+            else if (!pC.isReticulation()) {
                 // cannot move in this case
                 return Double.NEGATIVE_INFINITY;
             }
             else {
-                // the reticulation direction is changed
+                // pC is a reticulation node and the reticulation direction is changed
                 pN.setHeight(pC.getHeight());
                 pC.setHeight(newHeight);
                 // determine nodes around pC
                 final Integer pCpCCBranchNr = pC.childBranchNumbers.get(0);
-                final NetworkNode pCC = pC.getChildByBranch(pCpCCBranchNr);
+                final NetworkNode pCC = pC.getChildByBranch(pCpCCBranchNr);  // pCC: child of pC
                 final Integer pCpCPBranchNr;
                 if (pC.gammaBranchNumber.equals(pickedBranchNr))
                     pCpCPBranchNr = pC.gammaBranchNumber + 1;
                 else
                     pCpCPBranchNr = pC.gammaBranchNumber;
-                final NetworkNode pCP = pC.getParentByBranch(pCpCPBranchNr);
+                final NetworkNode pCP = pC.getParentByBranch(pCpCPBranchNr); // pCP: another parent of pC
 
-                // join pP and pNC
-                pP.childBranchNumbers.remove(pNpPBranchNr);
-                pP.childBranchNumbers.add(pNpNCBranchNr);
-                // replace pC by pN
                 pCP.childBranchNumbers.remove(pCpCPBranchNr);
                 pCP.childBranchNumbers.add(pNpPBranchNr);
-                pN.childBranchNumbers.remove(pNpNCBranchNr);
-                pN.childBranchNumbers.add(pCpCCBranchNr);
-                // separate aC and aP by pC
-                aP.childBranchNumbers.remove(attachBranchNr);
-                aP.childBranchNumbers.add(pCpCPBranchNr);
-                pC.childBranchNumbers.remove(pCpCCBranchNr);
-                pC.childBranchNumbers.add(attachBranchNr);
-                // update relationships
-                pP.updateRelationships();
-                pNC.updateRelationships();
+                if (aP == pC) {
+                    // the attaching branch is pCpCC
+                    pN.childBranchNumbers.add(pCpCPBranchNr);
+                } else {
+                    pN.childBranchNumbers.add(pCpCCBranchNr);
+                    // separate aC and aP by pC
+                    aP.childBranchNumbers.remove(attachBranchNr);
+                    aP.childBranchNumbers.add(pCpCPBranchNr);
+                    pC.childBranchNumbers.remove(pCpCCBranchNr);
+                    pC.childBranchNumbers.add(attachBranchNr);
+                    // speciesNetwork.updateRelationships();
+                    pCC.updateRelationships();
+                    aP.updateRelationships();
+                    aC.updateRelationships();
+                }
                 pCP.updateRelationships();
                 pN.updateRelationships();
-                pCC.updateRelationships();
-                aP.updateRelationships();
                 pC.updateRelationships();
-                aC.updateRelationships();
             }
 
             logProposalRatio = Math.log(upper - lower) - Math.log(bounds);
