@@ -26,15 +26,12 @@ public class RelocateBranch extends Operator {
     public final Input<Boolean> isWideInput =
             new Input<>("isWide", "If true, change the node height (default is true).", true);
 
-    private boolean isWide;
-
     // empty constructor to facilitate construction by XML + initAndValidate
     public RelocateBranch() {
     }
 
     @Override
     public void initAndValidate() {
-        isWide = isWideInput.get();
     }
 
     @Override
@@ -220,7 +217,7 @@ public class RelocateBranch extends Operator {
                 pCP.childBranchNumbers.remove(pCpCPBranchNr);
                 pCP.childBranchNumbers.add(pNpPBranchNr);
                 if (aP == pC) {
-                    // the attaching branch is pCpCC
+                    // the attaching branch is pC-pCC
                     pN.childBranchNumbers.add(pCpCPBranchNr);
                 } else {
                     pN.childBranchNumbers.add(pCpCCBranchNr);
