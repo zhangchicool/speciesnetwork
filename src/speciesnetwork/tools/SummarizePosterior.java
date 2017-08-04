@@ -42,12 +42,15 @@ public class SummarizePosterior extends Runnable {
             "Use median instead of mean for node heights and gamma probs in summary networks.", false);
     public final Input<Integer> decimalPlacesInput = new Input<>("dp",
             "The number of decimal places to use (default -1 for full precision)", -1);
+    public final Input<Boolean> popBubblesInput = new Input<>("popBubbles",
+            "Pop network bubbles (parallel edges) before summarizing posterior.", true);
 
     private Map<Integer, Integer> rSubnetworks;
     private Table<Integer, Integer, Integer> sSubnetworks;
     private int nextSubnetworkNumber;
 
     private boolean useMedian;
+    private boolean popBubbles;
     private DecimalFormat df;
     private static PrintStream progressStream = Log.info;
 
@@ -56,6 +59,7 @@ public class SummarizePosterior extends Runnable {
     	rSubnetworks = new HashMap<>(); // subnetworks defined by a reticulation node
     	sSubnetworks = HashBasedTable.create(); // subnetworks defined by a speciation node
         useMedian = medianInput.get();
+        popBubbles = popBubblesInput.get();
 
         int dp = decimalPlacesInput.get();
         if (dp < 0) {
@@ -91,6 +95,7 @@ public class SummarizePosterior extends Runnable {
                     if (numNetworks == 1)  // assume equal number of tips in the networks
                         nextSubnetworkNumber = network.getLeafNodeCount();
                     if (numNetworks > burnin) {
+                        if (popBubbles) popNetworkBubbles(network);
                         final int networkNr = findSubnetworks(network.getOrigin());
                         binnedNetworks.put(networkNr, network);  // bin networks by topology
                     }
@@ -137,7 +142,7 @@ public class SummarizePosterior extends Runnable {
                 network.resetAllVisited();
                 summarizeParameters(origin, null, null, networkHeights, networkGammas);
 
-                out.println(network.toString(df));
+                out.println(network.toString(df) + ";");
                 break;
             }
         }
@@ -145,7 +150,25 @@ public class SummarizePosterior extends Runnable {
         out.close();
     }
 
-    /*
+    private void popNetworkBubbles(Network network) {
+    	boolean networkHasBubbles;
+
+    	do {
+    		networkHasBubbles = false;
+			for (NetworkNode hybridNode: network.getReticulationNodes()) {
+				final int gammaBranchNumber = hybridNode.gammaBranchNumber;
+				final NetworkNode leftParent = hybridNode.getParentByBranch(gammaBranchNumber);
+				final NetworkNode rightParent = hybridNode.getParentByBranch(gammaBranchNumber + 1);
+				if (leftParent == rightParent) {
+					network.deleteReticulationBranch(gammaBranchNumber);
+					networkHasBubbles = true;
+					break;
+				}
+			}
+    	} while (networkHasBubbles);
+	}
+
+	/*
      * Figure out what subnetwork this node defines. If it doesn't have an assigned number, assign nextSubnetworkNumber.
      */
     private Integer findSubnetworks(NetworkNode node) {
