@@ -336,7 +336,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("                </taxonset>");
         out.println("            </stateNode>");
         out.println("            <parameter id=\"originTime:species\" lower=\"0.0\" name=\"stateNode\">" + df.format(speciesNetwork.getOrigin().getHeight()) + "</parameter>");
-        out.println("            <parameter id=\"netDivRate:species\" lower=\"0.0\" name=\"stateNode\">2.0</parameter>");
+        out.println("            <parameter id=\"netDivRate:species\" lower=\"0.0\" name=\"stateNode\">5.0</parameter>");
         out.println("            <parameter id=\"turnOverRate:species\" lower=\"0.0\" upper=\"1.0\" name=\"stateNode\">0.5</parameter>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("            <stateNode id=\"tree:gene" + (i+1) + "\" spec=\"speciesnetwork.EmbeddedTree\">");
