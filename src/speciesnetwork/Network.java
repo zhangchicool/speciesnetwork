@@ -591,13 +591,13 @@ public class Network extends StateNode {
 
     /**
      * delete a reticulation branch from the species network
-     * @param hybridBranchNr reticulation branch number
+     * @param reticuBranchNr reticulation branch number
      */
-    public void deleteReticulationBranch(Integer hybridBranchNr) {
-        // branch with hybridBranchNr is connecting hybridNode and pickedParent
-        final int hybridNodeNr = getNodeNumber(hybridBranchNr);
+    public void deleteReticulationBranch(Integer reticuBranchNr) {
+        // branch with reticuBranchNr is connecting hybridNode and bifurcNode
+        final int hybridNodeNr = getNodeNumber(reticuBranchNr);
         NetworkNode hybridNode = getNode(hybridNodeNr);
-        NetworkNode bifurcNode = hybridNode.getParentByBranch(hybridBranchNr);
+        NetworkNode bifurcNode = hybridNode.getParentByBranch(reticuBranchNr);
         final int bifurcNodeNr = bifurcNode.getNr();
         assert (bifurcNode.isSpeciation() && hybridNode.isReticulation());
 
@@ -605,7 +605,7 @@ public class Network extends StateNode {
         final Integer pNParentBranchNr = bifurcNode.gammaBranchNumber;  // should be equal to bifurcNodeNr
         NetworkNode pNParentNode = bifurcNode.getParentByBranch(pNParentBranchNr);
         final Integer pNChildBranchNr;
-        if (bifurcNode.childBranchNumbers.get(0).equals(hybridBranchNr))
+        if (bifurcNode.childBranchNumbers.get(0).equals(reticuBranchNr))
             pNChildBranchNr = bifurcNode.childBranchNumbers.get(1);
         else
             pNChildBranchNr = bifurcNode.childBranchNumbers.get(0);
@@ -615,7 +615,7 @@ public class Network extends StateNode {
         final Integer hNChildBranchNr = hybridNode.childBranchNumbers.get(0);
         // NetworkNode hNChildNode = hybridNode.getChildByBranch(hNChildBranchNr);
         final Integer hNParentBranchNr;
-        if (hybridNode.gammaBranchNumber.equals(hybridBranchNr))
+        if (hybridNode.gammaBranchNumber.equals(reticuBranchNr))
             hNParentBranchNr = hybridNode.gammaBranchNumber + 1;
         else
             hNParentBranchNr = hybridNode.gammaBranchNumber;
@@ -644,14 +644,13 @@ public class Network extends StateNode {
         speciationNodeCount -= 1;
         reticulationNodeCount -= 1;
 
-        // decreasing the child branch numbers between bifurcNodeNr and hybridBranchNr by 1, larger than hybridBranchNr by 3
         for (NetworkNode node: getInternalNodesWithOrigin()) {
             List<Integer> newBranchNrs = new ArrayList<>();
             for (Integer bNr: node.childBranchNumbers) {
-                if (bNr > bifurcNodeNr && bNr < hybridBranchNr)
-                    newBranchNrs.add(bNr - 1);
-                else if (bNr > hybridBranchNr)
-                    newBranchNrs.add(bNr - 3);
+                if (bNr > bifurcNodeNr && bNr < reticuBranchNr)
+                    newBranchNrs.add(bNr - 1);  // decreasing the child branch numbers by 1
+                else if (bNr > reticuBranchNr)
+                    newBranchNrs.add(bNr - 3);  // decreasing the child branch numbers by 3
                 else
                     newBranchNrs.add(bNr);
             }
