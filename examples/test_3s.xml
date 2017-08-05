@@ -270,6 +270,12 @@
             <geneTree idref="tree:gene3"/>
             <operator id="relocateBranch:species" spec="speciesnetwork.operators.RelocateBranch" speciesNetwork="@network:species" weight="0.0"/>
         </operator>
+        <operator id="flipReticulationAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="30.0">
+            <geneTree idref="tree:gene1"/>
+            <geneTree idref="tree:gene2"/>
+            <geneTree idref="tree:gene3"/>
+            <operator id="flipReticulation:species" spec="speciesnetwork.operators.FlipReticulation" speciesNetwork="@network:species" weight="0.0"/>
+        </operator>
         <operator id="addReticulationAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="80.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
