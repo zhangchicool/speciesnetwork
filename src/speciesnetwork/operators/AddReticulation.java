@@ -62,8 +62,6 @@ public class AddReticulation extends Operator {
         NetworkNode pickedParent1 = pickedNode1.getParentByBranch(pickedBranchNr1);
         NetworkNode pickedParent2 = pickedNode2.getParentByBranch(pickedBranchNr2);
 
-        double logProposalRatio = 0.0;
-
         // propose the attaching position at each branch
         final double l1, l2, l11, l21;
         l1 = pickedParent1.getHeight() - pickedNode1.getHeight();
@@ -71,7 +69,7 @@ public class AddReticulation extends Operator {
         l2 = pickedParent2.getHeight() - pickedNode2.getHeight();
         l21 = l2 * Randomizer.nextDouble();
 
-        logProposalRatio += Math.log(l1) + Math.log(l2);  // the Jacobian
+        double logProposalRatio = Math.log(l1) + Math.log(l2);  // the Jacobian
 
         // start moving
         speciesNetwork.startEditing(this);

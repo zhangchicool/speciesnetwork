@@ -47,53 +47,49 @@ public class DeleteReticulation extends Operator {
         final int nHybridNodes = speciesNetwork.getReticulationNodeCount();
         if (nHybridNodes == 0)  // there is no reticulation branch to delete
             return Double.NEGATIVE_INFINITY;
-        //number of reticulation branches in the current network
+        // number of reticulation branches in the current network
         final int nReticulationBranches = 2 * nHybridNodes;  // m'
 
         // pick a reticulation branch randomly
         final Integer hybridBranchNr = Randomizer.nextInt(nReticulationBranches) + speciesNetwork.getReticulationOffset();
         final int hybridNodeNr = speciesNetwork.getNodeNumber(hybridBranchNr);
-        // branch hybridBranchNr is connecting hybridNode and pickedParent
+        // branch with hybridBranchNr is connecting hybridNode and parentNode
         NetworkNode hybridNode = speciesNetwork.getNode(hybridNodeNr);
-        NetworkNode pickedParent = hybridNode.getParentByBranch(hybridBranchNr);
-        if (pickedParent.isReticulation())  // cannot delete a branch connecting two reticulation nodes
+        NetworkNode parentNode = hybridNode.getParentByBranch(hybridBranchNr);
+        if (parentNode.isReticulation())  // cannot delete a branch connecting two reticulation nodes
             return Double.NEGATIVE_INFINITY;
 
+        // get the parent node and another child node of parentNode
+        final Integer pNParentBranchNr = parentNode.gammaBranchNumber;
+        NetworkNode pNParentNode = parentNode.getParentByBranch(pNParentBranchNr);
+        final Integer pNChildBranchNr;
+        if (parentNode.childBranchNumbers.get(0).equals(hybridBranchNr))
+            pNChildBranchNr = parentNode.childBranchNumbers.get(1);
+        else
+            pNChildBranchNr = parentNode.childBranchNumbers.get(0);
+        NetworkNode pNChildNode = parentNode.getChildByBranch(pNChildBranchNr);
+
         // get the child node and another parent node of hybridNode
-        final Integer childBranchNr1 = hybridNode.childBranchNumbers.get(0);
-        NetworkNode childNode1 = hybridNode.getChildByBranch(childBranchNr1);
-        final Integer parentBranchNr1;
-        if (hybridNode.gammaBranchNumber.equals(hybridBranchNr)) {
-            parentBranchNr1 = hybridNode.gammaBranchNumber + 1;
-        } else {
-            parentBranchNr1 = hybridNode.gammaBranchNumber;
-        }
-        NetworkNode parentNode1 = hybridNode.getParentByBranch(parentBranchNr1);
-
-        // get the parent node and another child node of pickedParent
-        final Integer childBranchNr2;
-        if (pickedParent.childBranchNumbers.get(0).equals(hybridBranchNr)) {
-            childBranchNr2 = pickedParent.childBranchNumbers.get(1);
-        } else {
-            childBranchNr2 = pickedParent.childBranchNumbers.get(0);
-        }
-        NetworkNode childNode2 = pickedParent.getChildByBranch(childBranchNr2);
-        final Integer parentBranchNr2 = pickedParent.gammaBranchNumber;
-        NetworkNode parentNode2 = pickedParent.getParentByBranch(parentBranchNr2);
-
-        double logProposalRatio = 0.0;
+        final Integer hNChildBranchNr = hybridNode.childBranchNumbers.get(0);
+        NetworkNode hNChildNode = hybridNode.getChildByBranch(hNChildBranchNr);
+        final Integer hNParentBranchNr;
+        if (hybridNode.gammaBranchNumber.equals(hybridBranchNr))
+            hNParentBranchNr = hybridNode.gammaBranchNumber + 1;
+        else
+            hNParentBranchNr = hybridNode.gammaBranchNumber;
+        NetworkNode hNParentNode = hybridNode.getParentByBranch(hNParentBranchNr);
 
         // work out the Jacobian
         final double l1, l2;
-        if (hybridNode == childNode2 && pickedParent == parentNode1) {
+        if (parentNode == hNParentNode && hybridNode == pNChildNode) {
             // the two attaching points are on the same branch
-            l1 = l2 = parentNode2.getHeight() - childNode1.getHeight();
+            l1 = l2 = pNParentNode.getHeight() - hNChildNode.getHeight();
         } else {
             // the two attaching points are on different branches
-            l1 = parentNode1.getHeight() - childNode1.getHeight();
-            l2 = parentNode2.getHeight() - childNode2.getHeight();
+            l1 = hNParentNode.getHeight() - hNChildNode.getHeight();
+            l2 = pNParentNode.getHeight() - pNChildNode.getHeight();
         }
-        logProposalRatio -= Math.log(l1) + Math.log(l2);  // the Jacobian
+        double logProposalRatio = - Math.log(l1) - Math.log(l2);
 
         // start moving
         speciesNetwork.startEditing(this);

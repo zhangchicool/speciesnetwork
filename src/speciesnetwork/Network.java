@@ -594,45 +594,43 @@ public class Network extends StateNode {
      * @param hybridBranchNr reticulation branch number
      */
     public void deleteReticulationBranch(Integer hybridBranchNr) {
-        // branch hybridBranchNr is connecting hybridNode and pickedParent
+        // branch with hybridBranchNr is connecting hybridNode and pickedParent
         final int hybridNodeNr = getNodeNumber(hybridBranchNr);
         NetworkNode hybridNode = getNode(hybridNodeNr);
         NetworkNode bifurcNode = hybridNode.getParentByBranch(hybridBranchNr);
         final int bifurcNodeNr = bifurcNode.getNr();
         assert (bifurcNode.isSpeciation() && hybridNode.isReticulation());
 
-        // get the child node and another parent node of hybridNode
-        final Integer childBranchNr1 = hybridNode.childBranchNumbers.get(0);
-        // NetworkNode childNode1 = hybridNode.getChildByBranch(childBranchNr1);
-        final Integer parentBranchNr1;
-        if (hybridNode.gammaBranchNumber.equals(hybridBranchNr)) {
-            parentBranchNr1 = hybridNode.gammaBranchNumber + 1;
-        } else {
-            parentBranchNr1 = hybridNode.gammaBranchNumber;
-        }
-        NetworkNode parentNode1 = hybridNode.getParentByBranch(parentBranchNr1);
-
         // get the parent node and another child node of bifurcNode
-        final Integer childBranchNr2;
-        if (bifurcNode.childBranchNumbers.get(0).equals(hybridBranchNr)) {
-            childBranchNr2 = bifurcNode.childBranchNumbers.get(1);
-        } else {
-            childBranchNr2 = bifurcNode.childBranchNumbers.get(0);
-        }
-        NetworkNode childNode2 = bifurcNode.getChildByBranch(childBranchNr2);
-        final Integer parentBranchNr2 = bifurcNode.gammaBranchNumber;  // should be equal to bifurcNodeNr
-        NetworkNode parentNode2 = bifurcNode.getParentByBranch(parentBranchNr2);
+        final Integer pNParentBranchNr = bifurcNode.gammaBranchNumber;  // should be equal to bifurcNodeNr
+        NetworkNode pNParentNode = bifurcNode.getParentByBranch(pNParentBranchNr);
+        final Integer pNChildBranchNr;
+        if (bifurcNode.childBranchNumbers.get(0).equals(hybridBranchNr))
+            pNChildBranchNr = bifurcNode.childBranchNumbers.get(1);
+        else
+            pNChildBranchNr = bifurcNode.childBranchNumbers.get(0);
+        NetworkNode pNChildNode = bifurcNode.getChildByBranch(pNChildBranchNr);
+
+        // get the child node and another parent node of hybridNode
+        final Integer hNChildBranchNr = hybridNode.childBranchNumbers.get(0);
+        // NetworkNode hNChildNode = hybridNode.getChildByBranch(hNChildBranchNr);
+        final Integer hNParentBranchNr;
+        if (hybridNode.gammaBranchNumber.equals(hybridBranchNr))
+            hNParentBranchNr = hybridNode.gammaBranchNumber + 1;
+        else
+            hNParentBranchNr = hybridNode.gammaBranchNumber;
+        NetworkNode hNParentNode = hybridNode.getParentByBranch(hNParentBranchNr);
 
         // update child branch numbers
-        if (hybridNode == childNode2 && bifurcNode == parentNode1) {
+        if (bifurcNode == hNParentNode && hybridNode == pNChildNode) {
             // the two nodes are on the same branch
-            parentNode2.childBranchNumbers.remove(parentBranchNr2);
-            parentNode2.childBranchNumbers.add(childBranchNr1);
+            pNParentNode.childBranchNumbers.remove(pNParentBranchNr);
+            pNParentNode.childBranchNumbers.add(hNChildBranchNr);
         } else {
-            parentNode1.childBranchNumbers.remove(parentBranchNr1);
-            parentNode1.childBranchNumbers.add(childBranchNr1);
-            parentNode2.childBranchNumbers.remove(parentBranchNr2);
-            parentNode2.childBranchNumbers.add(childBranchNr2);
+            pNParentNode.childBranchNumbers.remove(pNParentBranchNr);
+            pNParentNode.childBranchNumbers.add(pNChildBranchNr);
+            hNParentNode.childBranchNumbers.remove(hNParentBranchNr);
+            hNParentNode.childBranchNumbers.add(hNChildBranchNr);
         }
 
         // remove the two nodes from the network
@@ -650,13 +648,12 @@ public class Network extends StateNode {
         for (NetworkNode node: getInternalNodesWithOrigin()) {
             List<Integer> newBranchNrs = new ArrayList<>();
             for (Integer bNr: node.childBranchNumbers) {
-                if (bNr > bifurcNodeNr && bNr < hybridBranchNr) {
+                if (bNr > bifurcNodeNr && bNr < hybridBranchNr)
                     newBranchNrs.add(bNr - 1);
-                } else if (bNr > hybridBranchNr) {
+                else if (bNr > hybridBranchNr)
                     newBranchNrs.add(bNr - 3);
-                } else {
+                else
                     newBranchNrs.add(bNr);
-                }
             }
             node.childBranchNumbers = newBranchNrs;
         }
@@ -730,11 +727,11 @@ public class Network extends StateNode {
     }
 
     public boolean hasBubble() {
-        for (NetworkNode hNode: getReticulationNodes()) {
-            if (hNode.getParentByBranch(hNode.gammaBranchNumber) == hNode.getParentByBranch(hNode.gammaBranchNumber+1))
+        for (NetworkNode hybridNode: getReticulationNodes()) {
+            final int gammaBranchNr = hybridNode.gammaBranchNumber;
+            if (hybridNode.getParentByBranch(gammaBranchNr) == hybridNode.getParentByBranch(gammaBranchNr + 1))
                 return true;
         }
-        // no parallel branches (bubble), return false
-        return false;
+        return false;  // no parallel edges (bubble)
     }
 }
