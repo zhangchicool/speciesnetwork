@@ -480,6 +480,11 @@ public class CoalescentSimulator extends Runnable {
             out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
         out.println("            <operator id=\"relocateBranch:species\" spec=\"speciesnetwork.operators.RelocateBranch\" speciesNetwork=\"@network:species\" weight=\"0.0\"/>");
         out.println("        </operator>");
+        out.println("        <operator id=\"flipReticulationAndEmbed:species\" spec=\"speciesnetwork.operators.RebuildEmbedding\" speciesNetwork=\"@network:species\" taxonset=\"@taxonsuperset\" weight=\"30.0\">");
+        for (int i = 0; i < nrOfGeneTrees; i++)
+            out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
+        out.println("            <operator id=\"flipReticulation:species\" spec=\"speciesnetwork.operators.FlipReticulation\" speciesNetwork=\"@network:species\" weight=\"0.0\"/>");
+        out.println("        </operator>");
         out.println("        <operator id=\"addReticulationAndEmbed:species\" spec=\"speciesnetwork.operators.RebuildEmbedding\" speciesNetwork=\"@network:species\" taxonset=\"@taxonsuperset\" weight=\"120.0\">");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
