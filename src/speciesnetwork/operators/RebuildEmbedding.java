@@ -99,7 +99,9 @@ public class RebuildEmbedding extends Operator {
             // Tell BEAST that *all* gene trees will be edited
             // doing this for all trees avoids Trie combinatorial explosions
             geneTree.startEditing(this);
+        }
 
+        for (EmbeddedTree geneTree : geneTrees) {
             getNodeHeirs(speciesNetwork, geneTree);
 
             final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();

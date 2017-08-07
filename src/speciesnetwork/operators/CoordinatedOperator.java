@@ -37,6 +37,7 @@ public abstract class CoordinatedOperator extends Operator {
         int n = 0;  // # gene node heights changed relative to 'lower'
         for (int i = 0; i < nLoci; i++) {  // loop over all loci
             EmbeddedTree geneTree = geneTrees.get(i);
+            geneTree.startEditing(this);  // Tell BEAST that *all* gene trees will be edited
 
             // update the gene tree node heights
             for (Node gNode : geneTree.getInternalNodes()) {
