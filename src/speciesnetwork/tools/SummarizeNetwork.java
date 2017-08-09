@@ -90,7 +90,7 @@ public class SummarizeNetwork extends Runnable {
         }
         progressStream.println("\nParsed " + numNetworks + " networks totally, " + burnin + " discarded as burn-in.");
 
-        printSummary_net(networks, out);
+        printSummary_h2(networks, out);
 
         out.close();
     }
@@ -210,7 +210,8 @@ public class SummarizeNetwork extends Runnable {
         int nTrees = 0;
         int nTruth = 0;  // number of true networks
         int nOneHy = 0;  // number of networks with 1 hybridization
-        int nBCDHy = 0;  // number of networks with 1 hybridization and the BCDH structure
+        int nTwoHy = 0;  // number of networks with 1 hybridization
+        int nBCDHy = 0;  // number of networks with the BCDH structure
         for (Network network : networks) {
             // network height and length
             double rootHeight = network.getRoot().getHeight();
@@ -235,10 +236,12 @@ public class SummarizeNetwork extends Runnable {
             // tree
             if (network.getReticulationNodeCount() == 0)
                 nTrees++;
-
             // network with 1 hybridization
             if (network.getReticulationNodeCount() == 1)
                 nOneHy++;
+            // network with 2 hybridizations
+            if (network.getReticulationNodeCount() == 2)
+                nTwoHy++;
 
             NetworkNode parentA = tipA.getParentByBranch(tipA.gammaBranchNumber);  // S1
             NetworkNode parentB = tipB.getParentByBranch(tipB.gammaBranchNumber);  // S3
@@ -249,10 +252,10 @@ public class SummarizeNetwork extends Runnable {
 
             // networks with the BCDH structure
             if (parentC.isReticulation() && parentB.getChildren().contains(parentC) && parentD.getChildren().contains(parentC)) {
+                nBCDHy++;
+
                 if (network.getReticulationNodeCount() == 1) {
                     // networks with 1 hybridization
-                    nBCDHy++;
-
                     if (parentC.getParentByBranch(parentC.gammaBranchNumber) == parentB)
                         gamma2.add(parentC.getGammaProb());
                     else
@@ -279,14 +282,16 @@ public class SummarizeNetwork extends Runnable {
             }
         }
 
-        // percentage of trees
         final int nNetworks = networks.size();
+        // percentage of trees
         out.print((double)nTrees/nNetworks + "\t");
-        // percentage of true networks
-        out.print((double)nTruth/nNetworks + "\t");
         // percentage of 1 hybridization
         out.print((double)nOneHy/nNetworks + "\t");
-        // percentage of 1 hybridization and BCDH
+        // percentage of 2 hybridizations
+        out.print((double)nTwoHy/nNetworks + "\t");
+        // percentage of true networks
+        out.print((double)nTruth/nNetworks + "\t");
+        // percentage of BCDH structure
         out.print((double)nBCDHy/nNetworks + "\t");
 
         // network height
