@@ -72,7 +72,7 @@ public abstract class CoordinatedOperator extends Operator {
         final int traversalNodeNr = snNode.getTraversalNumber();
         Integer withinBrNr;  Node treNode = gNode;
         do {
-            withinBrNr = geneTree.getEmbedding(treNode.getNr(), traversalNodeNr);
+            withinBrNr = geneTree.embedding.getDirection(treNode.getNr(), traversalNodeNr);
             treNode = treNode.getParent();
         } while (withinBrNr < 0 && treNode != null && treNode.getHeight() < upper);
 

@@ -143,7 +143,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
             }
             // traversal direction forward in time
             final int traversalNodeNumber = speciesNetworkNode.getTraversalNumber();
-            final Integer nextSpeciesBranchNumber = geneTree.getEmbedding(geneTreeNodeNumber, traversalNodeNumber);
+            final Integer nextSpeciesBranchNumber = geneTree.embedding.getDirection(geneTreeNodeNumber, traversalNodeNumber);
             assert (nextSpeciesBranchNumber >= 0);
             final NetworkNode nextSpeciesNode = speciesNetworkNode.getChildByBranch(nextSpeciesBranchNumber);
             assert nextSpeciesNode != null;

@@ -128,7 +128,7 @@ public class CoalescentSimulator extends Runnable {
             EmbeddedTree geneTree = geneTrees.get(ig);
 
             // initialize embedding matrix to -1 (no traversal)
-            geneTree.resetEmbedding(traversalNodeCount, -1);
+            geneTree.embedding.reset(traversalNodeCount, -1);
 
             networkNodeGeneLineagesMap.clear();
             // generate map of tip names to tip nodes
@@ -208,10 +208,10 @@ public class CoalescentSimulator extends Runnable {
             // update embedding
             final int traversalLParentNr = lParent.getTraversalNumber();
             for (final Node geneNode : lineagesAtLTop)
-            	geneTree.setEmbedding(geneNode.getNr(), traversalLParentNr, lBranchNumber);
+            	geneTree.embedding.setDirection(geneNode.getNr(), traversalLParentNr, lBranchNumber);
             final int traversalRParentNr = rParent.getTraversalNumber();
             for (final Node geneNode : lineagesAtRTop)
-            	geneTree.setEmbedding(geneNode.getNr(), traversalRParentNr, rBranchNumber);
+            	geneTree.embedding.setDirection(geneNode.getNr(), traversalRParentNr, rBranchNumber);
         }
         else {
             final double bottomHeight = snNode.getHeight();
@@ -233,7 +233,7 @@ public class CoalescentSimulator extends Runnable {
                 // update embedding
                 final int traversalParentNr = sParent.getTraversalNumber();
                 for (final Node geneNode : lineagesAtTop)
-                	geneTree.setEmbedding(geneNode.getNr(), traversalParentNr, sBranchNumber);
+                	geneTree.embedding.setDirection(geneNode.getNr(), traversalParentNr, sBranchNumber);
             }
         }
     }

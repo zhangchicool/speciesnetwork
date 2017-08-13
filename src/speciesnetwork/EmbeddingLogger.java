@@ -21,9 +21,9 @@ public class EmbeddingLogger extends CalculationNode implements Loggable, Functi
 
     @Override
     public void init(PrintStream out) {
-        final int[][] embedding = geneTreeInput.get().embedding;
-        int row = embedding.length;
-        int col = embedding[0].length;
+        final Embedding embedding = geneTreeInput.get().embedding;
+        final int row = embedding.geneNodeCount;
+        final int col = embedding.traversalNodeCount;
 
         for (int r = 0; r < row; r++)
             for (int c = 0; c < col; c++)
@@ -32,13 +32,13 @@ public class EmbeddingLogger extends CalculationNode implements Loggable, Functi
 
     @Override
     public void log(int sample, PrintStream out) {
-        final int[][] embedding = geneTreeInput.get().embedding;
-        int row = embedding.length;
-        int col = embedding[0].length;
+        final Embedding embedding = geneTreeInput.get().embedding;
+        final int row = embedding.geneNodeCount;
+        final int col = embedding.traversalNodeCount;
 
         for (int r = 0; r < row; r++)
             for (int c = 0; c < col; c++)
-                out.print(embedding[r][c] + "\t");
+                out.print(embedding.getDirection(r, c) + "\t");
     }
 
 	@Override
@@ -48,8 +48,8 @@ public class EmbeddingLogger extends CalculationNode implements Loggable, Functi
 
     @Override
     public int getDimension() {
-        final int[][] embedding = geneTreeInput.get().embedding;
-        return embedding.length * embedding[0].length;
+        final Embedding embedding = geneTreeInput.get().embedding;
+        return embedding.geneNodeCount * embedding.traversalNodeCount;
     }
 
     @Override
@@ -58,10 +58,8 @@ public class EmbeddingLogger extends CalculationNode implements Loggable, Functi
     }
 
     @Override
-    public double getArrayValue(int dim) {
-        final int[][] embedding = geneTreeInput.get().embedding;
-        int row = dim / embedding[0].length;
-        int col = dim % embedding[0].length;
-        return embedding[row][col];
+    public double getArrayValue(int i) {
+        final Embedding embedding = geneTreeInput.get().embedding;
+        return embedding.embedding[i];
     }
 }
