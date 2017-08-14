@@ -49,6 +49,9 @@ public class RebuildEmbedding extends Operator {
 
     @Override
     public double proposal() {
+        final List<EmbeddedTree> geneTrees = geneTreesInput.get();
+        final int nGeneTrees = geneTrees.size();
+
         // make the operation if possible
         double logHR = 0.0;
         if (operatorInput.get() != null) {
@@ -57,11 +60,32 @@ public class RebuildEmbedding extends Operator {
                 return Double.NEGATIVE_INFINITY;
         }
 
+        final double[] backwardProbs = new double[geneTrees.size()];
+        double backwardProbSum = 0.0;
+        // Tell BEAST that *all* gene trees will be edited
+        // doing this for all trees avoids Trie combinatorial explosions
+        for (int i = 0; i < nGeneTrees; i++) {
+        	final EmbeddedTree geneTree = geneTrees.get(i);
+            geneTree.startEditing(this);
+            backwardProbs[i] = geneTree.embedding.probability;
+            backwardProbSum += geneTree.embedding.probability;
+        }
+
         // then rebuild the embedding
         if (rebuildEmbedding() < 0)
             return Double.NEGATIVE_INFINITY;
 
-        /* TODO calculate HR for embedding */
+        final double[] forwardProbs = new double[geneTrees.size()];
+        double forwardProbSum = 0.0;
+        for (int i = 0; i < nGeneTrees; i++) {
+        	final EmbeddedTree geneTree = geneTrees.get(i);
+            forwardProbs[i] = geneTree.embedding.probability;
+            forwardProbSum += geneTree.embedding.probability;
+        }
+
+        for (int i = 0; i < nGeneTrees; i++)
+        	logHR += Math.log((backwardProbs[i] * forwardProbSum) / (forwardProbs[i] * backwardProbSum));
+
         return logHR;
     }
 
@@ -80,12 +104,7 @@ public class RebuildEmbedding extends Operator {
         final Network speciesNetwork = speciesNetworkInput.get();
         final List<EmbeddedTree> geneTrees = geneTreesInput.get();
 
-        // Tell BEAST that *all* gene trees will be edited
-        // doing this for all trees avoids Trie combinatorial explosions
-        for (EmbeddedTree geneTree : geneTrees) {
-            geneTree.startEditing(this);
-        }
-
+        // double nEmbeddings = 0.0;
         for (EmbeddedTree geneTree : geneTrees) {
             getNodeHeirs(speciesNetwork, geneTree);
 
@@ -93,14 +112,19 @@ public class RebuildEmbedding extends Operator {
             final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
             final Embedding initialEmbedding = new Embedding(geneNodeCount);
             initialEmbedding.reset(traversalNodeCount, -1);
+            final Set<Embedding> embeddingSet = new HashSet<>();
+            embeddingSet.add(initialEmbedding);
 
-            final Set<Embedding> validEmbeddings = recurseRebuild(initialEmbedding, geneTree.getRoot(), speciesNetwork.getRoot());
-            final int embeddingCount = validEmbeddings.size();
-            if (embeddingCount == 0) return -1;
-            final Embedding randomEmbedding = (Embedding) validEmbeddings.toArray()[Randomizer.nextInt(embeddingCount)];
-            geneTree.embedding = randomEmbedding;
+            if (recurseRebuild(embeddingSet, geneTree.getRoot(), speciesNetwork.getRoot())) {
+	            final Object[] embeddingArray = embeddingSet.toArray();
+	            geneTree.embedding = (Embedding) embeddingArray[Randomizer.nextInt(embeddingArray.length)];
+	            // nEmbeddings += embeddingSet.size();
+            } else {
+            	return -1;
+            }
         }
 
+        // System.out.println("Embeddings per gene: " + (nEmbeddings / geneTrees.size()));
         return 0;
     }
 
@@ -160,39 +184,45 @@ public class RebuildEmbedding extends Operator {
     }
 
     // recursive, return value is the multiplication of gamma probabilities
-    private Set<Embedding> recurseRebuild(
-    		final Embedding embedding,
-    		final Node geneTreeNode,
-    		final NetworkNode speciesNetworkNode) {
-    	final Set<Embedding> embeddingSet = new HashSet<>();
+    private boolean recurseRebuild(final Set<Embedding> embeddingSet, final Node geneTreeNode, final NetworkNode speciesNetworkNode) {   
         if (geneTreeNode.getHeight() < speciesNetworkNode.getHeight()) {
             // this coalescent node must be embedded in a descendant species network branch
+            final int geneTreeNodeNr = geneTreeNode.getNr();
+            final int traversalNodeNr = speciesNetworkNode.getTraversalNumber();
             final Collection<Integer> requiredHeirs = geneNodeHeirs.get(geneTreeNode);
-            final List<Integer> compatibleSpeciesBranches = new ArrayList<>();
+        	boolean hasValidEmbedding = false;
             for (Integer childBranchNr: speciesNetworkNode.childBranchNumbers) {
                 final NetworkNode childSpeciesNode = speciesNetworkNode.getChildByBranch(childBranchNr);
                 if (speciesNodeHeirs.get(childSpeciesNode).containsAll(requiredHeirs)) {
-                    compatibleSpeciesBranches.add(childBranchNr);
+		            if (hasValidEmbedding) {
+		            	// already set embedding so duplicate all existing embeddings
+		            	final Set<Embedding> alternativeSet = new HashSet<>();
+		            	for (Embedding e: embeddingSet)
+		            		alternativeSet.add(new Embedding(e));
+		            	// add them to the set if the embedding is valid
+		            	if (recurseRebuild(alternativeSet, geneTreeNode, childSpeciesNode))
+		            		for (Embedding e: alternativeSet) {
+		            			e.setDirection(geneTreeNodeNr, traversalNodeNr, childBranchNr);
+		            			embeddingSet.add(e);
+		            		};
+		            } else if (recurseRebuild(embeddingSet, geneTreeNode, childSpeciesNode)) {
+		            	hasValidEmbedding = true;
+		            	// set the direction if the embedding is valid
+		            	for (Embedding e: embeddingSet)
+		            		e.setDirection(geneTreeNodeNr, traversalNodeNr, childBranchNr);
+		            }
                 }
             }
 
-            for (Integer nextSpeciesBranchNr: compatibleSpeciesBranches) {
-	            final int traversalNodeNr = speciesNetworkNode.getTraversalNumber();
-	            final int geneTreeNodeNr = geneTreeNode.getNr();
-	            embedding.setDirection(geneTreeNodeNr, traversalNodeNr, nextSpeciesBranchNr);
-	
-	            final NetworkNode nextSpecies = speciesNetworkNode.getChildByBranch(nextSpeciesBranchNr);
-	            embeddingSet.addAll(recurseRebuild(embedding, geneTreeNode, nextSpecies));
-            }
-        } else if (geneTreeNode.isLeaf()) {
-            embeddingSet.add(embedding);
+            return hasValidEmbedding; // has at least one possible embedding
         } else {
-            // embed both gene tree children
+        	// embed both child nodes of the gene tree node
             for (Node childTreeNode : geneTreeNode.getChildren()) {
-                embeddingSet.addAll(recurseRebuild(embedding, childTreeNode, speciesNetworkNode));
+                if (!recurseRebuild(embeddingSet, childTreeNode, speciesNetworkNode))
+            		return false;
             }
-        }
 
-        return embeddingSet;
+            return true;
+        }
     }
 }
