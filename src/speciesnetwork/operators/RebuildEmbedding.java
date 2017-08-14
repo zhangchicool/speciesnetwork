@@ -83,8 +83,9 @@ public class RebuildEmbedding extends Operator {
             forwardProbSum += geneTree.embedding.probability;
         }
 
+        logHR += Math.log(forwardProbSum / backwardProbSum);
         for (int i = 0; i < nGeneTrees; i++)
-        	logHR += Math.log((backwardProbs[i] * forwardProbSum) / (forwardProbs[i] * backwardProbSum));
+        	logHR += Math.log(backwardProbs[i]) / (forwardProbs[i]);
 
         return logHR;
     }
@@ -117,6 +118,7 @@ public class RebuildEmbedding extends Operator {
 
             if (recurseRebuild(embeddingSet, geneTree.getRoot(), speciesNetwork.getRoot())) {
 	            final Object[] embeddingArray = embeddingSet.toArray();
+	        	assert embeddingArray.length == 1 || speciesNetwork.getReticulationNodeCount() > 0;
 	            geneTree.embedding = (Embedding) embeddingArray[Randomizer.nextInt(embeddingArray.length)];
 	            // nEmbeddings += embeddingSet.size();
             } else {
