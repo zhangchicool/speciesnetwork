@@ -8,7 +8,8 @@ public class Embedding {
 
 	public Embedding(int gnc) {
 		geneNodeCount = gnc;
-		traversalNodeCount = 0;
+		traversalNodeCount = 1;
+		embedding = new int[gnc];
 	}
 
 	public Embedding(int gnc, int tnc) {
@@ -20,8 +21,10 @@ public class Embedding {
 	public Embedding(Embedding src) {
 		geneNodeCount = src.geneNodeCount;
 		traversalNodeCount = src.traversalNodeCount;
-		embedding = new int[src.embedding.length];
-		System.arraycopy(src.embedding, 0, embedding, 0, embedding.length);
+		if (src.embedding != null) {
+			embedding = new int[src.embedding.length];
+			System.arraycopy(src.embedding, 0, embedding, 0, embedding.length);
+		}
 		probability = src.probability;
 	}
 

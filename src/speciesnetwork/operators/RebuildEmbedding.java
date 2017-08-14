@@ -13,6 +13,7 @@ import beast.core.StateNode;
 import beast.evolution.alignment.Taxon;
 import beast.evolution.alignment.TaxonSet;
 import beast.evolution.tree.Node;
+import beast.util.Randomizer;
 import speciesnetwork.EmbeddedTree;
 import speciesnetwork.Embedding;
 import speciesnetwork.Network;
@@ -90,9 +91,14 @@ public class RebuildEmbedding extends Operator {
 
             final int geneNodeCount = geneTree.getNodeCount();
             final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
-            final Embedding initialEmbedding = new Embedding(geneNodeCount, traversalNodeCount);
+            final Embedding initialEmbedding = new Embedding(geneNodeCount);
+            initialEmbedding.reset(traversalNodeCount, -1);
 
-            recurseRebuild(initialEmbedding, geneTree.getRoot(), speciesNetwork.getRoot(), geneTree);
+            final Set<Embedding> validEmbeddings = recurseRebuild(initialEmbedding, geneTree.getRoot(), speciesNetwork.getRoot());
+            final int embeddingCount = validEmbeddings.size();
+            if (embeddingCount == 0) return -1;
+            final Embedding randomEmbedding = (Embedding) validEmbeddings.toArray()[Randomizer.nextInt(embeddingCount)];
+            geneTree.embedding = randomEmbedding;
         }
 
         return 0;
@@ -157,8 +163,7 @@ public class RebuildEmbedding extends Operator {
     private Set<Embedding> recurseRebuild(
     		final Embedding embedding,
     		final Node geneTreeNode,
-    		final NetworkNode speciesNetworkNode,
-    		final EmbeddedTree geneTree) {
+    		final NetworkNode speciesNetworkNode) {
     	final Set<Embedding> embeddingSet = new HashSet<>();
         if (geneTreeNode.getHeight() < speciesNetworkNode.getHeight()) {
             // this coalescent node must be embedded in a descendant species network branch
@@ -170,22 +175,21 @@ public class RebuildEmbedding extends Operator {
                     compatibleSpeciesBranches.add(childBranchNr);
                 }
             }
-            int nAlternative = compatibleSpeciesBranches.size() - 1;
-            for (int nextBranchIndex = 0; nextBranchIndex < nAlternative; nextBranchIndex++) {
-	            final Integer nextSpeciesBranchNr = compatibleSpeciesBranches.get(nextBranchIndex);
+
+            for (Integer nextSpeciesBranchNr: compatibleSpeciesBranches) {
 	            final int traversalNodeNr = speciesNetworkNode.getTraversalNumber();
 	            final int geneTreeNodeNr = geneTreeNode.getNr();
-	            geneTree.embedding.setDirection(geneTreeNodeNr, traversalNodeNr, nextSpeciesBranchNr);
+	            embedding.setDirection(geneTreeNodeNr, traversalNodeNr, nextSpeciesBranchNr);
 	
 	            final NetworkNode nextSpecies = speciesNetworkNode.getChildByBranch(nextSpeciesBranchNr);
-	            embeddingSet.addAll(recurseRebuild(embedding, geneTreeNode, nextSpecies, geneTree));
+	            embeddingSet.addAll(recurseRebuild(embedding, geneTreeNode, nextSpecies));
             }
         } else if (geneTreeNode.isLeaf()) {
             embeddingSet.add(embedding);
         } else {
             // embed both gene tree children
             for (Node childTreeNode : geneTreeNode.getChildren()) {
-                embeddingSet.addAll(recurseRebuild(embedding, childTreeNode, speciesNetworkNode, geneTree));
+                embeddingSet.addAll(recurseRebuild(embedding, childTreeNode, speciesNetworkNode));
             }
         }
 
