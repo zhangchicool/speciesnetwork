@@ -60,32 +60,20 @@ public class RebuildEmbedding extends Operator {
                 return Double.NEGATIVE_INFINITY;
         }
 
-        final double[] backwardProbs = new double[geneTrees.size()];
-        double backwardProbSum = 0.0;
         // Tell BEAST that *all* gene trees will be edited
         // doing this for all trees avoids Trie combinatorial explosions
         for (int i = 0; i < nGeneTrees; i++) {
         	final EmbeddedTree geneTree = geneTrees.get(i);
             geneTree.startEditing(this);
-            backwardProbs[i] = geneTree.embedding.probability;
-            backwardProbSum += geneTree.embedding.probability;
+            logHR += Math.log(geneTree.embedding.probability);
         }
 
         // then rebuild the embedding
         if (rebuildEmbedding() < 0)
             return Double.NEGATIVE_INFINITY;
 
-        final double[] forwardProbs = new double[geneTrees.size()];
-        double forwardProbSum = 0.0;
-        for (int i = 0; i < nGeneTrees; i++) {
-        	final EmbeddedTree geneTree = geneTrees.get(i);
-            forwardProbs[i] = geneTree.embedding.probability;
-            forwardProbSum += geneTree.embedding.probability;
-        }
-
-        logHR += Math.log(forwardProbSum / backwardProbSum);
-        for (int i = 0; i < nGeneTrees; i++)
-        	logHR += Math.log(backwardProbs[i]) / (forwardProbs[i]);
+        for (final EmbeddedTree geneTree: geneTrees)
+            logHR -= Math.log(geneTree.embedding.probability);
 
         return logHR;
     }
@@ -105,7 +93,7 @@ public class RebuildEmbedding extends Operator {
         final Network speciesNetwork = speciesNetworkInput.get();
         final List<EmbeddedTree> geneTrees = geneTreesInput.get();
 
-        // double nEmbeddings = 0.0;
+        int embeddingSum = 0;
         for (EmbeddedTree geneTree : geneTrees) {
             getNodeHeirs(speciesNetwork, geneTree);
 
@@ -117,16 +105,25 @@ public class RebuildEmbedding extends Operator {
             embeddingSet.add(initialEmbedding);
 
             if (recurseRebuild(embeddingSet, geneTree.getRoot(), speciesNetwork.getRoot())) {
-	            final Object[] embeddingArray = embeddingSet.toArray();
+	            Embedding[] embeddingArray = new Embedding[embeddingSet.size()];
+	            int i = 0;
+	            double probabilitySum = 0.0;
+	            for (Embedding e: embeddingSet) {
+	            	probabilitySum += e.probability;
+	            	embeddingArray[i] = e;
+	            	i++;
+	            }
 	        	assert embeddingArray.length == 1 || speciesNetwork.getReticulationNodeCount() > 0;
-	            geneTree.embedding = (Embedding) embeddingArray[Randomizer.nextInt(embeddingArray.length)];
-	            // nEmbeddings += embeddingSet.size();
+	        	final Embedding randomEmbedding = embeddingArray[Randomizer.nextInt(embeddingArray.length)];
+	        	randomEmbedding.probability = randomEmbedding.probability / probabilitySum; // normalize probability
+	            geneTree.embedding = randomEmbedding;
+	            embeddingSum += embeddingArray.length;
             } else {
             	return -1;
             }
         }
 
-        // System.out.println("Embeddings per gene: " + (nEmbeddings / geneTrees.size()));
+        System.out.println("Total number of embeddings: " + embeddingSum + ", reticulation count: " + speciesNetwork.getReticulationNodeCount());
         return 0;
     }
 
