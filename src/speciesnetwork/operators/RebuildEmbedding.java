@@ -190,20 +190,21 @@ public class RebuildEmbedding extends Operator {
             final int traversalNodeNr = speciesNetworkNode.getTraversalNumber();
             final Collection<Integer> requiredHeirs = geneNodeHeirs.get(geneTreeNode);
         	boolean hasValidEmbedding = false;
+        	// already set embedding so duplicate all existing embeddings
+        	final Set<Embedding> alternativeSet = new HashSet<>();
+        	for (Embedding e: embeddingSet)
+        		alternativeSet.add(new Embedding(e));
             for (Integer childBranchNr: speciesNetworkNode.childBranchNumbers) {
                 final NetworkNode childSpeciesNode = speciesNetworkNode.getChildByBranch(childBranchNr);
                 if (speciesNodeHeirs.get(childSpeciesNode).containsAll(requiredHeirs)) {
 		            if (hasValidEmbedding) {
-		            	// already set embedding so duplicate all existing embeddings
-		            	final Set<Embedding> alternativeSet = new HashSet<>();
-		            	for (Embedding e: embeddingSet)
-		            		alternativeSet.add(new Embedding(e));
 		            	// add them to the set if the embedding is valid
-		            	if (recurseRebuild(alternativeSet, geneTreeNode, childSpeciesNode))
+		            	if (recurseRebuild(alternativeSet, geneTreeNode, childSpeciesNode)) {
 		            		for (Embedding e: alternativeSet) {
 		            			e.setDirection(geneTreeNodeNr, traversalNodeNr, childBranchNr);
 		            			embeddingSet.add(e);
-		            		};
+		            		}
+		            	}
 		            } else if (recurseRebuild(embeddingSet, geneTreeNode, childSpeciesNode)) {
 		            	hasValidEmbedding = true;
 		            	// set the direction if the embedding is valid
