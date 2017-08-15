@@ -57,10 +57,10 @@ public class Embedding {
 
 	public void appendRowToString(StringBuilder embeddingBuf, int row) {
 		final int offset = row * traversalNodeCount;
-		embeddingBuf.append(offset);
-		for (int i = 1; i < geneNodeCount; i++) {
+		embeddingBuf.append(embedding[offset]);
+		for (int i = 1; i < traversalNodeCount; i++) {
 			embeddingBuf.append(' ');
-			embeddingBuf.append(offset + i);
+			embeddingBuf.append(embedding[offset + i]);
 		}
 	}
 }

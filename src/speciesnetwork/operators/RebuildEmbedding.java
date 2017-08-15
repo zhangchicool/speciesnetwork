@@ -123,7 +123,7 @@ public class RebuildEmbedding extends Operator {
             }
         }
 
-        System.out.println("Total number of embeddings: " + embeddingSum + ", reticulation count: " + speciesNetwork.getReticulationNodeCount());
+        // System.out.println("Total number of embeddings: " + embeddingSum + ", reticulation count: " + speciesNetwork.getReticulationNodeCount());
         return 0;
     }
 

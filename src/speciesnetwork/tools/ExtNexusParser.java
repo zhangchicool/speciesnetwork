@@ -11,6 +11,7 @@ import beast.util.NexusParser;
  * parses nexus file and grabs alignment and calibration from the file
  * Modified parseTreesBlock from NexusParser built into BEAST2 to support networks
  */
+@Deprecated
 public class ExtNexusParser extends NexusParser {
 
     @Override
