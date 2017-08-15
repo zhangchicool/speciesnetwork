@@ -55,12 +55,25 @@ public class Embedding {
 		System.arraycopy(src.embedding, 0, embedding, 0, embedding.length);
 	}
 
-	public void appendRowToString(StringBuilder embeddingBuf, int row) {
-		final int offset = row * traversalNodeCount;
-		embeddingBuf.append(offset);
-		for (int i = 1; i < geneNodeCount; i++) {
-			embeddingBuf.append(' ');
-			embeddingBuf.append(offset + i);
+	public String rowToString(int row) {
+        StringBuilder str = new StringBuilder();
+        final int offset = row * traversalNodeCount;
+		str.append(embedding[offset]);
+		for (int i = 1; i < traversalNodeCount; i++) {
+			str.append(' ');
+			str.append(embedding[offset + i]);
 		}
+		return str.toString();
 	}
+
+    @Override
+	public String toString() {
+        StringBuilder str = new StringBuilder();
+        str.append(embedding[0]);
+	    for (int i = 1; i < geneNodeCount * traversalNodeCount; i++) {
+            str.append(' ');
+            str.append(embedding[i]);
+        }
+        return str.toString();
+    }
 }
