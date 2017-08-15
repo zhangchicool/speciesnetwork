@@ -91,11 +91,7 @@ public class EmbeddedTree extends Tree {
     public String toString() {
     	//printEmbedding();
     	for (int i = 0; i < nodeCount; i++) {
-    		final StringBuilder embeddingBuf = new StringBuilder();
-    		embeddingBuf.append("embedding=\"");
-    		embedding.appendRowToString(embeddingBuf, i);
-			embeddingBuf.append('"');
-    		m_nodes[i].metaDataString = embeddingBuf.toString();
+    		m_nodes[i].metaDataString = "embedding=\"" + embedding.rowToString(i) + "\"";
     	}
     	return super.toString();
     }
@@ -103,8 +99,6 @@ public class EmbeddedTree extends Tree {
     @Override
     public void fromXML(final org.w3c.dom.Node node) {
     	super.fromXML(node);
-
-    	
 
     	for (int i = 0; i < nodeCount; i++) {
     		final String embedStr = (String) m_nodes[i].getMetaData("embedding");
