@@ -62,17 +62,16 @@ public class RebuildEmbedding extends Operator {
 
         // Tell BEAST that *all* gene trees will be edited
         // doing this for all trees avoids Trie combinatorial explosions
-        for (int i = 0; i < nGeneTrees; i++) {
-        	final EmbeddedTree geneTree = geneTrees.get(i);
+        for (final EmbeddedTree geneTree : geneTrees) {
             geneTree.startEditing(this);
             logHR += Math.log(geneTree.embedding.probability);
         }
 
         // then rebuild the embedding
-        if (rebuildEmbedding() < 0)
+        if (!rebuildEmbedding())
             return Double.NEGATIVE_INFINITY;
 
-        for (final EmbeddedTree geneTree: geneTrees)
+        for (final EmbeddedTree geneTree : geneTrees)
             logHR -= Math.log(geneTree.embedding.probability);
 
         return logHR;
@@ -89,42 +88,32 @@ public class RebuildEmbedding extends Operator {
         return stateNodes;
     }
 
-    public int rebuildEmbedding() {
+    public boolean rebuildEmbedding() {
         final Network speciesNetwork = speciesNetworkInput.get();
         final List<EmbeddedTree> geneTrees = geneTreesInput.get();
 
-        int embeddingSum = 0;
+        final NetworkNode networkRoot = speciesNetwork.getRoot();
         for (EmbeddedTree geneTree : geneTrees) {
             getNodeHeirs(speciesNetwork, geneTree);
 
             final int geneNodeCount = geneTree.getNodeCount();
-            final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
-            final Embedding initialEmbedding = new Embedding(geneNodeCount);
-            initialEmbedding.reset(traversalNodeCount, -1);
-            final Set<Embedding> embeddingSet = new HashSet<>();
-            embeddingSet.add(initialEmbedding);
+            final int networkBranchCount = speciesNetwork.getBranchCount();
 
-            if (recurseRebuild(embeddingSet, geneTree.getRoot(), speciesNetwork.getRoot())) {
-	            Embedding[] embeddingArray = new Embedding[embeddingSet.size()];
-	            int i = 0;
-	            double probabilitySum = 0.0;
-	            for (Embedding e: embeddingSet) {
-	            	probabilitySum += e.probability;
-	            	embeddingArray[i] = e;
-	            	i++;
-	            }
-	        	assert embeddingArray.length == 1 || speciesNetwork.getReticulationNodeCount() > 0;
-	        	final Embedding randomEmbedding = embeddingArray[Randomizer.nextInt(embeddingArray.length)];
-	        	randomEmbedding.probability = randomEmbedding.probability / probabilitySum; // normalize probability
-	            geneTree.embedding = randomEmbedding;
-	            embeddingSum += embeddingArray.length;
-            } else {
-            	return -1;
-            }
+            double[][] traverseProb = new double[geneNodeCount][networkBranchCount];
+
+
+            if (!traverseEmbedding(geneTree.getRoot(), networkRoot, networkRoot.gammaBranchNumber, traverseProb))
+                return false;
+
+            final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
+            geneTree.embedding.reset(traversalNodeCount, -1);
+            geneTree.embedding.probability = 1.0;
+
+            if (!recurseRebuild(geneTree.getRoot(), networkRoot, geneTree, traverseProb))
+                return false;
         }
 
-        // System.out.println("Total number of embeddings: " + embeddingSum + ", reticulation count: " + speciesNetwork.getReticulationNodeCount());
-        return 0;
+        return true;
     }
 
 	private void getNodeHeirs(final Network speciesNetwork, final EmbeddedTree geneTree) {
@@ -166,7 +155,7 @@ public class RebuildEmbedding extends Operator {
         }
     }
 
-    private void recurseGeneHeirs (final Node gTreeNode) {
+    private void recurseGeneHeirs(final Node gTreeNode) {
         for (Node child : gTreeNode.getChildren()) {
             recurseGeneHeirs(child);
             geneNodeHeirs.putAll(gTreeNode, geneNodeHeirs.get(child));
@@ -182,47 +171,88 @@ public class RebuildEmbedding extends Operator {
         } 
     }
 
-    // recursive, return value is the multiplication of gamma probabilities
-    private boolean recurseRebuild(final Set<Embedding> embeddingSet, final Node geneTreeNode, final NetworkNode speciesNetworkNode) {   
+    private boolean recurseRebuild(final Node geneTreeNode, final NetworkNode speciesNetworkNode,
+                                   EmbeddedTree geneTree, double[][] traverseProb) {
+        final int geneLineageNr = geneTreeNode.getNr();
+
         if (geneTreeNode.getHeight() < speciesNetworkNode.getHeight()) {
             // this coalescent node must be embedded in a descendant species network branch
-            final int geneTreeNodeNr = geneTreeNode.getNr();
-            final int traversalNodeNr = speciesNetworkNode.getTraversalNumber();
             final Collection<Integer> requiredHeirs = geneNodeHeirs.get(geneTreeNode);
-        	boolean hasValidEmbedding = false;
-        	// already set embedding so duplicate all existing embeddings
-        	final Set<Embedding> alternativeSet = new HashSet<>();
-        	for (Embedding e: embeddingSet)
-        		alternativeSet.add(new Embedding(e));
+            final List<Integer> compatibleSpeciesBranches = new ArrayList<>();
             for (Integer childBranchNr: speciesNetworkNode.childBranchNumbers) {
                 final NetworkNode childSpeciesNode = speciesNetworkNode.getChildByBranch(childBranchNr);
                 if (speciesNodeHeirs.get(childSpeciesNode).containsAll(requiredHeirs)) {
-		            if (hasValidEmbedding) {
-		            	// add them to the set if the embedding is valid
-		            	if (recurseRebuild(alternativeSet, geneTreeNode, childSpeciesNode)) {
-		            		for (Embedding e: alternativeSet) {
-		            			e.setDirection(geneTreeNodeNr, traversalNodeNr, childBranchNr);
-		            			embeddingSet.add(e);
-		            		}
-		            	}
-		            } else if (recurseRebuild(embeddingSet, geneTreeNode, childSpeciesNode)) {
-		            	hasValidEmbedding = true;
-		            	// set the direction if the embedding is valid
-		            	for (Embedding e: embeddingSet)
-		            		e.setDirection(geneTreeNodeNr, traversalNodeNr, childBranchNr);
-		            }
+                    compatibleSpeciesBranches.add(childBranchNr);
                 }
             }
+            if (compatibleSpeciesBranches.size() == 0)
+                return false;  // for a valid embedding, should never go here
 
-            return hasValidEmbedding; // has at least one possible embedding
-        } else {
-        	// embed both child nodes of the gene tree node
-            for (Node childTreeNode : geneTreeNode.getChildren()) {
-                if (!recurseRebuild(embeddingSet, childTreeNode, speciesNetworkNode))
-            		return false;
+            double probSum = 0.0;
+            for (Integer compatibleBranchNr : compatibleSpeciesBranches) {
+                probSum += traverseProb[geneLineageNr][compatibleBranchNr];
             }
 
+            final double u = Randomizer.nextDouble();
+            Integer nextSpeciesBranchNr = compatibleSpeciesBranches.get(0);
+            if (u > traverseProb[geneLineageNr][nextSpeciesBranchNr] / probSum)
+                nextSpeciesBranchNr = compatibleSpeciesBranches.get(1);
+
+            geneTree.embedding.probability *= traverseProb[geneLineageNr][nextSpeciesBranchNr] / probSum;
+
+            final int traversalNodeNr = speciesNetworkNode.getTraversalNumber();
+            final int geneTreeNodeNr = geneTreeNode.getNr();
+            geneTree.embedding.setDirection(geneTreeNodeNr, traversalNodeNr, nextSpeciesBranchNr);
+
+            final NetworkNode nextSpecies = speciesNetworkNode.getChildByBranch(nextSpeciesBranchNr);
+            return recurseRebuild(geneTreeNode, nextSpecies, geneTree, traverseProb);
+        }
+        else {
+            // embed both gene tree children
+            for (Node childTreeNode : geneTreeNode.getChildren()) {
+                if (!recurseRebuild(childTreeNode, speciesNetworkNode, geneTree, traverseProb))
+                return false;
+            }
             return true;
         }
+    }
+
+    private boolean traverseEmbedding(final Node geneTreeNode, final NetworkNode speciesNetworkNode,
+                                      final Integer parentSpBranchNr, double[][] traverseProb) {
+        final int geneLineageNr = geneTreeNode.getNr();
+
+        if (geneTreeNode.getHeight() < speciesNetworkNode.getHeight()) {
+            for (Integer childSpBranchNr : speciesNetworkNode.childBranchNumbers) {
+                final NetworkNode childSpeciesNode = speciesNetworkNode.getChildByBranch(childSpBranchNr);
+                final Collection<Integer> requiredHeirs = geneNodeHeirs.get(geneTreeNode);
+                if (speciesNodeHeirs.get(childSpeciesNode).containsAll(requiredHeirs)) {
+                    if(!traverseEmbedding(geneTreeNode, childSpeciesNode, childSpBranchNr, traverseProb))
+                        return false;
+
+                    traverseProb[geneLineageNr][parentSpBranchNr] += traverseProb[geneLineageNr][childSpBranchNr];
+                }
+            }
+            if (traverseProb[geneLineageNr][parentSpBranchNr] == 0.0)
+                return false;  // for a valid embedding, should never go here
+
+            if (speciesNetworkNode.isReticulation()) {
+                if (speciesNetworkNode.gammaBranchNumber.equals(parentSpBranchNr))
+                    traverseProb[geneLineageNr][parentSpBranchNr] *= speciesNetworkNode.getGammaProb();
+                else
+                    traverseProb[geneLineageNr][parentSpBranchNr] *= 1.0 - speciesNetworkNode.getGammaProb();
+            }
+        }
+        else {
+            traverseProb[geneLineageNr][parentSpBranchNr] = 1.0;
+            for (Node childTreeNode : geneTreeNode.getChildren()) {
+                if(!traverseEmbedding(childTreeNode, speciesNetworkNode, parentSpBranchNr, traverseProb))
+                    return false;
+
+                final int childLineageNr = childTreeNode.getNr();
+                traverseProb[geneLineageNr][parentSpBranchNr] *= traverseProb[childLineageNr][parentSpBranchNr];
+            }
+        }
+
+        return true;
     }
 }
