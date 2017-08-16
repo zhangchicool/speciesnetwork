@@ -93,37 +93,22 @@ public class RebuildEmbedding extends Operator {
         final Network speciesNetwork = speciesNetworkInput.get();
         final List<EmbeddedTree> geneTrees = geneTreesInput.get();
 
-        // int embeddingSum = 0;
-        for (EmbeddedTree geneTree : geneTrees) {
+        for (EmbeddedTree geneTree: geneTrees) {
             getNodeHeirs(speciesNetwork, geneTree);
 
-            final int geneNodeCount = geneTree.getNodeCount();
             final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
-            final Embedding initialEmbedding = new Embedding(geneNodeCount);
-            initialEmbedding.reset(traversalNodeCount, -1);
-            final Set<Embedding> embeddingSet = new HashSet<>();
-            embeddingSet.add(initialEmbedding);
+            final WeightedArrayList<Integer> wl = recurseRebuild(geneTree.getRoot(), speciesNetwork.getRoot());
+            if (wl == null) return false;
 
-            if (recurseRebuild(embeddingSet, geneTree.getRoot(), speciesNetwork.getRoot())) {
-	            Embedding[] embeddingArray = new Embedding[embeddingSet.size()];
-	            int i = 0;
-	            double probabilitySum = 0.0;
-	            for (Embedding e: embeddingSet) {
-	            	probabilitySum += e.probability;
-	            	embeddingArray[i] = e;
-	            	i++;
-	            }
-	        	assert embeddingArray.length == 1 || speciesNetwork.getReticulationNodeCount() > 0;
-	        	final Embedding randomEmbedding = embeddingArray[Randomizer.nextInt(embeddingArray.length)];
-	        	randomEmbedding.probability = randomEmbedding.probability / probabilitySum; // normalize probability
-	            geneTree.embedding = randomEmbedding;
-	            // embeddingSum += embeddingArray.length;
-            } else {
-            	return false;
+            final Integer[] wa = (Integer[]) wl.toArray();
+            geneTree.embedding.reset(traversalNodeCount, -1);
+            assert wl.size() % 3 == 0;
+            final int wlDepth = wl.size() / 3;
+            for (int i = 0; i < wlDepth; i++) {
+                geneTree.embedding.setDirection(wa[i * 3], wa[i * 3 + 1], wa[i * 3 + 2]);
             }
         }
 
-        // System.out.println("Total number of embeddings: " + embeddingSum + ", reticulation count: " + speciesNetwork.getReticulationNodeCount());
         return true;
     }
 
@@ -183,46 +168,56 @@ public class RebuildEmbedding extends Operator {
     }
 
     // recursive, return value is the multiplication of gamma probabilities
-    private boolean recurseRebuild(final Set<Embedding> embeddingSet, final Node geneTreeNode, final NetworkNode speciesNetworkNode) {   
+    private WeightedArrayList<Integer> recurseRebuild(final Node geneTreeNode, final NetworkNode speciesNetworkNode) {   
         if (geneTreeNode.getHeight() < speciesNetworkNode.getHeight()) {
             // this coalescent node must be embedded in a descendant species network branch
             final int geneTreeNodeNr = geneTreeNode.getNr();
             final int traversalNodeNr = speciesNetworkNode.getTraversalNumber();
             final Collection<Integer> requiredHeirs = geneNodeHeirs.get(geneTreeNode);
-        	boolean hasValidEmbedding = false;
-        	// already set embedding so duplicate all existing embeddings
-        	final Set<Embedding> alternativeSet = new HashSet<>();
-        	for (Embedding e: embeddingSet)
-        		alternativeSet.add(new Embedding(e));
+            final WeightedArrayList<Integer>[] chains = new WeightedArrayList[2];
+            double probabilitySum = 0.0;
+            int i = 0;
             for (Integer childBranchNr: speciesNetworkNode.childBranchNumbers) {
                 final NetworkNode childSpeciesNode = speciesNetworkNode.getChildByBranch(childBranchNr);
                 if (speciesNodeHeirs.get(childSpeciesNode).containsAll(requiredHeirs)) {
-		            if (hasValidEmbedding) {
-		            	// add them to the set if the embedding is valid
-		            	if (recurseRebuild(alternativeSet, geneTreeNode, childSpeciesNode)) {
-		            		for (Embedding e: alternativeSet) {
-		            			e.setDirection(geneTreeNodeNr, traversalNodeNr, childBranchNr);
-		            			embeddingSet.add(e);
-		            		}
-		            	}
-		            } else if (recurseRebuild(embeddingSet, geneTreeNode, childSpeciesNode)) {
-		            	hasValidEmbedding = true;
-		            	// set the direction if the embedding is valid
-		            	for (Embedding e: embeddingSet)
-		            		e.setDirection(geneTreeNodeNr, traversalNodeNr, childBranchNr);
-		            }
+                	chains[i] = recurseRebuild(geneTreeNode, childSpeciesNode);
+                	if (chains[i] == null) return null;
+                	chains[i].add(geneTreeNodeNr);
+                	chains[i].add(traversalNodeNr);
+                	chains[i].add(childBranchNr);
+                	probabilitySum += chains[i].probabilitySum;
+                	i++;
                 }
             }
+            if (i == 0) return null;
 
-            return hasValidEmbedding; // has at least one possible embedding
+            final double randomProb = Randomizer.nextDouble() * probabilitySum;
+            if (randomProb < chains[0].probabilitySum) {
+            	chains[0].probabilitySum = probabilitySum;
+            	return chains[0];
+            } else {
+            	chains[1].probabilitySum = probabilitySum;
+            	return chains[1];
+            }
+        } else if (geneTreeNode.isLeaf()) {
+        	WeightedArrayList<Integer> wl = new WeightedArrayList<>();
+        	wl.probability = 1.0;
+        	wl.probabilitySum = 1.0;
+        	return wl;
         } else {
         	// embed both child nodes of the gene tree node
+        	WeightedArrayList<Integer> wl = new WeightedArrayList<>();
+        	wl.probability = 1.0;
+        	wl.probabilitySum = 1.0;
             for (Node childTreeNode : geneTreeNode.getChildren()) {
-                if (!recurseRebuild(embeddingSet, childTreeNode, speciesNetworkNode))
-            		return false;
+                 final WeightedArrayList<Integer> childList = recurseRebuild(childTreeNode, speciesNetworkNode);
+                 if (childList == null) return null;
+                 wl.addAll(childList);
+                 wl.probability *= childList.probability;
+                 wl.probabilitySum *= childList.probabilitySum;
             }
 
-            return true;
+            return wl;
         }
     }
 }
