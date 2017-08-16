@@ -4,7 +4,7 @@ public class Embedding {
 	protected int geneNodeCount;
 	protected int traversalNodeCount;
 	protected int[] embedding;
-	public double probability = 1.0;
+	public double probability;
 
 	public Embedding(int gnc) {
 		geneNodeCount = gnc;
@@ -47,12 +47,13 @@ public class Embedding {
 
 	// assumes geneNodeCount is unchanged
 	public void copyFrom(Embedding src) {
-		if (src.traversalNodeCount != traversalNodeCount) {
+		if (traversalNodeCount != src.traversalNodeCount) {
 			traversalNodeCount = src.traversalNodeCount;
 			embedding = new int[src.embedding.length];
 		}
 
 		System.arraycopy(src.embedding, 0, embedding, 0, embedding.length);
+		probability = src.probability;
 	}
 
 	public String rowToString(int row) {
