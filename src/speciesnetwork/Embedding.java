@@ -9,13 +9,15 @@ public class Embedding {
 	public Embedding(int gnc) {
 		geneNodeCount = gnc;
 		traversalNodeCount = 1;
-		embedding = new int[gnc];
+		embedding = new int[geneNodeCount * traversalNodeCount];
+		java.util.Arrays.fill(embedding, -1);
 	}
 
 	public Embedding(int gnc, int tnc) {
 		geneNodeCount = gnc;
 		traversalNodeCount = tnc;
 		embedding = new int[geneNodeCount * traversalNodeCount];
+		java.util.Arrays.fill(embedding, -1);
 	}
 
 	public Embedding(Embedding src) {
@@ -36,13 +38,13 @@ public class Embedding {
 		embedding[i] = value;
 	}
 
-	public void reset(int tnc, int value) {
+	public void reset(int tnc) {
 		if (traversalNodeCount != tnc) {
 			traversalNodeCount = tnc;
 			embedding = new int[geneNodeCount * traversalNodeCount];
 		}
 
-		java.util.Arrays.fill(embedding, value);
+		java.util.Arrays.fill(embedding, -1);
 	}
 
 	// assumes geneNodeCount is unchanged
@@ -71,7 +73,7 @@ public class Embedding {
 	public String toString() {
         StringBuilder str = new StringBuilder();
         str.append(embedding[0]);
-	    for (int i = 1; i < geneNodeCount * traversalNodeCount; i++) {
+	    for (int i = 1; i < embedding.length; i++) {
             str.append(' ');
             str.append(embedding[i]);
         }

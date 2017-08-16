@@ -80,7 +80,7 @@ abstract class PopulationTestHelper {
             final int[] embedding = this.embeddings.get(i);
             final int nRow = treeParser.getNodeCount();
             final int nCol = embedding.length / nRow;
-            embeddedTree.embedding.reset(nCol, -1);
+            embeddedTree.embedding.reset(nCol);
             for (int r = 0; r < nRow; r++) {
             	for (int c = 0; c < nCol; c++)
             		embeddedTree.embedding.setDirection(r, c, embedding[r * nCol + c]);
