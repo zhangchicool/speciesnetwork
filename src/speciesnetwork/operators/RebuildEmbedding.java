@@ -186,15 +186,17 @@ public class RebuildEmbedding extends Operator {
                 	chains[i] = recurseRebuild(geneTreeNode, childSpeciesNode);
                 	if (chains[i] == null) return null;
 
-                	double childGamma;
-                	if (childSpeciesNode.gammaBranchNumber == childBranchNr) {
-                		childGamma = childSpeciesNode.getGammaProb();
-                	} else {
-                		childGamma = 1.0 - childSpeciesNode.getGammaProb();
+                	if (childSpeciesNode.isReticulation()) {
+	                	double childGamma;
+	                	if (childSpeciesNode.gammaBranchNumber == childBranchNr)
+	                		childGamma = childSpeciesNode.getGammaProb();
+	                	else
+	                		childGamma = 1.0 - childSpeciesNode.getGammaProb();
+	
+	                	chains[i].probability *= childGamma;
+	                	chains[i].probabilitySum *= childGamma;
                 	}
 
-                	chains[i].probability *= childGamma;
-                	chains[i].probabilitySum *= childGamma;
                 	chains[i].setDirection(geneTreeNodeNr, traversalNodeNr, childBranchNr);
                 	probabilitySum += chains[i].probabilitySum;
                 	i++;
