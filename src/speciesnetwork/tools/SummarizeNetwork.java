@@ -90,7 +90,7 @@ public class SummarizeNetwork extends Runnable {
         }
         progressStream.println("\nParsed " + numNetworks + " networks totally, " + burnin + " discarded as burn-in.");
 
-        printSummary_h2(networks, out);
+        printSummary_net(networks, out);
 
         out.close();
     }

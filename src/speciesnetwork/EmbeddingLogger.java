@@ -22,11 +22,8 @@ public class EmbeddingLogger extends CalculationNode implements Loggable, Functi
     @Override
     public void init(PrintStream out) {
         final Embedding embedding = geneTreeInput.get().embedding;
-        final int row = embedding.geneNodeCount;
-        final int col = embedding.traversalNodeCount;
-
-        for (int r = 0; r < row; r++)
-            for (int c = 0; c < col; c++)
+        for (int r = 0; r < embedding.geneNodeCount; r++)
+            for (int c = 0; c < embedding.traversalNodeCount; c++)
                 out.print(geneTreeInput.get().getID() + "_" + r + "_" + c + "\t");
     }
 

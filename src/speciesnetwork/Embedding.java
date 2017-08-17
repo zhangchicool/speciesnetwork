@@ -45,22 +45,19 @@ public class Embedding {
 			traversalNodeCount = tnc;
 			embedding = new int[geneNodeCount * traversalNodeCount];
 		}
-
 		java.util.Arrays.fill(embedding, -1);
 	}
 
 	// assumes geneNodeCount is unchanged
 	public void copyFrom(Embedding src) {
-		probability = src.probability;
-		probabilitySum = src.probabilitySum;
-
-		if (src.traversalNodeCount != traversalNodeCount) {
+		if (traversalNodeCount != src.traversalNodeCount) {
 			traversalNodeCount = src.traversalNodeCount;
 			embedding = new int[src.embedding.length];
 		}
-
 		System.arraycopy(src.embedding, 0, embedding, 0, embedding.length);
-	}
+		probability = src.probability;
+		probabilitySum = src.probabilitySum;
+    }
 
 	public void mergeWith(Embedding src) {
 		assert src.geneNodeCount == geneNodeCount;
@@ -69,7 +66,8 @@ public class Embedding {
 		probability *= src.probability;
 		probabilitySum *= src.probabilitySum;
 		for (int i = 0; i < embedding.length; i++) {
-			if (embedding[i] == -1) embedding[i] = src.embedding[i];
+			if (embedding[i] == -1)
+				embedding[i] = src.embedding[i];
 		}
 	}
 
