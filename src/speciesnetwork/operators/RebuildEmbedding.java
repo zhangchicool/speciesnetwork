@@ -165,7 +165,7 @@ public class RebuildEmbedding extends Operator {
         } 
     }
 
-    // recursive, return value is the multiplication of gamma probabilities
+    // recursive, return value is a possible gene tree embedding, return null if no valid embedding
     private Embedding recurseRebuild(final Node geneTreeNode, final NetworkNode speciesNetworkNode) {   
         if (geneTreeNode.getHeight() < speciesNetworkNode.getHeight()) {
             // embed this gene tree node (lineage) in a descendant species network branch
