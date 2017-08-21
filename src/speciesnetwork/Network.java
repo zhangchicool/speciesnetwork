@@ -146,6 +146,10 @@ public class Network extends StateNode {
         return reticulationNodeCount;
     }
 
+    public int getInternalNodeCount() {
+        return speciationNodeCount + reticulationNodeCount;
+    }
+
     /**
      * @return the index of the first reticulation node
      */

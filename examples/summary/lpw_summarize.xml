@@ -1,5 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<beast namespace="beast.core:beast.app" version="2.4">
-    <run id="network.summary" spec="speciesnetwork.tools.SummarizePosterior"
-         inputFileName="lpw_infernet.species.trees" outputFileName="lpw_infernet.summary.trees"/>
-</beast>

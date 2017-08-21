@@ -237,7 +237,7 @@
         <operator id="gammaProbUniform:species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="10.0"/>
         <operator id="gammaProbRndWalk:species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="10.0"/>
 
-        <operator id="networkMultiplier:species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@network:species" weight="10.0">
+        <operator id="networkMultiplier:species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="10.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>

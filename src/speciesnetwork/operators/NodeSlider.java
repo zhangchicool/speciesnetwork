@@ -20,12 +20,12 @@ public class NodeSlider extends Operator {
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
     public final Input<RealParameter> originInput =
             new Input<>("origin", "The time when the process started.", Validate.REQUIRED);
-    public final Input<Double> windowSizeInput =
-            new Input<>("windowSize", "Window size of the uniform proposal (default is 0.02).", 0.02);
     public final Input<Boolean> isNormalInput =
-            new Input<>("isNormal", "Using normal proposal (default: uniform proposal).", false);
+            new Input<>("isNormal", "Using normal proposal (default: uniform proposal).", true);
     public final Input<Double> sigmaInput =
             new Input<>("sigma", "Standard deviation of the normal proposal (default is 0.01).", 0.01);
+    public final Input<Double> windowSizeInput =
+            new Input<>("windowSize", "Window size of the uniform proposal (default is 0.02).", 0.02);
 
     @Override
     public void initAndValidate() {
@@ -74,7 +74,6 @@ public class NodeSlider extends Operator {
             final RealParameter originTime = originInput.get();
             if (outsideBounds(newHeight, originTime))
                 return Double.NEGATIVE_INFINITY;
-
             originTime.setValue(newHeight);
         }
         speciesNetwork.startEditing(this);

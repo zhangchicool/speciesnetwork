@@ -444,7 +444,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("        <operator id=\"turnOverScale:species\" spec=\"ScaleOperator\" parameter=\"@turnOverRate:species\" scaleFactor=\"0.5\" weight=\"3.0\"/>");
         out.println("        <operator id=\"gammaProbUniform:species\" spec=\"speciesnetwork.operators.GammaProbUniform\" speciesNetwork=\"@network:species\" weight=\"5.0\"/>");
         out.println("        <operator id=\"gammaProbRndWalk:species\" spec=\"speciesnetwork.operators.GammaProbRndWalk\" speciesNetwork=\"@network:species\" weight=\"5.0\"/>\n");
-        out.println("        <operator id=\"networkMultiplier:species\" spec=\"speciesnetwork.operators.NetworkMultiplier\" speciesNetwork=\"@network:species\" weight=\"5.0\">");
+        out.println("        <operator id=\"networkMultiplier:species\" spec=\"speciesnetwork.operators.NetworkMultiplier\" speciesNetwork=\"@network:species\" origin=\"@originTime:species\" weight=\"5.0\">");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
         out.println("        </operator>");

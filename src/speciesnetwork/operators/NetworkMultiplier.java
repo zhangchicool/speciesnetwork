@@ -4,6 +4,7 @@ import beast.core.Description;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.Operator;
+import beast.core.parameter.RealParameter;
 import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
 import beast.util.Randomizer;
@@ -22,6 +23,8 @@ import java.util.List;
 public class NetworkMultiplier extends Operator {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
+    public final Input<RealParameter> originInput =
+            new Input<>("origin", "The time when the process started.", Validate.REQUIRED);
     public final Input<List<Tree>> geneTreesInput =
             new Input<>("geneTree", "Gene tree within the species network.", new ArrayList<>());
     public final Input<Double> tuningInput =
@@ -40,18 +43,21 @@ public class NetworkMultiplier extends Operator {
 
         final double scaler = Math.exp (tuning * (Randomizer.nextDouble() - 0.5));
 
-        // check proposed root height < origin height
-        if (speciesNetwork.getRoot().getHeight() * scaler >= speciesNetwork.getOrigin().getHeight())
-            return Double.NEGATIVE_INFINITY;
-
-        // scale all internal network nodes
+        // scale all internal network nodes (including origin)
         speciesNetwork.startEditing(this);
-        for (NetworkNode snNode : speciesNetwork.getInternalNodes()) {
+        for (NetworkNode snNode : speciesNetwork.getInternalNodesWithOrigin()) {
             final double newHeight = scaler * snNode.getHeight();
             snNode.setHeight(newHeight);
+
+            if (snNode.isOrigin()) {
+                final RealParameter originTime = originInput.get();
+                if (outsideBounds(newHeight, originTime))
+                    return Double.NEGATIVE_INFINITY;
+                originTime.setValue(newHeight);
+            }
         }
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
-        double logProposalRatio =  Math.log(scaler) * speciesNetwork.getInternalNodes().length;
+        double logProposalRatio =  Math.log(scaler) * (speciesNetwork.getInternalNodeCount() + 1);
 
         // also scale all gene tree internal nodes
         for (Tree gTree : geneTreesInput.get()) {
@@ -63,5 +69,12 @@ public class NetworkMultiplier extends Operator {
         }
 
         return logProposalRatio;
+    }
+
+    private boolean outsideBounds(final double value, final RealParameter param) {
+        final Double l = param.getLower();
+        final Double h = param.getUpper();
+
+        return (value < l || value > h);
     }
 }
