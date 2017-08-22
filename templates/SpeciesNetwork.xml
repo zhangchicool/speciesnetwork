@@ -324,7 +324,7 @@
 		<operator id="gammaProbUniform.t:Species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@Network.t:Species" weight="30.0"/>
 		<operator id="gammaProbRndWalk.t:Species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@Network.t:Species" weight="30.0"/>
 		
-		<operator id="networkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@Network.t:Species" weight="30.0"/>
+		<operator id="networkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="30.0"/>
 
         <operator id="originMultiplier.t:Species" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="5.0"/>
 		<operator id="nodeUniformAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="100.0">
