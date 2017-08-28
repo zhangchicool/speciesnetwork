@@ -105,7 +105,7 @@ public class RebuildEmbedding extends Operator {
                 return false;
 
             // propose a new embedding by traversing each lineage proportional to its traverse probability
-            geneTree.embedding.reset(traversalNodeCount, -1);
+            geneTree.embedding.reset(traversalNodeCount);
             geneTree.embedding.probability = 1.0;
             if (!recurseRebuild(geneTree.getRoot(), networkRoot, geneTree, traverseProb))
                 return false;
