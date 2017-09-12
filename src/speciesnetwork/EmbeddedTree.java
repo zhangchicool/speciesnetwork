@@ -109,7 +109,6 @@ public class EmbeddedTree extends Tree {
     			embedding.setDirection(i, j, value);
     		}
     	}
-
-    	System.out.println(getID() + "\n" + toString());
+    	// System.out.println(getID() + "\n" + toString());
     }
 }
