@@ -76,17 +76,6 @@ public class ConstantPopulation extends PopulationSizeModel {
 
     @Override
     public void serialize(NetworkNode speciesNetworkNode, StringBuilder buf, DecimalFormat df) {
-        final RealParameter popSizes = popSizesInput.get();
-        final int speciesNetworkNodeNumber = speciesNetworkNode.getNr();
-        final double branchPopSize = popSizes.getValue(speciesNetworkNodeNumber);
-
-        // TODO ???
-        buf.append("dmv={");
-        if (df == null) {
-            buf.append(branchPopSize);
-        } else {
-            buf.append(df.format(branchPopSize));
-        }
-        buf.append("}");
+        // do nothing
     }
 }

@@ -100,6 +100,7 @@ public class EmbeddedTree extends Tree {
     public void fromXML(final org.w3c.dom.Node node) {
     	super.fromXML(node);
 
+        // TODO: not working as node numbers might change when restored and embedding becomes invalid
     	for (int i = 0; i < nodeCount; i++) {
     		final String embedStr = (String) m_nodes[i].getMetaData("embedding");
     		String[] parts = embedStr.split(" ");
