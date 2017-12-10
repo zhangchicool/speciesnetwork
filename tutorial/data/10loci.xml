@@ -246,20 +246,23 @@ id="10loci">
                     <parameter id="RealParameter.18" estimate="false" name="S">1.25</parameter>
                 </LogNormal>
             </prior>
-            <prior id="netDivRatePrior.t:Species" name="distribution" x="@netDivRate.t:Species">
-                <OneOnX id="OneOnX.0" name="distr"/>
-            </prior>
             <distribution id="networkPrior" spec="speciesnetwork.BirthHybridizationModel" netDiversification="@netDivRate.t:Species" network="@Network.t:Species" turnOver="@turnOverRate.t:Species">
                 <parameter id="betaShape.t:Species" estimate="false" name="betaShape">1.0</parameter>
             </distribution>
-            <prior id="originTimePrior.t:Species" name="distribution" x="@originTime.t:Species">
-                <OneOnX id="OneOnX.1" name="distr"/>
-            </prior>
-            <prior id="popMeanPrior.t:Species" name="distribution" x="@popMean.t:Species">
-                <OneOnX id="OneOnX.2" name="distr"/>
+            <prior id="netDivRatePrior.t:Species" name="distribution" x="@netDivRate.t:Species">
+                <Exponential id="Exponential.0" name="distr" mean="10.0"/>
             </prior>
             <prior id="turnOverRatePrior.t:Species" name="distribution" x="@turnOverRate.t:Species">
                 <Uniform id="Uniform.0" name="distr"/>
+            </prior>
+            <prior id="originTimePrior.t:Species" name="distribution" x="@originTime.t:Species">
+                <Exponential id="Exponential.01" name="distr" mean="0.1"/>
+            </prior>
+            <prior id="popMeanPrior.t:Species" name="distribution" x="@popMean.t:Species">
+                <Gamma id="Gamma.0" name="distr">
+                    <parameter id="RealParameter.19" estimate="false" name="alpha">2.0</parameter>
+                    <parameter id="RealParameter.20" estimate="false" name="beta">0.005</parameter>
+                </Gamma>
             </prior>
         </distribution>
         <distribution id="likelihood" spec="util.CompoundDistribution">
