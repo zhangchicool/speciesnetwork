@@ -25,44 +25,42 @@ E-mail: zhangchi@ivpp.ac.cn}
 This tutorial describes a full Bayesian framework for species network inference studying reticulate evolution. The statistical methodology is described in \citet{Zhang:2017gq}.
 You will need the following software at your disposal:
 \begin{itemize}
-\item {\bf BEAST} --- this package contains the BEAST program, BEAUti, and other utility programs. This tutorial is written for BEAST v2.4.7 or higher \citep[\url{http://beast2.org},][]{Bouckaert:2014iz}.
-\item {\bf Tracer} --- this program is used to explore the output of BEAST (and other Bayesian MCMC programs). It summarizes graphically and quantitively the distributions of continuous parameters and provides diagnostic information for the particular MCMC chain (\url{http://tree.bio.ed.ac.uk/software/tracer}).
-\item {\bf IcyTree} --- this is a web application for visualizing phylogenies, including phylogenetic networks \citep[\url{icytree.org};][]{Vaughan:2017fu}.
+\item \textbf{BEAST} --- this package contains the BEAST program, BEAUti, and other utility programs. This tutorial is written for BEAST v2.4.7 or higher \citep[\url{http://beast2.org},][]{Bouckaert:2014iz}.
+\item \textbf{Tracer} --- this program is used to explore the output of BEAST (and other Bayesian MCMC programs). It summarizes graphically and quantitively the distributions of continuous parameters and provides diagnostic information for the particular MCMC chain (\url{http://tree.bio.ed.ac.uk/software/tracer}).
+\item \textbf{IcyTree} --- this is a web application for visualizing phylogenies, including phylogenetic networks \citep[\url{icytree.org};][]{Vaughan:2017fu}.
 \end{itemize}
 
 %%%%%%%%%
 \section*{The Data}
 
-The multilocus sequence alignment used to illustrate the analysis is simulated under JC69 substitution model \citep{Jukes:1969wx} with strict molecular clock and no rate variation across loci, on the gene trees simulated under the species network shown in Figure \ref{fig_spnetwork} \citep[see also][]{Zhang:2017gq}. There are 2 sequences from species $A$, 4 from $B$ and 2 from $C$ for each of the 10 loci. The sequence length is 200bp per locus. The NEXUS file called {\bf 10loci.nex} is included with this tutorial.
+The gene trees from six independent loci are simulated under the multispecies network coalescent \citep[MSNC;][]{Yu:2014dt} given the species network shown in figure \ref{fig_spnetwork}. Each gene tree has four tips per species. The sequence alignments are simulated under JC69 substitution model \citep{Jukes:1969wx} along the gene trees with strict molecular clock and no rate variation across loci. The sequence length is 200bp at each locus. The NEXUS file called \textbf{3s\_6loci.nex} is included with this tutorial.
 
 \begin{figure}[h]
 \center
-\includegraphics[width=0.4\textwidth]{figs/fig1_spnetwork}
+\includegraphics[width=0.5\textwidth]{figs/fig1_spnetwork}
 \caption{Species network used to simulate the data}
 \label{fig_spnetwork}
 \end{figure}
 
-\section*{Set up BEAUti}
+The first step in the analysis will be to convert the NEXUS files into a BEAST XML input file. This is done using the program \textbf{BEAUti} included in the BEAST package. It is a user-friendly program for setting the evolutionary model and options for the MCMC analysis. The second step will be to actually run \textbf{BEAST} using the XML input file that contains the data, model and MCMC chain settings. The final step will be to explore the output of BEAST in order to diagnose problems and to summarize the results.
 
-The first step in the analysis will be to convert the NEXUS files into a BEAST XML input file. This is done using the program {\bf BEAUti} included in the BEAST package. This is a user-friendly program for setting the evolutionary model and options for the MCMC analysis. The second step will be to actually run BEAST using the XML input file that contains the data, model and MCMC chain settings. The final step will be to explore the output of BEAST in order to diagnose problems and to summarize the results.
+\section*{BEAUti}
 
-SpeciesNetwork uses a non-standard template to generate the XML, so the first thing to do is to change the template. Choose the {\bf File / Template / SpeciesNetwork} item (Fig. \ref{fig_template}). If you do not see this template in the menu, make sure the SpeciesNetwork plugin is installed correctly.
+\subsection*{Switching the template}
+
+SpeciesNetwork uses a non-standard template to generate the XML, so the first thing to do is to change the template. Choose the \textbf{File / Template / SpeciesNetwork} item (fig. \ref{fig_template}). If you do not see this template in the menu, make sure the SpeciesNetwork plugin is installed correctly.
 Keep in mind that when changing a template, BEAUti deletes all previously imported data and starts with a clean template. So, if you already loaded some data, a warning message will pop up indicating that this data will be lost if you switch templates.
 
 \begin{figure}[h]
 \center
 \includegraphics[width=0.7\textwidth]{figs/fig2_template}
-\caption{Select a new template in BEAUti, then import the alignment}
+\caption{Switching the template, then import the alignment}
 \label{fig_template}
 \end{figure}
 
-\section*{Load the NEXUS file}
+\subsection*{Loading the NEXUS file}
 
-To import the sequence alignment into BEAUti, use the {\bf Import Alignment} option from the {\bf File} menu (Fig. \ref{fig_template}) and select 10loci.nex. Once loaded, the 10 loci are displayed in the Partitions panel. You can double click any locus (partition) to show its detail.
-
-For multilocus analyses, BEAST can link or unlink substitution, clock, and tree models across loci by clicking buttons at the top of the Partitions panel. The default is unlinking all models.
-Since the species are contemporary and the implementation can not incorporate node calibrations (except for the origin), plus that the purpose here is not to explore evolutionary rate variation across gene tree lineages through relaxed clock models, we link the clock models for all loci and rename the label to {\bf allloci} (Fig. \ref{fig_partition}). The clock rate will later be fixed to 1.0 in the Clock Model panel. The evolutionary rate variation across different gene loci will be modeled using gene-rate multipliers and set in the Site Model panel (see below).
-You should only unlink the tree models across loci that are actually genetically unlinked. For example, in most organisms all the mitochondrial genes are effectively linked due to a lack of recombination and they should be set up to use the same tree model.
+To import the sequence alignment into BEAUti, use the \textbf{Import Alignment} option from the \textbf{File} menu (fig. \ref{fig_template}) and select \textbf{3s\_6loci.nex}. Once loaded, the six loci are displayed in the \textbf{Partitions} panel. You can double click any locus (partition) to show its detail.
 
 \begin{figure}[h]
 \center
@@ -71,25 +69,29 @@ You should only unlink the tree models across loci that are actually genetically
 \label{fig_partition}
 \end{figure}
 
-\section*{Assign taxa to species}
-Each taxon should be assigned to a species, and this mapping is fixed during the analysis. Typically, the species name is already embedded inside the taxon name and should be easily extracted. If the default guess by BEAUti is not satisfactory, press the {\bf Guess} button at the bottom and a dialog will show up where you can choose from several ways to try to detect the species names. Otherwise the names can be filled in manually (Fig. \ref{fig_mapping}).
+For multilocus analyses, BEAST can link or unlink substitution, clock, and tree models across loci by clicking buttons at the top of the \textbf{Partitions} panel. The default is unlinking all models.
+Since the species are contemporary and the implementation can not incorporate node calibrations (except for the origin), plus that the purpose here is not to explore evolutionary rate variation across gene tree lineages through relaxed clock models, we link the clock models for all loci and rename the label to \textbf{allloci} (fig. \ref{fig_partition}). The clock rate will later be fixed to 1.0 in the \textbf{Clock Model} panel. The evolutionary rate variation across different gene loci will be modeled using gene-rate multipliers and set in the \textbf{Site Model} panel (see below).
+You should only unlink the tree models across loci that are actually genetically unlinked. For example, in most organisms all the mitochondrial genes are effectively linked due to a lack of recombination and they should be set up to use the same tree model.
+
+\subsection*{Assigning taxa to species}
+Each taxon should be assigned to a species, and this mapping is fixed during the analysis. Typically, the species name is already embedded inside the taxon name and should be easily extracted. If the default guess by BEAUti is not satisfactory, press the \textbf{Guess} button at the bottom and a dialog will show up where you can choose from several ways to try to detect the species names. Otherwise the names can be filled in manually (fig. \ref{fig_mapping}).
 
 \begin{figure}[h]
 \center
 \includegraphics[width=0.6\textwidth]{figs/fig4_mapping}
-\caption{Assigned taxa to species}
+\caption{Assigning taxa to species}
 \label{fig_mapping}
 \end{figure}
 
-\section*{Set gene ploidy}
+\subsection*{Setting gene ploidy}
 
-Ploidy should be based on the mode of inheritance for each gene. By convention, nuclear genes in diploids are given a ploidy of 2.0. Because mitochondrial and Y chromosome genes are haploid even in otherwise diploid organisms, and also inherited only through the mother or the father respectively, their effective population size is only one quarter that of nuclear genes. Therefore if nuclear gene ploidy is set to 2.0, mitochondrial or Y chromosome gene ploidy should be set to 0.5. All genes in the simulation are assumed from nuclear loci and their ploidy should be left at the default value of 2.0 in the Gene Ploidy panel.
+Ploidy should be based on the mode of inheritance for each gene. By convention, nuclear genes in diploids are given a ploidy of 2.0. Because mitochondrial and Y chromosome genes are haploid even in otherwise diploid organisms, and also inherited only through the mother or the father respectively, their effective population size is only one quarter that of nuclear genes. Therefore if nuclear gene ploidy is set to 2.0, mitochondrial or Y chromosome gene ploidy should be set to 0.5. All genes in the simulation are assumed from nuclear loci and their ploidy should be left at the default value of 2.0 in the \textbf{Gene Ploidy} panel.
 
-\section*{Set up substitution and clock models}
+\subsection*{Setting up substitution and clock models}
 
 The next thing to do is to set up the substitution and clock models.
-Although the true substitution model in the simulation is JC69 which is the default in the Site Model panel, we select the {\bf HKY} model \citep{Hasegawa:1985ww} that will fit better for real data. The frequencies are set to {\bf empirical} so that only the $\kappa$ parameter is {\bf estimated} (Fig. \ref{fig_sitemodel}).
-To account for evolutionary rate variation across loci with mean 1.0, tick {\bf estimate} at {\bf Substitution Rate} (Fig. \ref{fig_sitemodel}) to use the gene-rate multipliers.
+Although the true substitution model in the simulation is JC69 which is the default in the \textbf{Site Model} panel, we select the \textbf{HKY} model \citep{Hasegawa:1985ww} that will fit better for real data. The frequencies are set to \textbf{empirical} so that only the $\kappa$ parameter is \textbf{estimated} (fig. \ref{fig_sitemodel}).
+To account for evolutionary rate variation across loci with mean 1.0, tick \textbf{estimate} at \textbf{Substitution Rate} (fig. \ref{fig_sitemodel}) to use the gene-rate multipliers.
 
 \begin{figure}[h]
 \center
@@ -98,7 +100,7 @@ To account for evolutionary rate variation across loci with mean 1.0, tick {\bf 
 \label{fig_sitemodel}
 \end{figure}
 
-Uncheck {\bf estimate} in the Clock Model panel to fix the clock rate to 1.0 for all loci.
+Uncheck \textbf{estimate} in the \textbf{Clock Model} panel to fix the clock rate to 1.0 for all loci.
 \begin{figure}[h]
 \center
 \includegraphics[width=1.0\textwidth]{figs/fig6_clockmodel}
@@ -106,9 +108,197 @@ Uncheck {\bf estimate} in the Clock Model panel to fix the clock rate to 1.0 for
 \label{fig_clockmodel}
 \end{figure}
 
-\section*{Priors}
+\subsection*{Changing the default priors}
 
-The {\bf Priors} panel allows priors for each parameter in the model to be specified. The default priors that BEAST sets for the parameters would allow the analysis to work. However, some of these are inappropriate for this analysis. Therefore change the priors as follows:
+The \textbf{Priors} panel allows priors for each parameter in the model to be specified. The default priors that BEAST sets for the parameters would allow the analysis to work. However, some of these are inappropriate for this analysis. Therefore change the priors as follows (fig. \ref{fig_priors}):
+
+\begin{figure}[h]
+\center
+\includegraphics[width=1.0\textwidth]{figs/fig7_priors}
+\caption{Changing priors}
+\label{fig_priors}
+\end{figure}
+
+\textbf{netDivRate.t:Species}: Exponential with mean 10.0. This is for the parameter $\lambda-\nu$ (speciation rate minus hybridization rate). The other parameter \textbf{turnOverRate.t:Species} $=\nu/\lambda$ has the default prior $U(0,1)$.
+
+\textbf{originTime.t:Species}: Exponential with mean 0.1. This is for the origin time of the species network. 
+
+\textbf{popMean.t:Species}: Gamma with shape 2.0 and scale 0.005 (mean = 0.01). The population sizes of the species network are integrated out analytically using inverse-gamma(3, 2$\theta$) conjugate prior with mean $\theta$. This sets the prior for $\theta$.
+
+\subsection*{Setting the MCMC options}
+
+The \textbf{MCMC} tab provides settings for the MCMC chain. For this analysis, we set the \textbf{Chain Length} to \underline{20,000,000} (fig. \ref{fig_mcmc}). The appropriate length of the chain depends on the size of the dataset, the complexity of the model and the accuracy of the answer required, and should be adjusted accordingly. 
+Increase \textbf{Log Every} under \textbf{screenlog} to \underline{10,000} to output less frequently to the screen, and decrease \textbf{Log Every} to \underline{2000} under \textbf{tracelog}, \textbf{specieslog}, and \textbf{treelog.t} so that \underline{20,000,000 / 2000 = 10,000} samples will be recorded in the log files (fig. \ref{fig_mcmc}). You can also change the \textbf{File Name} if you want.
+
+\begin{figure}[h]
+\center
+\includegraphics[width=0.9\textwidth]{figs/fig8_mcmc}
+\caption{MCMC settings}
+\label{fig_mcmc}
+\end{figure}
+
+\subsection*{Generating the BEAST XML input file}
+We are now ready to create the BEAST XML file. To do this, either select the \textbf{File/Save} or \textbf{File/Save As} option from the \textbf{File} menu. Save the file with an appropriate name (i.e., \textbf{3s\_6loci.xml}). We are now ready to run the file through BEAST.
+
+\section*{BEAST}
+
+Now run BEAST. Provide your newly created XML file as input by clicking \textbf{Choose File}, and then click \textbf{Run} (Fig.~\ref{fig_beast}).
+
+\begin{figure}[h]
+\center
+\includegraphics[width=0.6\textwidth]{figs/fig9_beast}
+\caption{Launching BEAST}
+\label{fig_beast}
+\end{figure}
+
+BEAST will then run until the specified chain length is reached and has finished reporting information on the screen. The actual result files are saved to the disk in the same location as your input file. The output to the screen will look something like this: 
+
+{\tiny   
+\begin{verbatim}
+                        BEAST v2.4.7, 2002-2017
+             Bayesian Evolutionary Analysis Sampling Trees
+                       Designed and developed by
+ Remco Bouckaert, Alexei J. Drummond, Andrew Rambaut & Marc A. Suchard
+                                    
+                     Department of Computer Science
+                         University of Auckland
+                        remco@cs.auckland.ac.nz
+                        alexei@cs.auckland.ac.nz
+                                    
+                   Institute of Evolutionary Biology
+                        University of Edinburgh
+                           a.rambaut@ed.ac.uk
+                                    
+                    David Geffen School of Medicine
+                 University of California, Los Angeles
+                           msuchard@ucla.edu
+                                    
+                      Downloads, Help & Resources:
+                           http://beast2.org/
+                                    
+  Source code distributed under the GNU Lesser General Public License:
+                   http://github.com/CompEvol/beast2
+                                    
+                           BEAST developers:
+   Alex Alekseyenko, Trevor Bedford, Erik Bloomquist, Joseph Heled, 
+ Sebastian Hoehna, Denise Kuehnert, Philippe Lemey, Wai Lok Sibon Li, 
+Gerton Lunter, Sidney Markowitz, Vladimir Minin, Michael Defoin Platel, 
+                 Oliver Pybus, Chieh-Hsi Wu, Walter Xie
+                                    
+                               Thanks to:
+          Roald Forsberg, Beth Shapiro and Korbinian Strimmer
+
+Random number seed: 1513599534398
+
+... ...
+
+       19980000     -3066.4680      1039.9        -3248.3326        -6.8402       188.7048 1m7s/Msamples
+       19990000     -3054.5767      1036.3        -3234.7556        -4.9909       185.1698 1m7s/Msamples
+       20000000     -3055.5080      1036.1        -3250.6872        -7.2919       202.4712 1m7s/Msamples
+
+Operator                                                                   Tuning #accept #reject Pr(m) Pr(acc|m)
+speciesnetwork.operators.RebuildEmbedding(scaleAndEmbed.t:locus4)               -   19906   88118 0.0023  0.1843 
+speciesnetwork.operators.RebuildEmbedding(scaleRootAndEmbed.t:locus4)           -   30232   77871 0.0023  0.2797 
+speciesnetwork.operators.RebuildEmbedding(uniformAndEmbed.t:locus4)             -  513993  571303 0.0230  0.4736 
+speciesnetwork.operators.RebuildEmbedding(subSlideAndEmbed.t:locus4)            -    2449  539219 0.0115  0.0045 
+speciesnetwork.operators.RebuildEmbedding(narrowAndEmbed.t:locus4)              -  143450  399386 0.0115  0.2643 
+speciesnetwork.operators.RebuildEmbedding(wideAndEmbed.t:locus4)                -    2529  178664 0.0038  0.0140 
+speciesnetwork.operators.RebuildEmbedding(WilsonBaldingAndEmbed.t:locus4)       -    1991  179365 0.0038  0.0110 
+speciesnetwork.operators.RebuildEmbedding(scaleAndEmbed.t:locus3)               -   22541   85865 0.0023  0.2079 
+speciesnetwork.operators.RebuildEmbedding(scaleRootAndEmbed.t:locus3)           -   28768   80034 0.0023  0.2644 
+speciesnetwork.operators.RebuildEmbedding(uniformAndEmbed.t:locus3)             -  546282  540384 0.0230  0.5027 
+speciesnetwork.operators.RebuildEmbedding(subSlideAndEmbed.t:locus3)            -    2272  539750 0.0115  0.0042 
+speciesnetwork.operators.RebuildEmbedding(narrowAndEmbed.t:locus3)              -  241627  300650 0.0115  0.4456 
+speciesnetwork.operators.RebuildEmbedding(wideAndEmbed.t:locus3)                -    7528  173196 0.0038  0.0417 
+speciesnetwork.operators.RebuildEmbedding(WilsonBaldingAndEmbed.t:locus3)       -    5574  175938 0.0038  0.0307 
+speciesnetwork.operators.RebuildEmbedding(scaleAndEmbed.t:locus1)               -   21154   87052 0.0023  0.1955 
+speciesnetwork.operators.RebuildEmbedding(scaleRootAndEmbed.t:locus1)           -   27178   81197 0.0023  0.2508 
+speciesnetwork.operators.RebuildEmbedding(uniformAndEmbed.t:locus1)             -  522871  562376 0.0230  0.4818 
+speciesnetwork.operators.RebuildEmbedding(subSlideAndEmbed.t:locus1)            -    2322  539982 0.0115  0.0043 
+speciesnetwork.operators.RebuildEmbedding(narrowAndEmbed.t:locus1)              -  145628  397591 0.0115  0.2681 
+speciesnetwork.operators.RebuildEmbedding(wideAndEmbed.t:locus1)                -    3035  178128 0.0038  0.0168 
+speciesnetwork.operators.RebuildEmbedding(WilsonBaldingAndEmbed.t:locus1)       -    3365  178036 0.0038  0.0186 
+speciesnetwork.operators.RebuildEmbedding(scaleAndEmbed.t:locus2)               -   10078   98557 0.0023  0.0928 
+speciesnetwork.operators.RebuildEmbedding(scaleRootAndEmbed.t:locus2)           -   23101   85241 0.0023  0.2132 
+speciesnetwork.operators.RebuildEmbedding(uniformAndEmbed.t:locus2)             -  470489  614729 0.0230  0.4335 
+speciesnetwork.operators.RebuildEmbedding(subSlideAndEmbed.t:locus2)            -    2093  540608 0.0115  0.0039 
+speciesnetwork.operators.RebuildEmbedding(narrowAndEmbed.t:locus2)              -  218934  322354 0.0115  0.4045 
+speciesnetwork.operators.RebuildEmbedding(wideAndEmbed.t:locus2)                -    3846  176687 0.0038  0.0213 
+speciesnetwork.operators.RebuildEmbedding(WilsonBaldingAndEmbed.t:locus2)       -    3025  177812 0.0038  0.0167 
+speciesnetwork.operators.RebuildEmbedding(scaleAndEmbed.t:locus5)               -    7664  101841 0.0023  0.0700 
+speciesnetwork.operators.RebuildEmbedding(scaleRootAndEmbed.t:locus5)           -   23376   85167 0.0023  0.2154 
+speciesnetwork.operators.RebuildEmbedding(uniformAndEmbed.t:locus5)             -  407937  678976 0.0230  0.3753 
+speciesnetwork.operators.RebuildEmbedding(subSlideAndEmbed.t:locus5)            -    1978  540392 0.0115  0.0036 
+speciesnetwork.operators.RebuildEmbedding(narrowAndEmbed.t:locus5)              -  109555  432024 0.0115  0.2023 
+speciesnetwork.operators.RebuildEmbedding(wideAndEmbed.t:locus5)                -    2849  178217 0.0038  0.0157 
+speciesnetwork.operators.RebuildEmbedding(WilsonBaldingAndEmbed.t:locus5)       -    2022  178863 0.0038  0.0112 
+ScaleOperator(KappaScaler.s:locus1)                                        0.2889   11089   24810 0.0008  0.3089 
+ScaleOperator(KappaScaler.s:locus2)                                        0.3384   11024   25110 0.0008  0.3051 
+ScaleOperator(KappaScaler.s:locus3)                                        0.2571   10783   25369 0.0008  0.2983 
+ScaleOperator(KappaScaler.s:locus4)                                        0.2844   10974   25065 0.0008  0.3045 
+ScaleOperator(KappaScaler.s:locus5)                                        0.3532   10475   26077 0.0008  0.2866 
+DeltaExchangeOperator(FixMeanMutationRatesOperator)                        0.7751   13590   58786 0.0015  0.1878 
+ScaleOperator(popMeanScale.t:Species)                                      0.3050    9858   23044 0.0038  0.2996 
+ScaleOperator(netDivRateScale.t:Species)                                   0.1445   17411   47974 0.0077  0.2663 
+ScaleOperator(turnOverRateScale.t:Species)                                 0.0569    8898   55722 0.0077  0.1377 
+speciesnetwork.operators.GammaProbUniform(gammaProbUniform.t:Species)           -    3924  191988 0.0230  0.0200 
+speciesnetwork.operators.GammaProbRndWalk(gammaProbRndWalk.t:Species)           -    8964  186834 0.0230  0.0458 
+speciesnetwork.operators.NetworkMultiplier(networkMultiplier.t:Species)         -  103615   91969 0.0230  0.5298 
+speciesnetwork.operators.OriginMultiplier(originMultiplier.t:Species)      1.0000   29648    2750 0.0038  0.9151 
+speciesnetwork.operators.RebuildEmbedding(nodeUniformAndEmbed.t:Species)        -   69598  584061 0.0765  0.1065 
+speciesnetwork.operators.RebuildEmbedding(nodeSliderAndEmbed.t:Species)         -  502639  150228 0.0765  0.7699 
+speciesnetwork.operators.RebuildEmbedding(relocateBranchAndEmbed.t:Species)     -  112895 2493882 0.3060  0.0433 
+speciesnetwork.operators.RebuildEmbedding(addReticulationAndEmbed.t:Species)    -   10779  642083 0.0765  0.0165 
+speciesnetwork.operators.RebuildEmbedding(deleteReticulationAndEmbed.t:Species) -   10779  640091 0.0765  0.0166 
+
+     Tuning: The value of the operator's tuning parameter, or '-' if the operator can't be optimized.
+    #accept: The total number of times a proposal by this operator has been accepted.
+    #reject: The total number of times a proposal by this operator has been rejected.
+      Pr(m): The probability this operator is chosen in a step of the MCMC (i.e. the normalized weight).
+  Pr(acc|m): The acceptance probability (#accept as a fraction of the total proposals for this operator).
+
+Total calculation time: 1359.595 seconds
+End likelihood: -3055.5080039043723
+\end{verbatim}}
+
+\section*{Analyzing the results}
+
+\subsection*{Tracer}
+
+Run the program called \textbf{Tracer} to analyze the output of BEAST. When the main window has opened, choose \textbf{Import Trace File} from the \textbf{File} menu and select the file that BEAST has created called \textbf{speciesnetwork.log}. Change the \textbf{Burn-In} to \underline{5,000,000} on the top-left so that the first 25\% samples are discarded.
+On the left-hand side is a list of the different quantities that BEAST has logged. Selecting one item from this list brings up the trace under the \textbf{Trace} tab and the statistics for this trace under the \textbf{Estimates} tab on the right-hand side.
+
+\begin{figure}[h]
+\center
+\includegraphics[width=1.0\textwidth]{figs/fig10_tracer1}
+\caption{Tracer showing the estimate of mean population size}
+\label{fig_tracer1}
+\end{figure}
+
+\begin{figure}[h]
+\center
+\includegraphics[width=1.0\textwidth]{figs/fig11_tracer2}
+\caption{Tracer showing the marginal prob. of gene-rate multipliers}
+\label{fig_tracer2}
+\end{figure}
+
+For example, select \textbf{popMean.t:Species} to display the estimate of mean population size (fig. \ref{fig_tracer1}), and select the six \textbf{mutationRate.s} items (hold \texttt{shift} key while selecting) to display the estimates of the gene-rate multipliers. If you switch the tab at the top of the right-hand side to {\bf Marginal Prob Distribution} then you will get a plot of the marginal posterior densities of the estimates overlaid (fig. \ref{fig_tracer2}).
+Remember that MCMC is a stochastic algorithm so the actual numbers will not be exactly the same.
+
+\subsection*{Viewing the species networks}
+
+To summarize the posterior samples of species networks, we need to prepare another XML file specifying the input and output file names, and the burn-in (\underline{2501} out of 10,000 in this case). Save the following content to \textbf{3s\_6loci\_sum.xml} and put it to the same folder as the log files.
+
+{\tiny
+\begin{verbatim}
+<?xml version='1.0' encoding='UTF-8'?>
+<beast namespace="beast.core:beast.app" version="2.4">
+    <run id="network.summary" spec="speciesnetwork.tools.SummarizePosterior"
+         inputFileName="speciesnetwork.trees" outputFileName="speciesnetwork.sum.trees" burnin="2501"/>
+</beast>
+\end{verbatim}}
+
+\noindent Then run BEAST as you did for the standard analysis above. The summary networks will be saved to \textbf{speciesnetwork.sum.trees}.
 
 
 

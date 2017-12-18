@@ -117,8 +117,7 @@ public class CoalescentSimulator extends Runnable {
             speciesNetwork = speciesNetworkInput.get();
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
-        // set popSizes dimension
-        popSizes = popSizesInput.get();
+        popSizes = new RealParameter(popSizesInput.get().getValues()); // avoid modifying original input
         final int speciesBranchCount = speciesNetwork.getBranchCount();
         popSizes.setDimension(speciesBranchCount);
 
