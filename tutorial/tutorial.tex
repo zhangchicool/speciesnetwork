@@ -5,10 +5,6 @@
 \usepackage[colorlinks=true,citecolor=blue]{hyperref}
 \usepackage{natbib}
 \usepackage{graphicx}
-\usepackage{setspace}
-\usepackage{framed}
-
-% \doublespacing
 
 \begin{document}
 
@@ -269,26 +265,14 @@ Total calculation time: 1439.539 seconds
 End likelihood: -3739.4383147683425
 \end{verbatim}}
 
+It is strongly recommended to run multiple independent runs to confirm the results are consistent across runs. Then the log files can be combined using \textbf{LogCombiner} included in the BEAST package.
+
 \section*{Analyzing the results}
 
 \subsection*{Tracer}
 
 Run the program called \textbf{Tracer} to analyze the output of BEAST. When the main window has opened, choose \textbf{Import Trace File} from the \textbf{File} menu and select the file that BEAST has created called \textbf{speciesnetwork.log}. Change the \textbf{Burn-In} to \underline{5,000,000} on the top-left so that the first 25\% samples are discarded.
 On the left-hand side is a list of the different quantities that BEAST has logged. Selecting one item from this list brings up the trace under the \textbf{Trace} tab and the statistics for this trace under the \textbf{Estimates} tab on the right-hand side.
-
-\begin{figure}[h]
-\center
-\includegraphics[width=1.0\textwidth]{figs/fig10_tracer1}
-\caption{Tracer showing the estimate of mean population size}
-\label{fig_tracer1}
-\end{figure}
-
-\begin{figure}[h]
-\center
-\includegraphics[width=1.0\textwidth]{figs/fig11_tracer2}
-\caption{Tracer showing the marginal prob. of gene-rate multipliers}
-\label{fig_tracer2}
-\end{figure}
 
 For example, select \textbf{popMean.t:Species} to display the estimate of mean population size (fig. \ref{fig_tracer1}), and select the six \textbf{mutationRate.s} items (hold \texttt{shift} key while selecting) to display the estimates of the gene-rate multipliers. If you switch the tab at the top of the right-hand side to {\bf Marginal Prob Distribution} then you will get a plot of the marginal posterior densities of the estimates overlaid (fig. \ref{fig_tracer2}).
 Remember that MCMC is a stochastic algorithm so the actual numbers will not be exactly the same.
@@ -306,12 +290,35 @@ To summarize the posterior samples of species networks, we need to prepare anoth
 </beast>
 \end{verbatim}}
 
-\noindent Then run BEAST as you did for the standard analysis above but with 3s\_6loci\_sum.xml as input. The summary networks will be saved to \textbf{speciesnetwork.sum.trees}. It contains unique network topologies in descending order of their posterior probabilities. For each unique topology, the summaries of node height and inheritance probability (if apply) are annotated for each node.
+\begin{figure}[h]
+\center
+\includegraphics[width=1.0\textwidth]{figs/fig10_tracer1}
+\caption{Tracer showing the estimate of mean population size}
+\label{fig_tracer1}
+\end{figure}
 
+\begin{figure}[h]
+\center
+\includegraphics[width=1.0\textwidth]{figs/fig11_tracer2}
+\caption{Tracer showing the marginal prob. of gene-rate multipliers}
+\label{fig_tracer2}
+\end{figure}
+\clearpage
 
+\noindent Then run BEAST as you did for the standard analysis above but with 3s\_6loci\_sum.xml as input. The summary networks will be saved to \textbf{speciesnetwork.sum.trees}. It contains unique network topologies in descending order of their posterior probabilities. For each unique topology, the summaries of node height and inheritance probability (if apply) are annotated for each node. 
+Open \textbf{IcyTree} by entering the URL \url{icytree.org} to your browser. Then you can either drag and drop, or select \textbf{File / Load from file} to load the summary species networks in \textbf{speciesnetwork.sum.trees}. Select \textbf{Style / Internal node text / topologySupport} to display the posterior probability at the root for each network.
 
+\begin{figure}[h]
+\center
+\includegraphics[width=0.6\textwidth]{figs/fig12_networks}
+\caption{IcyTree showing the species networks}
+\label{fig_networks}
+\end{figure}
 
+Figure \ref{fig_networks} shows the three species networks in the 95\% posterior credible set. The true species network with one hybridization has probability 0.36. The estimate of inheritance probability $\gamma$ is 0.51 (0.20, 0.78) while the true value is 0.3. This can be viewed in \textbf{Child attribs} by moving the cursor to the reticulation branch.
 
+\bigskip
+\noindent \href{http://creativecommons.org/licenses/by/4.0/}{\includegraphics[scale=0.7]{figs/fig_ccby.pdf}} This tutorial is licensed under a \href{http://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 International License}. 
 
 %%%%%%%%%  REFERENCE    %%%%%%%%%%%%%%%
 \bibliographystyle{mbe}
