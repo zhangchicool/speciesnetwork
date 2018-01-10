@@ -18,8 +18,12 @@ E-mail: zhangchi@ivpp.ac.cn}
 %%%%%%%%%
 \section*{Introduction}
 
-This tutorial describes a full Bayesian framework for species network inference studying reticulate evolution. The statistical methodology is described in \citet{Zhang:2017gq}.
-You will need the following software at your disposal:
+This tutorial covers ``SpeciesNetwork'', a fully Bayesian framework for
+species network inference. SpeciesNetwork is very flexible; it can be used to
+study hybrid species and introgression between sister and non-sister taxa. The
+statistical methodology is described in \citet{Zhang:2017gq}. You will be
+using the following software to complete this tutorial:
+
 \begin{itemize}
 \item \textbf{BEAST} --- this package contains the BEAST program, BEAUti, and other utility programs. This tutorial is written for BEAST v2.4.7 or higher \citep[\url{http://beast2.org},][]{Bouckaert:2014iz}.
 \item \textbf{Tracer} --- this program is used to explore the output of BEAST (and other Bayesian MCMC programs). It summarizes graphically and quantitively the distributions of continuous parameters and provides diagnostic information for the particular MCMC chain (\url{http://tree.bio.ed.ac.uk/software/tracer}).
@@ -29,11 +33,11 @@ You will need the following software at your disposal:
 %%%%%%%%%
 \section*{The Data}
 
-The gene trees from six independent loci are simulated under the multispecies network coalescent \citep[MSNC;][]{Yu:2014dt} given the species network shown in figure \ref{fig_spnetwork}. Each gene tree has four tips per species. The sequence alignments are simulated under JC69 substitution model \citep{Jukes:1969wx} along the gene trees with strict molecular clock and no rate variation across loci. The sequence length is 200bp at each locus. The NEXUS file called \textbf{3s\_6loci.nex} is included with this tutorial.
+Gene trees from six independent loci were simulated under the multispecies network coalescent \citep[MSNC;][]{Yu:2014dt} given the species network shown in figure \ref{fig_spnetwork}. Each gene tree has four tips per species. Multiple sequence alignments of 200bp each were simulated under the JC69 substitution model \citep{Jukes:1969wx} along the gene trees with a strict molecular clock and no rate variation among sites or loci. The NEXUS file called \textbf{3s\_6loci.nex} contains multiple sequence alignments for all six loci and is included with this tutorial.
 
 \begin{figure}[h]
 \center
-\includegraphics[width=0.5\textwidth]{figs/fig1_spnetwork}
+\includegraphics[width=0.5\textwidth]{figs/fig1_spnetwork.pdf}
 \caption{Species network used to simulate the data}
 \label{fig_spnetwork}
 \end{figure}
@@ -42,95 +46,136 @@ The first step in the analysis will be to convert the NEXUS files into a BEAST X
 
 \section*{BEAUti}
 
+\subsection*{Installing SpeciesNetwork}
+
+Before creating the XML input file we need to install SpeciesNetwork, which is available as a package for BEAST2.
+After downloading and installing BEAST2 on your computer, open BEAUti. To install SpeciesNetwork (or
+any BEAST2 package), open the File menu and select Manage Packages (Figure~\ref{fig:managePackages}).
+
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=0.8\textwidth]{figs/managePackages.png}
+\caption
+{Opening the package manager}
+\label{fig:managePackages}
+\end{figure}
+
+Select SpeciesNetwork from the list of available packages and click the install button, which will take
+care of the installation for you (Figure~\ref{fig:installSpeciesNetwork}). After the installation of SpeciesNetwork is finished, just like for any BEAST2 package, you
+\textbf{must} quit and relaunch BEAUti.
+
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=1.0\textwidth]{figs/installSpeciesNetwork.png}
+\caption
+{Installing SpeciesNetwork}
+\label{fig:installSpeciesNetwork}
+\end{figure}
+
 \subsection*{Switching the template}
 
-SpeciesNetwork uses a non-standard template to generate the XML, so the first thing to do is to change the template. Choose the \textbf{File / Template / SpeciesNetwork} item (fig. \ref{fig_template}). If you do not see this template in the menu, make sure the SpeciesNetwork plugin is installed correctly.
+SpeciesNetwork uses a non-standard template to generate the XML, so the first thing to do is to change the template. Launch BEAUTi and choose the \textbf{File / Template / SpeciesNetwork} item (fig. \ref{fig_template}). If you do not see this template in the menu, make sure the SpeciesNetwork plugin is installed correctly.
 Keep in mind that when changing a template, BEAUti deletes all previously imported data and starts with a clean template. So, if you already loaded some data, a warning message will pop up indicating that this data will be lost if you switch templates.
 
 \begin{figure}[h]
 \center
-\includegraphics[width=0.7\textwidth]{figs/fig2_template}
+\includegraphics[width=0.7\textwidth]{figs/fig2_template.png}
 \caption{Switching the template, then import the alignment}
 \label{fig_template}
 \end{figure}
 
 \subsection*{Loading the NEXUS file}
 
-To import the sequence alignment into BEAUti, use the \textbf{Import Alignment} option from the \textbf{File} menu (fig. \ref{fig_template}) and select \textbf{3s\_6loci.nex}. Once loaded, the six loci are displayed in the \textbf{Partitions} panel. You can double click any locus (partition) to show its detail.
+To import the sequence alignment into BEAUti, use the \textbf{Import Alignment} option from the \textbf{File} menu and select \textbf{3s\_6loci.nex}. Once loaded, the six loci are displayed in the \textbf{Partitions} panel. You can double click any locus (partition) to view its sequence alignment.
 
 \begin{figure}[h]
 \center
-\includegraphics[width=1.0\textwidth]{figs/fig3_partition}
+\includegraphics[width=1.0\textwidth]{figs/fig3_partition.png}
 \caption{Partition panel after loading the alignment}
 \label{fig_partition}
 \end{figure}
 
-For multilocus analyses, BEAST can link or unlink substitution, clock, and tree models across loci by clicking buttons at the top of the \textbf{Partitions} panel. The default is unlinking all models.
-Since the species are contemporary and the implementation can not incorporate node calibrations (except for the origin), plus that the purpose here is not to explore evolutionary rate variation across gene tree lineages through relaxed clock models, we link the clock models for all loci and rename the label to \textbf{allloci} (fig. \ref{fig_partition}). The clock rate will later be fixed to 1.0 in the \textbf{Clock Model} panel. The evolutionary rate variation across different gene loci will be modeled using gene-rate multipliers and set in the \textbf{Site Model} panel (see below).
-You should only unlink the tree models across loci that are actually genetically unlinked. For example, in most organisms all the mitochondrial genes are effectively linked due to a lack of recombination and they should be set up to use the same tree model.
+For multilocus analyses, BEAST can link or unlink substitution, clock, and tree models for multiple loci by clicking buttons at the top of the \textbf{Partitions} panel. The default is unlinking all models for all loci.
+One way to configure a multilocus analysis is to link the clock models for all loci, set the overall clock rate to a fixed value, and allow relative substitution rates to be estimated for all loci. Although we did not simulate loci with different rates, this is more realistic for empirical data sets.
+
+To configure this model, select all loci, click ``Link Clock Models'' and rename the ``Clock Model'' label to \textbf{allloci} (fig. \ref{fig_partition}). The clock rate will later be fixed at 1.0 in the \textbf{Clock Model} panel. Substitution rate variation among loci will be modeled using gene-rate multipliers and set in the \textbf{Site Model} panel (see below).
+You should only link tree models of loci that are actually genetically linked. For example, in most organisms all the mitochondrial genes are effectively linked due to a lack of recombination and should use the same tree model.
 
 \subsection*{Assigning taxa to species}
-Each taxon should be assigned to a species, and this mapping is fixed during the analysis. Typically, the species name is already embedded inside the taxon name and should be easily extracted. If the default guess by BEAUti is not satisfactory, press the \textbf{Guess} button at the bottom and a dialog will show up where you can choose from several ways to try to detect the species names. Otherwise the names can be filled in manually (fig. \ref{fig_mapping}).
+Each taxon should be assigned to a species, and this mapping is fixed during the analysis. Typically, the species name is already embedded inside the taxon name and can be easily set using the \textbf{Guess} button at the bottom. Click the button and a dialog will show up where you can choose from several ways to try to determine the species names. For this tutorial, keep ``use everything'' selected but change it to ``before last'' (fig. \ref{fig_mapping}). After clicking OK, the species names should be set appropriately.
 
 \begin{figure}[h]
 \center
-\includegraphics[width=0.6\textwidth]{figs/fig4_mapping}
+\includegraphics[width=0.8\textwidth]{figs/fig4_mapping.png}
 \caption{Assigning taxa to species}
 \label{fig_mapping}
 \end{figure}
 
 \subsection*{Setting gene ploidy}
 
-Ploidy should be based on the mode of inheritance for each gene. By convention, nuclear genes in diploids are given a ploidy of 2.0. Because mitochondrial and Y chromosome genes are haploid even in otherwise diploid organisms, and also inherited only through the mother or the father respectively, their effective population size is only one quarter that of nuclear genes. Therefore if nuclear gene ploidy is set to 2.0, mitochondrial or Y chromosome gene ploidy should be set to 0.5. All genes in the simulation are assumed from nuclear loci and their ploidy should be left at the default value of 2.0 in the \textbf{Gene Ploidy} panel.
+Ploidy should be based on the mode of inheritance for each gene. By convention, nuclear genes in diploids are given a ploidy of 2.0. Because mitochondrial and Y chromosome genes are haploid even in otherwise diploid organisms, and also inherited only through the mother or the father respectively, their effective population size is only one quarter that of nuclear genes. Therefore if nuclear gene ploidy is set to 2.0, mitochondrial or Y chromosome gene ploidy should be set to 0.5. All genes in the simulation are nominally nuclear loci and their ploidy should be left at the default value of 2.0 in the \textbf{Gene Ploidy} panel.
 
 \subsection*{Setting up substitution and clock models}
 
 The next thing to do is to set up the substitution and clock models.
-Although the true substitution model in the simulation is JC69 which is the default in the \textbf{Site Model} panel, we select the \textbf{HKY} model \citep{Hasegawa:1985ww} that will fit better for real data. The frequencies are set to \textbf{empirical} so that only the $\kappa$ parameter is \textbf{estimated} (fig. \ref{fig_sitemodel}).
-To account for evolutionary rate variation across loci with mean 1.0, tick \textbf{estimate} at \textbf{Substitution Rate} (fig. \ref{fig_sitemodel}) to use the gene-rate multipliers.
+Although the true substitution model in the simulation is JC69 which is the default in the \textbf{Site Model} panel, we select the \textbf{HKY} model \citep{Hasegawa:1985ww} that will fit real data better. The frequencies are set to \textbf{empirical} so that only the $\kappa$ parameter is \textbf{estimated} (fig. \ref{fig_sitemodel}).
+To account for evolutionary rate variation among loci, tick \textbf{estimate} next to \textbf{Substitution Rate} (fig. \ref{fig_sitemodel}) to allow a relative substitution rate to be estimated.
 
 \begin{figure}[h]
 \center
-\includegraphics[width=1.0\textwidth]{figs/fig5_sitemodel}
+\includegraphics[width=1.0\textwidth]{figs/fig5_sitemodel.png}
 \caption{Setting up substitution models}
 \label{fig_sitemodel}
 \end{figure}
 
-Uncheck \textbf{estimate} in the \textbf{Clock Model} panel to fix the clock rate to 1.0 for all loci.
-Note though that if you have informative calibration for the time of origin, you can keep \textbf{estimate} checked, and assign reasonable priors for the origin time and clock rate in the \textbf{Priors} panel.
+Select all loci in the left hand panel, and click OK to clone their settings from locus1 (fig. \ref{fig_cloneSiteModel}). Now the same HKY model will be used for all loci, but a separate $\kappa$
+parameter and relative substitution rate will be estimated for each locus.
 
 \begin{figure}[h]
 \center
-\includegraphics[width=1.0\textwidth]{figs/fig6_clockmodel}
+\includegraphics[width=1.0\textwidth]{figs/cloneSiteModel.png}
+\caption{Cloning substitution models}
+\label{fig_cloneSiteModel}
+\end{figure}
+
+Uncheck \textbf{estimate} in the \textbf{Clock Model} panel to fix the clock rate to 1.0 for all loci.
+
+\begin{figure}[h]
+\center
+\includegraphics[width=1.0\textwidth]{figs/fig6_clockmodel.png}
 \caption{Setting up clock models}
 \label{fig_clockmodel}
 \end{figure}
 
 \subsection*{Changing the default priors}
 
-The \textbf{Priors} panel allows priors for each parameter in the model to be specified. The default priors that BEAST sets for the parameters would allow the analysis to work. However, some of these are inappropriate for this analysis. Therefore change the priors as follows (fig. \ref{fig_priors}):
+The \textbf{Priors} panel allows priors for each parameter in the model to be specified. The default priors that BEAST sets for the parameters would allow the analysis to run without crashing. However, some of these are inappropriate for this analysis. Therefore change the priors as follows (fig. \ref{fig_priors}):
 
 \begin{figure}[h]
 \center
-\includegraphics[width=1.0\textwidth]{figs/fig7_priors}
+\includegraphics[width=1.0\textwidth]{figs/fig7_priors.png}
 \caption{Changing priors}
 \label{fig_priors}
 \end{figure}
 
-\textbf{netDivRate.t:Species}: Exponential with mean 10.0. This is for the parameter $\lambda-\nu$ (speciation rate minus hybridization rate). The other parameter \textbf{turnOverRate.t:Species} $=\nu/\lambda$ has the default prior $U(0,1)$.
+\textbf{netDivRate.t:Species}: Exponential with mean 10.0. This is for the parameter $\lambda-\nu$ (speciation rate minus hybridization rate). Leave the other macroevolutionary rate parameter \textbf{turnOverRate.t:Species} $=\nu/\lambda$ with its default prior of $U(0,1)$.
 
 \textbf{originTime.t:Species}: Exponential with mean 0.1. This is for the origin time of the species network. 
 
-\textbf{popMean.t:Species}: Gamma with shape 2.0 and scale 0.005 (mean = 0.01). The population sizes of the species network are integrated out analytically using inverse-gamma(3, 2$\theta$) conjugate prior with mean $\theta$. This sets the prior for $\theta$.
+\textbf{popMean.t:Species}: Gamma with shape (alpha) 2.0 and scale (beta) 0.005, which is a distributon with a mean of 0.01. The population sizes of the species network are integrated out analytically using an inverse-gamma(3, 2$\theta$) conjugate prior with the mean $\theta$. \textbf{popMean.t:Species} is the prior on $\theta$.
 
 \subsection*{Setting the MCMC options}
 
-The \textbf{MCMC} tab provides settings for the MCMC chain. For this analysis, we set the \textbf{Chain Length} to \underline{20,000,000} (fig. \ref{fig_mcmc}). The appropriate length of the chain depends on the size of the dataset, the complexity of the model and the accuracy of the answer required, and should be adjusted accordingly. 
-Increase \textbf{Log Every} under \textbf{screenlog} to \underline{10,000} to output less frequently to the screen, and decrease \textbf{Log Every} to \underline{2000} under \textbf{tracelog}, \textbf{specieslog}, and \textbf{treelog.t} so that \underline{20,000,000 / 2000 = 10,000} samples will be recorded in the log files (fig. \ref{fig_mcmc}). You can also change the \textbf{File Name} if you want.
+The \textbf{MCMC} tab provides settings for the MCMC chain. For this analysis, we set the \textbf{Chain Length} to \underline{20000000} (20 million, fig. \ref{fig_mcmc}). The appropriate length of the chain depends on the size of the dataset and the complexity of the model, and should be adjusted upwards if at first the chain does not converge.
+
+This is a simple analysis which will run quite quickly, so increase \textbf{Log Every} under \textbf{screenlog} to \underline{10000} (ten thousand) to output less frequently to the screen. This will reduce the amount of text in your console to a reasonable amount.
+
+Decrease \textbf{Log Every} to \underline{2000} under \textbf{tracelog}, \textbf{specieslog}, and each \textbf{treelog.t:}<locus> so that \underline{20,000,000 / 2000 = 10,000} samples will be recorded in the log files (fig. \ref{fig_mcmc}). You can also change the \textbf{File Name} if you want.
+If the log frequencies are very high (that is, the values of \textbf{Log Every} are small), output files will be very large in size and difficult to analyze with software like Tracer. Conversely if they are very low, output files will not contain enough samples for to accurately represent the posterior distributions of complex models like SpeciesNetwork.
 
 \begin{figure}[h]
 \center
-\includegraphics[width=0.9\textwidth]{figs/fig8_mcmc}
+\includegraphics[width=0.9\textwidth]{figs/fig8_mcmc.png}
 \caption{MCMC settings}
 \label{fig_mcmc}
 \end{figure}
@@ -144,7 +189,7 @@ Now run BEAST. Provide your newly created XML file as input by clicking \textbf{
 
 \begin{figure}[h]
 \center
-\includegraphics[width=0.6\textwidth]{figs/fig9_beast}
+\includegraphics[width=0.6\textwidth]{figs/fig9_beast.png}
 \caption{Launching BEAST}
 \label{fig_beast}
 \end{figure}
@@ -267,59 +312,60 @@ Total calculation time: 1439.539 seconds
 End likelihood: -3739.4383147683425
 \end{verbatim}}
 
-It is strongly recommended to run multiple independent runs to confirm the results are consistent across runs. Then the log files can be combined using \textbf{LogCombiner} included in the BEAST package.
+For real studies, it is strongly recommended to run multiple independent chains (the same data and model with different random seeds) to confirm the results are consistent across runs. Then the log files can be combined using \textbf{LogCombiner}, which included in the BEAST package.
 
 \section*{Analyzing the results}
 
 \subsection*{Tracer}
 
-Run the program called \textbf{Tracer} to analyze the output of BEAST. When the main window has opened, choose \textbf{Import Trace File} from the \textbf{File} menu and select the file that BEAST has created called \textbf{speciesnetwork.log}. Change the \textbf{Burn-In} to \underline{5,000,000} on the top-left so that the first 25\% samples are discarded.
+Run the program called \textbf{Tracer} to analyze the output of BEAST. When the main window has opened, choose \textbf{Import Trace File} from the \textbf{File} menu and select the file that BEAST has created called \textbf{speciesnetwork.log}. Change the \textbf{Burn-In} to \underline{5000000} (5 million) on the top-left so that the first 25\% samples are discarded.
 On the left-hand side is a list of the different quantities that BEAST has logged. Selecting one item from this list brings up the trace under the \textbf{Trace} tab and the statistics for this trace under the \textbf{Estimates} tab on the right-hand side.
 
-For example, select \textbf{popMean.t:Species} to display the estimate of mean population size (fig. \ref{fig_tracer1}), and select the six \textbf{mutationRate.s} items (hold \texttt{shift} key while selecting) to display the estimates of the gene-rate multipliers. If you switch the tab at the top of the right-hand side to {\bf Marginal Prob Distribution} then you will get a plot of the marginal posterior densities of the estimates overlaid (fig. \ref{fig_tracer2}).
+For example, select \textbf{popMean.t:Species} to display the estimate of mean population size (fig. \ref{fig_tracer1}). Select all six \textbf{mutationRate.s:}<locus> items (hold \texttt{shift} key while selecting) to display the estimates of the gene-rate multipliers. If you switch the tab at the top of the right-hand side to {\bf Marginal Prob Distribution} then you will get a plot of the marginal posterior densities of the estimates overlaid (fig. \ref{fig_tracer2}). It is not surprising that the mutation rates are all overlapping, since the loci were simulated with identical rates.
 Remember that MCMC is a stochastic algorithm so the actual numbers will not be exactly the same.
-
-\subsection*{Viewing the species networks}
-
-To summarize the posterior samples of species networks, we need to prepare another XML file specifying the input and output file names, and the burn-in (\underline{2501} out of 10,000 in this case). Save the following content to \textbf{3s\_6loci\_sum.xml} and put it to the same folder as the log files.
-
-{\tiny
-\begin{verbatim}
-<?xml version='1.0' encoding='UTF-8'?>
-<beast namespace="beast.core:beast.app" version="2.4">
-    <run id="network.summary" spec="speciesnetwork.tools.SummarizePosterior"
-         inputFileName="speciesnetwork.trees" outputFileName="speciesnetwork.sum.trees" burnin="2501"/>
-</beast>
-\end{verbatim}}
 
 \begin{figure}[h]
 \center
-\includegraphics[width=1.0\textwidth]{figs/fig10_tracer1}
+\includegraphics[width=1.0\textwidth]{figs/fig10_tracer1.png}
 \caption{Tracer showing the estimate of mean population size}
 \label{fig_tracer1}
 \end{figure}
 
 \begin{figure}[h]
 \center
-\includegraphics[width=1.0\textwidth]{figs/fig11_tracer2}
+\includegraphics[width=1.0\textwidth]{figs/fig11_tracer2.png}
 \caption{Tracer showing the marginal prob. of gene-rate multipliers}
 \label{fig_tracer2}
 \end{figure}
+
 \clearpage
 
-\noindent Then run BEAST as you did for the standard analysis above but with 3s\_6loci\_sum.xml as input. The summary networks will be saved to \textbf{speciesnetwork.sum.trees}. It contains unique network topologies in descending order of their posterior probabilities. For each unique topology, the summaries of node height and inheritance probability (if apply) are annotated for each node. 
+\subsection*{Viewing the species networks}
+
+To summarize the posterior samples of species networks, we need to prepare another XML file specifying the input and output file names, and the burn-in (\underline{2501} out of 10,000 in this case). Save the following content to \textbf{3s\_6loci\_sum.xml} and put it in the same folder as the log files.
+
+{\tiny
+\begin{verbatim}
+<?xml version="1.0" encoding="UTF-8"?>
+<beast namespace="beast.core:beast.app" version="2.4">
+    <run id="network.summary" spec="speciesnetwork.tools.SummarizePosterior"
+         inputFileName="speciesnetwork.trees" outputFileName="speciesnetwork.sum.trees" burnin="2501"/>
+</beast>
+\end{verbatim}}
+
+\noindent Then run BEAST as you did for the standard analysis above but with 3s\_6loci\_sum.xml as input. With a chain length of 20 million, it will take about 30 minutes to complete. The summary networks will be saved to \textbf{speciesnetwork.sum.trees}. It contains unique network topologies in descending order of their posterior probabilities. For each unique topology, the summaries of node height and inheritance probability (if apply) are annotated for each node. 
 Open \textbf{IcyTree} by entering the URL \url{icytree.org} to your browser. Then you can either drag and drop, or select \textbf{File / Load from file} to load the summary species networks in \textbf{speciesnetwork.sum.trees}. Select \textbf{Style / Internal node text / topologySupport} to display the posterior probability at the root for each network.
 
 \begin{figure}[h]
 \center
-\includegraphics[width=0.6\textwidth]{figs/fig12_networks}
+\includegraphics[width=0.6\textwidth]{figs/icytree.pdf}
 \caption{IcyTree showing the species networks}
 \label{fig_networks}
 \end{figure}
 
-Figure \ref{fig_networks} shows the three species networks in the 95\% posterior credible set. The true species network with one hybridization has probability 0.36. The estimate of inheritance probability $\gamma$ is 0.51 (0.20, 0.78) while the true value is 0.3. This can be viewed in \textbf{Child attribs} by moving the cursor to the reticulation branch.
+Figure \ref{fig_networks} shows the three species networks in the 95\% posterior credible set. The true species network with one hybridization (middle subfigure) has probability 0.36. The estimate of inheritance probability $\gamma$ is 0.51 (0.20, 0.78) while the true value is 0.3. This can be viewed in \textbf{Child attribs} by moving the cursor to the reticulation branch (dashed line).
 
-\bigskip
+\clearpage
 \noindent \href{http://creativecommons.org/licenses/by/4.0/}{\includegraphics[scale=0.7]{figs/fig_ccby.pdf}} This tutorial is licensed under a \href{http://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 International License}. 
 
 %%%%%%%%%  REFERENCE    %%%%%%%%%%%%%%%
