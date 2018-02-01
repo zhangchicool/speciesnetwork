@@ -342,14 +342,16 @@ Remember that MCMC is a stochastic algorithm so the actual numbers will not be e
 
 \subsection*{Viewing the species networks}
 
-To summarize the posterior samples of species networks, we need to prepare another XML file specifying the input and output file names, and the burn-in (\underline{2501} out of 10,000 in this case). Save the following content to \textbf{3s\_6loci\_sum.xml} and put it in the same folder as the log files.
+To summarize the posterior samples of species networks, we need to prepare another XML file specifying the input and output file names, and the burn-in (\underline{2501} out of 10,000 in this case). Save the following content to \textbf{3s\_6loci\_sum.xml} and put it in the same folder as the log files. If you are running BEAST from the command line from the folder your log files are in, can can remove the ``/path/to/'' from the file names. Otherwise you will need to change each ``/path/to/'' with the absolute path to your log file folder. For example on a Mac, if your username is Bob, this might be ``/Users/Bob/Documents/speciesnetwork-tutorial/speciesnetwork.trees'' for the inputFileName.
 
 {\tiny
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <beast namespace="beast.core:beast.app" version="2.4">
     <run id="network.summary" spec="speciesnetwork.tools.SummarizePosterior"
-         inputFileName="speciesnetwork.trees" outputFileName="speciesnetwork.sum.trees" burnin="2501"/>
+         inputFileName="/path/to/speciesnetwork.trees"
+         outputFileName="/path/to/speciesnetwork.sum.trees"
+         burnin="2501"/>
 </beast>
 \end{verbatim}}
 
