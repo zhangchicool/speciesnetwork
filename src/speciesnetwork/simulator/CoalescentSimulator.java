@@ -143,12 +143,14 @@ public class CoalescentSimulator extends Runnable {
             }
             // multimap of species network tip node to gene tree tip nodes
             final TaxonSet taxonSuperSet = taxonSuperSetInput.get();
-            for (Taxon speciesTip : taxonSuperSet.taxonsetInput.get()) {
-                final NetworkNode speciesNode = speciesNodeMap.get(speciesTip.getID());
-                final TaxonSet speciesTaxonSet = (TaxonSet) speciesTip;
+            for (Taxon species : taxonSuperSet.taxonsetInput.get()) {
+                final String speciesName = species.getID();
+                final NetworkNode speciesNode = speciesNodeMap.get(speciesName);
+                final TaxonSet speciesTaxonSet = (TaxonSet) species;
                 for (Taxon geneTip : speciesTaxonSet.taxonsetInput.get()) {
-                    final Node geneNode = geneNodeMap.get(geneTip.getID());
-                    networkNodeGeneLineagesMap.put(speciesNode, geneNode);
+                    final String gTipName = geneTip.getID();
+                    final Node geneNode = geneNodeMap.get(gTipName);
+                    if (geneNode != null) networkNodeGeneLineagesMap.put(speciesNode, geneNode);
                 }
             }
 
