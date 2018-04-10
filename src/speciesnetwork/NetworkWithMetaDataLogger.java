@@ -44,7 +44,7 @@ public class NetworkWithMetaDataLogger extends BEASTObject implements Loggable {
     }
 
     @Override
-    public void log(int nSample, PrintStream out) {
+    public void log(long sample, PrintStream out) {
         // make sure we get the current version of the inputs
         Network network = (Network) speciesNetworkInput.get().getCurrent();
         List<Function> metadata = parameterInput.get();
@@ -56,7 +56,7 @@ public class NetworkWithMetaDataLogger extends BEASTObject implements Loggable {
         // BranchRateModel branchRateModel = clockModelInput.get();
         // PopulationSizeModel populationModel = populationModelInput.get();
         // write out the log tree with meta data
-        out.print("tree STATE_" + nSample + " = ");
+        out.print("tree STATE_" + sample + " = ");
         out.print(network.toString(df));
         out.print(";");
     }

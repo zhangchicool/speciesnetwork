@@ -28,7 +28,7 @@ public class EmbeddingLogger extends CalculationNode implements Loggable, Functi
     }
 
     @Override
-    public void log(int sample, PrintStream out) {
+    public void log(long sample, PrintStream out) {
         final Embedding embedding = geneTreeInput.get().embedding;
         out.print(embedding.toString());
     }

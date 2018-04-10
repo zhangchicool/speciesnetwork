@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import beast.core.Citation;
 import beast.core.Description;
 import beast.core.Input;
 import beast.core.StateNode;
@@ -17,6 +18,10 @@ import beast.util.TreeParser;
  * @author Chi Zhang
  * @author Huw Ogilvie
  */
+
+@Citation("Zhang C., Ogilvie H.A., Drummond A.J., Stadler T. (2018).\n" +
+        "  Bayesian inference of species networks from multilocus sequence data.\n" +
+        "  Molecular Biology and Evolution 35(2):504–517.")
 
 @Description("Network representing reticulate evolution of species")
 public class Network extends StateNode {
@@ -490,7 +495,7 @@ public class Network extends StateNode {
     }
 
     @Override
-    public void log(int sample, PrintStream out) {
+    public void log(long sample, PrintStream out) {
         Network network = (Network) getCurrent();
         out.print("tree STATE_" + sample + " = ");
         final String newick = network.toString();

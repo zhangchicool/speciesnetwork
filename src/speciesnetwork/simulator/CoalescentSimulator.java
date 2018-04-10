@@ -266,7 +266,7 @@ public class CoalescentSimulator extends Runnable {
                 // deal with the parent of the two picked nodes
                 final Node node = internalNodes.get(nodeIndex++);
                 left.setParent(node); right.setParent(node);
-                node.setLeft(left);   node.setRight(right);
+                node.setChild(0, left);   node.setChild(1, right);
                 node.setHeight(currentHeight);
                 currentLineages.add(node);
             }

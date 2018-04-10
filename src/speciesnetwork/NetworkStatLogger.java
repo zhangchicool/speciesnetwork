@@ -36,7 +36,7 @@ public class NetworkStatLogger extends CalculationNode implements Loggable, Func
     }
 
     @Override
-    public void log(int sample, PrintStream out) {
+    public void log(long sample, PrintStream out) {
         final Network speciesNetwork = speciesNetworkInput.get();
         if (logHeightInput.get()) {
             // network root height

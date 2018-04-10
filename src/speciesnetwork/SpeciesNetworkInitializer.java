@@ -265,7 +265,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
         final Node root = speciesTree.getRoot();
         final Node origin = newNode();       // create origin
         origin.setHeight(1.2 * root.getHeight());
-        origin.setLeft(root);                // set root as child of origin
+        origin.setChild(0, root);            // set root as child of origin
         root.setParent(origin);              // set origin as parent of root
         speciesTree.getInternalNodeCount();  // make sure node counts are correct
         speciesTree.addNode(origin);         // add the origin
