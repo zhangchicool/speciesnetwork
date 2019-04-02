@@ -8,9 +8,11 @@ import static org.junit.Assert.assertTrue;
 
 import beast.core.State;
 import beast.evolution.alignment.TaxonSet;
+import beast.evolution.tree.Node;
 import beast.util.TreeParser;
 import speciesnetwork.NetworkParser;
 import speciesnetwork.EmbeddedTree;
+import speciesnetwork.EmbeddedTreeInterface;
 import speciesnetwork.GeneTreeInSpeciesNetwork;
 import speciesnetwork.MultispeciesCoalescent;
 import speciesnetwork.PopulationSizeModel;
@@ -23,7 +25,7 @@ abstract class PopulationTestHelper {
     TaxonSet speciesSuperset;
     TreeParser speciesTree;
     NetworkParser speciesNetwork;
-    List<EmbeddedTree> geneTrees = new ArrayList<>();
+    List<EmbeddedTreeInterface> geneTrees = new ArrayList<>();
     List<GeneTreeInSpeciesNetwork> geneTreeWrappers = new ArrayList<>();
 
     State state = null;
@@ -70,25 +72,32 @@ abstract class PopulationTestHelper {
         state.initialise();
     }
 
-    private void initializeGeneTrees(boolean reembed) {
+	protected EmbeddedTreeInterface treeFromRoot(Node root) {
+		return new EmbeddedTree(root);
+	}
+
+    protected void initializeGeneTrees(boolean reembed) {
         for (int i = 0; i < newickGeneTrees.size(); i++) {
             final String newick = newickGeneTrees.get(i);
             TreeParser treeParser = new TreeParser();
             treeParser.initByName("newick", newick, "IsLabelledNewick", true);
-            EmbeddedTree embeddedTree = new EmbeddedTree(treeParser.getRoot());
+            EmbeddedTreeInterface embeddedTree = treeFromRoot(treeParser.getRoot());
 
             final int[] embedding = this.embeddings.get(i);
             final int nRow = treeParser.getNodeCount();
             final int nCol = embedding.length / nRow;
-            embeddedTree.embedding.reset(nCol);
+            embeddedTree.getEmbedding().reset(nCol);
             for (int r = 0; r < nRow; r++) {
             	for (int c = 0; c < nCol; c++)
-            		embeddedTree.embedding.setDirection(r, c, embedding[r * nCol + c]);
+            		embeddedTree.getEmbedding().setDirection(r, c, embedding[r * nCol + c]);
             }
 
             geneTrees.add(embeddedTree);
             GeneTreeInSpeciesNetwork geneTreeWrapper = new GeneTreeInSpeciesNetwork();
-            geneTreeWrapper.initByName("geneTree", embeddedTree, "ploidy", ploidy, "speciesNetwork", speciesNetwork);
+            geneTreeWrapper.initByName(
+            		"geneTree", embeddedTree,
+            		"ploidy", ploidy,
+            		"speciesNetwork", speciesNetwork);
             geneTreeWrappers.add(geneTreeWrapper);
         }
         if (reembed) { // rebuild the embedding
