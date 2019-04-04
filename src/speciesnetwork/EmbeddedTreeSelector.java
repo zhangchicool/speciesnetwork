@@ -10,19 +10,19 @@ import beast.core.Input.Validate;
 import beast.core.parameter.IntegerParameter;
 import beast.evolution.alignment.TaxonSet;
 import beast.evolution.tree.Node;
+import beast.evolution.tree.Tree;
 
 public class EmbeddedTreeSelector extends CalculationNode implements EmbeddedTreeInterface {
 	public final Input<List<BEASTInterface>> trees = new Input<>("tree", "EmbeddedTree-list to select from",
 			new ArrayList<>(), Validate.REQUIRED, EmbeddedTreeInterface.class);
 	public final Input<IntegerParameter> choice = new Input<>("choice", "EmbeddedTree-list to select from",
 			Validate.REQUIRED);
-	public final Input<Integer> index = new Input<>("index", "For re-use purposes, the relevant index of choice",
-			0);
+	public final Input<Integer> index = new Input<>("index", "For re-use purposes, the relevant index of choice", 0);
 
 	private EmbeddedTreeInterface tree() {
 		return ((EmbeddedTreeInterface) (trees.get().get(choice.get().getNativeValue(index.get()))));
 	}
-	
+
 	@Override
 	public int getLeafNodeCount() {
 		return tree().getLeafNodeCount();
@@ -79,6 +79,11 @@ public class EmbeddedTreeSelector extends CalculationNode implements EmbeddedTre
 	}
 
 	@Override
+	public void setEmbedding(Embedding newEmbedding) {
+		tree().setEmbedding(newEmbedding);
+	}
+
+	@Override
 	public void setMetaData(Node node, Double[] t, String pattern) {
 		tree().setMetaData(node, t, pattern);
 	}
@@ -91,6 +96,17 @@ public class EmbeddedTreeSelector extends CalculationNode implements EmbeddedTre
 	@Override
 	public void getMetaData(Node node, Double[] t, String pattern) {
 		tree().getMetaData(node, t, pattern);
+	}
+
+	@Override
+	public void makeCaterpillar(double rootHeight, double d, boolean b) {
+		tree().makeCaterpillar(rootHeight, d, b);
+
+	}
+
+	@Override
+	public void assignFromTree(Tree tempTree) {
+		tree().assignFromTree(tempTree);
 	}
 
 }

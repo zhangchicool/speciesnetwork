@@ -5,6 +5,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
+import beast.core.BEASTInterface;
 import beast.core.Description;
 import beast.core.Function;
 import beast.core.Input;
@@ -17,6 +18,7 @@ import beast.evolution.alignment.distance.Distance;
 import beast.evolution.alignment.distance.JukesCantorDistance;
 import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
+import beast.evolution.tree.TreeInterface;
 import beast.util.ClusterTree;
 import speciesnetwork.operators.RebuildEmbedding;
 import speciesnetwork.simulator.CoalescentSimulator;
@@ -52,8 +54,8 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
             = new Input<>("speciesNetwork", "Species network to initialize.", Validate.REQUIRED);
     public final Input<RealParameter> originInput =
             new Input<>("origin", "The time when the process started.", Validate.REQUIRED);
-    public final Input<List<EmbeddedTree>> geneTreesInput =
-            new Input<>("geneTree", "Gene tree to initialize.", new ArrayList<>());
+    public final Input<List<BEASTInterface>> geneTreesInput =
+            new Input<>("geneTree", "Gene tree to initialize.", new ArrayList<>(), EmbeddedTreeInterface.class);
     public final Input<RebuildEmbedding> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
             "Operator which rebuilds embedding of gene trees within species network.", Validate.REQUIRED);
     public final Input<RealParameter> birthRateInput =
@@ -109,9 +111,9 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
         if (coalSimulatorInput.get() == null) {
             final double rootHeight = sNetwork.getRoot().getHeight();
             // initialize caterpillar gene trees
-            final List<EmbeddedTree> geneTrees = geneTreesInput.get();
-            for (final EmbeddedTree gtree : geneTrees) {
-                gtree.makeCaterpillar(rootHeight, rootHeight / gtree.getInternalNodeCount(), true);
+            for (final BEASTInterface gtree : geneTreesInput.get()) {
+            	((EmbeddedTreeInterface) gtree).makeCaterpillar(rootHeight, rootHeight /
+            			((EmbeddedTreeInterface) gtree).getInternalNodeCount(), true);
             }
         }
         else {
@@ -131,16 +133,19 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
         final List<String> speciesNames = species.asStringList();
         final int speciesCount = speciesNames.size();
 
-        final List<EmbeddedTree> geneTrees = geneTreesInput.get();
         double maxNsites = 0;
-        for (final EmbeddedTree gtree : geneTrees) {
-            final Alignment alignment = gtree.m_taxonset.get().alignmentInput.get();
+        for (final BEASTInterface rawGTree : geneTreesInput.get()) {
+        	EmbeddedTreeInterface gtree = (EmbeddedTreeInterface) rawGTree;
+            final Alignment alignment = ((EmbeddedTreeInterface) gtree).getTaxonset().alignmentInput.get();
             final ClusterTree ctree = new ClusterTree();
             final Tree tempTree = new Tree();
             tempTree.setID(gtree.getID());
-            ctree.initByName("initial", tempTree, "clusterType", "upgma", "taxa", alignment);
+            ctree.initByName(
+            		"initial", tempTree,
+            		"clusterType", "upgma",
+            		"taxa", alignment);
             gtree.assignFromTree(tempTree);
-            gtree.scale(1 / clockRate);
+            gtree.getRoot().scale(1 / clockRate);
             maxNsites = max(maxNsites, alignment.getSiteCount());
         }
 
@@ -155,9 +160,9 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
         }
 
         final double[] dg = new double[speciesCount*(speciesCount-1)/2];
-        final double[][] genesDmins = new double[geneTrees.size()][];
-        for(int ng = 0; ng < geneTrees.size(); ++ng) {
-            final EmbeddedTree gtree = geneTrees.get(ng);
+        final double[][] genesDmins = new double[geneTreesInput.get().size()][];
+        for(int ng = 0; ng < geneTreesInput.get().size(); ++ng) {
+            final EmbeddedTreeInterface gtree = (EmbeddedTreeInterface) geneTreesInput.get().get(ng);
             final double[] dmin = firstMeetings(gtree, geneTips2Species, speciesCount);
             genesDmins[ng] = dmin;
 
@@ -187,7 +192,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
         }
 
         for(int i = 0; i < dg.length; ++i) {
-            double d = dg[i] / geneTrees.size();
+            double d = dg[i] / geneTreesInput.get().size();
             if( d == 0 ) {
                 d = (0.5/maxNsites) * (1/clockRate);
             } else {
@@ -214,7 +219,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
         }
         final double[] spmin = firstMeetings(speciesTree, sptips2SpeciesIndex, speciesCount);
 
-        for(int ng = 0; ng < geneTrees.size(); ++ng) {
+        for(int ng = 0; ng < geneTreesInput.get().size(); ++ng) {
             final double[] dmin = genesDmins[ng];
             boolean compatible = true;
             for(int i = 0; i < spmin.length; ++i) {
@@ -224,8 +229,8 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
                 }
             }
             if( ! compatible ) {
-                final EmbeddedTree gtree = geneTrees.get(ng);
-                final TaxonSet gtreeTaxa = gtree.m_taxonset.get();
+                final EmbeddedTreeInterface gtree = (EmbeddedTreeInterface) geneTreesInput.get().get(ng);
+                final TaxonSet gtreeTaxa = gtree.getTaxonset();
                 final Alignment alignment = gtreeTaxa.alignmentInput.get();
                 final List<String> taxaNames = alignment.getTaxaNames();
                 final int taxonCount =  taxaNames.size();
@@ -281,7 +286,7 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
         originTime.setValue(tOrigin);
     }
 
-    private double[] firstMeetings(final Tree gtree, final Map<String, Integer> tipName2Species, final int speciesCount) {
+    private double[] firstMeetings(final TreeInterface gtree, final Map<String, Integer> tipName2Species, final int speciesCount) {
         final Node[] nodes = gtree.listNodesPostOrder(null, null);
         @SuppressWarnings("unchecked")
         final Set<Integer>[] tipsSpecies = new Set[nodes.length];
@@ -329,7 +334,11 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
     @Override
     public void getInitialisedStateNodes(List<StateNode> stateNodes) {
         stateNodes.add(speciesNetworkInput.get());
-        stateNodes.addAll(geneTreesInput.get());
+        for (BEASTInterface gtree: geneTreesInput.get()) {
+        	if (gtree instanceof StateNode) {
+                stateNodes.add((StateNode) gtree);        		
+        	}
+        }
 
         final RealParameter brate = birthRateInput.get();
         if(brate != null) stateNodes.add(brate);

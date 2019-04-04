@@ -15,6 +15,7 @@ import beast.evolution.alignment.TaxonSet;
 import beast.evolution.tree.Node;
 import beast.util.Randomizer;
 import speciesnetwork.EmbeddedTree;
+import speciesnetwork.EmbeddedTreeInterface;
 import speciesnetwork.Embedding;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
@@ -30,7 +31,7 @@ public class RebuildEmbedding extends Operator {
             "The species network.", Validate.REQUIRED);
     public final Input<TaxonSet> taxonSuperSetInput = new Input<>("taxonset",
             "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
-    public final Input<List<EmbeddedTree>> geneTreesInput = new Input<>("geneTree",
+    public final Input<List<EmbeddedTreeInterface>> geneTreesInput = new Input<>("geneTree",
             "The gene tree within the species network.", new ArrayList<>());
     // operator input can be null so that the species network and gene trees are unchanged
     public final Input<Operator> operatorInput = new Input<>("operator",
@@ -51,7 +52,7 @@ public class RebuildEmbedding extends Operator {
 
     @Override
     public double proposal() {
-        final List<EmbeddedTree> geneTrees = geneTreesInput.get();
+        final List<EmbeddedTreeInterface> geneTrees = geneTreesInput.get();
 
         // make the operation if possible
         double operatorLogHR = 0.0;
@@ -64,9 +65,11 @@ public class RebuildEmbedding extends Operator {
         // Tell BEAST that *all* gene trees will be edited
         // doing this for all trees avoids Trie combinatorial explosions
         double embeddingLogHR = 0.0;
-        for (final EmbeddedTree geneTree: geneTrees) {
-            geneTree.startEditing(this);
-            embeddingLogHR += Math.log(geneTree.embedding.probability) - Math.log(geneTree.embedding.probabilitySum);
+        for (final EmbeddedTreeInterface geneTree: geneTrees) {
+        	if (geneTree instanceof StateNode) {
+        		((StateNode) geneTree).startEditing(this);
+        	}
+            embeddingLogHR += Math.log(geneTree.getEmbedding().probability) - Math.log(geneTree.getEmbedding().probabilitySum);
         }
 
         // then rebuild the embedding
@@ -74,8 +77,8 @@ public class RebuildEmbedding extends Operator {
             return Double.NEGATIVE_INFINITY;
 
         // finalize hastings ratio of rebuild embedding
-        for (final EmbeddedTree geneTree: geneTrees) {
-        	embeddingLogHR -= Math.log(geneTree.embedding.probability) - Math.log(geneTree.embedding.probabilitySum);
+        for (final EmbeddedTreeInterface geneTree: geneTrees) {
+        	embeddingLogHR -= Math.log(geneTree.getEmbedding().probability) - Math.log(geneTree.getEmbedding().probabilitySum);
         }
         
         return operatorLogHR + embeddingLogHR;
@@ -93,24 +96,24 @@ public class RebuildEmbedding extends Operator {
     }
 
     public boolean rebuildEmbedding() {
-        final List<EmbeddedTree> geneTrees = geneTreesInput.get();
+        final List<EmbeddedTreeInterface> geneTrees = geneTreesInput.get();
         final Network speciesNetwork = speciesNetworkInput.get();
         traversalNodeCount = speciesNetwork.getTraversalNodeCount();
 
-        for (EmbeddedTree geneTree: geneTrees) {
+        for (EmbeddedTreeInterface geneTree: geneTrees) {
             geneNodeCount = geneTree.getNodeCount();
             getNodeHeirs(speciesNetwork, geneTree);
 
             final Embedding newEmbedding = recurseRebuild(geneTree.getRoot(), speciesNetwork.getRoot());
             if (newEmbedding == null) return false;
 
-            geneTree.embedding = newEmbedding;
+            geneTree.setEmbedding(newEmbedding);
         }
 
         return true;
     }
 
-	private void getNodeHeirs(final Network speciesNetwork, final EmbeddedTree geneTree) {
+	private void getNodeHeirs(final Network speciesNetwork, final EmbeddedTreeInterface geneTree) {
         // map of species network tip names to species network tip nodes
         final Map<String, NetworkNode> speciesNodeMap = new HashMap<>();
         for (NetworkNode speciesNode: speciesNetwork.getLeafNodes()) {
