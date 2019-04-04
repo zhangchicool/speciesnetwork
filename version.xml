@@ -1,5 +1,6 @@
-<package name="SpeciesNetwork" version="0.12.2"
-         description="Bayesian inference of species networks from multilocus data"
-         projectURL="https://github.com/zhangchicool/speciesnetwork">
-    <depends on="beast2" atleast="2.5.0"/>
-</package>
+<addon name="speciesnetwork" version="0.12.2">
+            <depends on="BEAST" atleast="2.5.0"/>
+
+            <!-- Add other dependencies as necessary. -->
+            </addon>
+        
