@@ -355,7 +355,7 @@ public class SummarizePosterior extends Runnable {
     }
 
     // 1st and 3rd quartiles
-    private double[] calculateQuartiles(List<Double> sample) {
+    public double[] calculateQuartiles(List<Double> sample) {
         final int length = sample.size();
         int[] indices = new int[length];
         HeapSort.sort(sample, indices);

@@ -42,9 +42,6 @@ public class RelocateBranch extends Operator {
         final Network speciesNetwork = speciesNetworkInput.get();
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
-        // number of branches in the network
-        final int branchCount = speciesNetwork.getBranchCount();
-
         // pick an internal node randomly
         final NetworkNode[] internalNodes = speciesNetwork.getInternalNodes();
         int rIndex = Randomizer.nextInt(internalNodes.length);

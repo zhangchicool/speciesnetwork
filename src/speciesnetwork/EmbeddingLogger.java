@@ -7,12 +7,11 @@ import beast.core.Description;
 import beast.core.Function;
 import beast.core.Input;
 import beast.core.Input.Validate;
-import beast.core.util.Log;
 import beast.core.Loggable;
 
 @Description("Logs embedding of a gene tree")
 public class EmbeddingLogger extends CalculationNode implements Loggable, Function {
-    public final Input<EmbeddedTree> geneTreeInput =
+    public final Input<GeneTreeInSpeciesNetwork> geneTreeInput =
             new Input<>("geneTree", "Gene tree embedded in the species network.", Validate.REQUIRED);
 
     @Override
@@ -21,7 +20,7 @@ public class EmbeddingLogger extends CalculationNode implements Loggable, Functi
 
     @Override
     public void init(PrintStream out) {
-        final Embedding embedding = geneTreeInput.get().embedding;
+        final Embedding embedding = geneTreeInput.get().embeddingInput.get();
         for (int r = 0; r < embedding.geneNodeCount; r++)
             for (int c = 0; c < embedding.traversalNodeCount; c++)
                 out.print(geneTreeInput.get().getID() + "_" + r + "_" + c + "\t");
@@ -29,7 +28,7 @@ public class EmbeddingLogger extends CalculationNode implements Loggable, Functi
 
     @Override
     public void log(long sample, PrintStream out) {
-        final Embedding embedding = geneTreeInput.get().embedding;
+        final Embedding embedding = geneTreeInput.get().embeddingInput.get();
         out.print(embedding.toString());
     }
 
@@ -40,7 +39,7 @@ public class EmbeddingLogger extends CalculationNode implements Loggable, Functi
 
     @Override
     public int getDimension() {
-        final Embedding embedding = geneTreeInput.get().embedding;
+        final Embedding embedding = geneTreeInput.get().embeddingInput.get();
         return embedding.geneNodeCount * embedding.traversalNodeCount;
     }
 
@@ -51,7 +50,7 @@ public class EmbeddingLogger extends CalculationNode implements Loggable, Functi
 
     @Override
     public double getArrayValue(int i) {
-        final Embedding embedding = geneTreeInput.get().embedding;
+        final Embedding embedding = geneTreeInput.get().embeddingInput.get();
         return embedding.embedding[i];
     }
 }

@@ -18,19 +18,17 @@ import beast.evolution.tree.TreeInterface;
  * @author Chi Zhang
  */
 
-public class GeneTreeInSpeciesNetwork extends CalculationNode {
+public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTreeInterface {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "Species network for embedding the gene tree.", Validate.REQUIRED);
     public final Input<TreeInterface> geneTreeInput =
             new Input<>("geneTree", "Gene tree embedded in the species network.", Validate.REQUIRED);
     public final Input<Embedding> embeddingInput =
-    		new Input<>("embedding", "Embedding of the gene tree in the species network", Validate.REQUIRED);
+    		new Input<>("embedding", "Embedding of the gene tree in the species network", (Embedding) null);
     public final Input<Double> ploidyInput =
             new Input<>("ploidy", "Ploidy (copy number) for this gene (default is 2).", 2.0);
-    protected double ploidy;
-
+    
     private boolean needsUpdate;
-    private TreeInterface geneTree;
     private Network speciesNetwork;
 
     // the coalescent times of this gene tree for all species branches
@@ -88,9 +86,14 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
     }
 
     public void initAndValidate() {
-        ploidy = ploidyInput.get();
-        geneTree = geneTreeInput.get();
         speciesNetwork = speciesNetworkInput.get();
+        if (embeddingInput.get() == null) {
+        	// FIXME: Embedding arguments are BAD HORRENDOUS INVENTED NUMBERS!
+        	// TODO: But I still do not understand how they work.
+        	embeddingInput.set(new Embedding(8, 8));
+        } else {
+        	// TODO: Check that embedding fits tree and network
+        }
         needsUpdate = true;
     }
 
@@ -102,10 +105,9 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
 
     private void update() {
         speciesNetwork = speciesNetworkInput.get();
-        geneTree = geneTreeInput.get();
         logGammaSum = 0.0;
 
-        final int geneTreeNodeCount = geneTree.getNodeCount();
+        final int geneTreeNodeCount = getTree().getNodeCount();
         final int speciesBranchCount = speciesNetwork.getBranchCount();
         speciesOccupancy = new double[geneTreeNodeCount][speciesBranchCount];
 
@@ -113,7 +115,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
         coalescentLineageCounts.clear();
         coalescentTimes.clear();
 
-        final Node geneTreeRoot = geneTree.getRoot();
+        final Node geneTreeRoot = getTree().getRoot();
         final NetworkNode speciesNetworkRoot = speciesNetwork.getRoot();
         final Integer speciesRootBranchNumber = speciesNetworkRoot.gammaBranchNumber;
         try {
@@ -174,7 +176,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
      * this can be in Tree.java as gTreeNode.getGeneTreeTipDescendant()
      */
     public Node getGeneNodeDescendantTip(Node gTreeNode) {
-        final List<Node> gTreeTips = geneTree.getExternalNodes();  // tips
+        final List<Node> gTreeTips = getTree().getExternalNodes();  // tips
         for (Node tip : gTreeTips) {
             Node node = tip;
             while(node != null && !node.equals(gTreeNode)) {
@@ -185,4 +187,40 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
         }
         return null;  // looped all the tips but nothing found
     }
+
+	@Override
+	public TreeInterface getTree() {
+		return geneTreeInput.get();
+	}
+
+	@Override
+	public Embedding getEmbedding() {
+		return embeddingInput.get();
+	}
+
+	@Override
+	public void setEmbedding(Embedding newEmbedding) {
+		embeddingInput.set(newEmbedding);
+	}
+
+	@Override
+	public double getPloidy() {
+		return ploidyInput.get();
+	}
+
+	@Override
+	public double logGammaSum() {
+		computeCoalescentTimes();
+		return logGammaSum;
+	}
+
+	@Override
+	public ListMultimap<Integer, Double> coalescentTimes() {
+		return coalescentTimes;
+	}
+	
+	@Override
+	public Multiset<Integer> coalescentLineageCounts() {
+		return coalescentLineageCounts;
+	}
 }

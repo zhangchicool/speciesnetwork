@@ -3,89 +3,65 @@ package speciesnetwork;
 import java.util.ArrayList;
 import java.util.List;
 
-import beast.core.BEASTInterface;
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multiset;
+
 import beast.core.CalculationNode;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.parameter.IntegerParameter;
-import beast.evolution.alignment.TaxonSet;
-import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
 import beast.evolution.tree.TreeInterface;
 
-public class GeneTreeSelector extends CalculationNode implements TreeInterface {
-	public final Input<List<Tree>> trees = new Input<>("tree", "EmbeddedTree-list to select from",
+public class GeneTreeSelector extends CalculationNode implements GeneTreeInterface {
+	public final Input<List<GeneTreeInSpeciesNetwork>> trees = new Input<>("tree", "EmbeddedTree-list to select from",
 			new ArrayList<>(), Validate.REQUIRED);
 	public final Input<IntegerParameter> choice = new Input<>("choice", "EmbeddedTree-list to select from",
 			Validate.REQUIRED);
 	public final Input<Integer> index = new Input<>("index", "For re-use purposes, the relevant index of choice", 0);
 
-	private TreeInterface tree() {
-		return ((TreeInterface) (trees.get().get(choice.get().getNativeValue(index.get()))));
+	private GeneTreeInSpeciesNetwork tree() {
+		return trees.get().get(choice.get().getNativeValue(index.get()));
 	}
 
 	@Override
-	public int getLeafNodeCount() {
-		return tree().getLeafNodeCount();
-	}
-
-	@Override
-	public int getInternalNodeCount() {
-		return tree().getInternalNodeCount();
-	}
-
-	@Override
-	public int getNodeCount() {
-		return tree().getNodeCount();
-	}
-
-	@Override
-	public Node getRoot() {
-		return tree().getRoot();
-	}
-
-	@Override
-	public Node getNode(int i) {
-		return tree().getNode(i);
-	}
-
-	@Override
-	public Node[] getNodesAsArray() {
-		return tree().getNodesAsArray();
-	}
-
-	@Override
-	public List<Node> getExternalNodes() {
-		return tree().getExternalNodes();
-	}
-
-	@Override
-	public List<Node> getInternalNodes() {
-		return tree().getInternalNodes();
-	}
-
-	@Override
-	public TaxonSet getTaxonset() {
-		return tree().getTaxonset();
-	}
-
-	@Override
-	public boolean somethingIsDirty() {
-		return tree().somethingIsDirty();
-	}
-
-	@Override
-	public void setMetaData(Node node, Double[] t, String pattern) {
-		tree().setMetaData(node, t, pattern);
+	public TreeInterface getTree() {
+		// TODO Auto-generated method stub
+		return tree().getTree();
 	}
 
 	@Override
 	public void initAndValidate() {
-		trees.get().get(choice.get().getNativeValue(index.get())).initAndValidate();
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public void getMetaData(Node node, Double[] t, String pattern) {
-		tree().getMetaData(node, t, pattern);
+	public Embedding getEmbedding() {
+		return tree().getEmbedding();
+	}
+
+	@Override
+	public void setEmbedding(Embedding newEmbedding) {
+		tree().setEmbedding(newEmbedding);
+	}
+
+	@Override
+	public double getPloidy() {
+		return tree().getPloidy();
+	}
+
+	@Override
+	public double logGammaSum() {
+		return tree().logGammaSum();
+	}
+
+	@Override
+	public ListMultimap<Integer, Double> coalescentTimes() {
+		return tree().coalescentTimes();
+	}
+
+	@Override
+	public Multiset<Integer> coalescentLineageCounts() {
+		return tree().coalescentLineageCounts();
 	}
 }

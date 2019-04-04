@@ -4,25 +4,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import beast.core.parameter.IntegerParameter;
-import beast.evolution.tree.Node;
+import beast.evolution.tree.TreeInterface;
 
 public class TestSharedEmbeddingSelector extends ConstantPopulationTest {
 	private int ntrees = 0; 
 	private int counter = 0; 
 	private IntegerParameter range;
-	private List<EmbeddedTree> trees = new ArrayList<EmbeddedTree>();
-	
+	private List<GeneTreeInSpeciesNetwork> trees = new ArrayList<GeneTreeInSpeciesNetwork>();
+
 	@Override
-	protected GeneTreeSelector treeFromRoot(Node root) {
-		GeneTreeSelector embeddedTree = new GeneTreeSelector();
-        trees.set(counter, new EmbeddedTree(root));
-        embeddedTree.initByName(
+	protected GeneTreeSelector geneTree(TreeInterface tree, Embedding embedding) {
+        GeneTreeInSpeciesNetwork geneTreeWrapper = new GeneTreeInSpeciesNetwork();
+        geneTreeWrapper.initByName(
+        		"geneTree", tree,
+        		"embedding", embedding,
+        		"ploidy", ploidy,
+        		"speciesNetwork", speciesNetwork);
+        trees.set(counter, geneTreeWrapper);
+        GeneTreeSelector selector = new GeneTreeSelector();
+        selector.initByName(
         		"tree", trees,
         		"choice", range,
         		"index", counter
         		);
         ++counter;
-		return embeddedTree;
+		return selector;
 	}
 
 	@Override
