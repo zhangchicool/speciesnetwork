@@ -31,10 +31,10 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 			"Species network for embedding the gene tree.", Validate.REQUIRED);
 	public final Input<TreeInterface> geneTreeInput = new Input<>("geneTree",
 			"Gene tree embedded in the species network.", Validate.REQUIRED);
-	public final Input<Embedding> embeddingInput = new Input<>("embedding",
+	public final Input<Embedding> embeddingInput = new Input<Embedding>("embedding",
 			"Embedding of the gene tree in the species network", (Embedding) null);
-	public final Input<Double> ploidyInput = new Input<>("ploidy", "Ploidy (copy number) for this gene (default is 2).",
-			2.0);
+	public final Input<Double> ploidyInput = new Input<>("ploidy",
+			"Ploidy (copy number) for this gene (default is 2).", 2.0);
 	public final Input<TaxonSet> taxonSuperSetInput = new Input<>("taxa",
 			"Taxon superset associating taxa with gene tree tips", Validate.REQUIRED);
 
@@ -102,6 +102,14 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 	}
 
 	public void initAndValidate() {
+		final Network speciesNetwork = speciesNetworkInput.get();
+		traversalNodeCount = speciesNetwork.getTraversalNodeCount();
+		geneNodeCount = getTree().getNodeCount();
+		embeddingInput.setType(Embedding.class);
+
+		if (getEmbedding() == null) {
+			setEmbedding(new Embedding(geneNodeCount, traversalNodeCount));
+		}
 		needsUpdate = true;
 	}
 

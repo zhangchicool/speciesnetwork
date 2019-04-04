@@ -1,5 +1,16 @@
 package speciesnetwork;
 
+import java.io.PrintStream;
+import java.util.Map;
+import java.util.Set;
+
+import org.w3c.dom.Node;
+
+import beast.core.BEASTInterface;
+import beast.core.BEASTObject;
+import beast.core.Input;
+import beast.core.StateNode;
+
 public class Embedding {
 	protected int geneNodeCount;
 	protected int traversalNodeCount;
@@ -11,7 +22,7 @@ public class Embedding {
 		geneNodeCount = gnc;
 		traversalNodeCount = 1;
 		embedding = new int[geneNodeCount][traversalNodeCount];
-		for (int[] row: embedding) {			
+		for (int[] row : embedding) {
 			java.util.Arrays.fill(row, -1);
 		}
 	}
@@ -20,7 +31,7 @@ public class Embedding {
 		geneNodeCount = gnc;
 		traversalNodeCount = tnc;
 		embedding = new int[geneNodeCount][traversalNodeCount];
-		for (int[] row: embedding) {			
+		for (int[] row : embedding) {
 			java.util.Arrays.fill(row, -1);
 		}
 	}

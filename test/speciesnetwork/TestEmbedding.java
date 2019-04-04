@@ -26,7 +26,6 @@ public class TestEmbedding {
 		gTree.initByName(
 				"speciesNetwork", nw,
 				"geneTree", tree,
-				"embedding", new Embedding(3, 3),
 				"taxa", taxa,
 				"ploidy", 1.0);
 		gTree.rebuildEmbedding();
@@ -52,7 +51,6 @@ public class TestEmbedding {
 		gTree.initByName(
 				"speciesNetwork", nw,
 				"geneTree", tree,
-				"embedding", new Embedding(5, 6),
 				"taxa", taxa,
 				"ploidy", 1.0);
 		gTree.rebuildEmbedding();
@@ -78,7 +76,6 @@ public class TestEmbedding {
 		gTree.initByName(
 				"speciesNetwork", nw,
 				"geneTree", tree,
-				"embedding", new Embedding(5, 6),
 				"taxa", taxa,
 				"ploidy", 1.0);
 		gTree.rebuildEmbedding();
