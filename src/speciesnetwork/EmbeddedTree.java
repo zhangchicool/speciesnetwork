@@ -117,4 +117,17 @@ public class EmbeddedTree extends Tree implements EmbeddedTreeInterface {
 	public Embedding getEmbedding() {
 		return embedding;
 	}
+   
+	@Override
+	public void assignFromTree(Tree tempTree) {
+        setRoot(tempTree.getRoot());
+        initArrays();
+        embedding = new Embedding(nodeCount);
+        storedEmbedding = new Embedding(nodeCount);	
+	}
+
+	@Override
+	public void setEmbedding(Embedding newEmbedding) {
+		embedding = newEmbedding;
+	}
 }
