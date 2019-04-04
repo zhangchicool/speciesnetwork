@@ -1,21 +1,19 @@
 package speciesnetwork;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
 
 import beast.core.State;
 import beast.evolution.alignment.TaxonSet;
 import beast.evolution.tree.Node;
+import beast.evolution.tree.Tree;
+import beast.evolution.tree.TreeInterface;
 import beast.util.TreeParser;
-import speciesnetwork.NetworkParser;
-import speciesnetwork.EmbeddedTree;
-import speciesnetwork.EmbeddedTreeInterface;
-import speciesnetwork.GeneTreeInSpeciesNetwork;
-import speciesnetwork.MultispeciesCoalescent;
-import speciesnetwork.PopulationSizeModel;
 import speciesnetwork.operators.RebuildEmbedding;
 
 abstract class PopulationTestHelper {
@@ -25,7 +23,6 @@ abstract class PopulationTestHelper {
     TaxonSet speciesSuperset;
     TreeParser speciesTree;
     NetworkParser speciesNetwork;
-    List<EmbeddedTreeInterface> geneTrees = new ArrayList<>();
     List<GeneTreeInSpeciesNetwork> geneTreeWrappers = new ArrayList<>();
 
     State state = null;
@@ -72,30 +69,30 @@ abstract class PopulationTestHelper {
         state.initialise();
     }
 
-	protected EmbeddedTreeInterface treeFromRoot(Node root) {
-		return new EmbeddedTree(root);
+	protected TreeInterface treeFromRoot(Node root) {
+		return new Tree(root);
 	}
 
     protected void initializeGeneTrees(boolean reembed) {
-        for (int i = 0; i < newickGeneTrees.size(); i++) {
+		for (int i = 0; i < newickGeneTrees.size(); i++) {
             final String newick = newickGeneTrees.get(i);
             TreeParser treeParser = new TreeParser();
             treeParser.initByName("newick", newick, "IsLabelledNewick", true);
-            EmbeddedTreeInterface embeddedTree = treeFromRoot(treeParser.getRoot());
+            TreeInterface embeddedTree = treeFromRoot(treeParser.getRoot());
 
-            final int[] embedding = this.embeddings.get(i);
+            final int[] rawEmbedding = this.embeddings.get(i);
             final int nRow = treeParser.getNodeCount();
-            final int nCol = embedding.length / nRow;
-            embeddedTree.getEmbedding().reset(nCol);
+            final int nCol = rawEmbedding.length / nRow;
+            Embedding embedding = new Embedding(nCol);
             for (int r = 0; r < nRow; r++) {
             	for (int c = 0; c < nCol; c++)
-            		embeddedTree.getEmbedding().setDirection(r, c, embedding[r * nCol + c]);
+            		embedding.setDirection(r, c, rawEmbedding[r * nCol + c]);
             }
 
-            geneTrees.add(embeddedTree);
             GeneTreeInSpeciesNetwork geneTreeWrapper = new GeneTreeInSpeciesNetwork();
             geneTreeWrapper.initByName(
             		"geneTree", embeddedTree,
+            		"embedding", embedding,
             		"ploidy", ploidy,
             		"speciesNetwork", speciesNetwork);
             geneTreeWrappers.add(geneTreeWrapper);
@@ -103,7 +100,7 @@ abstract class PopulationTestHelper {
         if (reembed) { // rebuild the embedding
             RebuildEmbedding rebuildOperator = new RebuildEmbedding();
             rebuildOperator.initByName("speciesNetwork", speciesNetwork, "taxonset", speciesSuperset,
-                                       "geneTree", geneTrees);
+                                       "geneTree", geneTreeWrappers);
             assertTrue(rebuildOperator.rebuildEmbedding());
         }
     }

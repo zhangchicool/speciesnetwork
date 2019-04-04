@@ -15,8 +15,8 @@ import beast.evolution.alignment.TaxonSet;
 import beast.evolution.tree.Node;
 import beast.util.Randomizer;
 import speciesnetwork.EmbeddedTree;
-import speciesnetwork.EmbeddedTreeInterface;
 import speciesnetwork.Embedding;
+import speciesnetwork.GeneTreeInSpeciesNetwork;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 
@@ -31,7 +31,7 @@ public class RebuildEmbedding extends Operator {
             "The species network.", Validate.REQUIRED);
     public final Input<TaxonSet> taxonSuperSetInput = new Input<>("taxonset",
             "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
-    public final Input<List<EmbeddedTreeInterface>> geneTreesInput = new Input<>("geneTree",
+    public final Input<List<GeneTreeInSpeciesNetwork>> geneTreesInput = new Input<>("geneTree",
             "The gene tree within the species network.", new ArrayList<>());
     // operator input can be null so that the species network and gene trees are unchanged
     public final Input<Operator> operatorInput = new Input<>("operator",
@@ -52,7 +52,7 @@ public class RebuildEmbedding extends Operator {
 
     @Override
     public double proposal() {
-        final List<EmbeddedTreeInterface> geneTrees = geneTreesInput.get();
+        final List<GeneTreeInSpeciesNetwork> geneTrees = geneTreesInput.get();
 
         // make the operation if possible
         double operatorLogHR = 0.0;
@@ -65,11 +65,10 @@ public class RebuildEmbedding extends Operator {
         // Tell BEAST that *all* gene trees will be edited
         // doing this for all trees avoids Trie combinatorial explosions
         double embeddingLogHR = 0.0;
-        for (final EmbeddedTreeInterface geneTree: geneTrees) {
-        	if (geneTree instanceof StateNode) {
-        		((StateNode) geneTree).startEditing(this);
-        	}
-            embeddingLogHR += Math.log(geneTree.getEmbedding().probability) - Math.log(geneTree.getEmbedding().probabilitySum);
+        for (final GeneTreeInSpeciesNetwork geneTree: geneTrees) {
+        	((StateNode) geneTree.geneTreeInput.get()).startEditing(this);
+            embeddingLogHR += Math.log(geneTree.embeddingInput.get().probability) -
+            		Math.log(geneTree.embeddingInput.get().probabilitySum);
         }
 
         // then rebuild the embedding
@@ -77,8 +76,9 @@ public class RebuildEmbedding extends Operator {
             return Double.NEGATIVE_INFINITY;
 
         // finalize hastings ratio of rebuild embedding
-        for (final EmbeddedTreeInterface geneTree: geneTrees) {
-        	embeddingLogHR -= Math.log(geneTree.getEmbedding().probability) - Math.log(geneTree.getEmbedding().probabilitySum);
+        for (final GeneTreeInSpeciesNetwork geneTree: geneTrees) {
+        	embeddingLogHR -= Math.log(geneTree.embeddingInput.get().probability) -
+        			Math.log(geneTree.embeddingInput.get().probabilitySum);
         }
         
         return operatorLogHR + embeddingLogHR;
@@ -96,24 +96,24 @@ public class RebuildEmbedding extends Operator {
     }
 
     public boolean rebuildEmbedding() {
-        final List<EmbeddedTreeInterface> geneTrees = geneTreesInput.get();
+        final List<GeneTreeInSpeciesNetwork> geneTrees = geneTreesInput.get();
         final Network speciesNetwork = speciesNetworkInput.get();
         traversalNodeCount = speciesNetwork.getTraversalNodeCount();
 
-        for (EmbeddedTreeInterface geneTree: geneTrees) {
-            geneNodeCount = geneTree.getNodeCount();
+        for (GeneTreeInSpeciesNetwork geneTree: geneTrees) {
+            geneNodeCount = geneTree.geneTreeInput.get().getNodeCount();
             getNodeHeirs(speciesNetwork, geneTree);
 
-            final Embedding newEmbedding = recurseRebuild(geneTree.getRoot(), speciesNetwork.getRoot());
+            final Embedding newEmbedding = recurseRebuild(geneTree.geneTreeInput.get().getRoot(), speciesNetwork.getRoot());
             if (newEmbedding == null) return false;
 
-            geneTree.setEmbedding(newEmbedding);
+            geneTree.embeddingInput.set(newEmbedding);
         }
 
         return true;
     }
 
-	private void getNodeHeirs(final Network speciesNetwork, final EmbeddedTreeInterface geneTree) {
+	private void getNodeHeirs(final Network speciesNetwork, final GeneTreeInSpeciesNetwork geneTree) {
         // map of species network tip names to species network tip nodes
         final Map<String, NetworkNode> speciesNodeMap = new HashMap<>();
         for (NetworkNode speciesNode: speciesNetwork.getLeafNodes()) {
@@ -136,7 +136,7 @@ public class RebuildEmbedding extends Operator {
 
         geneNodeHeirs.clear();
         speciesNodeHeirs.clear();
-        for (final Node geneLeaf: geneTree.getExternalNodes()) {
+        for (final Node geneLeaf: geneTree.geneTreeInput.get().getExternalNodes()) {
             final int gLeafNr = geneLeaf.getNr();
             final String gLeafName = geneLeaf.getID();
             final NetworkNode speciesLeaf = geneTipMap.get(gLeafName);
@@ -146,7 +146,7 @@ public class RebuildEmbedding extends Operator {
             speciesNodeHeirs.put(speciesLeaf, gLeafNr);
         }
 
-        recurseGeneHeirs(geneTree.getRoot());
+        recurseGeneHeirs(geneTree.geneTreeInput.get().getRoot());
         for (final NetworkNode speciesLeaf: speciesNetwork.getLeafNodes()) {
             recurseSpeciesHeirs(speciesLeaf);
         }

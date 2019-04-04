@@ -11,6 +11,7 @@ import beast.core.CalculationNode;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.evolution.tree.Node;
+import beast.evolution.tree.TreeInterface;
 
 /**
  * @author Huw Ogilvie
@@ -20,14 +21,16 @@ import beast.evolution.tree.Node;
 public class GeneTreeInSpeciesNetwork extends CalculationNode {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "Species network for embedding the gene tree.", Validate.REQUIRED);
-    public final Input<EmbeddedTreeInterface> geneTreeInput =
+    public final Input<TreeInterface> geneTreeInput =
             new Input<>("geneTree", "Gene tree embedded in the species network.", Validate.REQUIRED);
+    public final Input<Embedding> embeddingInput =
+    		new Input<>("embedding", "Embedding of the gene tree in the species network", Validate.REQUIRED);
     public final Input<Double> ploidyInput =
             new Input<>("ploidy", "Ploidy (copy number) for this gene (default is 2).", 2.0);
     protected double ploidy;
 
     private boolean needsUpdate;
-    private EmbeddedTreeInterface geneTree;
+    private TreeInterface geneTree;
     private Network speciesNetwork;
 
     // the coalescent times of this gene tree for all species branches
@@ -143,7 +146,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
             }
             // traversal direction forward in time
             final int traversalNodeNumber = speciesNetworkNode.getTraversalNumber();
-            final Integer nextSpeciesBranchNumber = geneTree.getEmbedding().getDirection(geneTreeNodeNumber, traversalNodeNumber);
+            final Integer nextSpeciesBranchNumber = embeddingInput.get().getDirection(geneTreeNodeNumber, traversalNodeNumber);
             assert (nextSpeciesBranchNumber >= 0);
             final NetworkNode nextSpeciesNode = speciesNetworkNode.getChildByBranch(nextSpeciesBranchNumber);
             assert nextSpeciesNode != null;

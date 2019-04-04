@@ -1,18 +1,10 @@
 package speciesnetwork;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import beast.core.parameter.IntegerParameter;
 import beast.evolution.tree.Node;
-import beast.util.TreeParser;
-import speciesnetwork.EmbeddedTree;
-import speciesnetwork.EmbeddedTreeInterface;
-import speciesnetwork.EmbeddedTreeSelector;
-import speciesnetwork.GeneTreeInSpeciesNetwork;
-import speciesnetwork.operators.RebuildEmbedding;
 
 public class TestSharedEmbeddingSelector extends ConstantPopulationTest {
 	private int ntrees = 0; 
@@ -21,8 +13,8 @@ public class TestSharedEmbeddingSelector extends ConstantPopulationTest {
 	private List<EmbeddedTree> trees = new ArrayList<EmbeddedTree>();
 	
 	@Override
-	protected EmbeddedTreeInterface treeFromRoot(Node root) {
-        EmbeddedTreeSelector embeddedTree = new EmbeddedTreeSelector();
+	protected GeneTreeSelector treeFromRoot(Node root) {
+		GeneTreeSelector embeddedTree = new GeneTreeSelector();
         trees.set(counter, new EmbeddedTree(root));
         embeddedTree.initByName(
         		"tree", trees,

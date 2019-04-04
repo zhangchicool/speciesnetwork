@@ -4,7 +4,7 @@ import beast.core.StateNode;
 import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
 
-public class EmbeddedTree extends Tree implements EmbeddedTreeInterface {
+public class EmbeddedTree extends Tree {
 	public Embedding embedding;
 	private Embedding storedEmbedding;
 
@@ -113,12 +113,10 @@ public class EmbeddedTree extends Tree implements EmbeddedTreeInterface {
     	// System.out.println(getID() + "\n" + toString());
     }
 
-	@Override
 	public Embedding getEmbedding() {
 		return embedding;
 	}
    
-	@Override
 	public void assignFromTree(Tree tempTree) {
         setRoot(tempTree.getRoot());
         initArrays();
@@ -126,7 +124,6 @@ public class EmbeddedTree extends Tree implements EmbeddedTreeInterface {
         storedEmbedding = new Embedding(nodeCount);	
 	}
 
-	@Override
 	public void setEmbedding(Embedding newEmbedding) {
 		embedding = newEmbedding;
 	}
