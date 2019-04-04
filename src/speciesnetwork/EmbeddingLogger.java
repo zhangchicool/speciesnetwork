@@ -4,13 +4,12 @@ import java.io.PrintStream;
 
 import beast.core.CalculationNode;
 import beast.core.Description;
-import beast.core.Function;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.Loggable;
 
 @Description("Logs embedding of a gene tree")
-public class EmbeddingLogger extends CalculationNode implements Loggable, Function {
+public class EmbeddingLogger extends CalculationNode implements Loggable {
     public final Input<GeneTreeInSpeciesNetwork> geneTreeInput =
             new Input<>("geneTree", "Gene tree embedded in the species network.", Validate.REQUIRED);
 
@@ -35,22 +34,5 @@ public class EmbeddingLogger extends CalculationNode implements Loggable, Functi
 	@Override
     public void close(PrintStream out) {
         // nothing to do
-    }
-
-    @Override
-    public int getDimension() {
-        final Embedding embedding = geneTreeInput.get().embeddingInput.get();
-        return embedding.geneNodeCount * embedding.traversalNodeCount;
-    }
-
-    @Override
-    public double getArrayValue() {
-        return -1;
-    }
-
-    @Override
-    public double getArrayValue(int i) {
-        final Embedding embedding = geneTreeInput.get().embeddingInput.get();
-        return embedding.embedding[i];
     }
 }

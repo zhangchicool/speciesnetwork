@@ -64,4 +64,9 @@ public class GeneTreeSelector extends CalculationNode implements GeneTreeInterfa
 	public Multiset<Integer> coalescentLineageCounts() {
 		return tree().coalescentLineageCounts();
 	}
+
+	@Override
+	public void rebuildEmbedding() {
+		tree().rebuildEmbedding();		
+	}
 }

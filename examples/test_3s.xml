@@ -102,9 +102,13 @@
 
         <distribution id="posterior" spec="util.CompoundDistribution">
             <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
-                <geneTreeWithin id="geneTree:gene1" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene1"/>
-                <geneTreeWithin id="geneTree:gene2" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene2"/>
-                <geneTreeWithin id="geneTree:gene3" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene3"/>
+                <geneTreeWithin id="geneTree:gene1"
+                    spec="speciesnetwork.GeneTreeInSpeciesNetwork"
+                    speciesNetwork="@network:species"
+                    geneTree="@tree:gene1"
+                    taxa="@taxonsuperset" />
+                <geneTreeWithin id="geneTree:gene2" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene2" taxa="@taxonsuperset" />
+                <geneTreeWithin id="geneTree:gene3" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene3" taxa="@taxonsuperset" />
                 <!-- populationModel id="popModel" popSizes="@popSizes" spec="speciesnetwork.ConstantPopulation"/ -->
                 <populationModel id="popModel" alpha="4.0" beta="0.04" spec="speciesnetwork.ConstantPopIntegrated"/>
             </distribution>

@@ -92,8 +92,9 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
             throw new IllegalArgumentException("Time of origin (" + tOrigin + ") < time of MRCA (" + tMRCA + ")!");
 
         // initialize embedding for all gene trees
-        if (!rebuildEmbeddingInput.get().rebuildEmbedding())
-            throw new RuntimeException("Failed to initialize gene tree embedding!");
+        for (GeneTreeInterface geneTree: geneTreesInput.get()) {
+        	geneTree.rebuildEmbedding();
+        }
     }
 
     private void userStates() {
