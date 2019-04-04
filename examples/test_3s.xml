@@ -152,7 +152,7 @@
                     </siteModel>
                     <branchRateModel id="strictClock:gene3" clock.rate="1.0" spec="StrictClockModel"/>
                 </distribution>
-                <distribution id="likelihood:gene4" data="@gene4" tree="@tree:gene3" spec="TreeLikelihood">
+                <distribution id="likelihood:gene4" data="@gene4" tree="@tree:gene2" spec="TreeLikelihood">
                     <siteModel id="siteModel:gene4" mutationRate="1.0" spec="SiteModel">
                         <substModel id="jc:gene4" spec="JukesCantor"/>
                     </siteModel>
