@@ -19,7 +19,8 @@ public class TestSharedEmbeddingSelector extends ConstantPopulationTest {
         		"geneTree", tree,
         		"embedding", embedding,
         		"ploidy", ploidy,
-        		"speciesNetwork", speciesNetwork);
+				"taxa", generateSuperset(),
+				"speciesNetwork", speciesNetwork);
         trees.set(counter, geneTreeWrapper);
         GeneTreeSelector selector = new GeneTreeSelector();
         selector.initByName(

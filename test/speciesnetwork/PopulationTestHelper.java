@@ -70,11 +70,15 @@ abstract class PopulationTestHelper {
 
 	protected GeneTreeInterface geneTree(TreeInterface tree, Embedding embedding) {
 		GeneTreeInSpeciesNetwork geneTreeWrapper = new GeneTreeInSpeciesNetwork();
-		geneTreeWrapper.initByName("geneTree", tree, "embedding", embedding, "ploidy", ploidy, "speciesNetwork",
-				speciesNetwork);
+		geneTreeWrapper.initByName(
+				"geneTree", tree,
+				"embedding", embedding,
+				"ploidy", ploidy,
+				"taxa", generateSuperset(),
+				"speciesNetwork", speciesNetwork);
 		return geneTreeWrapper;
 	}
-
+	
 	protected void initializeGeneTrees(boolean reembed) {
 		for (int i = 0; i < newickGeneTrees.size(); i++) {
 			final String newick = newickGeneTrees.get(i);
