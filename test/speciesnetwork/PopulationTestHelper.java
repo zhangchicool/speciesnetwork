@@ -1,4 +1,4 @@
-package snetworktests;
+package speciesnetwork;
 
 import java.util.ArrayList;
 import java.util.List;

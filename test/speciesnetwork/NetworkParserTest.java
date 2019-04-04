@@ -1,4 +1,4 @@
-package snetworktests;
+package speciesnetwork;
 
 import java.text.DecimalFormat;
 import org.junit.Test;

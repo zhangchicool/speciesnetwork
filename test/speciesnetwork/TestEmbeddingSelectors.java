@@ -1,4 +1,4 @@
-package snetworktests;
+package speciesnetwork;
 
 import beast.evolution.tree.Node;
 import speciesnetwork.EmbeddedTree;

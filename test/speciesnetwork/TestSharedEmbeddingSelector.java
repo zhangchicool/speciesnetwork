@@ -1,4 +1,4 @@
-package snetworktests;
+package speciesnetwork;
 
 import static org.junit.Assert.assertTrue;
 
