@@ -9,7 +9,8 @@ import org.junit.runners.Suite.SuiteClasses;
     ConstantPopIntegratedTest.class,
     ConstantPopulationTest.class,
     NetworkParserTest.class,
-    BirthHybridizationTest.class
+    BirthHybridizationTest.class,
+    TestEmbedding.class
 })
 
 public class AllTests {
