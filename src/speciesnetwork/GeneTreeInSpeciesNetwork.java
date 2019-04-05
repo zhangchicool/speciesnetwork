@@ -79,11 +79,8 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 
 		storedLogGammaSum = logGammaSum;
 
-		System.out.println("storing:");
-		System.out.println(getEmbedding().toString());
 		storedEmbedding = new Embedding(getEmbedding().getGenes());
 		storedEmbedding.copyFrom(getEmbedding());
-		System.out.println(storedEmbedding.toString());
 
 		super.store();
 	}
@@ -151,15 +148,16 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		final Node geneTreeRoot = getTree().getRoot();
 		final NetworkNode speciesNetworkRoot = speciesNetwork.getRoot();
 		final Integer speciesRootBranchNumber = speciesNetworkRoot.gammaBranchNumber;
-		recurseCoalescentEvents(geneTreeRoot, speciesNetworkRoot, speciesRootBranchNumber, Double.POSITIVE_INFINITY);
+		recurseCoalescentEvents(geneTreeRoot, speciesRootBranchNumber, Double.POSITIVE_INFINITY);
 
 		needsUpdate = false;
 	}
 
 	// forward in time recursion, unlike StarBEAST 2
-	private void recurseCoalescentEvents(final Node geneTreeNode, final NetworkNode speciesNetworkNode,
-			final Integer speciesBranchNumber, final double lastHeight) {
+	private void recurseCoalescentEvents(final Node geneTreeNode, final Integer speciesBranchNumber, final double lastHeight) {
 		final double geneNodeHeight = geneTreeNode.getHeight();
+		Network network = speciesNetworkInput.get();
+		NetworkNode speciesNetworkNode = network.getNode(network.getNodeNumber(speciesBranchNumber));
 		final double speciesNodeHeight = speciesNetworkNode.getHeight();
 		final int geneTreeNodeNumber = geneTreeNode.getNr();
 
@@ -180,9 +178,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 			final Integer nextSpeciesBranchNumber = getEmbedding().getDirection(geneTreeNodeNumber,
 					traversalNodeNumber);
 			assert (nextSpeciesBranchNumber >= 0);
-			final NetworkNode nextSpeciesNode = speciesNetworkNode.getChildByBranch(nextSpeciesBranchNumber);
-			assert nextSpeciesNode != null;
-			recurseCoalescentEvents(geneTreeNode, nextSpeciesNode, nextSpeciesBranchNumber, speciesNodeHeight);
+			recurseCoalescentEvents(geneTreeNode, nextSpeciesBranchNumber, speciesNodeHeight);
 		} else if (geneTreeNode.isLeaf()) { // assumes tip node heights are always zero
 			speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] += lastHeight;
 			coalescentLineageCounts.add(speciesBranchNumber);
@@ -190,13 +186,13 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 			speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] += lastHeight - geneNodeHeight;
 			coalescentTimes.put(speciesBranchNumber, geneNodeHeight);
 			for (Node geneChildNode : geneTreeNode.getChildren()) {
-				recurseCoalescentEvents(geneChildNode, speciesNetworkNode, speciesBranchNumber, geneNodeHeight);
+				recurseCoalescentEvents(geneChildNode, speciesBranchNumber, geneNodeHeight);
 			}
 		}
 	}
 
 	public double[][] getSpeciesOccupancy() {
-		if (needsUpdate)
+		// if (needsUpdate)
 			update();
 		return speciesOccupancy;
 	}
@@ -359,20 +355,14 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		return geneTreeInput.get();
 	}
 
-	protected boolean goodEmbedding(Node treeNode, NetworkNode networkNode) {
-		// The embedding is a geneTreeNodes × transversalNodes array, containing several
-		// empty cells and some cells that describe relationships in the tree.
-		return true;
-	}
-
 	@Override
 	public Embedding getEmbedding() {
-		assert goodEmbedding(getTree().getRoot(), speciesNetworkInput.get().getRoot());
 		return embeddingInput.get();
 	}
 
 	@Override
 	public void setEmbedding(Embedding newEmbedding) {
+		needsUpdate = true;
 		embeddingInput.set(newEmbedding);
 	}
 
