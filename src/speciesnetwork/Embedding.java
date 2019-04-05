@@ -78,7 +78,7 @@ public class Embedding {
 		probabilitySum *= src.probabilitySum;
 		for (int g = 0; g < geneNodeCount; g++) {
 			for (int t = 0; t < traversalNodeCount; t++) {
-				if (embedding[g][t] == -1) {
+				if (embedding[g][t] == -1 && src.embedding[g][t] != -1) {
 					embedding[g][t] = src.embedding[g][t];
 				}
 			}
@@ -88,7 +88,9 @@ public class Embedding {
 	public String rowToString(int row) {
 		StringBuilder str = new StringBuilder();
 		for (int t = 0; t < traversalNodeCount; t++) {
-			str.append(' ');
+			if (t > 0) {
+				str.append(' ');
+			}
 			str.append(embedding[row][t]);
 		}
 		return str.toString();
@@ -98,10 +100,10 @@ public class Embedding {
 	public String toString() {
 		StringBuilder str = new StringBuilder();
 		for (int g = 0; g < geneNodeCount; g++) {
-			for (int t = 0; t < traversalNodeCount; t++) {
-				str.append(' ');
-				str.append(embedding[g][t]);
+			if (g > 0) {
+				str.append('\t');
 			}
+			str.append(rowToString(g));
 		}
 		return str.toString();
 	}
