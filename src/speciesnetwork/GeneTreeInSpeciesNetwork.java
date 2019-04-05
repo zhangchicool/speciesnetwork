@@ -33,8 +33,8 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 			"Gene tree embedded in the species network.", Validate.REQUIRED);
 	public final Input<Embedding> embeddingInput = new Input<Embedding>("embedding",
 			"Embedding of the gene tree in the species network", (Embedding) null);
-	public final Input<Double> ploidyInput = new Input<>("ploidy",
-			"Ploidy (copy number) for this gene (default is 2).", 2.0);
+	public final Input<Double> ploidyInput = new Input<>("ploidy", "Ploidy (copy number) for this gene (default is 2).",
+			2.0);
 	public final Input<TaxonSet> taxonSuperSetInput = new Input<>("taxa",
 			"Taxon superset associating taxa with gene tree tips", Validate.REQUIRED);
 
@@ -78,13 +78,13 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		System.arraycopy(speciesOccupancy, 0, storedSpeciesOccupancy, 0, speciesOccupancy.length);
 
 		storedLogGammaSum = logGammaSum;
-		
+
 		System.out.println("storing:");
 		System.out.println(getEmbedding().toString());
 		storedEmbedding = new Embedding(getEmbedding().getGenes());
-		storedEmbedding.copyFrom(getEmbedding());		
+		storedEmbedding.copyFrom(getEmbedding());
 		System.out.println(storedEmbedding.toString());
-		
+
 		super.store();
 	}
 
@@ -123,7 +123,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		geneNodeCount = getTree().getNodeCount();
 		embeddingInput.setType(Embedding.class);
 
-		if (getEmbedding() == null) {
+		if (embeddingInput.get() == null) {
 			setEmbedding(new Embedding(geneNodeCount, traversalNodeCount));
 		}
 		needsUpdate = true;
@@ -177,7 +177,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 			}
 			// traversal direction forward in time
 			final int traversalNodeNumber = speciesNetworkNode.getTraversalNumber();
-			final Integer nextSpeciesBranchNumber = embeddingInput.get().getDirection(geneTreeNodeNumber,
+			final Integer nextSpeciesBranchNumber = getEmbedding().getDirection(geneTreeNodeNumber,
 					traversalNodeNumber);
 			assert (nextSpeciesBranchNumber >= 0);
 			final NetworkNode nextSpeciesNode = speciesNetworkNode.getChildByBranch(nextSpeciesBranchNumber);
@@ -297,13 +297,14 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 			final int traversalNodeNr = speciesNetworkNode.getTraversalNumber();
 			final Collection<Integer> requiredHeirs = geneNodeHeirs.get(geneTreeNode);
 
-			final Embedding[] altEmbeddings = new Embedding[2];
+			final Embedding[] altEmbeddings = new Embedding[2]; // TODO: Does this show a binary tree assumption?
 			double probSum = 0.0;
 			int i = 0;
 			for (Integer childBranchNr : speciesNetworkNode.childBranchNumbers) {
 				final NetworkNode childSpeciesNode = speciesNetworkNode.getChildByBranch(childBranchNr);
 				if (speciesNodeHeirs.get(childSpeciesNode).containsAll(requiredHeirs)) {
 					altEmbeddings[i] = recurseRebuild(geneTreeNode, childSpeciesNode);
+
 					if (altEmbeddings[i] == null)
 						return null;
 					altEmbeddings[i].setDirection(geneTreeNodeNr, traversalNodeNr, childBranchNr);
@@ -358,8 +359,15 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		return geneTreeInput.get();
 	}
 
+	protected boolean goodEmbedding(Node treeNode, NetworkNode networkNode) {
+		// The embedding is a geneTreeNodes × transversalNodes array, containing several
+		// empty cells and some cells that describe relationships in the tree.
+		return true;
+	}
+
 	@Override
 	public Embedding getEmbedding() {
+		assert goodEmbedding(getTree().getRoot(), speciesNetworkInput.get().getRoot());
 		return embeddingInput.get();
 	}
 
