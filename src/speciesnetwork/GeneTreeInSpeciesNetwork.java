@@ -58,6 +58,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 	private Multimap<NetworkNode, Integer> speciesNodeHeirs = HashMultimap.create();
 	private int geneNodeCount;
 	private int traversalNodeCount;
+	private Embedding storedEmbedding;
 
 	@Override
 	public boolean requiresRecalculation() {
@@ -77,12 +78,22 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		System.arraycopy(speciesOccupancy, 0, storedSpeciesOccupancy, 0, speciesOccupancy.length);
 
 		storedLogGammaSum = logGammaSum;
-
+		
+		System.out.println("storing:");
+		System.out.println(getEmbedding().toString());
+		storedEmbedding = new Embedding(getEmbedding().getGenes());
+		storedEmbedding.copyFrom(getEmbedding());		
+		System.out.println(storedEmbedding.toString());
+		
 		super.store();
 	}
 
 	@Override
 	public void restore() {
+		final Network speciesNetwork = speciesNetworkInput.get();
+		traversalNodeCount = speciesNetwork.getTraversalNodeCount();
+		geneNodeCount = getTree().getNodeCount();
+
 		ListMultimap<Integer, Double> tmpCoalescentTimes = coalescentTimes;
 		Multiset<Integer> tmpCoalescentLineageCounts = coalescentLineageCounts;
 		double[][] tmpSpeciesOccupancy = speciesOccupancy;
@@ -97,6 +108,11 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		storedCoalescentLineageCounts = tmpCoalescentLineageCounts;
 		storedSpeciesOccupancy = tmpSpeciesOccupancy;
 		storedLogGammaSum = tmpLogGammaSum;
+
+		System.out.println("restoring:");
+		System.out.println(storedEmbedding.toString());
+		getEmbedding().copyFrom(storedEmbedding);
+		System.out.println(getEmbedding().toString());
 
 		super.restore();
 	}

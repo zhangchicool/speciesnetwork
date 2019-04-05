@@ -102,7 +102,8 @@
 
         <distribution id="posterior" spec="util.CompoundDistribution">
             <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
-                <geneTreeWithin id="geneTree:gene1"
+                <geneTreeWithin
+                    id="geneTree:gene1"
                     spec="speciesnetwork.GeneTreeInSpeciesNetwork"
                     speciesNetwork="@network:species"
                     geneTree="@tree:gene1"

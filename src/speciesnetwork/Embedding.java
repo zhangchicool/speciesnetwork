@@ -1,16 +1,5 @@
 package speciesnetwork;
 
-import java.io.PrintStream;
-import java.util.Map;
-import java.util.Set;
-
-import org.w3c.dom.Node;
-
-import beast.core.BEASTInterface;
-import beast.core.BEASTObject;
-import beast.core.Input;
-import beast.core.StateNode;
-
 public class Embedding {
 	protected int geneNodeCount;
 	protected int traversalNodeCount;
@@ -49,6 +38,10 @@ public class Embedding {
 		return geneNodeCount;
 	}
 
+	public int getTravs() {
+		return traversalNodeCount;
+	}
+
 	public int getDirection(int geneNode, int traversalNode) {
 		return embedding[geneNode][traversalNode];
 	}
@@ -67,11 +60,12 @@ public class Embedding {
 
 	// assumes geneNodeCount is unchanged
 	public void copyFrom(Embedding src) {
-		if (traversalNodeCount != src.traversalNodeCount) {
-			traversalNodeCount = src.traversalNodeCount;
-			embedding = new int[src.embedding.length][src.embedding[0].length];
+		geneNodeCount = src.geneNodeCount;
+		traversalNodeCount = src.traversalNodeCount;
+		embedding = new int[geneNodeCount][traversalNodeCount];
+		for (int g = 0; g < geneNodeCount; g++) {
+			System.arraycopy(src.embedding[g], 0, embedding[g], 0, embedding[g].length);
 		}
-		System.arraycopy(src.embedding, 0, embedding, 0, embedding.length);
 		probability = src.probability;
 		probabilitySum = src.probabilitySum;
 	}
