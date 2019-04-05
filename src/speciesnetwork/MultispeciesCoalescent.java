@@ -21,7 +21,7 @@ import beast.core.State;
 public class MultispeciesCoalescent extends Distribution {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
-    public final Input<List<GeneTreeInSpeciesNetwork>> geneTreeWrapperInput =
+    public final Input<List<GeneTreeInterface>> geneTreeWrapperInput =
             new Input<>("geneTreeWithin", "Gene tree (wrapper) within the species network.", new ArrayList<>());
     public final Input<PopulationSizeModel> populationModelInput =
             new Input<>("populationModel", "The species network population model.", Validate.REQUIRED);
@@ -35,13 +35,13 @@ public class MultispeciesCoalescent extends Distribution {
 
     @Override
     public void initAndValidate() {
-        final List<GeneTreeInSpeciesNetwork> geneTrees = geneTreeWrapperInput.get();
+        final List<GeneTreeInterface> geneTrees = geneTreeWrapperInput.get();
         nGeneTrees = geneTrees.size();
 
         perGenePloidy = new double[nGeneTrees];
         for (int i = 0; i < nGeneTrees; i++) {
-            final GeneTreeInSpeciesNetwork geneTreeI = geneTrees.get(i);
-            perGenePloidy[i] = geneTreeI.ploidy;
+            final GeneTreeInterface geneTreeI = geneTrees.get(i);
+            perGenePloidy[i] = geneTreeI.getPloidy();
         }
 
         final Network speciesNetwork = speciesNetworkInput.get();
@@ -82,22 +82,21 @@ public class MultispeciesCoalescent extends Distribution {
             allCoalescentTimes.add(new ArrayList<>());
         }
 
-        final List<GeneTreeInSpeciesNetwork> geneTrees = geneTreeWrapperInput.get();
+        final List<GeneTreeInterface> geneTrees = geneTreeWrapperInput.get();
         // transpose gene-branch list of lists to branch-gene list of lists
         logP = 0.0;
         for (int j = 0; j < nGeneTrees; j++) { // for each gene "j"
-            final GeneTreeInSpeciesNetwork geneTree = geneTrees.get(j);
-            geneTree.computeCoalescentTimes();
-            logP += geneTree.logGammaSum;
+            final GeneTreeInterface geneTree = geneTrees.get(j);
+            logP += geneTree.logGammaSum();
 
             for (int i = 0; i < speciesBranchCount; i++) { // for each species network branch "i"
-                final List<Double> timesView = geneTree.coalescentTimes.get(i);
+                final List<Double> timesView = geneTree.coalescentTimes().get(i);
                 final int geneBranchEventCount = timesView.size();
                 final Double[] geneBranchCoalescentTimes = new Double[geneBranchEventCount];
                 timesView.toArray(geneBranchCoalescentTimes);
                 Arrays.sort(geneBranchCoalescentTimes);
 
-                final int geneBranchLineageCount = geneTree.coalescentLineageCounts.count(i);
+                final int geneBranchLineageCount = geneTree.coalescentLineageCounts().count(i);
 
                 final Double[] coalescentTimesIJ = new Double[geneBranchEventCount + 2];
                 coalescentTimesIJ[0] = speciesEndTimes[i];

@@ -1,23 +1,35 @@
 package speciesnetwork.simulator;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-import beast.app.seqgen.*;
+import beast.app.seqgen.SequenceSimulator;
 import beast.core.Description;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.Runnable;
 import beast.core.State;
 import beast.core.parameter.RealParameter;
-import beast.evolution.alignment.*;
+import beast.evolution.alignment.Alignment;
+import beast.evolution.alignment.Sequence;
+import beast.evolution.alignment.Taxon;
+import beast.evolution.alignment.TaxonSet;
 import beast.evolution.tree.Node;
+import beast.evolution.tree.Tree;
 import beast.util.Randomizer;
-import speciesnetwork.EmbeddedTree;
+import speciesnetwork.GeneTreeInSpeciesNetwork;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 import speciesnetwork.SanityChecks;
@@ -40,7 +52,7 @@ public class CoalescentSimulator extends Runnable {
     public final Input<TaxonSet> taxonSuperSetInput =
             new Input<>("taxonset", "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
 
-    public final Input<List<EmbeddedTree>> geneTreesInput =
+    public final Input<List<GeneTreeInSpeciesNetwork>> geneTreesInput =
             new Input<>("geneTree", "Gene tree embedded in the species network.", new ArrayList<>());
     public final Input<RealParameter> ploidiesInput =
             new Input<>("ploidy", "Ploidy (copy number) for each gene (default is 2).");
@@ -58,7 +70,7 @@ public class CoalescentSimulator extends Runnable {
 
     private Network speciesNetwork;
     private RealParameter popSizes;
-    private List<EmbeddedTree> geneTrees;
+    private List<GeneTreeInSpeciesNetwork> geneTrees;
     private RealParameter ploidies;
 
     private int nrOfGeneTrees;
@@ -124,7 +136,7 @@ public class CoalescentSimulator extends Runnable {
         final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
         // simulate each gene tree and alignment
         for (int ig = 0; ig < nrOfGeneTrees; ig++) {
-            EmbeddedTree geneTree = geneTrees.get(ig);
+        	GeneTreeInSpeciesNetwork geneTree = geneTrees.get(ig);
 
             // initialize embedding matrix to -1 (no traversal)
             geneTree.getEmbedding().reset(traversalNodeCount);
@@ -137,7 +149,7 @@ public class CoalescentSimulator extends Runnable {
                 speciesNodeMap.put(speciesName, leafNode);
             }
             final Map<String, Node> geneNodeMap = new HashMap<>();
-            for (Node leafNode : geneTree.getExternalNodes()) {
+            for (Node leafNode : geneTree.geneTreeInput.get().getExternalNodes()) {
                 final String geneName = leafNode.getID();
                 geneNodeMap.put(geneName, leafNode);
             }
@@ -168,7 +180,7 @@ public class CoalescentSimulator extends Runnable {
     }
 
     // recursively simulate lineages coalescent in each population
-    private void simulateGeneTree(NetworkNode snNode, EmbeddedTree geneTree, double ploidy) {
+    private void simulateGeneTree(NetworkNode snNode, GeneTreeInSpeciesNetwork geneTree, double ploidy) {
         if (snNode.isVisited())
             return;
         for (NetworkNode c: snNode.getChildren()) {
@@ -228,24 +240,25 @@ public class CoalescentSimulator extends Runnable {
             List<Node> lineagesAtTop =
                     simulateCoalescentEvents(lineagesAtBottom, bottomHeight, topHeight, ploidy*popSize, geneTree);
             if (sParent.isOrigin()) {
-                geneTree.setRoot(lineagesAtTop.get(0));
+                ((Tree) geneTree.geneTreeInput.get()).setRoot(lineagesAtTop.get(0));
             } else {
                 networkNodeGeneLineagesMap.putAll(sParent, lineagesAtTop);
                 // update embedding
                 final int traversalParentNr = sParent.getTraversalNumber();
-                for (final Node geneNode : lineagesAtTop)
+                for (final Node geneNode : lineagesAtTop) {
                 	geneTree.getEmbedding().setDirection(geneNode.getNr(), traversalParentNr, sBranchNumber);
+                }
             }
         }
     }
 
     private List<Node> simulateCoalescentEvents(Collection<Node> lineages, double bottomHeight,
-                                                double topHeight, double pNu, EmbeddedTree geneTree) {
+                                                double topHeight, double pNu, GeneTreeInSpeciesNetwork geneTree) {
         // start from the lineages at the bottom
         List<Node> currentLineages = new ArrayList<>(lineages);
         double currentHeight = bottomHeight;
 
-        List<Node> internalNodes = geneTree.getInternalNodes();
+        List<Node> internalNodes = geneTree.geneTreeInput.get().getInternalNodes();
 
         // then go up backward in time
         while (currentLineages.size() > 1 && currentHeight < topHeight) {
@@ -301,8 +314,8 @@ public class CoalescentSimulator extends Runnable {
                 for (Sequence seq : sequences)
                     out.println("        <sequence taxon=\"" + seq.getTaxon() + "\" value=\"" + seq.getData() + "\"/>");
             } else {
-            	EmbeddedTree geneTree = geneTrees.get(i);
-                for (Node leaf : geneTree.getExternalNodes())
+            	GeneTreeInSpeciesNetwork geneTree = geneTrees.get(i);
+                for (Node leaf : geneTree.geneTreeInput.get().getExternalNodes())
                     out.println("        <sequence taxon=\"" + leaf.getID() + "\" totalcount=\"4\" value=\"-\"/>");
             }
             out.println("    </data>");
@@ -348,9 +361,9 @@ public class CoalescentSimulator extends Runnable {
         // print initial/true gene trees
         out.println("        <!--");
         for (int i = 0; i < nrOfGeneTrees; i++) {
-            EmbeddedTree geneTree = geneTrees.get(i);
+        	GeneTreeInSpeciesNetwork geneTree = geneTrees.get(i);
             out.println("        <init spec=\"beast.util.TreeParser\" id=\"newick:gene" + (i+1) + "\" initial=\"@tree:gene" + (i+1) + "\" taxa=\"@gene" + (i+1) + "\" IsLabelledNewick=\"true\"\n" +
-                        "              newick=\"" + geneTree.getRoot().toNewick() + "\"/>");
+                        "              newick=\"" + geneTree.geneTreeInput.get().getRoot().toNewick() + "\"/>");
         }
         out.println("        -->");
         // starbeast initializer
@@ -538,14 +551,14 @@ public class CoalescentSimulator extends Runnable {
     private void writeGeneTrees(String outputFileName) throws IOException {
         if (outputFileName == null) {
             for (int i = 0; i < nrOfGeneTrees; i++) {
-            	EmbeddedTree geneTree = geneTrees.get(i);
-                System.out.println(geneTree.getRoot().toNewick() + ";");
+            	GeneTreeInSpeciesNetwork geneTree = geneTrees.get(i);
+                System.out.println(geneTree.geneTreeInput.get().getRoot().toNewick() + ";");
             }
         } else {
             FileWriter fw = new FileWriter(outputFileName, true);
             for (int i = 0; i < nrOfGeneTrees; i++) {
-            	EmbeddedTree geneTree = geneTrees.get(i);
-                fw.write(geneTree.getRoot().toNewick() + ";\n");
+            	GeneTreeInSpeciesNetwork geneTree = geneTrees.get(i);
+                fw.write(geneTree.geneTreeInput.get().getRoot().toNewick() + ";\n");
             }
             fw.close();
         }

@@ -1,18 +1,21 @@
 package speciesnetwork;
 
-import beast.evolution.tree.Node;
-import speciesnetwork.EmbeddedTree;
-import speciesnetwork.EmbeddedTreeInterface;
-import speciesnetwork.EmbeddedTreeSelector;
-
+import beast.evolution.tree.TreeInterface;
 public class TestEmbeddingSelectors extends ConstantPopulationTest {
 	@Override
-	protected EmbeddedTreeInterface treeFromRoot(Node root) {
-        EmbeddedTreeSelector embeddedTree = new EmbeddedTreeSelector();
-        embeddedTree.initByName(
-        		"tree", new EmbeddedTree(root),
+	protected GeneTreeSelector geneTree(TreeInterface tree, Embedding embedding) {
+        GeneTreeInSpeciesNetwork geneTreeWrapper = new GeneTreeInSpeciesNetwork();
+        geneTreeWrapper.initByName(
+        		"geneTree", tree,
+        		"embedding", embedding,
+        		"ploidy", ploidy,
+				"taxa", generateSuperset(),
+        		"speciesNetwork", speciesNetwork);
+        GeneTreeSelector selector = new GeneTreeSelector();
+        selector.initByName(
+        		"tree", geneTreeWrapper,
         		"choice", "0"
         		);
-		return embeddedTree;
+		return selector;
 	}
 }

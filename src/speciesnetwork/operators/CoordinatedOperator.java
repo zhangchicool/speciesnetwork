@@ -1,11 +1,15 @@
 package speciesnetwork.operators;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import beast.core.Input;
 import beast.core.Operator;
 import beast.evolution.tree.Node;
-import speciesnetwork.EmbeddedTree;
+import beast.evolution.tree.Tree;
+import beast.evolution.tree.TreeInterface;
+import speciesnetwork.GeneTreeInSpeciesNetwork;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 
@@ -16,7 +20,7 @@ import speciesnetwork.NetworkNode;
 public abstract class CoordinatedOperator extends Operator {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Input.Validate.REQUIRED);
-    public final Input<List<EmbeddedTree>> geneTreesInput = new Input<>("geneTree",
+    public final Input<List<GeneTreeInSpeciesNetwork>> geneTreesInput = new Input<>("geneTree",
             "The gene tree within the species network.", new ArrayList<>());
 
     /**
@@ -30,17 +34,20 @@ public abstract class CoordinatedOperator extends Operator {
         final Integer speciesBrNr = networkNode.gammaBranchNumber;
         final NetworkNode parentNode = networkNode.getParentByBranch(speciesBrNr);
 
-        final List<EmbeddedTree> geneTrees = geneTreesInput.get();
+        final List<GeneTreeInSpeciesNetwork> geneTrees = geneTreesInput.get();
         final int nLoci = geneTrees.size();  // if nLoci == 0 (no input), gene trees are not changed
 
         int m = 0;  // # gene node heights changed relative to 'upper'
         int n = 0;  // # gene node heights changed relative to 'lower'
         for (int i = 0; i < nLoci; i++) {  // loop over all loci
-            EmbeddedTree geneTree = geneTrees.get(i);
-            geneTree.startEditing(this);  // Tell BEAST that *all* gene trees will be edited
-
+        	GeneTreeInSpeciesNetwork geneTree = geneTrees.get(i);
+        	TreeInterface tree = geneTree.geneTreeInput.get();
+        	if (tree instanceof Tree) {
+        		((Tree) tree).startEditing(this);  // Tell BEAST that *all* gene trees will be edited
+        	}
+        	
             // update the gene tree node heights
-            for (Node gNode : geneTree.getInternalNodes()) {
+            for (Node gNode : geneTree.geneTreeInput.get().getInternalNodes()) {
                 final double gNodeHeight = gNode.getHeight();
 
                 if (oldHeight <= gNodeHeight && gNodeHeight < upper) {
@@ -68,11 +75,11 @@ public abstract class CoordinatedOperator extends Operator {
 
     /* check if a gene tree node is within certain child branches of the network node */
     private boolean isWithinChildBranch(NetworkNode snNode, List<Integer> childBrNrs,
-                                        Node gNode, EmbeddedTree geneTree, final double upper) {
+                                        Node gNode, GeneTreeInSpeciesNetwork geneTree, final double upper) {
         final int traversalNodeNr = snNode.getTraversalNumber();
         Integer withinBrNr;  Node treNode = gNode;
         do {
-            withinBrNr = geneTree.getEmbedding().getDirection(treNode.getNr(), traversalNodeNr);
+            withinBrNr = geneTree.embeddingInput.get().getDirection(treNode.getNr(), traversalNodeNr);
             treNode = treNode.getParent();
         } while (withinBrNr < 0 && treNode != null && treNode.getHeight() < upper);
 
