@@ -37,7 +37,7 @@ public class TestEmbedding {
 		Tree tree = new Tree("((a:2,b:2):1,c:3):1;");
 		Network nw = new NetworkParser();
 		nw.initByName(
-				"tree", new Tree("((A:2,(B:1)#H1:1):1,(C:1,#H1:0):2):1;"));
+				"tree", new Tree("((A:2,(B:1)#H1:1):1,(C:2,#H1:1):1):1;"));
 		Taxon[] t1 = { new Taxon("a") };
 		Taxon[] t2 = { new Taxon("b") };
 		Taxon[] t3 = { new Taxon("c") };
