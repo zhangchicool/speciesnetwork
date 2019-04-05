@@ -317,7 +317,7 @@ public class NetworkNode {
         } else {
             parentHeight = parent.getHeight();
         }
-        return buildNewick(parentHeight, gammaBranchNumber, df, inXML, true);
+        return buildNewick(parentHeight, gammaBranchNumber, df, inXML, false);
     }
 
     public String toString() {
