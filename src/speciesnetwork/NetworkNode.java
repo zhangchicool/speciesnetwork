@@ -296,6 +296,18 @@ public class NetworkNode {
         }
     }
 
+    public String getNewickTopology() {
+        resetAllTouched();
+        NetworkNode parent = getParentByBranch(gammaBranchNumber);
+        final double parentHeight;
+        if (parent == null) {
+            parentHeight = Double.POSITIVE_INFINITY;
+        } else {
+            parentHeight = parent.getHeight();
+        }
+        return buildNewick(parentHeight, gammaBranchNumber, new DecimalFormat("0"), false, false);
+    }
+
     public String toString(DecimalFormat df, boolean inXML) {
         resetAllTouched();
         NetworkNode parent = getParentByBranch(gammaBranchNumber);
@@ -305,14 +317,14 @@ public class NetworkNode {
         } else {
             parentHeight = parent.getHeight();
         }
-        return buildNewick(parentHeight, gammaBranchNumber, df, inXML);
+        return buildNewick(parentHeight, gammaBranchNumber, df, inXML, true);
     }
 
     public String toString() {
         return toString(null, false);
     }
 
-    private String buildNewick(double parentHeight, Integer branchNumber, DecimalFormat df, boolean inXML) {
+    private String buildNewick(double parentHeight, Integer branchNumber, DecimalFormat df, boolean inXML, boolean onlyTopology) {
         final StringBuilder subStr = new StringBuilder();
         // only add children to a reticulation node once
         if (children.size() > 0 && !touched) {
@@ -322,7 +334,7 @@ public class NetworkNode {
             for (Integer childBranchNr: childBranchNumbers) {
                 if (i > 0) subStr.append(",");
                 NetworkNode childNode = getChildByBranch(childBranchNr);
-                subStr.append(childNode.buildNewick(height, childBranchNr, df, inXML));
+                subStr.append(childNode.buildNewick(height, childBranchNr, df, inXML, onlyTopology));
                 i++;
             }
             subStr.append(")");
@@ -342,13 +354,17 @@ public class NetworkNode {
         } else {
             processMetaData(false); // do not write gamma prob
         }
-        subStr.append(getNewickMetaData(inXML));
+        if (!onlyTopology) {
+            subStr.append(getNewickMetaData(inXML));        	
+        }
 
-        if (parentHeight < Double.POSITIVE_INFINITY) {
+        if (parentHeight < Double.POSITIVE_INFINITY && !onlyTopology) {
             final double branchLength = parentHeight - height;
             subStr.append(":");
-            if (df == null) subStr.append(branchLength);
-            else subStr.append(df.format(branchLength));
+            if (df == null)
+            	subStr.append(branchLength);
+            else
+            	subStr.append(df.format(branchLength));
         }
 
         return subStr.toString();
