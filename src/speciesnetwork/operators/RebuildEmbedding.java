@@ -19,10 +19,6 @@ import speciesnetwork.Network;
 
 @Description("Rebuild the embedding of a gene tree in the species network.")
 public class RebuildEmbedding extends Operator {
-    public final Input<Network> speciesNetworkInput = new Input<>("speciesNetwork",
-            "The species network.", Validate.REQUIRED);
-    public final Input<TaxonSet> taxonSuperSetInput = new Input<>("taxonset",
-            "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
     public final Input<List<GeneTreeInterface>> geneTreesInput = new Input<>("geneTree",
             "The gene tree within the species network.", new ArrayList<>());
     // operator input can be null so that the species network and gene trees are unchanged
@@ -55,7 +51,7 @@ public class RebuildEmbedding extends Operator {
             
             // then rebuild the embedding
             try {
-            	geneTree.rebuildEmbedding();
+            	geneTree.rebuildEmbedding(this);
             } catch (RuntimeException e) {
                 return Double.NEGATIVE_INFINITY;
             }
@@ -76,6 +72,9 @@ public class RebuildEmbedding extends Operator {
 
         if (operatorInput.get() != null)
             stateNodes.addAll(operatorInput.get().listStateNodes());
+		for (GeneTreeInterface geneTree: geneTreesInput.get()) {
+            stateNodes.add(geneTree.getEmbedding());        	
+        }
         stateNodes.addAll(super.listStateNodes());
 
         return stateNodes;
