@@ -95,7 +95,7 @@ abstract class PopulationTestHelper {
 			GeneTreeInterface gt = geneTree(treeParser, embedding);
 			geneTreeWrappers.add(gt);
 			if (reembed) { // rebuild the embedding
-				gt.rebuildEmbedding();
+				gt.rebuildEmbedding(null);
 			}
 		}
 	}

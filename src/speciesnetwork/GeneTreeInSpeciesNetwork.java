@@ -65,7 +65,9 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		geneNodeCount = getTree().getNodeCount();
 		traversalNodeCount = speciesNetwork.getTraversalNodeCount();
 		Embedding e = embeddingInput.get();
-		if (e == null || e.getDimension() == 0) {
+		if (e == null) {
+			embeddingInput.set(new Embedding(geneNodeCount, traversalNodeCount));			
+		} else if (e.getDimension() == 0) {
 			embeddingInput.get().assignFrom(new Embedding(geneNodeCount, traversalNodeCount));
 		} else {
 			if (e.geneNodeCount != geneNodeCount || e.traversalNodeCount != traversalNodeCount) {
