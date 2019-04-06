@@ -49,7 +49,7 @@ abstract class PopulationTestHelper {
 
 		msc = new MultispeciesCoalescent();
 		msc.initByName("speciesNetwork", speciesNetwork, "geneTreeWithin", geneTreeWrappers, "populationModel",
-				populationModel);
+				populationModel, "ploidy", ploidy);
 
 		double calculatedLogP = msc.calculateLogP();
 		assertEquals(expectedLogP, calculatedLogP, allowedError);
@@ -72,10 +72,9 @@ abstract class PopulationTestHelper {
 		GeneTreeInSpeciesNetwork geneTreeWrapper = new GeneTreeInSpeciesNetwork();
 		geneTreeWrapper.initByName(
 				"geneTree", tree,
-				"embedding", embedding,
-				"ploidy", ploidy,
 				"taxa", generateSuperset(),
 				"speciesNetwork", speciesNetwork);
+		geneTreeWrapper.embedding = embedding;
 		return geneTreeWrapper;
 	}
 	
@@ -91,7 +90,7 @@ abstract class PopulationTestHelper {
 			Embedding embedding = new Embedding(nRow, nCol);
 			for (int r = 0; r < nRow; r++) {
 				for (int c = 0; c < nCol; c++)
-					embedding.setDirection(r, c, rawEmbedding[r * nCol + c]);
+					embedding.embedding[r][c] = rawEmbedding[r * nCol + c];
 			}
 			GeneTreeInterface gt = geneTree(treeParser, embedding);
 			geneTreeWrappers.add(gt);

@@ -1,5 +1,6 @@
 package speciesnetwork;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -31,108 +32,35 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 			"Species network for embedding the gene tree.", Validate.REQUIRED);
 	public final Input<TreeInterface> geneTreeInput = new Input<>("geneTree",
 			"Gene tree embedded in the species network.", Validate.REQUIRED);
-	public final Input<Embedding> embeddingInput = new Input<Embedding>("embedding",
-			"Embedding of the gene tree in the species network", (Embedding) null);
-	public final Input<Double> ploidyInput = new Input<>("ploidy", "Ploidy (copy number) for this gene (default is 2).",
-			2.0);
 	public final Input<TaxonSet> taxonSuperSetInput = new Input<>("taxa",
 			"Taxon superset associating taxa with gene tree tips", Validate.REQUIRED);
 
-	private boolean needsUpdate;
-
 	// the coalescent times of this gene tree for all species branches
 	protected ListMultimap<Integer, Double> coalescentTimes = ArrayListMultimap.create();
-	protected ListMultimap<Integer, Double> storedCoalescentTimes = ArrayListMultimap.create();
-	// the number of lineages at the tipward end of each species branch
-	protected Multiset<Integer> coalescentLineageCounts = HashMultiset.create();
-	protected Multiset<Integer> storedCoalescentLineageCounts = HashMultiset.create();
 
 	protected double[][] speciesOccupancy;
-	protected double[][] storedSpeciesOccupancy;
 	protected double logGammaSum;
-	protected double storedLogGammaSum;
 
 	// heirs are the gene tree leaf tip numbers below each gene tree node or species
 	// network node
-	private Multimap<Node, Integer> geneNodeHeirs = HashMultimap.create();
 	private Multimap<NetworkNode, Integer> speciesNodeHeirs = HashMultimap.create();
-	private int geneNodeCount;
-	private int traversalNodeCount;
-	private Embedding storedEmbedding;
+
+	public Embedding embedding;
 
 	@Override
 	public boolean requiresRecalculation() {
+		boolean needsUpdate;
 		needsUpdate = geneTreeInput.isDirty() || speciesNetworkInput.isDirty();
 		return needsUpdate;
 	}
 
-	@Override
-	public void store() {
-		storedCoalescentTimes.clear();
-		storedCoalescentLineageCounts.clear();
-
-		storedCoalescentTimes.putAll(coalescentTimes);
-		storedCoalescentLineageCounts.addAll(coalescentLineageCounts);
-
-		storedSpeciesOccupancy = new double[speciesOccupancy.length][speciesOccupancy[0].length];
-		System.arraycopy(speciesOccupancy, 0, storedSpeciesOccupancy, 0, speciesOccupancy.length);
-
-		storedLogGammaSum = logGammaSum;
-
-		storedEmbedding = new Embedding(getEmbedding().getGenes());
-		storedEmbedding.copyFrom(getEmbedding());
-
-		super.store();
-	}
-
-	@Override
-	public void restore() {
-		final Network speciesNetwork = speciesNetworkInput.get();
-		traversalNodeCount = speciesNetwork.getTraversalNodeCount();
-		geneNodeCount = getTree().getNodeCount();
-
-		ListMultimap<Integer, Double> tmpCoalescentTimes = coalescentTimes;
-		Multiset<Integer> tmpCoalescentLineageCounts = coalescentLineageCounts;
-		double[][] tmpSpeciesOccupancy = speciesOccupancy;
-		double tmpLogGammaSum = logGammaSum;
-
-		coalescentTimes = storedCoalescentTimes;
-		coalescentLineageCounts = storedCoalescentLineageCounts;
-		speciesOccupancy = storedSpeciesOccupancy;
-		logGammaSum = storedLogGammaSum;
-
-		storedCoalescentTimes = tmpCoalescentTimes;
-		storedCoalescentLineageCounts = tmpCoalescentLineageCounts;
-		storedSpeciesOccupancy = tmpSpeciesOccupancy;
-		storedLogGammaSum = tmpLogGammaSum;
-
-		System.out.println("restoring:");
-		System.out.println(storedEmbedding.toString());
-		getEmbedding().copyFrom(storedEmbedding);
-		System.out.println(getEmbedding().toString());
-
-		super.restore();
-	}
-
 	public void initAndValidate() {
-		final Network speciesNetwork = speciesNetworkInput.get();
-		traversalNodeCount = speciesNetwork.getTraversalNodeCount();
-		geneNodeCount = getTree().getNodeCount();
-		embeddingInput.setType(Embedding.class);
-
-		if (embeddingInput.get() == null) {
-			setEmbedding(new Embedding(geneNodeCount, traversalNodeCount));
-		}
-		needsUpdate = true;
+		embedding = null;
+		coalescentLineageCounts = HashMultiset.create();
+		checkDirtiness();
 	}
 
-	protected void computeCoalescentTimes() {
-		if (needsUpdate) {
-			update();
-		}
-	}
-
-	private void update() {
+	void update() {
 		Network speciesNetwork = speciesNetworkInput.get();
 		logGammaSum = 0.0;
 
@@ -145,21 +73,30 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		coalescentLineageCounts.clear();
 		coalescentTimes.clear();
 
-		final Node geneTreeRoot = getTree().getRoot();
+		final Node geneTreeRoot = getTree();
 		final NetworkNode speciesNetworkRoot = speciesNetwork.getRoot();
 		final Integer speciesRootBranchNumber = speciesNetworkRoot.gammaBranchNumber;
-		recurseCoalescentEvents(geneTreeRoot, speciesRootBranchNumber, Double.POSITIVE_INFINITY);
 
-		needsUpdate = false;
+		recurseCoalescentEvents(geneTreeRoot, speciesRootBranchNumber, Double.POSITIVE_INFINITY);
 	}
 
-	// forward in time recursion, unlike StarBEAST 2
-	private void recurseCoalescentEvents(final Node geneTreeNode, final Integer speciesBranchNumber, final double lastHeight) {
-		final double geneNodeHeight = geneTreeNode.getHeight();
+	public Node getTree() {
+		return geneTreeInput.get().getRoot();
+	}
+
+	Multiset<Integer> coalescentLineageCounts;
+	private int traversalNodeCount;
+	private int geneNodeCount;
+
+	// forward in time recursion
+	private void recurseCoalescentEvents(final Node geneTreeNode, final Integer speciesBranchNumber,
+			final double lastHeight) {
 		Network network = speciesNetworkInput.get();
 		NetworkNode speciesNetworkNode = network.getNode(network.getNodeNumber(speciesBranchNumber));
 		final double speciesNodeHeight = speciesNetworkNode.getHeight();
+
 		final int geneTreeNodeNumber = geneTreeNode.getNr();
+		final double geneNodeHeight = geneTreeNode.getHeight();
 
 		// check if coalescent node occurs in a descendant species network branch
 		if (geneNodeHeight < speciesNodeHeight) {
@@ -175,11 +112,10 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 			}
 			// traversal direction forward in time
 			final int traversalNodeNumber = speciesNetworkNode.getTraversalNumber();
-			final Integer nextSpeciesBranchNumber = getEmbedding().getDirection(geneTreeNodeNumber,
-					traversalNodeNumber);
-			assert (nextSpeciesBranchNumber >= 0);
+			final Integer nextSpeciesBranchNumber = embedding.embedding[geneTreeNodeNumber][traversalNodeNumber];
 			recurseCoalescentEvents(geneTreeNode, nextSpeciesBranchNumber, speciesNodeHeight);
-		} else if (geneTreeNode.isLeaf()) { // assumes tip node heights are always zero
+		} else if (geneTreeNode.isLeaf()) {
+			// TODO: assumes tip node heights are always zero
 			speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] += lastHeight;
 			coalescentLineageCounts.add(speciesBranchNumber);
 		} else {
@@ -191,52 +127,29 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		}
 	}
 
-	public double[][] getSpeciesOccupancy() {
-		// if (needsUpdate)
-			update();
-		return speciesOccupancy;
-	}
-
-	/**
-	 * @return the first tip node which is descendant of
-	 * @param gTreeNode this can be in Tree.java as
-	 *                  gTreeNode.getGeneTreeTipDescendant()
-	 */
-	public Node getGeneNodeDescendantTip(Node gTreeNode) {
-		final List<Node> gTreeTips = getTree().getExternalNodes(); // tips
-		for (Node tip : gTreeTips) {
-			Node node = tip;
-			while (node != null && !node.equals(gTreeNode)) {
-				node = node.getParent();
-			}
-			if (node != null)
-				return tip; // find you!
-		}
-		return null; // looped all the tips but nothing found
-	}
-
 	public void rebuildEmbedding() {
 		final Network speciesNetwork = speciesNetworkInput.get();
 		traversalNodeCount = speciesNetwork.getTraversalNodeCount();
 		geneNodeCount = getTree().getNodeCount();
 
 		getNodeHeirs();
-
-		final Embedding newEmbedding = recurseRebuild(getTree().getRoot(), speciesNetwork.getRoot());
+		final Embedding newEmbedding = recurseRebuild(getTree(), speciesNetwork.getRoot());
 		if (newEmbedding == null) {
 			throw new RuntimeException("No valid embedding found");
 		}
-		setEmbedding(newEmbedding);
+		embedding = newEmbedding;
 	}
 
-	private void getNodeHeirs() {
+	void getNodeHeirs() {
+		speciesNodeHeirs = HashMultimap.create();
+	
 		// map of species network tip names to species network tip nodes
 		final Map<String, NetworkNode> speciesNodeMap = new HashMap<>();
 		for (NetworkNode speciesNode : speciesNetworkInput.get().getLeafNodes()) {
 			final String speciesName = speciesNode.getLabel();
 			speciesNodeMap.put(speciesName, speciesNode);
 		}
-
+	
 		// map of gene tree tip names to species network tip nodes
 		final Map<String, NetworkNode> geneTipMap = new HashMap<>();
 		final TaxonSet taxonSuperSet = taxonSuperSetInput.get();
@@ -247,41 +160,30 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 			for (Taxon geneTip : speciesTaxonSet.taxonsetInput.get()) {
 				final String gTipName = geneTip.getID();
 				geneTipMap.put(gTipName, speciesNode);
+	
 			}
 		}
-
-		geneNodeHeirs.clear();
-		speciesNodeHeirs.clear();
-		for (final Node geneLeaf : getTree().getExternalNodes()) {
+	
+		for (final Node geneLeaf : getTree().getAllLeafNodes()) {
 			final int gLeafNr = geneLeaf.getNr();
 			final String gLeafName = geneLeaf.getID();
 			final NetworkNode speciesLeaf = geneTipMap.get(gLeafName);
-			// the heir for each gene leaf node is itself
-			geneNodeHeirs.put(geneLeaf, gLeafNr);
-			// the heirs for each species leaf node is the associated gene leaf nodes
+			// the heirs for each species leaf node are the associated gene leaf nodes
 			speciesNodeHeirs.put(speciesLeaf, gLeafNr);
 		}
-
-		recurseGeneHeirs(getTree().getRoot());
-		for (final NetworkNode speciesLeaf : speciesNetworkInput.get().getLeafNodes()) {
-			recurseSpeciesHeirs(speciesLeaf);
-		}
+	
+		recurseSpeciesHeirs(speciesNetworkInput.get().getRoot(), speciesNodeHeirs);
 	}
 
-	private void recurseGeneHeirs(final Node gTreeNode) {
-		for (Node child : gTreeNode.getChildren()) {
-			recurseGeneHeirs(child);
-			geneNodeHeirs.putAll(gTreeNode, geneNodeHeirs.get(child));
+	void recurseSpeciesHeirs(final NetworkNode sNetNode, Multimap<NetworkNode, Integer> geneHeirs) {
+		if (geneHeirs.get(sNetNode).size() != 0) {
+			return;
 		}
-	}
-
-	private void recurseSpeciesHeirs(final NetworkNode sNetNode) {
 		for (NetworkNode child : sNetNode.getChildren()) {
-			speciesNodeHeirs.putAll(sNetNode, speciesNodeHeirs.get(child));
+			recurseSpeciesHeirs(child, geneHeirs);
+			geneHeirs.putAll(sNetNode, geneHeirs.get(child));
 		}
-		for (NetworkNode parent : sNetNode.getParents()) {
-			recurseSpeciesHeirs(parent);
-		}
+	
 	}
 
 	// recursive, return value is a possible gene tree embedding, return null if no
@@ -291,19 +193,17 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 			// embed this gene tree node (lineage) in a descendant species network branch
 			final int geneTreeNodeNr = geneTreeNode.getNr();
 			final int traversalNodeNr = speciesNetworkNode.getTraversalNumber();
-			final Collection<Integer> requiredHeirs = geneNodeHeirs.get(geneTreeNode);
 
-			final Embedding[] altEmbeddings = new Embedding[2]; // TODO: Does this show a binary tree assumption?
 			double probSum = 0.0;
-			int i = 0;
+			List<Embedding> altEmbeddings = new ArrayList<Embedding>();
 			for (Integer childBranchNr : speciesNetworkNode.childBranchNumbers) {
 				final NetworkNode childSpeciesNode = speciesNetworkNode.getChildByBranch(childBranchNr);
-				if (speciesNodeHeirs.get(childSpeciesNode).containsAll(requiredHeirs)) {
-					altEmbeddings[i] = recurseRebuild(geneTreeNode, childSpeciesNode);
+				if (speciesSubNetworkContainsGeneSubTree(childSpeciesNode, geneTreeNode)) {
+					Embedding em = recurseRebuild(geneTreeNode, childSpeciesNode);
 
-					if (altEmbeddings[i] == null)
+					if (em == null)
 						return null;
-					altEmbeddings[i].setDirection(geneTreeNodeNr, traversalNodeNr, childBranchNr);
+					em.embedding[geneTreeNodeNr][traversalNodeNr] = childBranchNr;
 
 					if (childSpeciesNode.isReticulation()) {
 						double childGamma;
@@ -311,25 +211,29 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 							childGamma = childSpeciesNode.getGammaProb();
 						else
 							childGamma = 1.0 - childSpeciesNode.getGammaProb();
-						altEmbeddings[i].probability *= childGamma;
-						altEmbeddings[i].probabilitySum *= childGamma;
+						em.probability *= childGamma;
+						em.probabilitySum *= childGamma;
 					}
 
-					probSum += altEmbeddings[i].probabilitySum;
-					i++;
+					altEmbeddings.add(em);
+					probSum += em.probabilitySum;
 				}
 			}
-			if (i == 0 || probSum == 0.0)
+			if (altEmbeddings.size() == 0 || probSum == 0.0)
 				return null; // for a valid embedding, should never go here
 
-			final double u = Randomizer.nextDouble() * probSum;
-			if (u < altEmbeddings[0].probabilitySum) {
-				altEmbeddings[0].probabilitySum = probSum;
-				return altEmbeddings[0];
-			} else {
-				altEmbeddings[1].probabilitySum = probSum;
-				return altEmbeddings[1];
+			double u = Randomizer.nextDouble() * probSum;
+			for (Embedding em : altEmbeddings) {
+				if (u < em.probabilitySum) {
+					em.probabilitySum = probSum;
+					return em;
+				} else {
+					u -= em.probabilitySum;
+				}
 			}
+			// There was some u left over after all the probability sums? This should never
+			// happen.
+			throw new RuntimeException("Random selection of sub-embedding failed.");
 		} else if (geneTreeNode.isLeaf()) {
 			return new Embedding(geneNodeCount, traversalNodeCount);
 		} else {
@@ -345,45 +249,50 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 					embedding.mergeWith(childEmbedding);
 				}
 			}
-
 			return embedding;
 		}
 	}
 
-	@Override
-	public TreeInterface getTree() {
-		return geneTreeInput.get();
-	}
-
-	@Override
-	public Embedding getEmbedding() {
-		return embeddingInput.get();
-	}
-
-	@Override
-	public void setEmbedding(Embedding newEmbedding) {
-		needsUpdate = true;
-		embeddingInput.set(newEmbedding);
-	}
-
-	@Override
-	public double getPloidy() {
-		return ploidyInput.get();
+	private boolean speciesSubNetworkContainsGeneSubTree(NetworkNode childSpeciesNode, Node geneTreeNode) {
+		Collection<Integer> speciesGeneHeirs = speciesNodeHeirs.get(childSpeciesNode);
+		if (geneTreeNode.isLeaf()) {
+			if (!speciesGeneHeirs.contains(geneTreeNode.getNr())) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		for (Node l : geneTreeNode.getAllLeafNodes()) {
+			if (!speciesGeneHeirs.contains(l.getNr())) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
 	public double logGammaSum() {
-		computeCoalescentTimes();
+		getNodeHeirs();
+		update();
 		return logGammaSum;
 	}
 
 	@Override
 	public ListMultimap<Integer, Double> coalescentTimes() {
+		getNodeHeirs();
+		update();
 		return coalescentTimes;
 	}
 
 	@Override
 	public Multiset<Integer> coalescentLineageCounts() {
+		getNodeHeirs();
+		update();
 		return coalescentLineageCounts;
+	}
+
+	@Override
+	public Embedding getEmbedding() {
+		return embedding;
 	}
 }

@@ -31,6 +31,7 @@ import beast.evolution.tree.Tree;
 import beast.util.Randomizer;
 import speciesnetwork.GeneTreeInSpeciesNetwork;
 import speciesnetwork.Network;
+import speciesnetwork.Embedding;
 import speciesnetwork.NetworkNode;
 import speciesnetwork.SanityChecks;
 
@@ -139,7 +140,7 @@ public class CoalescentSimulator extends Runnable {
         	GeneTreeInSpeciesNetwork geneTree = geneTrees.get(ig);
 
             // initialize embedding matrix to -1 (no traversal)
-            geneTree.getEmbedding().reset(traversalNodeCount);
+            geneTree.embedding = new Embedding(geneTree.getTree().getNodeCount(), traversalNodeCount);
 
             networkNodeGeneLineagesMap.clear();
             // generate map of tip names to tip nodes
@@ -221,10 +222,10 @@ public class CoalescentSimulator extends Runnable {
             // update embedding
             final int traversalLParentNr = lParent.getTraversalNumber();
             for (final Node geneNode : lineagesAtLTop)
-            	geneTree.getEmbedding().setDirection(geneNode.getNr(), traversalLParentNr, lBranchNumber);
+            	geneTree.embedding.embedding[geneNode.getNr()][traversalLParentNr] = lBranchNumber;
             final int traversalRParentNr = rParent.getTraversalNumber();
             for (final Node geneNode : lineagesAtRTop)
-            	geneTree.getEmbedding().setDirection(geneNode.getNr(), traversalRParentNr, rBranchNumber);
+            	geneTree.embedding.embedding[geneNode.getNr()][traversalRParentNr] = rBranchNumber;
         }
         else {
             final double bottomHeight = snNode.getHeight();
@@ -246,7 +247,7 @@ public class CoalescentSimulator extends Runnable {
                 // update embedding
                 final int traversalParentNr = sParent.getTraversalNumber();
                 for (final Node geneNode : lineagesAtTop) {
-                	geneTree.getEmbedding().setDirection(geneNode.getNr(), traversalParentNr, sBranchNumber);
+                	geneTree.embedding.embedding[geneNode.getNr()][traversalParentNr] = sBranchNumber;
                 }
             }
         }

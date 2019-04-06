@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 
 import beast.core.CalculationNode;
@@ -22,13 +23,7 @@ public class GeneTreeSelector extends CalculationNode implements GeneTreeInterfa
 	private GeneTreeInSpeciesNetwork tree() {
 		return trees.get().get(choice.get().getNativeValue(index.get()));
 	}
-
-	@Override
-	public TreeInterface getTree() {
-		// TODO Auto-generated method stub
-		return tree().getTree();
-	}
-
+	
 	@Override
 	public void initAndValidate() {
 		// TODO Auto-generated method stub
@@ -36,30 +31,10 @@ public class GeneTreeSelector extends CalculationNode implements GeneTreeInterfa
 	}
 
 	@Override
-	public Embedding getEmbedding() {
-		return tree().getEmbedding();
-	}
-
-	@Override
-	public void setEmbedding(Embedding newEmbedding) {
-		tree().setEmbedding(newEmbedding);
-	}
-
-	@Override
-	public double getPloidy() {
-		return tree().getPloidy();
-	}
-
-	@Override
 	public double logGammaSum() {
 		return tree().logGammaSum();
 	}
-
-	@Override
-	public ListMultimap<Integer, Double> coalescentTimes() {
-		return tree().coalescentTimes();
-	}
-
+	
 	@Override
 	public Multiset<Integer> coalescentLineageCounts() {
 		return tree().coalescentLineageCounts();
@@ -68,5 +43,15 @@ public class GeneTreeSelector extends CalculationNode implements GeneTreeInterfa
 	@Override
 	public void rebuildEmbedding() {
 		tree().rebuildEmbedding();		
+	}
+
+	@Override
+	public ListMultimap<Integer, Double> coalescentTimes() {
+		return tree().coalescentTimes();
+	}
+
+	@Override
+	public Embedding getEmbedding() {
+		return tree().getEmbedding();
 	}
 }

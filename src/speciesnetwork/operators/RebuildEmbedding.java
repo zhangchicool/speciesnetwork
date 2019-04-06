@@ -50,7 +50,6 @@ public class RebuildEmbedding extends Operator {
         // doing this for all trees avoids Trie combinatorial explosions
         double embeddingLogHR = 0.0;
         for (GeneTreeInterface geneTree: geneTrees) {
-        	((StateNode) geneTree.getTree()).startEditing(this);
             embeddingLogHR += Math.log(geneTree.getEmbedding().probability) -
             		Math.log(geneTree.getEmbedding().probabilitySum);
             
