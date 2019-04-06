@@ -8,8 +8,9 @@ import org.junit.Test;
 import beast.evolution.alignment.Taxon;
 import beast.evolution.alignment.TaxonSet;
 import beast.evolution.tree.Tree;
+import junit.framework.TestCase;
 
-public class TestEmbedding {
+public class TestEmbedding extends TestCase {  
 	@Test
 	public void testTrivialEmbedding() {
 		// Test whether a trivial embedding of two individuals in two taxa, exactly

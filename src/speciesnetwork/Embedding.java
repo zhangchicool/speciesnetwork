@@ -5,12 +5,12 @@ import java.io.PrintStream;
 import org.w3c.dom.Node;
 
 import beast.core.StateNode;
-import beast.util.TreeParser;
+import java.util.ArrayList;
 
 public class Embedding extends StateNode {
 	protected int geneNodeCount;
 	protected int traversalNodeCount;
-	protected int[][] embedding;
+	protected int[] embedding;
 	public double probability = 1.0;
 	public double probabilitySum = 1.0;
 	
@@ -19,43 +19,38 @@ public class Embedding extends StateNode {
 	public Embedding() {
 		geneNodeCount = 0;
 		traversalNodeCount = 1;
-		embedding = new int[geneNodeCount][traversalNodeCount];		
+		embedding = new int[geneNodeCount * traversalNodeCount];	
+    java.util.Arrays.fill(embedding, -1);
 	}
 
 	public Embedding(int gnc) {
 		geneNodeCount = gnc;
 		traversalNodeCount = 1;
-		embedding = new int[geneNodeCount][traversalNodeCount];
-		for (int[] row : embedding) {
-			java.util.Arrays.fill(row, -1);
-		}
+		embedding = new int[geneNodeCount * traversalNodeCount];
+    java.util.Arrays.fill(embedding, -1);
 	}
 
 	public Embedding(int gnc, int tnc) {
 		geneNodeCount = gnc;
 		traversalNodeCount = tnc;
-		embedding = new int[geneNodeCount][traversalNodeCount];
-		for (int[] row : embedding) {
-			java.util.Arrays.fill(row, -1);
-		}
+		embedding = new int[geneNodeCount * traversalNodeCount];
+    java.util.Arrays.fill(embedding, -1);
 	}
 
 	public int getDirection(int geneNode, int traversalNode) {
-		return embedding[geneNode][traversalNode];
+		return embedding[geneNode * traversalNodeCount + traversalNode];
 	}
 
 	public void setDirection(int geneNode, int traversalNode, int value) {
-		embedding[geneNode][traversalNode] = value;
+		embedding[geneNode * traversalNodeCount + traversalNode] = value;
 	}
 
 	public void reset(int tnc) {
 		if (traversalNodeCount != tnc) {
 			traversalNodeCount = tnc;
-			embedding = new int[geneNodeCount][traversalNodeCount];
+			embedding = new int[geneNodeCount * traversalNodeCount];
 		}
-		for (int g = 0; g < geneNodeCount; g++) {
-			java.util.Arrays.fill(embedding[g], -1);
-		}
+    java.util.Arrays.fill(embedding, -1);
 	}
 
 	public void mergeWith(Embedding src) {
@@ -66,8 +61,8 @@ public class Embedding extends StateNode {
 		probabilitySum *= src.probabilitySum;
 		for (int g = 0; g < geneNodeCount; g++) {
 			for (int t = 0; t < traversalNodeCount; t++) {
-				if (embedding[g][t] == -1 && src.embedding[g][t] != -1) {
-					embedding[g][t] = src.embedding[g][t];
+				if (embedding[g * traversalNodeCount + t] == -1 && src.embedding[g * traversalNodeCount + t] != -1) {
+					embedding[g * traversalNodeCount + t] = src.embedding[g * traversalNodeCount + t];
 				}
 			}
 		}
@@ -79,7 +74,7 @@ public class Embedding extends StateNode {
 			if (t > 0) {
 				str.append(' ');
 			}
-			str.append(embedding[row][t]);
+			str.append(embedding[row * traversalNodeCount + t]);
 		}
 		return str.toString();
 	}
@@ -124,7 +119,7 @@ public class Embedding extends StateNode {
 	@Override
 	public double getArrayValue(int dim) {
 		// This method would make slightly more sense as int method.
-		return embedding[dim / traversalNodeCount][dim % traversalNodeCount];
+		return embedding[dim];
 	}
 
 	@Override
@@ -154,10 +149,8 @@ public class Embedding extends StateNode {
 			
 			geneNodeCount = e.geneNodeCount;
 			traversalNodeCount = e.traversalNodeCount;
-			embedding = new int[geneNodeCount][traversalNodeCount];
-			for (int g = 0; g < geneNodeCount; g++) {
-				System.arraycopy(e.embedding[g], 0, embedding[g], 0, embedding[g].length);
-			}
+			embedding = new int[geneNodeCount * traversalNodeCount];
+			System.arraycopy(e.embedding, 0, embedding, 0, geneNodeCount * traversalNodeCount);
 			probability = e.probability;
 			probabilitySum = e.probabilitySum;
 		} else {
@@ -174,21 +167,18 @@ public class Embedding extends StateNode {
 	public void fromXML(Node node) {
 		String[] tNodes = node.getTextContent().split("//");
 		geneNodeCount = tNodes.length;
-		traversalNodeCount = 0;
-		embedding = new int[geneNodeCount][];
+    ArrayList<Integer> em = new ArrayList<>();
+    int i = 0;
 		for (int g = 0; g < geneNodeCount; ++g) {
 			String row = tNodes[g];
 			String[] values = row.trim().split("\\s");
-			if (traversalNodeCount == 0) {
-				traversalNodeCount = values.length;
-			} else {
-				if (traversalNodeCount != values.length) {
-					throw new RuntimeException("Embedding is not rectangular");
-				}
-			}
-			embedding[g] = new int[traversalNodeCount];
-			for (int t = 0; t < traversalNodeCount; ++t) {
-				embedding[g][t] = Integer.parseInt(values[t]);
+      if (g == 0) {
+        traversalNodeCount = values.length;
+        embedding = new int[geneNodeCount * traversalNodeCount];
+      }
+			for (String v: values) {
+				embedding[i] = Integer.parseInt(v);
+        ++i;
 			}
 		}
 	}

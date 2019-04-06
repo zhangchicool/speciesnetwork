@@ -47,10 +47,12 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 	// heirs are the gene tree leaf tip numbers below each gene tree node or species
 	// network node
 	private Multimap<NetworkNode, Integer> speciesNodeHeirs = HashMultimap.create();
+	private Multimap<NetworkNode, Integer> storedSpeciesNodeHeirs = null;
 
-	private Multiset<Integer> coalescentLineageCounts = HashMultiset.create();
+	private final Multiset<Integer> coalescentLineageCounts = HashMultiset.create();
 	private int traversalNodeCount;
 	private int geneNodeCount;
+  private final Map<String, NetworkNode>  geneTipMap = new HashMap<>();
 
 	@Override
 	public boolean requiresRecalculation() {
@@ -59,6 +61,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		return needsUpdate;
 	}
 
+  @Override
 	public void initAndValidate() {
 		Network speciesNetwork = speciesNetworkInput.get();
 
@@ -74,6 +77,26 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 				throw new RuntimeException("Wrong embedding shape");
 			}
 		}
+    
+    // map of species network tip names to species network tip nodes
+		final Map<String, NetworkNode> speciesNodeMap = new HashMap<>();
+		for (NetworkNode speciesNode : speciesNetworkInput.get().getLeafNodes()) {
+			final String speciesName = speciesNode.getLabel();
+			speciesNodeMap.put(speciesName, speciesNode);
+		}
+
+		// map of gene tree tip names to species network tip nodes
+		geneTipMap.clear();
+		final TaxonSet taxonSuperSet = taxonSuperSetInput.get();
+		for (Taxon species : taxonSuperSet.taxonsetInput.get()) {
+			final String speciesName = species.getID();
+			final NetworkNode speciesNode = speciesNodeMap.get(speciesName);
+			final TaxonSet speciesTaxonSet = (TaxonSet) species;
+			for (Taxon geneTip : speciesTaxonSet.taxonsetInput.get()) {
+				final String gTipName = geneTip.getID();
+				geneTipMap.put(gTipName, speciesNode);
+			}
+		}
 	}
 
 	void update() {
@@ -84,7 +107,6 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		traversalNodeCount = speciesNetwork.getTraversalNodeCount();
 		final int speciesBranchCount = speciesNetwork.getBranchCount();
 		speciesOccupancy = new double[geneNodeCount][speciesBranchCount];
-		getNodeHeirs();
 
 		// reset coalescent arrays as these values need to be recomputed after any
 		// changes to the species or gene tree
@@ -94,6 +116,10 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		final Node geneTreeRoot = getTree();
 		final NetworkNode speciesNetworkRoot = speciesNetwork.getRoot();
 		final Integer speciesRootBranchNumber = speciesNetworkRoot.gammaBranchNumber;
+
+    if (speciesNetwork.isDirty()) {
+      getNodeHeirs();      
+    }
 
 		assert getEmbedding().geneNodeCount == geneNodeCount;
 		assert getEmbedding().traversalNodeCount == traversalNodeCount;
@@ -144,12 +170,15 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		}
 	}
 
+  @Override
 	public void rebuildEmbedding(Operator operator) {
 		final Network speciesNetwork = speciesNetworkInput.get();
 		traversalNodeCount = speciesNetwork.getTraversalNodeCount();
 		geneNodeCount = getTree().getNodeCount();
 
-		getNodeHeirs();
+    if (speciesNetwork.isDirty()) {
+      getNodeHeirs();      
+    }
 		final Embedding newEmbedding = recurseRebuild(getTree(), speciesNetwork.getRoot());
 		if (newEmbedding == null) {
 			throw new RuntimeException("No valid embedding found");
@@ -163,29 +192,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 	}
 
 	void getNodeHeirs() {
-		speciesNodeHeirs = HashMultimap.create();
-
-		// map of species network tip names to species network tip nodes
-		final Map<String, NetworkNode> speciesNodeMap = new HashMap<>();
-		for (NetworkNode speciesNode : speciesNetworkInput.get().getLeafNodes()) {
-			final String speciesName = speciesNode.getLabel();
-			speciesNodeMap.put(speciesName, speciesNode);
-		}
-
-		// map of gene tree tip names to species network tip nodes
-		final Map<String, NetworkNode> geneTipMap = new HashMap<>();
-		final TaxonSet taxonSuperSet = taxonSuperSetInput.get();
-		for (Taxon species : taxonSuperSet.taxonsetInput.get()) {
-			final String speciesName = species.getID();
-			final NetworkNode speciesNode = speciesNodeMap.get(speciesName);
-			final TaxonSet speciesTaxonSet = (TaxonSet) species;
-			for (Taxon geneTip : speciesTaxonSet.taxonsetInput.get()) {
-				final String gTipName = geneTip.getID();
-				geneTipMap.put(gTipName, speciesNode);
-
-			}
-		}
-
+		speciesNodeHeirs.clear();
 		for (final Node geneLeaf : getTree().getAllLeafNodes()) {
 			final int gLeafNr = geneLeaf.getNr();
 			final String gLeafName = geneLeaf.getID();
@@ -198,7 +205,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 	}
 
 	void recurseSpeciesHeirs(final NetworkNode sNetNode, Multimap<NetworkNode, Integer> geneHeirs) {
-		if (geneHeirs.get(sNetNode).size() != 0) {
+		if (!geneHeirs.get(sNetNode).isEmpty()) {
 			return;
 		}
 		for (NetworkNode child : sNetNode.getChildren()) {
@@ -217,7 +224,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 			final int traversalNodeNr = speciesNetworkNode.getTraversalNumber();
 
 			double probSum = 0.0;
-			List<Embedding> altEmbeddings = new ArrayList<Embedding>();
+			List<Embedding> altEmbeddings = new ArrayList<>();
 			for (Integer childBranchNr : speciesNetworkNode.childBranchNumbers) {
 				final NetworkNode childSpeciesNode = speciesNetworkNode.getChildByBranch(childBranchNr);
 				if (speciesSubNetworkContainsGeneSubTree(childSpeciesNode, geneTreeNode)) {
@@ -241,7 +248,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 					probSum += em.probabilitySum;
 				}
 			}
-			if (altEmbeddings.size() == 0 || probSum == 0.0)
+			if (altEmbeddings.isEmpty() || probSum == 0.0)
 				return null; // for a valid embedding, should never go here
 
 			double u = Randomizer.nextDouble() * probSum;
@@ -278,11 +285,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 	private boolean speciesSubNetworkContainsGeneSubTree(NetworkNode childSpeciesNode, Node geneTreeNode) {
 		Collection<Integer> speciesGeneHeirs = speciesNodeHeirs.get(childSpeciesNode);
 		if (geneTreeNode.isLeaf()) {
-			if (!speciesGeneHeirs.contains(geneTreeNode.getNr())) {
-				return false;
-			} else {
-				return true;
-			}
+      return speciesGeneHeirs.contains(geneTreeNode.getNr());
 		}
 		for (Node l : geneTreeNode.getAllLeafNodes()) {
 			if (!speciesGeneHeirs.contains(l.getNr())) {
@@ -294,19 +297,25 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 
 	@Override
 	public double logGammaSum() {
-		update();
+    if (requiresRecalculation()) {
+      update();
+    }
 		return logGammaSum;
 	}
 
 	@Override
 	public ListMultimap<Integer, Double> coalescentTimes() {
-		update();
+    if (requiresRecalculation()) {
+      update();
+    }
 		return coalescentTimes;
 	}
 
 	@Override
 	public Multiset<Integer> coalescentLineageCounts() {
-		update();
+    if (requiresRecalculation()) {
+      update();
+    }
 		return coalescentLineageCounts;
 	}
 
@@ -315,12 +324,16 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		return embeddingInput.get();
 	}
 	
+  @Override
 	protected void store() {
-	    super.store();
+	  super.store();
+    storedSpeciesNodeHeirs = speciesNodeHeirs;
+    speciesNodeHeirs = HashMultimap.create();
 	}
 	
+  @Override
 	protected void restore() {
-	    super.restore();
-	    update();
+    super.restore();
+    speciesNodeHeirs = storedSpeciesNodeHeirs;
 	}
 }

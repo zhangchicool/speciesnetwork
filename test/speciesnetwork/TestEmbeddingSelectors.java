@@ -1,6 +1,7 @@
 package speciesnetwork;
 
 import beast.evolution.tree.TreeInterface;
+import org.junit.Test;
 public class TestEmbeddingSelectors extends ConstantPopulationTest {
 	@Override
 	protected GeneTreeSelector geneTree(TreeInterface tree, Embedding embedding) {

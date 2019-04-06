@@ -5,10 +5,11 @@ import static org.junit.Assert.assertEquals;
 
 import beast.core.parameter.RealParameter;
 import beast.util.TreeParser;
+import junit.framework.TestCase;
 import speciesnetwork.NetworkParser;
 import speciesnetwork.BirthHybridizationModel;
 
-public class BirthHybridizationTest {
+public class BirthHybridizationTest extends TestCase {
     TreeParser treeParser;
     NetworkParser networkParser;
 

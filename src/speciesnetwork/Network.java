@@ -174,6 +174,8 @@ public class Network extends StateNode {
     }
 
     /**
+     * @param time A time point in the network
+     * 
      * @return the number of branches at the given time
      */
     public int getBranchCount(double time) {

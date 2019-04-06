@@ -11,8 +11,9 @@ import beast.core.State;
 import beast.evolution.alignment.TaxonSet;
 import beast.evolution.tree.TreeInterface;
 import beast.util.TreeParser;
+import junit.framework.TestCase;
 
-abstract class PopulationTestHelper {
+abstract class PopulationTestHelper extends TestCase {
 	String newickSpeciesNetwork;
 	List<String> newickGeneTrees = new ArrayList<>();
 
@@ -90,7 +91,7 @@ abstract class PopulationTestHelper {
 			Embedding embedding = new Embedding(nRow, nCol);
 			for (int r = 0; r < nRow; r++) {
 				for (int c = 0; c < nCol; c++)
-					embedding.embedding[r][c] = rawEmbedding[r * nCol + c];
+					embedding.setDirection(r, c, rawEmbedding[r * nCol + c]);
 			}
 			GeneTreeInterface gt = geneTree(treeParser, embedding);
 			geneTreeWrappers.add(gt);

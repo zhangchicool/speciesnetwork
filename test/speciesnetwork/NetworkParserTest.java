@@ -5,9 +5,10 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import beast.util.TreeParser;
+import junit.framework.TestCase;
 import speciesnetwork.NetworkParser;
 
-public class NetworkParserTest {
+public class NetworkParserTest extends TestCase {
     TreeParser treeParser;
     NetworkParser networkParser;
 
