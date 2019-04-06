@@ -3,7 +3,7 @@ package speciesnetwork;
 public class Embedding {
 	protected int geneNodeCount;
 	protected int traversalNodeCount;
-	protected int[][] embedding;
+	public int[][] embedding;
 	public double probability = 1.0;
 	public double probabilitySum = 1.0;
 
