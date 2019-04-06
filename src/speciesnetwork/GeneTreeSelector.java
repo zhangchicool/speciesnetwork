@@ -10,6 +10,7 @@ import com.google.common.collect.Multiset;
 import beast.core.CalculationNode;
 import beast.core.Input;
 import beast.core.Input.Validate;
+import beast.core.Operator;
 import beast.core.parameter.IntegerParameter;
 import beast.evolution.tree.TreeInterface;
 
@@ -41,8 +42,8 @@ public class GeneTreeSelector extends CalculationNode implements GeneTreeInterfa
 	}
 
 	@Override
-	public void rebuildEmbedding() {
-		tree().rebuildEmbedding();		
+	public void rebuildEmbedding(Operator operator) {
+		tree().rebuildEmbedding(operator);		
 	}
 
 	@Override

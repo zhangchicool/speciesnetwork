@@ -3,6 +3,8 @@ package speciesnetwork;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multiset;
 
+import beast.core.Operator;
+
 public interface GeneTreeInterface {
 
 	public Embedding getEmbedding();
@@ -13,5 +15,5 @@ public interface GeneTreeInterface {
 
 	public Multiset<Integer> coalescentLineageCounts();
 
-	public void rebuildEmbedding();
+	public void rebuildEmbedding(Operator operator);
 }
