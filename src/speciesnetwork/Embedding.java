@@ -13,9 +13,14 @@ public class Embedding extends StateNode {
 	protected int[][] embedding;
 	public double probability = 1.0;
 	public double probabilitySum = 1.0;
-	private boolean isDirty;
 	
-	private Embedding stored = null;
+	Embedding stored = null;
+	
+	public Embedding() {
+		geneNodeCount = 0;
+		traversalNodeCount = 1;
+		embedding = new int[geneNodeCount][traversalNodeCount];		
+	}
 
 	public Embedding(int gnc) {
 		geneNodeCount = gnc;
@@ -33,15 +38,6 @@ public class Embedding extends StateNode {
 		for (int[] row : embedding) {
 			java.util.Arrays.fill(row, -1);
 		}
-	}
-
-	public Embedding(Embedding src) {
-		geneNodeCount = src.geneNodeCount;
-		traversalNodeCount = src.traversalNodeCount;
-		embedding = new int[src.embedding.length][src.embedding[0].length];
-		System.arraycopy(src.embedding, 0, embedding, 0, embedding.length);
-		probability = src.probability;
-		probabilitySum = src.probabilitySum;
 	}
 
 	public int getDirection(int geneNode, int traversalNode) {
@@ -136,11 +132,6 @@ public class Embedding extends StateNode {
 	}
 
 	@Override
-	public void setEverythingDirty(boolean dirt) {
-		isDirty = dirt;
-	}
-
-	@Override
 	public Embedding copy() {
 		Embedding e = new Embedding(geneNodeCount, traversalNodeCount);
 
@@ -215,5 +206,10 @@ public class Embedding extends StateNode {
 	@Override
 	public void restore() {
 		assignFrom(stored);
+	}
+
+	@Override
+	public void setEverythingDirty(boolean isDirty) {
+		setSomethingIsDirty(isDirty);
 	}
 }
