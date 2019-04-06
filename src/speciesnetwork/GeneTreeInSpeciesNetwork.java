@@ -34,6 +34,8 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 			"Gene tree embedded in the species network.", Validate.REQUIRED);
 	public final Input<TaxonSet> taxonSuperSetInput = new Input<>("taxa",
 			"Taxon superset associating taxa with gene tree tips", Validate.REQUIRED);
+	public Input<Embedding> embeddingInput = new Input<Embedding>("embedding",
+			"Embedding between geneTree and speciesNetwork", (Embedding) null, Embedding.class);
 
 	// the coalescent times of this gene tree for all species branches
 	protected ListMultimap<Integer, Double> coalescentTimes = ArrayListMultimap.create();
@@ -45,8 +47,6 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 	// network node
 	private Multimap<NetworkNode, Integer> speciesNodeHeirs = HashMultimap.create();
 
-	public Embedding embedding;
-
 	@Override
 	public boolean requiresRecalculation() {
 		boolean needsUpdate;
@@ -55,7 +55,19 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 	}
 
 	public void initAndValidate() {
-		embedding = null;
+		Network speciesNetwork = speciesNetworkInput.get();
+
+		final int geneTreeNodeCount = getTree().getNodeCount();
+		final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
+		Embedding e = embeddingInput.get();
+		if (e == null) {
+			embeddingInput.set(new Embedding(geneTreeNodeCount, traversalNodeCount));
+		} else {
+			if (e.geneNodeCount != geneTreeNodeCount
+					|| e.traversalNodeCount != traversalNodeCount) {
+				throw new RuntimeException("Wrong embedding shape");
+			}
+		}
 		coalescentLineageCounts = HashMultiset.create();
 		checkDirtiness();
 	}
@@ -112,7 +124,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 			}
 			// traversal direction forward in time
 			final int traversalNodeNumber = speciesNetworkNode.getTraversalNumber();
-			final Integer nextSpeciesBranchNumber = embedding.embedding[geneTreeNodeNumber][traversalNodeNumber];
+			final Integer nextSpeciesBranchNumber = getEmbedding().getDirection(geneTreeNodeNumber, traversalNodeNumber);
 			recurseCoalescentEvents(geneTreeNode, nextSpeciesBranchNumber, speciesNodeHeight);
 		} else if (geneTreeNode.isLeaf()) {
 			// TODO: assumes tip node heights are always zero
@@ -137,7 +149,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		if (newEmbedding == null) {
 			throw new RuntimeException("No valid embedding found");
 		}
-		embedding = newEmbedding;
+		embeddingInput.set(newEmbedding);
 	}
 
 	void getNodeHeirs() {
@@ -203,7 +215,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 
 					if (em == null)
 						return null;
-					em.embedding[geneTreeNodeNr][traversalNodeNr] = childBranchNr;
+					em.setDirection(geneTreeNodeNr, traversalNodeNr, childBranchNr);
 
 					if (childSpeciesNode.isReticulation()) {
 						double childGamma;
@@ -293,6 +305,6 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 
 	@Override
 	public Embedding getEmbedding() {
-		return embedding;
+		return embeddingInput.get();
 	}
 }
