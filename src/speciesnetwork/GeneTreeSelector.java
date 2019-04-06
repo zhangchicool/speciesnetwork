@@ -42,8 +42,8 @@ public class GeneTreeSelector extends CalculationNode implements GeneTreeInterfa
 	}
 
 	@Override
-	public void rebuildEmbedding(Operator operator) {
-		tree().rebuildEmbedding(operator);		
+	public boolean rebuildEmbedding(Operator operator) {
+		return tree().rebuildEmbedding(operator);		
 	}
 
 	@Override

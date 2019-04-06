@@ -15,5 +15,5 @@ public interface GeneTreeInterface {
 
 	public Multiset<Integer> coalescentLineageCounts();
 
-	public void rebuildEmbedding(Operator operator);
+	public boolean rebuildEmbedding(Operator operator);
 }

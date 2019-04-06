@@ -171,7 +171,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 	}
 
   @Override
-	public void rebuildEmbedding(Operator operator) {
+	public boolean rebuildEmbedding(Operator operator) {
 		final Network speciesNetwork = speciesNetworkInput.get();
 		traversalNodeCount = speciesNetwork.getTraversalNodeCount();
 		geneNodeCount = getTree().getNodeCount();
@@ -181,7 +181,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
     }
 		final Embedding newEmbedding = recurseRebuild(getTree(), speciesNetwork.getRoot());
 		if (newEmbedding == null) {
-			throw new RuntimeException("No valid embedding found");
+			return false;
 		}
 		newEmbedding.stored = getEmbedding(); 
 		if (operator != null) {
@@ -189,6 +189,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		}
 		embeddingInput.get().assignFrom(newEmbedding);
 		update();
+    return true;
 	}
 
 	void getNodeHeirs() {

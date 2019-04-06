@@ -23,7 +23,7 @@ public class TestEmbedding extends TestCase {
 				new TaxonSet("B", Arrays.asList(new Taxon[] { new Taxon("b") })) };
 		TaxonSet taxa = new TaxonSet(Arrays.asList(tx));
 		gTree.initByName("speciesNetwork", nw, "geneTree", tree, "taxa", taxa);
-		gTree.rebuildEmbedding(null);
+		assert gTree.rebuildEmbedding(null);
 		gTree.update();
 		double[][] x = gTree.speciesOccupancy;
 		Assert.assertArrayEquals(new double[] { 2.0, 0.0, 0.0 }, x[0], 1e-5);
@@ -46,7 +46,7 @@ public class TestEmbedding extends TestCase {
 		TaxonSet taxa = new TaxonSet(Arrays.asList(tx));
 		GeneTreeInSpeciesNetwork gTree = new GeneTreeInSpeciesNetwork();
 		gTree.initByName("speciesNetwork", nw, "geneTree", tree, "taxa", taxa);
-		gTree.rebuildEmbedding(null);
+		assert gTree.rebuildEmbedding(null);
 		gTree.update();
 		double[][] x = gTree.speciesOccupancy;
 		Assert.assertArrayEquals(new double[] { 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }, x[0], 1e-5);
@@ -73,7 +73,7 @@ public class TestEmbedding extends TestCase {
 		TaxonSet taxa = new TaxonSet(Arrays.asList(tx));
 		GeneTreeInSpeciesNetwork gTree = new GeneTreeInSpeciesNetwork();
 		gTree.initByName("speciesNetwork", nw, "geneTree", tree, "taxa", taxa);
-		gTree.rebuildEmbedding(null);
+		assert gTree.rebuildEmbedding(null);
 		gTree.update();
 		double[][] x = gTree.speciesOccupancy;
 		Assert.assertArrayEquals(new double[] { 2.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 }, x[0], 1e-5);
@@ -100,6 +100,6 @@ public class TestEmbedding extends TestCase {
 		TaxonSet taxa = new TaxonSet(Arrays.asList(tx));
 		GeneTreeInSpeciesNetwork gTree = new GeneTreeInSpeciesNetwork();
 		gTree.initByName("speciesNetwork", nw, "geneTree", tree, "taxa", taxa);
-		gTree.rebuildEmbedding(null);
+		assert !gTree.rebuildEmbedding(null);
 	}
 }

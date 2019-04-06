@@ -50,9 +50,7 @@ public class RebuildEmbedding extends Operator {
             		Math.log(geneTree.getEmbedding().probabilitySum);
             
             // then rebuild the embedding
-            try {
-            	geneTree.rebuildEmbedding(this);
-            } catch (RuntimeException e) {
+            if (!geneTree.rebuildEmbedding(this)) {
                 return Double.NEGATIVE_INFINITY;
             }
         }

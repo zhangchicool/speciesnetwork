@@ -93,7 +93,9 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
 
         // initialize embedding for all gene trees
         for (GeneTreeInterface geneTree: geneTreesInput.get()) {
-        	geneTree.rebuildEmbedding(null);
+          if (!geneTree.rebuildEmbedding(null)){
+            throw new RuntimeException("No valid embedding constructed.");
+          }
         }
     }
 

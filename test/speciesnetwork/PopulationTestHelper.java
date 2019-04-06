@@ -96,7 +96,7 @@ abstract class PopulationTestHelper extends TestCase {
 			GeneTreeInterface gt = geneTree(treeParser, embedding);
 			geneTreeWrappers.add(gt);
 			if (reembed) { // rebuild the embedding
-				gt.rebuildEmbedding(null);
+				assert gt.rebuildEmbedding(null);
 			}
 		}
 	}
