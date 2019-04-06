@@ -514,4 +514,26 @@ public class NetworkNode {
         }
         System.out.println();
     }
+    
+	/**
+	 * get all descendants of this node, including the node itself. NOTE: if this
+	 * node is a leaf then, counterintuitively, return the empty list, not the list
+	 * containing only <this>.
+	 *
+	 * @return a list of all descendants of this node, including this node itself it it is not a leaf.
+	 */
+	public List<NetworkNode> getAllChildNodesAndSelf() {
+		final List<NetworkNode> childNodes = new ArrayList<>();
+		if (!this.isLeaf())
+			getAllChildNodesAndSelf(childNodes);
+		return childNodes;
+	}
+
+	// recursive
+	public void getAllChildNodesAndSelf(final List<NetworkNode> childNodes) {
+		childNodes.add(this);
+		for (NetworkNode child : children)
+			child.getAllChildNodesAndSelf(childNodes);
+	}
+
 }
