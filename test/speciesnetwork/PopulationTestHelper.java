@@ -74,8 +74,8 @@ abstract class PopulationTestHelper extends TestCase {
 		geneTreeWrapper.initByName(
 				"geneTree", tree,
 				"taxa", generateSuperset(),
-				"speciesNetwork", speciesNetwork,
-				"embedding", embedding);
+				"speciesNetwork", speciesNetwork);
+		geneTreeWrapper.embedding = embedding;
 		return geneTreeWrapper;
 	}
 	

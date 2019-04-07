@@ -9,8 +9,8 @@ public class TestEmbeddingSelectors extends ConstantPopulationTest {
         geneTreeWrapper.initByName(
         		"geneTree", tree,
 				"taxa", generateSuperset(),
-				"embedding", embedding,
         		"speciesNetwork", speciesNetwork);
+        geneTreeWrapper.embedding = embedding;
         GeneTreeSelector selector = new GeneTreeSelector();
         selector.initByName(
         		"tree", geneTreeWrapper,

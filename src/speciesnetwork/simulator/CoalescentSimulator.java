@@ -140,7 +140,7 @@ public class CoalescentSimulator extends Runnable {
         	GeneTreeInSpeciesNetwork geneTree = geneTrees.get(ig);
 
             // initialize embedding matrix to -1 (no traversal)
-            geneTree.embeddingInput.set(new Embedding(geneTree.getTree().getNodeCount(), traversalNodeCount));
+            geneTree.getEmbedding().reset(traversalNodeCount);
 
             networkNodeGeneLineagesMap.clear();
             // generate map of tip names to tip nodes

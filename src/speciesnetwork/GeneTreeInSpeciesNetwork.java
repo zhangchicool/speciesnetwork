@@ -1,5 +1,6 @@
 package speciesnetwork;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 
-import beast.core.CalculationNode;
+import beast.core.StateNode;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.Operator;
@@ -28,15 +29,13 @@ import beast.util.Randomizer;
  * @author Chi Zhang
  */
 
-public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTreeInterface {
+public class GeneTreeInSpeciesNetwork extends StateNode implements GeneTreeInterface {
 	public final Input<Network> speciesNetworkInput = new Input<>("speciesNetwork",
 			"Species network for embedding the gene tree.", Validate.REQUIRED);
 	public final Input<TreeInterface> geneTreeInput = new Input<>("geneTree",
 			"Gene tree embedded in the species network.", Validate.REQUIRED);
 	public final Input<TaxonSet> taxonSuperSetInput = new Input<>("taxa",
 			"Taxon superset associating taxa with gene tree tips", Validate.REQUIRED);
-	public Input<Embedding> embeddingInput = new Input<Embedding>("embedding",
-			"Embedding between geneTree and speciesNetwork", (Embedding) null, Embedding.class);
 
 	// the coalescent times of this gene tree for all species branches
 	protected ListMultimap<Integer, Double> coalescentTimes = ArrayListMultimap.create();
@@ -54,10 +53,12 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 	private int geneNodeCount;
 	private final Map<String, NetworkNode> geneTipMap = new HashMap<>();
 	private boolean needsUpdate;
+	protected Embedding embedding;
+	protected Embedding storedEmbedding;
 
 	@Override
 	public boolean requiresRecalculation() {
-		needsUpdate |= geneTreeInput.isDirty() || speciesNetworkInput.isDirty() || embeddingInput.isDirty();
+		needsUpdate |= geneTreeInput.isDirty() || speciesNetworkInput.isDirty();
 		return needsUpdate;
 	}
 
@@ -67,18 +68,8 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 
 		geneNodeCount = getTree().getNodeCount();
 		traversalNodeCount = speciesNetwork.getTraversalNodeCount();
-		Embedding e = embeddingInput.get();
-		if (e == null) {
-			embeddingInput.set(new Embedding(geneNodeCount, traversalNodeCount));
-			embeddingInput.get().setID(getID() + ":embedding");
-		} else if (e.getDimension() == 0) {
-			embeddingInput.get().assignFrom(new Embedding(geneNodeCount, traversalNodeCount));
-		} else {
-			if (e.geneNodeCount != geneNodeCount || e.traversalNodeCount != traversalNodeCount) {
-				throw new RuntimeException("Wrong embedding shape");
-			}
-		}
-
+		embedding = new Embedding(geneNodeCount, traversalNodeCount);
+		
 		// map of species network tip names to species network tip nodes
 		final Map<String, NetworkNode> speciesNodeMap = new HashMap<>();
 		for (NetworkNode speciesNode : speciesNetworkInput.get().getLeafNodes()) {
@@ -187,11 +178,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		if (newEmbedding == null) {
 			return false;
 		}
-		newEmbedding.stored = getEmbedding();
-		if (operator != null) {
-			embeddingInput.get().startEditing(operator);
-		}
-		embeddingInput.get().assignFrom(newEmbedding);
+		embedding = newEmbedding;
 		update();
 		return true;
 	}
@@ -326,19 +313,82 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 
 	@Override
 	public Embedding getEmbedding() {
-		return embeddingInput.get();
+		return embedding;
 	}
 
 	@Override
 	protected void store() {
-		super.store();
 		storedSpeciesNodeHeirs = speciesNodeHeirs;
 		speciesNodeHeirs = HashMultimap.create();
+		storedEmbedding = embedding.copy(); 
 	}
 
 	@Override
-	protected void restore() {
-		super.restore();
+	public void restore() {
 		speciesNodeHeirs = storedSpeciesNodeHeirs;
+		embedding = storedEmbedding;
 	}
+
+	@Override
+	public void init(PrintStream out) {
+		out.append(getID() + "\t");
+	}
+
+	@Override
+	public void close(PrintStream out) {
+		getEmbedding().close(out);
+	}
+
+	@Override
+	public int getDimension() {
+		return getEmbedding().getDimension();
+	}
+
+	@Override
+	public double getArrayValue() {
+		return getEmbedding().getArrayValue();
+	}
+
+	@Override
+	public double getArrayValue(int dim) {
+		return getEmbedding().getArrayValue(dim);
+	}
+
+	@Override
+	public GeneTreeInSpeciesNetwork copy() {
+		return this;
+	}
+
+	@Override
+	public void assignTo(StateNode other) {
+		throw new RuntimeException("Unexpected call to GTiS.assignTo");
+	}
+
+	@Override
+	public void assignFrom(StateNode other) {
+		throw new RuntimeException("Unexpected call to GTiS.assignFrom");
+	}
+
+	@Override
+	public void assignFromFragile(StateNode other) {
+		throw new RuntimeException("Unexpected call to GTiS.assignFromFragile");
+	}
+
+	@Override
+	public void fromXML(org.w3c.dom.Node node) {
+		embedding.fromXML(node);
+	}
+
+	@Override
+	public int scale(double scale) {
+		throw new RuntimeException("Unexpected call to GTiS.scale");
+	}
+	
+	@Override
+	public void setEverythingDirty(boolean isDirty) {
+		needsUpdate = isDirty;
+		requiresRecalculation();
+		setSomethingIsDirty(needsUpdate);
+	}
+
 }

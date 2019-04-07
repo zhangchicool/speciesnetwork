@@ -7,15 +7,13 @@ import org.w3c.dom.Node;
 import beast.core.StateNode;
 import java.util.ArrayList;
 
-public class Embedding extends StateNode {
+public class Embedding {
 	protected int geneNodeCount;
 	protected int traversalNodeCount;
 	protected int[] embedding;
 	public double probability = 1.0;
 	public double probabilitySum = 1.0;
-	
-	Embedding stored = null;
-	
+		
 	public Embedding() {
 		geneNodeCount = 0;
 		traversalNodeCount = 1;
@@ -91,42 +89,27 @@ public class Embedding extends StateNode {
 		return str.toString();
 	}
 
-	@Override
-	public void init(PrintStream out) {
-		out.append(getID() + "\t");
-	}
-
-	@Override
 	public void log(long sample, PrintStream out) {
 		out.append(toString() + "\t");
 	}
 
-	@Override
 	public void close(PrintStream out) {
 	}
 
-	@Override
 	public int getDimension() {
 		return geneNodeCount * traversalNodeCount;
 	}
 
-	@Override
 	public double getArrayValue() {
 		// This method makes no sense.
 		throw new RuntimeException("Useless call to Embedding.getArrayValue");
 	}
 
-	@Override
 	public double getArrayValue(int dim) {
 		// This method would make slightly more sense as int method.
 		return embedding[dim];
 	}
 
-	@Override
-	public void initAndValidate() {
-	}
-
-	@Override
 	public Embedding copy() {
 		Embedding e = new Embedding(geneNodeCount, traversalNodeCount);
 
@@ -137,13 +120,7 @@ public class Embedding extends StateNode {
 		return e;
 	}
 
-	@Override
-	public void assignTo(StateNode other) {
-		throw new RuntimeException("Useless call to Embedding.assignTo");
-	}
-
-	@Override
-	public void assignFrom(StateNode other) {
+	public void assignFrom(Object other) {
 		if (other instanceof Embedding) {
 			Embedding e = (Embedding) other;
 			
@@ -158,12 +135,6 @@ public class Embedding extends StateNode {
 		}
 	}
 
-	@Override
-	public void assignFromFragile(StateNode other) {
-		throw new RuntimeException("Useless call to Embedding.assignFromFragile");
-	}
-
-	@Override
 	public void fromXML(Node node) {
 		String[] tNodes = node.getTextContent().split("//");
 		geneNodeCount = tNodes.length;
@@ -181,25 +152,5 @@ public class Embedding extends StateNode {
         ++i;
 			}
 		}
-	}
-
-	@Override
-	public int scale(double scale) {
-		throw new RuntimeException("Useless call to Embedding.scale");
-	}
-
-	@Override
-	protected void store() {
-		stored = copy();
-	}
-
-	@Override
-	public void restore() {
-		assignFrom(stored);
-	}
-
-	@Override
-	public void setEverythingDirty(boolean isDirty) {
-		setSomethingIsDirty(isDirty);
 	}
 }

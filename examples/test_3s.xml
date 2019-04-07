@@ -71,19 +71,22 @@
             <stateNode id="tree:gene3" spec="beast.evolution.tree.Tree">
                 <taxonset id="taxonset:gene3" spec="TaxonSet" alignment="@gene3"/>
             </stateNode>
-            <stateNode id="embedding1" spec="speciesnetwork.Embedding" />
-            <stateNode id="embedding2" spec="speciesnetwork.Embedding" />
-            <stateNode id="embedding3" spec="speciesnetwork.Embedding" />
+            <stateNode id="geneTree:gene1"
+                       spec="speciesnetwork.GeneTreeInSpeciesNetwork"
+                       speciesNetwork="@network:species"
+                       geneTree="@tree:gene1"
+                       taxa="@taxonsuperset" />
+            <stateNode id="geneTree:gene2"
+                       spec="speciesnetwork.GeneTreeInSpeciesNetwork"
+                       speciesNetwork="@network:species"
+                       geneTree="@tree:gene2"
+                       taxa="@taxonsuperset" />
+            <stateNode id="geneTree:gene3"
+                       spec="speciesnetwork.GeneTreeInSpeciesNetwork"
+                       speciesNetwork="@network:species"
+                       geneTree="@tree:gene3"
+                       taxa="@taxonsuperset" />
         </state>
-
-        <!--
-        <init spec="beast.util.TreeParser" id="newick:gene1" initial="@tree:gene1" taxa="@gene1" IsLabelledNewick="true"
-              newick="(((c2:0.04249203493600491,b3:0.04249203493600491):0.019350663935872564,((a2:0.017995125411803013,a1:0.017995125411803013):0.017684284218994494,b2:0.03567940963079751):0.026163289241079968):0.03333444717660146,((b1:0.02203509327104657,b4:0.02203509327104657):0.050566593341810115,c1:0.07260168661285668):0.022575459435622253):0.0"/>
-        <init spec="beast.util.TreeParser" id="newick:gene2" initial="@tree:gene2" taxa="@gene2" IsLabelledNewick="true"
-              newick="(((b4:0.017023564024344212,b1:0.017023564024344212):0.051198165432823045,c2:0.06822172945716726):0.009122215994975175,(c1:0.05485538318544209,(((b3:0.0019971673577841562,b2:0.0019971673577841562):0.02302676505740664,a1:0.025023932415190797):0.01822945364607874,a2:0.043253386061269536):0.011601997124172557):0.02248856226670034):0.0"/>
-        <init spec="beast.util.TreeParser" id="newick:gene3" initial="@tree:gene3" taxa="@gene3" IsLabelledNewick="true"
-              newick="(((c2:0.03335151661826598,(b4:0.027190452259781853,b3:0.027190452259781853):0.006161064358484125):0.03623148308931505,(((b2:0.005073631027769405,b1:0.005073631027769405):0.022171351530035716,a2:0.027244982557805122):0.010875973599979598,a1:0.03812095615778472):0.03146204354979631):0.0032023815417494828,c1:0.07278538124933051):0.0"/>
-        -->
         <init id="SNI" spec="speciesnetwork.SpeciesNetworkInitializer" estimate="false" method="random" speciesNetwork="@network:species" origin="@originTime:species">
             <geneTree idref="geneTree:gene1"/>
             <geneTree idref="geneTree:gene2"/>
@@ -97,24 +100,9 @@
 
         <distribution id="posterior" spec="util.CompoundDistribution">
             <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
-                <geneTreeWithin id="geneTree:gene1"
-                    spec="speciesnetwork.GeneTreeInSpeciesNetwork"
-                    speciesNetwork="@network:species"
-                    embedding="@embedding1"
-                    geneTree="@tree:gene1"
-                    taxa="@taxonsuperset" />
-                <geneTreeWithin id="geneTree:gene2"
-                    spec="speciesnetwork.GeneTreeInSpeciesNetwork"
-                    speciesNetwork="@network:species"
-                    embedding="@embedding2"
-                    geneTree="@tree:gene2"
-                    taxa="@taxonsuperset" />
-                <geneTreeWithin id="geneTree:gene3"
-                	spec="speciesnetwork.GeneTreeInSpeciesNetwork"
-                	speciesNetwork="@network:species"
-                    embedding="@embedding3"
-                	geneTree="@tree:gene3"
-                	taxa="@taxonsuperset" />
+              <geneTreeWithin idref="geneTree:gene1" />
+              <geneTreeWithin idref="geneTree:gene2" />
+              <geneTreeWithin idref="geneTree:gene3" />
                 <!-- populationModel id="popModel" popSizes="@popSizes" spec="speciesnetwork.ConstantPopulation"/ -->
                 <populationModel id="popModel" alpha="4.0" beta="0.04" spec="speciesnetwork.ConstantPopIntegrated"/>
             </distribution>
