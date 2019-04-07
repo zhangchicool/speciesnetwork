@@ -52,16 +52,16 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 	private final Multiset<Integer> coalescentLineageCounts = HashMultiset.create();
 	private int traversalNodeCount;
 	private int geneNodeCount;
-  private final Map<String, NetworkNode>  geneTipMap = new HashMap<>();
+	private final Map<String, NetworkNode> geneTipMap = new HashMap<>();
+	private boolean needsUpdate;
 
 	@Override
 	public boolean requiresRecalculation() {
-		boolean needsUpdate;
-		needsUpdate = geneTreeInput.isDirty() || speciesNetworkInput.isDirty() || embeddingInput.isDirty();
+		needsUpdate |= geneTreeInput.isDirty() || speciesNetworkInput.isDirty() || embeddingInput.isDirty();
 		return needsUpdate;
 	}
 
-  @Override
+	@Override
 	public void initAndValidate() {
 		Network speciesNetwork = speciesNetworkInput.get();
 
@@ -69,7 +69,8 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		traversalNodeCount = speciesNetwork.getTraversalNodeCount();
 		Embedding e = embeddingInput.get();
 		if (e == null) {
-			embeddingInput.set(new Embedding(geneNodeCount, traversalNodeCount));			
+			embeddingInput.set(new Embedding(geneNodeCount, traversalNodeCount));
+			embeddingInput.get().setID(getID() + ":embedding");
 		} else if (e.getDimension() == 0) {
 			embeddingInput.get().assignFrom(new Embedding(geneNodeCount, traversalNodeCount));
 		} else {
@@ -77,8 +78,8 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 				throw new RuntimeException("Wrong embedding shape");
 			}
 		}
-    
-    // map of species network tip names to species network tip nodes
+
+		// map of species network tip names to species network tip nodes
 		final Map<String, NetworkNode> speciesNodeMap = new HashMap<>();
 		for (NetworkNode speciesNode : speciesNetworkInput.get().getLeafNodes()) {
 			final String speciesName = speciesNode.getLabel();
@@ -97,6 +98,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 				geneTipMap.put(gTipName, speciesNode);
 			}
 		}
+		needsUpdate = true;
 	}
 
 	void update() {
@@ -117,13 +119,15 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		final NetworkNode speciesNetworkRoot = speciesNetwork.getRoot();
 		final Integer speciesRootBranchNumber = speciesNetworkRoot.gammaBranchNumber;
 
-    if (speciesNetwork.isDirty()) {
-      getNodeHeirs();      
-    }
+		if (speciesNetwork.isDirty()) {
+			getNodeHeirs();
+		}
 
 		assert getEmbedding().geneNodeCount == geneNodeCount;
 		assert getEmbedding().traversalNodeCount == traversalNodeCount;
 		recurseCoalescentEvents(geneTreeRoot, speciesRootBranchNumber, Double.POSITIVE_INFINITY);
+
+		needsUpdate = false;
 	}
 
 	public Node getTree() {
@@ -170,26 +174,26 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 		}
 	}
 
-  @Override
+	@Override
 	public boolean rebuildEmbedding(Operator operator) {
 		final Network speciesNetwork = speciesNetworkInput.get();
 		traversalNodeCount = speciesNetwork.getTraversalNodeCount();
 		geneNodeCount = getTree().getNodeCount();
 
-    if (speciesNetwork.isDirty()) {
-      getNodeHeirs();      
-    }
+		if (speciesNetwork.isDirty()) {
+			getNodeHeirs();
+		}
 		final Embedding newEmbedding = recurseRebuild(getTree(), speciesNetwork.getRoot());
 		if (newEmbedding == null) {
 			return false;
 		}
-		newEmbedding.stored = getEmbedding(); 
+		newEmbedding.stored = getEmbedding();
 		if (operator != null) {
 			embeddingInput.get().startEditing(operator);
 		}
 		embeddingInput.get().assignFrom(newEmbedding);
 		update();
-    return true;
+		return true;
 	}
 
 	void getNodeHeirs() {
@@ -286,7 +290,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 	private boolean speciesSubNetworkContainsGeneSubTree(NetworkNode childSpeciesNode, Node geneTreeNode) {
 		Collection<Integer> speciesGeneHeirs = speciesNodeHeirs.get(childSpeciesNode);
 		if (geneTreeNode.isLeaf()) {
-      return speciesGeneHeirs.contains(geneTreeNode.getNr());
+			return speciesGeneHeirs.contains(geneTreeNode.getNr());
 		}
 		for (Node l : geneTreeNode.getAllLeafNodes()) {
 			if (!speciesGeneHeirs.contains(l.getNr())) {
@@ -298,25 +302,25 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 
 	@Override
 	public double logGammaSum() {
-    if (requiresRecalculation()) {
-      update();
-    }
+		if (requiresRecalculation()) {
+			update();
+		}
 		return logGammaSum;
 	}
 
 	@Override
 	public ListMultimap<Integer, Double> coalescentTimes() {
-    if (requiresRecalculation()) {
-      update();
-    }
+		if (requiresRecalculation()) {
+			update();
+		}
 		return coalescentTimes;
 	}
 
 	@Override
 	public Multiset<Integer> coalescentLineageCounts() {
-    if (requiresRecalculation()) {
-      update();
-    }
+		if (requiresRecalculation()) {
+			update();
+		}
 		return coalescentLineageCounts;
 	}
 
@@ -324,17 +328,17 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode implements GeneTre
 	public Embedding getEmbedding() {
 		return embeddingInput.get();
 	}
-	
-  @Override
+
+	@Override
 	protected void store() {
-	  super.store();
-    storedSpeciesNodeHeirs = speciesNodeHeirs;
-    speciesNodeHeirs = HashMultimap.create();
+		super.store();
+		storedSpeciesNodeHeirs = speciesNodeHeirs;
+		speciesNodeHeirs = HashMultimap.create();
 	}
-	
-  @Override
+
+	@Override
 	protected void restore() {
-    super.restore();
-    speciesNodeHeirs = storedSpeciesNodeHeirs;
+		super.restore();
+		speciesNodeHeirs = storedSpeciesNodeHeirs;
 	}
 }
