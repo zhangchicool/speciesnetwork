@@ -27,10 +27,10 @@ public class BirthHybridizationModel extends Distribution {
             new Input<>("netDiversification", "Net diversification rate: lambda-nu.");
     public final Input<RealParameter> turnOverInput =
             new Input<>("turnOver", "Turn over rate: nu/lambda.");
-    public final Input<RealParameter> rhoProbInput =
-            new Input<>("rho", "Sampling prob. of extant species, rho.");
-    public final Input<RealParameter> betaShapeInput =
-            new Input<>("betaShape", "Shape of the symmetric beta prior on gamma probs (default is 1).");
+	public final Input<RealParameter> rhoProbInput = new Input<RealParameter>("rho",
+			"Sampling prob. of extant species, rho.", new RealParameter(new Double[] { 1.0 }));
+	public final Input<RealParameter> betaShapeInput = new Input<RealParameter>("betaShape",
+			"Shape of the symmetric beta prior on gamma probs.", new RealParameter(new Double[] { 1.0 }));
     // public final Input<RealParameter> originInput =
     //        new Input<>("origin", "The time when the process started.");
 
@@ -39,20 +39,26 @@ public class BirthHybridizationModel extends Distribution {
     private double lambda, nu;
     private Beta betaPrior;
 
+    private void recalculateParameters() {
+	    if (birthRateInput.get() != null && hybridRateInput.get() != null) {
+	        lambda = birthRateInput.get().getValue();
+	        nu = hybridRateInput.get().getValue();
+	    }
+	    else if (netDiversification.get() != null && turnOverInput.get() != null) {
+	        lambda = netDiversification.get().getValue() / (1 - turnOverInput.get().getValue());
+	        nu = lambda * turnOverInput.get().getValue();
+	    } else {
+	        throw new RuntimeException("Either specify speciationRate and hybridizationRate " +
+	                                    "OR specify netDiversification and turnOver.");
+	    }
+    }
+    
     @Override
     public void initAndValidate() {
-        if (birthRateInput.get() != null && hybridRateInput.get() != null) {
-            lambda = birthRateInput.get().getValue();
-            nu = hybridRateInput.get().getValue();
+    	recalculateParameters();
+        if (lambda <= 0.0 || nu <= 0.0) {
+        	throw new RuntimeException("Speciation rate and hybridization rate must be positive!");
         }
-        else if (netDiversification.get() != null && turnOverInput.get() != null) {
-            lambda = netDiversification.get().getValue() / (1 - turnOverInput.get().getValue());
-            nu = lambda * turnOverInput.get().getValue();
-        } else {
-            throw new RuntimeException("Either specify speciationRate and hybridizationRate " +
-                                        "OR specify netDiversification and turnOver.");
-        }
-        assert (lambda > 0.0 && nu > 0.0);
         // rho = rhoProbInput.get() == null ? 1.0 : rhoProbInput.get().getValue();
 
         // make sure that all tips are at the same height, otherwise this Model is not appropriate
@@ -67,16 +73,18 @@ public class BirthHybridizationModel extends Distribution {
 
         betaPrior = new Beta();
         final RealParameter betaShape;
-        if (betaShapeInput.get() == null)
-            betaShape = new RealParameter("1.0");  // default
-        else
-            betaShape = betaShapeInput.get();
+        betaShape = betaShapeInput.get();
         betaPrior.alphaInput.setValue(betaShape, betaPrior);
         betaPrior.betaInput.setValue(betaShape, betaPrior);
     }
 
     @Override
     public double calculateLogP() {
+        recalculateParameters();
+        if (lambda <= 0.0 || nu <= 0.0) {
+        	return Double.NEGATIVE_INFINITY;
+        }
+        
         final Network network = networkInput.get();
 
         // sort the internal nodes according to their heights in ascending order
