@@ -5,6 +5,7 @@
 \usepackage[colorlinks=true,citecolor=blue]{hyperref}
 \usepackage{natbib}
 \usepackage{graphicx}
+\usepackage{listings}
 
 \begin{document}
 
@@ -368,6 +369,54 @@ Open \textbf{IcyTree} by entering the URL \url{icytree.org} to your browser. The
 Figure \ref{fig_networks} shows the top three species networks. The true species network with one hybridization (middle subfigure) has probability 0.39. The estimate of inheritance probability $\gamma$ is 0.49 (with a credible interval of 0.20 to 0.77) while the true value is 0.3. This can be viewed in \textbf{Child attribs} by hovering the cursor over one of the branches leading to the solid dot. Only one of those branches will display a $\gamma$ (gamma) value, and with the current versions of IcyTree and SpeciesNetwork it is arbitrary whether it is the dotted or solid branch. The inheritance probability of other branch (where no value is shown) will be $1 - \gamma$.
 
 \clearpage
+\section*{Fixing the network topology}
+
+In situations when we have good knowledge of the network topology and the inheritance probability ($\gamma$) is on focus, or extreme cases when the data is too large (hundreds of loci or more) for the method to converge, we might want to fix the species network topology and infer the node heights and inheritance probability ($\gamma$) from data.
+This requires some modifications to the xml file generated earlier.
+
+First duplicate the file \textbf{3s\_6loci.xml} and rename it to \textbf{3s\_6loci\_fixnet.xml}, then modify it in the following three parts:
+
+\begin{itemize}
+\item Initialize the species network.
+Here we use the true network in the simulation formatted in extended Newick format.
+Put this element
+\begin{lstlisting}
+<init spec="beast.util.TreeParser" id="newick:species"
+  IsLabelledNewick="true" adjustTipHeights="false"
+  newick="(((speciesA:0.02,(speciesB:0.01)#H1:0.01):0.03,
+            (#H1:0.02,speciesC:0.03):0.02):0.05)"/>
+\end{lstlisting}
+before
+\begin{lstlisting}
+<run id="mcmc" spec="MCMC" ...
+\end{lstlisting}
+
+\item Replace
+\begin{lstlisting}
+<stateNode id="Network.t:Species" 
+  spec="speciesnetwork.Network">
+\end{lstlisting}
+with
+\begin{lstlisting}
+<stateNode id="Network.t:Species"
+  spec="speciesnetwork.NetworkParser"
+  tree="@newick:species">
+\end{lstlisting}
+
+\item Remove (or comment out) the operators updating the network topology, that is, those with IDs
+\begin{lstlisting}
+relocateBranchAndEmbed.t:Species
+addReticulationAndEmbed.t:Species
+deleteReticulationAndEmbed.t:Species
+\end{lstlisting}
+\end{itemize}
+ 
+Finally, run BEAST on the modified xml file and summarize the networks as before.
+
+If we just carry out the first two modifications and keep the network topology operators in the xml file, this strategy provides us a way to specify a starting network when running the full MCMC analysis.
+It would be helpful for faster convergence when starting from a good point.
+
+\bigskip
 \noindent \href{http://creativecommons.org/licenses/by/4.0/}{\includegraphics[scale=0.7]{figs/fig_ccby.pdf}} This tutorial is licensed under a \href{http://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 International License}. 
 
 %%%%%%%%%  REFERENCE    %%%%%%%%%%%%%%%
