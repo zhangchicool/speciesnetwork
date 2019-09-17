@@ -87,7 +87,7 @@
 		<panel spec="BeautiPanelConfig" panelname="Partitions" tiptext="Data Partitions" path="distribution/distribution[id='likelihood']/distribution/data" hasPartitions="none" icon="0.pngx" forceExpansion="FALSE" type="beast.evolution.alignment.Alignment"/>
 		<mergepoint id="aux-partitions-panels"/>
 
-		<panel spec="BeautiPanelConfig" panelname="Taxon sets" tiptext="Specify taxon sets that make up species" path="operator[id='nodeUniformAndEmbed.t:Species']/taxonset" hasPartitions="none" icon="1.pngx" forceExpansion="TRUE"/>
+		<panel spec="BeautiPanelConfig" panelname="Taxon sets" tiptext="Specify taxon sets that make up species" path="operator[id='coorNodeUniformAndEmbed.t:Species']/taxonset" hasPartitions="none" icon="1.pngx" forceExpansion="TRUE"/>
 
 		<panel spec="BeautiPanelConfig" panelname="Gene Ploidy" tiptext="The ploidy for each gene (locus)" path="distribution/distribution[id='coalescent']/geneTreeWithin" hasPartitions="none" icon="2.pngx" forceExpansion="TRUE"/>
 
@@ -233,8 +233,9 @@
 
             <connect srcID="treelog.t:$(n)" targetID="mcmc" inputName="logger" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
 
-			<connect srcID="Tree.t:$(n)" targetID="networkMultiplier.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Tree.t:$(n)" targetID="nodeUniformAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="coorNetworkMultiplier.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="coorNodeUniformAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="coorNodeUniform.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 			<connect srcID="Tree.t:$(n)" targetID="nodeSliderAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 			<connect srcID="Tree.t:$(n)" targetID="relocateBranchAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 			<connect srcID="Tree.t:$(n)" targetID="addReticulationAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
@@ -324,11 +325,12 @@
 		<operator id="gammaProbUniform.t:Species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@Network.t:Species" weight="30.0"/>
 		<operator id="gammaProbRndWalk.t:Species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@Network.t:Species" weight="30.0"/>
 		
-		<operator id="networkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="30.0"/>
-
         <operator id="originMultiplier.t:Species" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="5.0"/>
-		<operator id="nodeUniformAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="100.0">
-			<operator id="nodeUniform.t:Species" spec="speciesnetwork.operators.NodeUniform" speciesNetwork="@Network.t:Species" weight="0.0"/>
+
+		<operator id="coorNetworkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="30.0"/>
+
+		<operator id="coorNodeUniformAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="150.0">
+			<operator id="coorNodeUniform.t:Species" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
 		<operator id="nodeSliderAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="100.0">
