@@ -1,8 +1,8 @@
 package speciesnetwork;
 
 public class Embedding {
-	protected int geneNodeCount;
-	protected int traversalNodeCount;
+	public int geneNodeCount;
+	public int traversalNodeCount;
 	protected int[] embedding;
 	public double probability = 1.0;
 	public double probabilitySum = 1.0;
@@ -28,6 +28,10 @@ public class Embedding {
 		System.arraycopy(src.embedding, 0, embedding, 0, embedding.length);
 		probability = src.probability;
 		probabilitySum = src.probabilitySum;
+	}
+
+	public int[] getEmbedding() {
+		return embedding;
 	}
 
 	public int getDirection(int geneNode, int traversalNode) {

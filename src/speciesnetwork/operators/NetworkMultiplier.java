@@ -10,7 +10,7 @@ import beast.evolution.tree.Tree;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
-import speciesnetwork.SanityChecks;
+import speciesnetwork.utils.SanityChecks;
 
 import java.util.ArrayList;
 import java.util.List;

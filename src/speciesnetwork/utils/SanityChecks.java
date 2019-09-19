@@ -1,10 +1,11 @@
-package speciesnetwork;
+package speciesnetwork.utils;
 
 import java.util.List;
 
 import com.google.common.collect.Multiset;
 
 import beast.evolution.tree.Node;
+import speciesnetwork.NetworkNode;
 
 public final class SanityChecks {
     public static void checkTreeSanity(Node node) {

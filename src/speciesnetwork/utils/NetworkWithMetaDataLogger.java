@@ -1,4 +1,4 @@
-package speciesnetwork;
+package speciesnetwork.utils;
 
 import java.io.PrintStream;
 import java.math.RoundingMode;
@@ -13,6 +13,7 @@ import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.Loggable;
 import beast.core.StateNode;
+import speciesnetwork.Network;
 
 @Description("Logs network annotated with metadata")
 public class NetworkWithMetaDataLogger extends BEASTObject implements Loggable {

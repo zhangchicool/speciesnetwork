@@ -1,4 +1,4 @@
-package speciesnetwork;
+package speciesnetwork.utils;
 
 import java.io.PrintStream;
 
@@ -9,6 +9,7 @@ import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.util.Log;
 import beast.core.Loggable;
+import speciesnetwork.Network;
 
 @Description("Logs statistics of a species network")
 public class NetworkStatLogger extends CalculationNode implements Loggable, Function {

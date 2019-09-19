@@ -7,7 +7,7 @@ import beast.core.Operator;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
-import speciesnetwork.SanityChecks;
+import speciesnetwork.utils.SanityChecks;
 
 /**
  * This proposal deletes a reticulation branch from the species network. If there is no reticulation, or if the branch

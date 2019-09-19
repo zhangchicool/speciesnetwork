@@ -1,4 +1,4 @@
-package speciesnetwork;
+package speciesnetwork.utils;
 
 import java.io.PrintStream;
 
@@ -7,8 +7,9 @@ import beast.core.Description;
 import beast.core.Function;
 import beast.core.Input;
 import beast.core.Input.Validate;
-import beast.core.util.Log;
 import beast.core.Loggable;
+import speciesnetwork.EmbeddedTree;
+import speciesnetwork.Embedding;
 
 @Description("Logs embedding of a gene tree")
 public class EmbeddingLogger extends CalculationNode implements Loggable, Function {
@@ -52,6 +53,7 @@ public class EmbeddingLogger extends CalculationNode implements Loggable, Functi
     @Override
     public double getArrayValue(int i) {
         final Embedding embedding = geneTreeInput.get().embedding;
-        return embedding.embedding[i];
+        final int[] e = embedding.getEmbedding();
+        return e[i];
     }
 }

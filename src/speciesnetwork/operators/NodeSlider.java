@@ -8,7 +8,7 @@ import beast.core.parameter.RealParameter;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
-import speciesnetwork.SanityChecks;
+import speciesnetwork.utils.SanityChecks;
 
 /**
  * @author Chi Zhang

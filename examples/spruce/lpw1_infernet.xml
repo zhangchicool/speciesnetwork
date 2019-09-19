@@ -1969,7 +1969,7 @@
         <log idref="turnOverRate:species"/>
         <!-- log idref="popSizes:species"/ -->
         <log idref="originTime:species"/>
-        <log id="networkLength:species" speciesNetwork="@network:species" spec="speciesnetwork.NetworkStatLogger"/>
+        <log id="networkLength:species" speciesNetwork="@network:species" spec="speciesnetwork.utils.NetworkStatLogger"/>
         <log id="treeHeight.t:4cl" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:4cl"/>
         <log id="treeHeight.t:ebs" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:ebs"/>
         <log id="treeHeight.t:gi" spec="beast.evolution.tree.TreeStatLogger" tree="@tree.t:gi"/>
@@ -2018,7 +2018,7 @@
     </logger>
 
     <logger id="treelog.t:species" fileName="lpw_infernet.species.trees" logEvery="20000" mode="tree">
-        <log id="networkLogger:species" spec="speciesnetwork.NetworkWithMetaDataLogger" speciesNetwork="@network:species"/>
+        <log id="networkLogger:species" spec="speciesnetwork.utils.NetworkWithMetaDataLogger" speciesNetwork="@network:species"/>
     </logger>
 
     <logger id="treelog.t:4cl" fileName="lpw_infernet.4cl.trees" logEvery="20000" mode="tree">

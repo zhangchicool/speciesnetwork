@@ -586,7 +586,7 @@
         <log idref="netDivRate.t:Species"/>
         <log idref="turnOverRate.t:Species"/>
         <log idref="originTime.t:Species"/>
-        <log id="NetworkLength.t:Species" spec="speciesnetwork.NetworkStatLogger" speciesNetwork="@Network.t:Species"/>
+        <log id="NetworkLength.t:Species" spec="speciesnetwork.utils.NetworkStatLogger" speciesNetwork="@Network.t:Species"/>
         <log idref="popMean.t:Species"/>
         <log idref="treeLikelihood.locus4"/>
         <log id="TreeHeight.t:locus4" spec="beast.evolution.tree.TreeStatLogger" tree="@Tree.t:locus4"/>
@@ -615,7 +615,7 @@
     </logger>
 
     <logger id="specieslog" fileName="speciesnetwork.trees" logEvery="2000" mode="tree">
-        <log id="speciesNetworkLoggerX" spec="speciesnetwork.NetworkWithMetaDataLogger" speciesNetwork="@Network.t:Species"/>
+        <log id="speciesNetworkLoggerX" spec="speciesnetwork.utils.NetworkWithMetaDataLogger" speciesNetwork="@Network.t:Species"/>
     </logger>
 
     <logger id="treelog.t:locus4" fileName="$(tree).trees" logEvery="2000" mode="tree">
