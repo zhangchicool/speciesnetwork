@@ -1,17 +1,17 @@
 <beast version="2.0" namespace="beast.app.beauti:beast.core:beast.evolution.branchratemodel:beast.evolution.speciation:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood:beast.evolution:beast.math.distributions" templateinfo="SpeciesNetwork template for strict or gene tree relaxed clocks.">
 
-<map name="connect" reserved="true">beast.app.beauti.BeautiConnector</map>
-<map name="subtemplate" reserved="true">beast.app.beauti.BeautiSubTemplate</map>
-<map name="Uniform">beast.math.distributions.Uniform</map>
-<map name="Normal">beast.math.distributions.Normal</map>
-<map name="OneOnX">beast.math.distributions.OneOnX</map>
-<map name="LogNormal">beast.math.distributions.LogNormalDistributionModel</map>
-<map name="Exponential">beast.math.distributions.Exponential</map>
-<map name="Gamma">beast.math.distributions.Gamma</map>
-<map name="Beta">beast.math.distributions.Beta</map>
-<map name="LaplaceDistribution">beast.math.distributions.LaplaceDistribution</map>
-<map name="InverseGamma">beast.math.distributions.InverseGamma</map>
-<map name="prior">beast.math.distributions.Prior</map>
+	<map name="connect" reserved="true">beast.app.beauti.BeautiConnector</map>
+	<map name="subtemplate" reserved="true">beast.app.beauti.BeautiSubTemplate</map>
+	<map name="Uniform">beast.math.distributions.Uniform</map>
+	<map name="Normal">beast.math.distributions.Normal</map>
+	<map name="OneOnX">beast.math.distributions.OneOnX</map>
+	<map name="LogNormal">beast.math.distributions.LogNormalDistributionModel</map>
+	<map name="Exponential">beast.math.distributions.Exponential</map>
+	<map name="Gamma">beast.math.distributions.Gamma</map>
+	<map name="Beta">beast.math.distributions.Beta</map>
+	<map name="LaplaceDistribution">beast.math.distributions.LaplaceDistribution</map>
+	<map name="InverseGamma">beast.math.distributions.InverseGamma</map>
+	<map name="prior">beast.math.distributions.Prior</map>
 
 	<beauticonfig spec="BeautiConfig"
 		inputLabelMap="beast.core.MCMC.operator=Operators,
@@ -238,7 +238,7 @@
 			<connect srcID="Tree.t:$(n)" targetID="coorNodeUniform.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 			<connect srcID="Tree.t:$(n)" targetID="nodeSliderAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 			<connect srcID="Tree.t:$(n)" targetID="relocateBranchAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
-			<connect srcID="Tree.t:$(n)" targetID="flipBranchAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="flipReticulationAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 			<connect srcID="Tree.t:$(n)" targetID="addReticulationAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 			<connect srcID="Tree.t:$(n)" targetID="deleteReticulationAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
 
