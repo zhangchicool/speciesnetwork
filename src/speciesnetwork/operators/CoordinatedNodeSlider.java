@@ -18,12 +18,12 @@ import speciesnetwork.utils.SanityChecks;
 public class CoordinatedNodeSlider extends CoordinatedOperator {
     public final Input<RealParameter> originInput =
             new Input<>("origin", "The time when the process started.", Validate.REQUIRED);
-    public final Input<Double> windowSizeInput =
-            new Input<>("windowSize", "Window size of the uniform proposal (default is 0.02).", 0.02);
     public final Input<Boolean> isNormalInput =
-            new Input<>("isNormal", "Using normal proposal (default: uniform proposal).", false);
+            new Input<>("isNormal", "Using normal proposal (default: uniform proposal).", true);
     public final Input<Double> sigmaInput =
             new Input<>("sigma", "Standard deviation of the normal proposal (default is 0.01).", 0.01);
+    public final Input<Double> windowSizeInput =
+            new Input<>("windowSize", "Window size of the uniform proposal (default is 0.02).", 0.02);
 
     @Override
     public void initAndValidate() {
@@ -72,13 +72,14 @@ public class CoordinatedNodeSlider extends CoordinatedOperator {
             final RealParameter originTime = originInput.get();
             if (outsideBounds(newHeight, originTime))
                 return Double.NEGATIVE_INFINITY;
-
             originTime.setValue(newHeight);
         }
         speciesNetwork.startEditing(this);
         pickedNode.setHeight(newHeight);
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
+        // update gene tree node heights (necessary only when speciation network node)
+        // return proposal ratio of this update
         return updateRubberBand(pickedNode, oldHeight, newHeight, lower, upper);
     }
 

@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import beast.core.Description;
-import beast.core.Input;
-import beast.core.Input.Validate;
-import beast.core.Operator;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
@@ -17,19 +14,15 @@ import speciesnetwork.utils.SanityChecks;
  * If bifurcation node: move the end of either the two parent branches.
  * If reticulation node: move the top of either the two child branches.
  * Propose a destination branch randomly from all possible branches, and attach the picked branch to the new position.
+ * Also update the affected gene tree lineages at each locus to maintain the compatibility.
  *
  * @author Chi Zhang
  */
 
 @Description("Relocate the source of an edge starting with speciation node, " +
-             "or the destination of an edge ending with hybridization node.")
-public class RelocateBranch extends Operator {
-    public final Input<Network> speciesNetworkInput =
-            new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
-
-    // empty constructor to facilitate construction by XML + initAndValidate
-    public RelocateBranch() {
-    }
+             "or the destination of an edge ending with hybridization node." +
+             "Also update the affected gene tree lineages to maintain compatibility.")
+public class CoordinatedRelocateBranch extends CoordinatedOperator {
 
     @Override
     public void initAndValidate() {
@@ -76,9 +69,10 @@ public class RelocateBranch extends Operator {
             pC.updateRelationships();
 
             // look for all the candidate branches to attach to
+            // do not change the direction of picked branch at the moment
             List<Integer> candidateBrNrs = new ArrayList<>();
             for (NetworkNode node : speciesNetwork.getAllNodesExceptOrigin()) {
-                if (node != pN && (pP.isSpeciation() || node.getHeight() < pP.getHeight())) {
+                if (node != pN && node.getHeight() < pP.getHeight()) {
                     candidateBrNrs.add(node.gammaBranchNumber);
                     if (node.isReticulation())
                         candidateBrNrs.add(node.gammaBranchNumber + 1);
@@ -111,47 +105,14 @@ public class RelocateBranch extends Operator {
                 pN.updateRelationships();
                 aC.updateRelationships();
             }
-            else if (pP.isReticulation()) {
+            else {
                 // cannot move in this case
                 return Double.NEGATIVE_INFINITY;
             }
-            else {
-                // pP is a bifurcation node and the reticulation direction is changed
-                pN.setHeight(pP.getHeight());
-                pP.setHeight(newHeight);
-                // determine nodes around pP
-                final Integer pPpPPBranchNr = pP.gammaBranchNumber;
-                final NetworkNode pPP = pP.getParentByBranch(pPpPPBranchNr); // pPP: parent of pP
-                final Integer pPpPCBranchNr;
-                if (pP.childBranchNumbers.get(0).equals(pickedBranchNr))
-                    pPpPCBranchNr = pP.childBranchNumbers.get(1);
-                else
-                    pPpPCBranchNr = pP.childBranchNumbers.get(0);
-                final NetworkNode pPC = pP.getChildByBranch(pPpPCBranchNr);  // pPC: another child of pP
-
-                pP.childBranchNumbers.remove(pPpPCBranchNr);
-                pN.childBranchNumbers.add(pPpPCBranchNr);
-                if (pP == aC) {
-                    // the attaching branch is pP-pPP
-                    pP.childBranchNumbers.add(pNpNPBranchNr);
-                } else {
-                    pPP.childBranchNumbers.remove(pPpPPBranchNr);
-                    pPP.childBranchNumbers.add(pNpNPBranchNr);
-                    // separate aC and aP by pP
-                    aP.childBranchNumbers.remove(attachBranchNr);
-                    aP.childBranchNumbers.add(pPpPPBranchNr);
-                    pP.childBranchNumbers.add(attachBranchNr);
-                    pPP.updateRelationships();
-                    aP.updateRelationships();
-                    aC.updateRelationships();
-                }
-                // speciesNetwork.updateRelationships();
-                pP.updateRelationships();
-                pN.updateRelationships();
-                pPC.updateRelationships();
-            }
 
             logProposalRatio = Math.log(upper - lower) - Math.log(bounds);
+
+            // TODO: update gene trees
         }
         else {
             // move the top of either the two child branches
@@ -179,9 +140,10 @@ public class RelocateBranch extends Operator {
             pNC.updateRelationships();
 
             // look for all the candidate branches to attach to
+            // do not change the direction of picked branch at the moment
             List<Integer> candidateBrNrs = new ArrayList<>();
             for (NetworkNode node : speciesNetwork.getInternalNodesWithOrigin()) {
-                if (pC.isReticulation() || node.getHeight() > pC.getHeight()) {
+                if (node.getHeight() > pC.getHeight()) {
                     for (Integer childBrNr : node.childBranchNumbers) {
                         if (!childBrNr.equals(pickedBranchNr) && !childBrNr.equals(pNpPBranchNr))
                             candidateBrNrs.add(childBrNr);
@@ -215,47 +177,14 @@ public class RelocateBranch extends Operator {
                 pN.updateRelationships();
                 aC.updateRelationships();
             }
-            else if (!pC.isReticulation()) {
+            else {
                 // cannot move in this case
                 return Double.NEGATIVE_INFINITY;
             }
-            else {
-                // pC is a reticulation node and the reticulation direction is changed
-                pN.setHeight(pC.getHeight());
-                pC.setHeight(newHeight);
-                // determine nodes around pC
-                final Integer pCpCCBranchNr = pC.childBranchNumbers.get(0);
-                final NetworkNode pCC = pC.getChildByBranch(pCpCCBranchNr);  // pCC: child of pC
-                final Integer pCpCPBranchNr;
-                if (pC.gammaBranchNumber.equals(pickedBranchNr))
-                    pCpCPBranchNr = pC.gammaBranchNumber + 1;
-                else
-                    pCpCPBranchNr = pC.gammaBranchNumber;
-                final NetworkNode pCP = pC.getParentByBranch(pCpCPBranchNr); // pCP: another parent of pC
-
-                pCP.childBranchNumbers.remove(pCpCPBranchNr);
-                pCP.childBranchNumbers.add(pNpPBranchNr);
-                if (aP == pC) {
-                    // the attaching branch is pC-pCC
-                    pN.childBranchNumbers.add(pCpCPBranchNr);
-                } else {
-                    pN.childBranchNumbers.add(pCpCCBranchNr);
-                    // separate aC and aP by pC
-                    aP.childBranchNumbers.remove(attachBranchNr);
-                    aP.childBranchNumbers.add(pCpCPBranchNr);
-                    pC.childBranchNumbers.remove(pCpCCBranchNr);
-                    pC.childBranchNumbers.add(attachBranchNr);
-                    // speciesNetwork.updateRelationships();
-                    pCC.updateRelationships();
-                    aP.updateRelationships();
-                    aC.updateRelationships();
-                }
-                pCP.updateRelationships();
-                pN.updateRelationships();
-                pC.updateRelationships();
-            }
 
             logProposalRatio = Math.log(upper - lower) - Math.log(bounds);
+
+            // TODO: update gene trees
         }
 
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
