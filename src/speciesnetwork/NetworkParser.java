@@ -23,6 +23,8 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
             new Input<>("tree", "Tree initialized from extended newick string.", Validate.REQUIRED);
     public final Input<Boolean> adjustTipHeightsInput =
             new Input<>("adjustTipHeights", "Whether tipHeights shall be adjusted (default is true).", true);
+    public final Input<Boolean> autoAddOriginInput =
+            new Input<>("autoAddOrigin", "If the root node is bifurcating, add an origin node above the root (default is true).", true);
 
     private List<String> leafOrder;
     private int nextSpeciationNr;
@@ -40,6 +42,19 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
     public void initAndValidate() {
         final Tree tree = treeInput.get();
         final Node treeRoot = tree.getRoot();
+
+        // Automatically add origin node if none exists
+        Node treeOrigin;
+        if (autoAddOriginInput.get() && treeRoot.getChildCount() == 2) {
+            treeOrigin = new Node();
+            treeOrigin.setHeight(treeRoot.getHeight() * 2.0); // set height to double the root
+            treeOrigin.addChild(treeRoot);
+
+            tree.addNode(treeOrigin);
+            tree.setRoot(treeOrigin);
+        } else {
+            treeOrigin = treeRoot;
+        }
 
         // Step (1) is to initialize the node counts and array
         leafOrder = new ArrayList<>();
@@ -72,7 +87,7 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
         nextReticulationNr = leafNodeCount + speciationNodeCount;
 
         // Step (2) is to recursively copy the tree to the network
-        rebuildNetwork(treeRoot);
+        rebuildNetwork(treeOrigin);
 
         // Update the cached parents and children for each node
         updateRelationships();

@@ -1,5 +1,8 @@
 package speciesnetwork.operators;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import beast.core.Description;
 import beast.core.Input;
 import beast.core.Input.Validate;
@@ -7,7 +10,7 @@ import beast.core.Operator;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
-import speciesnetwork.SanityChecks;
+import speciesnetwork.utils.SanityChecks;
 
 /**
  * Pick an internal network node randomly.
@@ -44,7 +47,7 @@ public class RelocateBranch extends Operator {
 
         // pick an internal node randomly
         final NetworkNode[] internalNodes = speciesNetwork.getInternalNodes();
-        final int rIndex = Randomizer.nextInt(internalNodes.length);
+        int rIndex = Randomizer.nextInt(internalNodes.length);
         final NetworkNode pN = internalNodes[rIndex];
 
         // start moving
@@ -77,11 +80,21 @@ public class RelocateBranch extends Operator {
             pNP.updateRelationships();
             pC.updateRelationships();
 
+            // look for all the candidate branches to attach to
+            List<Integer> candidateBrNrs = new ArrayList<>();
+            for (NetworkNode node : speciesNetwork.getAllNodesExceptOrigin()) {
+                if (node != pN && (pP.isSpeciation() || node.getHeight() < pP.getHeight())) {
+                    candidateBrNrs.add(node.gammaBranchNumber);
+                    if (node.isReticulation())
+                        candidateBrNrs.add(node.gammaBranchNumber + 1);
+                }
+            }
+            if (candidateBrNrs.size() == 0)
+                return Double.NEGATIVE_INFINITY;
+
             // pick a candidate branch randomly
-            Integer attachBranchNr;
-            do {
-                attachBranchNr = Randomizer.nextInt(branchCount);
-            } while (attachBranchNr.equals(pickedBranchNr) || attachBranchNr.equals(pNpNPBranchNr));
+            rIndex = Randomizer.nextInt(candidateBrNrs.size());
+            final Integer attachBranchNr = candidateBrNrs.get(rIndex);
             final int aCNodeNr = speciesNetwork.getNodeNumber(attachBranchNr);
             final NetworkNode aC = speciesNetwork.getNode(aCNodeNr);      // aC: child at attaching branch
             final NetworkNode aP = aC.getParentByBranch(attachBranchNr);  // aP: parent at attaching branch
@@ -170,11 +183,22 @@ public class RelocateBranch extends Operator {
             pP.updateRelationships();
             pNC.updateRelationships();
 
+            // look for all the candidate branches to attach to
+            List<Integer> candidateBrNrs = new ArrayList<>();
+            for (NetworkNode node : speciesNetwork.getInternalNodesWithOrigin()) {
+                if (pC.isReticulation() || node.getHeight() > pC.getHeight()) {
+                    for (Integer childBrNr : node.childBranchNumbers) {
+                        if (!childBrNr.equals(pickedBranchNr) && !childBrNr.equals(pNpPBranchNr))
+                            candidateBrNrs.add(childBrNr);
+                    }
+                }
+            }
+            if (candidateBrNrs.size() == 0)
+                return Double.NEGATIVE_INFINITY;
+
             // pick a candidate branch randomly
-            Integer attachBranchNr;
-            do {
-                attachBranchNr = Randomizer.nextInt(branchCount);
-            } while (attachBranchNr.equals(pickedBranchNr) || attachBranchNr.equals(pNpPBranchNr));
+            rIndex = Randomizer.nextInt(candidateBrNrs.size());
+            final Integer attachBranchNr = candidateBrNrs.get(rIndex);
             final int aCNodeNr = speciesNetwork.getNodeNumber(attachBranchNr);
             final NetworkNode aC = speciesNetwork.getNode(aCNodeNr);      // aC: child at attaching branch
             final NetworkNode aP = aC.getParentByBranch(attachBranchNr);  // aP: parent at attaching branch

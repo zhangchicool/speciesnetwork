@@ -154,10 +154,9 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
         } else {
             speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] += lastHeight - geneNodeHeight;
             coalescentTimes.put(speciesBranchNumber, geneNodeHeight);
-            final Node leftChild = geneTreeNode.getLeft();
-            final Node rightChild = geneTreeNode.getRight();
-            recurseCoalescentEvents(leftChild, speciesNetworkNode, speciesBranchNumber, geneNodeHeight);
-            recurseCoalescentEvents(rightChild, speciesNetworkNode, speciesBranchNumber, geneNodeHeight);
+            for (Node geneChildNode : geneTreeNode.getChildren()) {
+                recurseCoalescentEvents(geneChildNode, speciesNetworkNode, speciesBranchNumber, geneNodeHeight);
+            }
         }
     }
 

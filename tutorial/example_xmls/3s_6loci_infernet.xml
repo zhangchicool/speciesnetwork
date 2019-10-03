@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='SpeciesNetwork' beautistatus='noAutoSetClockRate' namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" required="" version="2.5">
+
+<data id="3s_6loci">
+    <sequence id="seq_speciesA_tip1" taxon="speciesA_tip1" totalcount="4" value="TGGCGGACGTTAGTTACGCTGCAAAGGCTCTCTAAGATTGTCCGGAGCTGTAGACACATTCCACCTTGTGCGTCTGGACTTGCGTCACGTTTGAGCGACTTCCCTCCCGGCTACCGTACGTTAGAGTGGAGTCACTTTTTTGAGTGGATATGTAGGTCCTCTGAATAAGTTAATTGAAGTGTGTCATCGACTCCGGCCTGCATGTACAAGGCGTGCTGAGAATCCCCGAGCATTCGTGGGCGCTCTAACGATCTGTTGACCATAAAGAGTCTTGGTAGGATCCCTTTATGAGATGACTTCAAACGTGATGGGGCGCCATGCTGTGAAACTTAGCCCGTTCGGATATCGAGTTGGAAGAAGCTTTTTCTAGGGCACTTCCAACCATTTACTGCATTACACAACCCCCTACGTCAGCACCGTCCATCTCCTATTTTACAGGCGAGACTTCGTTAGCGACCATCTATAAACTCACTCTCCGGGTAAGTCTAATGCAAAAGGAGATGAAACAAAGGCAACGGAGCACGAATCCCCTGTTCGGCCACGAGGGCTGCCGTGTACGTACGCAACAAGAATGCCCCACACCCAGTTGCTTCGGGTATACTAGTCGTTCCCTAATTTAGCTATAACTCTAGGCAAGGCTGGATCATAGTTACTGCCGACACTCCAACGCAGGGGGTGCCTACTCCCAATCCTATCGTTAGAGTTAGCGGCATCTATACAAACCGTTTGGTTTATAAGTGTTGGCGCGCATTATTGCCAAGGACGTGCACGTACTCATCCCGCCCCCAGAACCTTGTGGCTGGTAAGTAACACCACAGGAGACAATCGAATCCATCCGTCCGAAGGTAGAAACTCGAGGGTCCCCCTCCGGTCAACCTCTATCCATCGGTCTCGCATATATCCGGTTAAGATGACAGGCATTGCGCCTTTTTTCGAAGGAATACTACGGCCCTCGAATCATCCCCTAGCAGGGTGCACTGTAGAAGGTCTCCTAGCCGTCCTCTATCGTCTGATACGGGCCAACATCCCTCTGCGCCGTAAGAGGATGAAAGCTGGAACCAGTTGATCCCTGATTCAGACGCAGTTCGTAACACGCAATAAGTCAGGGGTCGGCTGGTCTAGTGTCTTACACAATTGCGAACCACTTAGAACCAACCAGTTGTCCCTATCCACAGACCATAACCCGCACAACAAAATCAA"/>
+    <sequence id="seq_speciesA_tip2" taxon="speciesA_tip2" totalcount="4" value="TGGCGGACGTTAGTTACGCTGTAAAGGCTCTCTAAGATTGTCCGGAGCTGTAGACACATTCCACCTTGTGCGTCTGGGCTCGCGTCACGTTTGCGCGACTTCCCTCCCGGCTACCGTACGTTAGAGTGGAGTCACTTTTTTGAGTGGATATGTAGGTCCTCTGAATAAGTCAATTGAAGTGTGTCATCGACTCCGGCCTGCATGTACAACGCGTGCTGAGAATCCCCGAGCATTCGTGGGCGCTCTAACGATCTGTTGAGCATAAAGAGTCTTGGTAGGATCCCTTTATGAGATGACTTCAAATGTGATGGTGCGCCATGCTGTGAAACTTAGCCCGCTCGGATATCGAGTTGGAAGGAGCTTTTTCTAGGGCACTTCCTACCATTTACTGCATTACACAACCCCCTACGTCAGCACCGTCCATCTCCTATTTTACAGGCGAGACTTCGTTAGCGACCATCTATAAACTCACTCTCCGGGTAAGTCTAATGCAAAAGGAGATGAAACAAAGGCAACGGAGCACGGATCCCCTGTTCGGCCACCAGGGCTGCCGTGTACGAACGCAACAAGAATGCCCCACAGCCAGTTGCTTCGGGTATACTAGTCGTTCCCTAATTTAGCTATAACTCTAGGCAAGGCTGGATCATAGTTACTGCCGACACTCCAACGCAGGGGGTGCCTACTCCCAATCCTATCGTTAGAGTTAGCGGCATCTATACAAACCGTTTGGTTTATAAGTGTTGGCGCGCATTATTGCCAAGGACGTGCACGTACTCATCCCGCCCCCAGAACCTTGTGGCTGGTAAGTAACACCACAGGAGACAATCGAATCCATCCCTCCGAAGGTAGAAACTCGAGGGTCCCCCTCCGGTCAACCTCTATCCATCGGTCTCGCATATATCCCGTTAAGATGACAGGCATTGCGCCTTTTTTCGAAGGAATACTACGGCCCTCGAATCATCCCCTAGCAGGGTGCACTGTAGAAGGTCTCCTAACCGTCCTCTATCGTCTGATACGGGCCAACATCCCTCTGCGCCGTAAGAGGATGAAAGCTGGAACCAGTTGATCCCTGATGCAGACGCAGTTCGTAACACGCAATAAGTCAGGGGTCGGCTGGTCTAGTGTCTTACACAATTGCGAACCACTTAGAACCAACCAGTTGTCCCTATCCACAGACCATAACCCTCACAACAAAATCAA"/>
+    <sequence id="seq_speciesA_tip3" taxon="speciesA_tip3" totalcount="4" value="TGGCGGACTTTAGTTACGCTGTTAACGCTCTCTAAGATTGTCCTGAGCAGTAGTCAGATTCCTCCTTGTGCATCTGGGCTCGCGTGACGGTTGCGCTGCTTCCCTCCACGGTACCGTACATTAGAGAGGAGCCACTTTTTTGAGTGGATATGTAGGTACTCGGAGTATGTTGATTGAACTGTGTCATTGACTCCGGCCTGCATGTACAAGGCGTGCTGAGAATCCCCGAGCATTCGTGGGCGCTCTAACGATCTGTTGACCATAAAGAGTCTTGGTAGGATCCCTTTATGAGATGACTTCAAACGTGATGGGGCGCCATGCTGTGAAACTTAGCCCGTTCGGATATCGAGTTGGAAGAAGCTTTTTCTAGGGCACTTCCTACCATTTACTGCATTACACAACCACCTACGTCAGAACCGTCCATCTCCTATTTTACAGGCGAGACTTCGTTAGCGACCATCTATCAACTCACTCTCCGGGTAAGTCTAATGCAAAAGGAGATGCAACAAAGGCAACGGAGCACGTATCCCCTGTTCGGCCACCAGGGCTACTGTGCACCAACGCAACAAGAATGCCTCACAGCCAGTTGCTTCGGGTATACTAGTCGTTCACTAATTTAGCTATAACTCTAGGCAAGGCTGGATCATAGTTACTGCCGACACTCCAACGCAGGGGGTGCCTACTCCCAATCCTATCGTTAGAGTTAGCGGCATCTATACAAACCGTTTGGTTTATAAGTGTTGGCGCGCATTATTGCCAAGGACGTGCACGTACTCATCCCGCCCCCAGAACCTTGTGGCTGGTAAGTAACACCACAGGAGACAATCGAATCCATCCCTCCGAAGGTAGAAACTCGAGGGTCCCCCTCCGGTCAACCTCTATCCATCGGTCTCGCATATATCCCGTTAAGATGACAGGCATTGCGCCTTTTTTCGAAGGAATACTACGGCCCTCGAATCATCCCCTAGCAGGGTGCACTGTAGAAGGTCTCCTAACCGTCCTCTATCGTCTGATACGGGCCAACATCCCTCTGCGCCGTAAGAGGATGAAAGCTGGAACCAGTTGATCCCTGATTCAGACGCAGTTCGTAACACGCAATAAGTCAGGGGTCGGCTGGTCTAGTGTCTTACACAATTGCGACCCACTTAGAACCAACCAGTTGTCCCTATCCACAGACCATAACCCTTACAACAAAATCAA"/>
+    <sequence id="seq_speciesA_tip4" taxon="speciesA_tip4" totalcount="4" value="TGGCGGACGTTAGTTACGCTGCAAAGGCTCTCTAAGATTGTCCGGAGCTGTAGACACATTGCACCTTGTGCGTCTGGACTTGCGTCACGTTTGAGCGACTTCCCTCCCGGCTACCGTACGTTAGAGTGGAGTCACTTTTTTGAGTGGCTATGTAGGTCCTCTGAATAAGTTAATTGAAGTGTGTCATCGACTCCGGCATGCATGTACAAGGCGTGCTGAGAATCCCCGAGCATTCGTGGGCGCTATAACGATCTGTTGACCATAAAGAGTCTTGGTAGGATCCCTTTATGAGATGACTTCAAACGTGATGGGGCGCCATGCTGTGAAACTTAGCCCGTTCGGATATCGAGTTGGAAGAAGCTTTTTCTAGGGCACTTCCAGCCATTTACTGCATTACACAACCCCCTACGTCAGCACCGTCCATCTCCTATTTTACAGGCGAGACTTCGTTAGCGACCATCTATAAACTCACTCTCCGGGTAAGTCTAATGCAAAAGGAGATGAAACAAAGGAAACGGAGCACGAATCCCCCGTTCGGCCACCAGGGCTGCCGTGTACGAACGCAACAAGAATGCCCCACAGCCAGTTGCTTCGGGTATACTAGTCGTTCCCTTCTGATGCTATATCTCTAGGCAAGCCTGGATCATAGTTACTGCCGACTGTCCAACGCAAAGGGTGCCCAATCCCAACGTTATCGTTAGATTTAGCGGCATCTATACAAATAGTTCGGTTTATAACTGTTGGCCCCCATTATTGAGAAGGGCGCGCACGTCCTCAGCACTCCCCCCGAACCTTGTGGCTGGTAAGTAACACCACAGGAGACAATCGAATCCATCCCTCCGAAGGTAGAAACTCGAGGGTCCCCCTCCGGTCAACCTCTATCCATCGGTCTCGCATATATCCCGTTAAGATGACAGGCATTGCGCCTTTTTTCGAAGGAATACTACGGACCTCGAATCATCCCCTAGCAGGGTGCACTGTAGAAGGTCTCCTAGCCGTCCTCTATCGTCTGGTACGGGCCAACATCCCTCTGCGCCGTAAGTGGATGAAAGCTGGAACCAGTTGATCCCTGATTCAGCCGCAGTTCGTAACACGCAATCAGTCAGGGGTCGGCTGGTCTATTGTCTTACACAATTGCGAACCACTTAGAACCAACCAGTTGTCCCTATCCACACACCATAACGCGCCCAGCAAAATCAA"/>
+    <sequence id="seq_speciesB_tip1" taxon="speciesB_tip1" totalcount="4" value="TGGCGGACGTGAGTTACGCTGCAAAGGCTCTCTAAGATTGTCCGGAGCTGTAGACACATTCCACCTTGTGCGTCTGGGCTCGCGTCAAGTTTGCGCGACTTCCCTTCCGGCTACAGTACGTTAGAGTGGAGTCCCTTTTTTGAGTAGATATATAGGTCCTCTGAATAAGGTAATTGAAGTGTGTCATCTACTCCGGCCTGTATGTGCAAGACGTGCTGAGTTTCCTCTAGCATTCGTAGGCGCTCTAATGATCCGTTCAGCATAAAGAGGCTTTGTATGATCCCTTTATGAGAGGAATTCAAACGGGATGGTTCGGCGTGCTGTGACACTTAGCCCTTTCGGAGATCGAGTTGGAAGAAGCGTTTTTAAGTGCACTTATTCCCATTTACTGTATTACACAACCCCCTACGTCAGAACCGTCCATCTCCTATTTTACAGGCGAGATTTCGTCAGCGACCATCTATAAACTCACTCTCCGGGTAAGTCTAATGAAAAAAGAGATGCAACAAAGGCAACGGAGCACGGATCCCCTGTTCGGCCACCAGGGCTGTTGTGCACGAACGCAACAACAATGCCCCACAGCCAGTTGCTACGGGTATACTACTCGTTCCCTAATGATGCTATAATTCGAGGCCAGGCTGGATCATAGTTAGTCCCGACCCTCCAATGCAAGGGGTGCCGATTGCCAACCCTATTTTTAGATTTAGACGCACCTATACAAACAGTTCTGTTTATAACTGTTGGCGGCGATTACTGACTAGACCGCGCATGTACTCAACCCGGCGCTTGAACCTAGTGGATGGTAACTAACACCACAGGAGACAATCGAATCCGTCCCTCCGAAGGTATCAACTCGAGGGTCCCCCTCCTATCAACCTCCATCCATCGGTCTCGTATATAACCCGTTAAGATGACAGGCGTTGCGCCTTTTTTCGAAGGAATACTACGGCCCTCGATTCATCCGCTAGCAGGGAGCACTGTAGACGTTCTGCTAGGCGTCCTCAATCGTCTGATACTGGCGAACATCGCTCTGCGCCGTACGATGTTGAAGGCTGCAACCTGTTGATCTCTGACTCAGTCTCAGGTCGTAACACGCAATAAGGCAGGGAGCGGCTGGTCTAGTGTCTTAAACAAATGCGAACCACTTTGAACCAAGCACTTATCCCTATCCACATCCCCTAACCCGCACAACAGAATCAA"/>
+    <sequence id="seq_speciesB_tip2" taxon="speciesB_tip2" totalcount="4" value="TGGCGGACGTTAGTTACGCTGCAAAGGCTCTCTAAGATTGTCCGGAGCTGTAGACACATTCCACCTTGTGCGTCTGGGCTCGCGTCACGTTTGCGCGACTTCCCTCCCGGCTACCGTACGTTAGAGTCGAGTCCCTTTTTTGAGTAGATATGTAGGTCCTCTGAATAAGGTAATTGAAGTGTGTCATCGACTCCGGCCTGTATGTGCAAGACGTGCTGAGTTTCCTCTAGCATTCGTAGGCGCTCTAATGATCCGTTCAGCATAAAGAGGCTTTGTATGATCCCTTTATGAGAGGAATTCAAACGGGATGGTTCGGCGTGCTGTGACACTTAGCCCTTTCGGAGATCGAGTTGGAAGAAGCGTTTTTAAGTGCACTTATTCCCATTTACTGTATTACACAACCCCCTACGTCAGAACCGGCAATCTCCTTTTTTACAGCCGGGATTTCGTTAGCGACCATCTATAAACTCACTCTCCGGGTAAAGCGAATGCATAAGGACATGCAACAAAGGCAACGGAGCACGGATCGTCAGTTCGGCCACGAGGCCGGCTGTGAACGCACGCAACCGAAATGCTCCGCAACCCGTTGTTTCGTGTATACTTCTCGTTCCCTGATGATGCTATAATTCTAGGCCAGGCTGGATCTTAGTTAGTACCGACCCTCCAACGCAAGGGGTGCCGATTGCTAACCCTATTTTTAGATTTAGACGCATCTATACAAACAGTTCTGTTTATAACTGTTGGCGGCGATTAGTGACTAGACCGCGCATGTACTCAACCCGGCGCCTGAACCTAGAGGATGGTAACTAACACCACAGGAGACAATCGAATCCGTCCCTCCGAAGGTATCAACTCGAGGGTCCCCCTCCTATCAACCTCCATCCATCGGTCTCGTATATAACCCGTTAAGATGACAGGCGTTGCGCCTTTTTTCGAAGGAATACTACGGCCCTCGACTCATCCGCTAGCAGGGTGCACTGTAGACGTTCTGCTAGGCGTGCTCAATCGTCTGATACTGGCGAACATCGCTCTGCGCCGTACGATGTTGAAGGCTGCAACCTGTTGATCTCTGACTCAGTCTAAGGTCGTAACACGCAATAAGGCAGGGAGCGGCTGGTCTAGTGTCTTAAACAAATGCGAACCACTTTGAACCAAGCACTTATCCCTATCCACATCCCCTAACCCGCACAACAGAATCAA"/>
+    <sequence id="seq_speciesB_tip3" taxon="speciesB_tip3" totalcount="4" value="TGGCGGACGTGAGTTACGCTGCAAAGGCTCTCTAAGATTGTCCGGAGCTGTAGACACATTCCACCTTGTGCGTCTGGGCTCGCGTCAAGTTTGCGCGACTTCCCTTCCGGCTACAGTACGTTAGAGTGGAGTCCCTTTTTTGAGTAGATATATAGGTCCTCTGAATAAGGTAATTGAAGTGTGTCATCTACTCCGGCCTGTATGTGCAAGACGTGCTGAGTTTCCTCTAGCATTCGTAGGCGATCTAATGATCCGTTCAGCATAAAGAGGCTTTGTATGATCCCTTTATGGGAGGAATTCAAACGGGATGGTTCGGCGTGCTGTGACACTTAGCCCTTTCGGAGATCGAGTTGGAAGAAGCGTTTTTAAGTGCACTTATTCCCATTTACTGTATTACACAACCCCCTACGTCAGAACCGACCATCTCCTTTTTTACAGCCGAGACTTCGTTAGCGACCATCTATAAACTCACTCTCTGGGTAAGTCTAATGCAAAAGGAGATGCAACAAAGGCAACGGAGCACTGATCCCCTGTCCGGCCACTAGGGCTGCCGTGCACGAACGCAACAAGAATGCCCCACAGCCAGTTGCTTCGGGTAGACTACTCGTTCCCTGATGATGCTATAATTCTAGGCCAGGCTGGATCATAGTTAGTCCAGACCCTCCAACGCAAGGGGTGCCGATTGCCAACCCTAGTTTTAGATTTAGACGCATCTATACAAACAGTTCTGTTTATAACTGTTGGCGGCGATTATTGACTAGACCGCGCAAGTACTCAACCCGGCGCCTGAACCTAGTGGATGGTAACTAACACCACAGGAGACAATCGAATCCGTCCCTCCGAAGGTATCAACTCGAGGGTCCACCTCCTATCAACCTCCATCCATCGGTCTCGTATATAACCCGTTAAGATGACAGGCGTTGCGCCTTTTTTCGAAGGAATACTACGGCCCTCGATTCATCCGCTAGCAGGGTGCACTGTAGACGTTCTGCTAGGCGTCCTCAATCGCCTGATACTGGCAAACATCCCTCTGTGCCGTAAGAGGTTGAAAGCTGGAAGAAGTTTATCTCTGATTCAGTCTTAGTTCGTAATACGCAATAAGGCAGGGGTCGGCTGGTCTAGTATCTTACACAAATGCGAGCCACTTAGAACCAACCAGTTATCCCTATCCACAGACCATAACCCGCACAACAAAATCAA"/>
+    <sequence id="seq_speciesB_tip4" taxon="speciesB_tip4" totalcount="4" value="TGGCGGACCTGAGTTACGCTGCAAAGGCTCTCTAAGATTGTCCGGAGCTGTAGACACATTCCACCTTGTGCGTCTGGGCTCGCGTCAAGTTTGCGCGACTTCCCTTCCGGCTACACTACGTTAGAGTGGAGTCCCTTTTTTGAGTAGATATGTAGGTCCTCTGAATAAGGTAATTGAAGTGTGTCATCGACTCCGGACTGTATGTGCAAGACGTGCTGAGTTTCCTCTAGCATTCGTAGGCGCTCTAATGATCCGTTCAGCATAAAGAGGCTTTGTATGATCCCTTTATGAGAGGAATTCAAACGGGATGGTTCGGCGTGCTGTGACACTTAGCCCTTTCGGAGATCGAGTTGGAAGAAGCGTTTTTAAGTGCACTTATTCCCATTTACTGTATTACACAACCTCCTACGTCAGAACCGTCAATCTCCTTTTTTACAGCCGGGATCTCGTTAGCGACCATCTATAAACTCACTCTCCGGGTAAAGCGAATGCATAAGGACATGCAACAAAGGCAACGGAGCACGGATCCTCAGTTCGGCCACGAGGCCGGCTGTGAACGCACGCAACCGAAATGCTCCGGAACCCGTTGTTTCGTGTATACTTCTCGTTCCCTGATGATGCTATAATTCTAGGCCAGGCTGGATCTTAGTTAGTACCGACCCTCCAACGCAAGGGGTGCCGATTGCTAACCCTATTTTTAGATTTAGACGCATCTATACAAACAGTTCTGTTTATAACTGTTGGCGGCGATTAGTGACTAGACCACGCATGTACTCAACCCGGCGCCTGAACCTAGAGGATGGTAACTAACACCACAGGAGACAATCGAATCCGTCCCTCCGAACGTATCAACTCGAGGGTCCACCTCCTACCAACCTCCATCCATCGGTCTCGTATATAACCCGTTAAGATGACAGGCGTTGCGCCTTTTTTCGAAGGAATACTACGGCCCTCGATTCATCCGCTAGCAGGGTGCACTGTAGACGTTCTGCTAGGCGTCCTCAATCGCCTGATACTGGCAAACATCCCTCTGTGCCGTAAGAGGTTGAAAGCTGGAAGAAGTTTGTCTCTGATTCAGTCTTAGTTCGTAATACGCAATAAGGCAGGGGTCGGCTGGTCTAGTATCTTACACAAATGCGAGCCACTTAGAACCAACCAGTTATACCTATCCACAGACCATAACCCGCACAACAAAATCAA"/>
+    <sequence id="seq_speciesC_tip1" taxon="speciesC_tip1" totalcount="4" value="TCGCGGACTTTACTTACGCTGCAAAGGCTCTCTAAGATTGTCCTGAGCAGTAGACAGATTCCTTCTTGTGCGTCTGGGCTCGCGTGACGTTTGCGCGAATTCCCTCTAGGCTACCGTACGTTAGAGAGGAGTCCCTTTTTTGAGTCGATATGTCGGTCCTCGGAGTAGGTTAATTGAAGTGTGCCATCGACTCCGGTCAGCATGTGCAAGGCGTGCTGAGAATCCCCTAGCATTCGTAGGCGCTCTAATTCTGTGTTCAGCATAAAGATGCTTTCTATGATCCCTTTATGAGAAGAATTTAAACGGGATGGTTAACCGTGCTGTGACACTTAGCCCTTTCGGAGAACGAGTTGGCAGAAGCTATTTTAAGTGCACTTCTTCCCATGTACTGCATTACACAACCCCCTACGTCAGAACCGGCAATCTCCTATTTTACAGGCGGGATTTCGTTAGCGACCATCTATCAACTCACTCTCCGGGTAAAGCTAATGCAAAAGGACATGCAACAAAGGCAACGGAGCCCGAATCCCCAGTTCGGCCACGAGGGCGGCTGTGCACGCACGCAACCGAAATGCTCCACAACCTGTTGTTTCGGGTATACTACTCGTTCCCTAATGATGCTATAATTCTAGGCCAGGCTGGATCATAGTTAGTGCCGACCCTCCAACGCAAGGGGTGCCGATTGCCAACCCTATTTGTAGATTTAGACGCATCTATACAAACAGTTCTGTTTATAACTGTTGGCCGCGATTAGTGACTAGACCGCGCATGTACTCAATCCGGCACCTGAAACTAGTGGATCGTAACTAACACCACAGGAGACAATCGAATCCATCGATCCGAATGTATCAACTCGAGGGTCCCCCTCCGATCAACCTCTATCCAGTGGTCTTGGATATAACTCGTTAAGATGACAGGCGTTGCGCTTTTTGTCGAACGAATACTACGGCCCTCGATTCCTCCCATAGCAGGGTGCAGTGTAGAAGTTATCCTTGGCGTCCTCAATCGTCTGAAACTGGCAAACATCCCTCTGCGCCGTAAGAGGTTGAAAGCTGTAACCAGCTTATCTCTGATTCAGTCTCAGTTCGTAACACGCAATAAGGCAGGGGTCGGCTGGTCTAGTTTCTTACACAAATGCGAACCACTTAGAACCAACCAGTTATCCCTATCCACAGCCCATAACCCGCACAACATAATCAA"/>
+    <sequence id="seq_speciesC_tip2" taxon="speciesC_tip2" totalcount="4" value="TGGCGGTCTTTAGTTACGCTGCAAAGGCTCTCTAAGATGGTCCTGAGCAGTAGACAGATTCCTCCGTGTGCGTCTGGGATCGCGTGACGTTTGCGCGACTCCCCTCCAGGCTACCGTACGTTAGAGAGGAGTCCCTTTTTTGAGTCGATATGTAGGTGCTCGGAGTAGGTTAATTGAAGTGTGTCATCGACTTCGTCCTGCATGTGCAAGGCGTGCTGAGAATCCCCTAGCATTCGTAGGCCCTCTAATTCTGTGTTCAGCATAAAGATGCTTTCTATGATCCCTTTATGAGAAGAATTTAAACGGGATGGTTAACCGTGCTGTGACACTTAGCCCTTTCGGAGATCGAGTTGGCAGAAGCTATTTTAAGTGCACTTCTTCCCATGTACTGCATTACACAACCCCCTACGTCAGAACCGGCAATCTCCTATTTTACAGGCGGGATTTCGTTAGCGACCATCTATCAACTCACTCTCCGGGTAAAGCTAATGCAAAAGGACATGAAACAAAGGCAACGGAGCGCGAATCCCCAGTTCGGCCACGAGGGCGGCTGTGCACGCACGCAACCGAAATGCTCCACAACCTGTTGTTTCGCGTATACTACTCGTTCCCTAATGATGCTATAATTCTAGGCCAGGCTGGATCATAGTTAGTGCCGTCCCTCCAACGCAAGGGGTGCCGATTGCCAACCCTATTTGTAGATTTAGACGCATCTATACAAACAGTTCTGTTTATAACTGTTGGCCGCGATTAGTGACTAGACCGCGCATGTACTCAACCCGGCACCTGAAACTAGTGGATCGTAACTAACACCACAGGAGACAATCGAATCCATCGATCCGAATGTATCAACTCGAGGGTCCCCCTCCGATCAACCTCTATCCAGTGGTCTTGGATATAACACGTTAAGATGACAGGCGTTGCGCTTTTTGTCGAACGAATACTACGGCCCTCGATTCCTCCCATAGCAGGGTGCAGTGTAGAAGTTATCCTTGGCGTCCTCAATCGTCTGATACTGGCAAACATCCCTCTGCGCCGTAAGATGTAGAAAGCTGGAACCAGCTTATCTCTGATTCAGTCTCAGTTCGTAACACGCAATGAGGCAGGGGTCGGCTGGTCTAGTTTCTTACACAAATGAGAACCACTTAGAACCAACCAGTTATCCCTATCCACAGACCATAACCCGCACAACAAAATCAA"/>
+    <sequence id="seq_speciesC_tip3" taxon="speciesC_tip3" totalcount="4" value="TCGCGGACTTTACTTACGCTGCAAAGGCTCTCTAAGATTGTCCTGAGCAGTAGACAGATTCCTTCTTGTGCGTCTGGGCTCGCGTGACGTTTGCGCGAATTCCCTCTAGGCTACCGTACGTTAGAGAGGAGTCCCTTTTTTGAGTCGATATGTCGGTCCTCGGAGTAGGTTAATTGAAGTGTGCCATCGACTCCGGTCAGCATGTGCAAGGCGTGCTGAGAATCCCCTAGCATTCGTAGGCCCTCTAATTCTGTGTTCAGCATAAAGATGCTTTCTATGATCCCTTTATGAGAAGAATTTAAACGGGATGGTTAACCGTGCTGTGACACTTAGCCCTTTCGGAGATCGAGTTGGCAGAAGCTATTTTAAGTGCACTTCTTCCCATGTACTGCATTACACAACCCCCTACGTCAGAACCGGCAATCTCCTATTTTACAGGCGGGATTTCGTTAGCGACCATCTATCAACTCACTCTCCGGGTAAAGCTAATGCAAAACGACATGCAACAAAGGCAACGGAGCGCGAATCCCCAGTTCGGCCACGAGGGCGGCTGTGCACGCACGCAACCGAAATGCTCCACAACCTGTTGTTTCGCGTATACTACTCGTTCCCTAATGATGCTATAAATGTAGGCCAGGCTGGATCATAGTTGGTGCCGACCCTCCAACTCAAGGGGAGCCGATTGCCAACCCTATTTTTAGATTTAGACGCATCTATACAAACAGTTCGGTTGATAACTGTTGGCTGCGATTAGTGACTAGACCGCGCATGTATTCAACCCGGCGCCTGAAAATAGTGGATCGTAACTAACACCACAGGAGACAATCGAATCCATCGATCCGAATGTATCAACTCGAGGGTCCCCCTCCGATCAACCTCTATCCAGTGGTCTTGGATATAACTCGTTAAGATGACAGGCGTTGCGCTTTTTGTCGAACGAATACTACGGCCCTCGATTCCTCCCATAGCAGGGTGCAGTGTAGAAGTTATCCTTGGCGTCCTCAATCGTCTGAAACTGGCAAACATCCCTCTGCGCCGTAAGAGGTTGAAAGCTGTAACCAGCTTATCTCTGATTCAGTCTCAGTTCGTAACACGCAATAAGGCAGGGGTCGGCTGGTCTAGTTTCTTACACAAATGCGAACCACTTAGAACCAACCAGTTATCCCTATCCACAGCCCATAACCCGCACAACATAATCAA"/>
+    <sequence id="seq_speciesC_tip4" taxon="speciesC_tip4" totalcount="4" value="TCGCGGACTTTACTTACGCTGCAAAGGCTCTCTAAGATTGTCCTGAGCAGTAGACAGATTCCTTCTTGTGCGTCTGGGCTCGCGTGACGTTTGCGCGAATTCCCTCTAGGCTACCGTACGTTAGAGAGGAGTCCCTTTTTTGAGTCGATATGTCGGTCCTCGGAGTAGGTTAATTGAAGTGTGCCATCGACTCCGGTCAGCATGTGCAAGGCGAGCCGAGAATCCCCTAGCATTCGTAGGCGCTCTAATGATCTGTTCAGCATAAAGAGGCTTTGTATGATCCCGTTATGAGAGGCACTCAAACGGGATGGTTCGGCCTGCTGTGACACTTAGCCCTTTCGGAGATCGAGTTGGAAGGAGCGTTTTTAAGTGCACTTCTTCCCATTTACTGTATTACACAACCCCCTACGTGAGAACCGGCAATCTCCTATTTTACAGGCGGGATTTCGTTAGCGTCCATCTATAAACTCACTCTCCGGGTAGAGCTAATGCAAAAGGACATGCAACAAAGGCAACGGAGCCCGAATCCCCAGTTCGGCCACGAGGGCGGCTGTGCACGCACTCAACCGAAATGCTCCACAACCAGTTGTTTCGGGTATACTACTCGTTCCCTAATGATGCTATAAATGTAGGCCAGGCTGGATCATAGTTGGTGCCGACCCTCCAACTCAAGGGGAGCCGATTGCCAACCCTATTTTTAGATTTAGACGCATCTATACAAACAGTTCGGTTGATAACTGTTGGCTGCGATTAGTGACTAGACCGCGCATGTATTCAACCCGGCGCCTGAAAATAGTGGATCGTAACTAACACCACAGGAGACAATCGAATCCATCCATCCGAATGAATCAACTCGAAGGTCCCCCTCCGATTAACCACTATCCAGTGGTCTCGGATATAACTCGTTAAGATGACTGGCGTTGCGCCTTTTGTCGAGCGAATACTACGGCCCTCGATTCCTCCCCTAGCAGGGTGCACTGTAGAAGTTCTCCTTGGCGTCCTCAATCGTCTGATACTGGCAAACATCCCTCTGCGCCGTAAGATGTAGAAAGCTGGAACCAGCTTATCTCTGATTCAGTCTCAGTTCGTAACACGCAATGAGGCAGGGGTCGGCTGGTCTAGTTTCTTACACAAATGCGAACCACTTAGAACCAACCACTGATCCCTATCCACAGACCATAACCCGCACAACAAAATCAA"/>
+</data>
+
+
+<map name="Uniform" >beast.math.distributions.Uniform</map>
+<map name="Exponential" >beast.math.distributions.Exponential</map>
+<map name="LogNormal" >beast.math.distributions.LogNormalDistributionModel</map>
+<map name="Normal" >beast.math.distributions.Normal</map>
+<map name="Beta" >beast.math.distributions.Beta</map>
+<map name="Gamma" >beast.math.distributions.Gamma</map>
+<map name="LaplaceDistribution" >beast.math.distributions.LaplaceDistribution</map>
+<map name="prior" >beast.math.distributions.Prior</map>
+<map name="InverseGamma" >beast.math.distributions.InverseGamma</map>
+<map name="OneOnX" >beast.math.distributions.OneOnX</map>
+
+
+<run id="mcmc" spec="MCMC" chainLength="20000000" storeEvery="5000">
+    <state id="state" storeEvery="5000">
+        <stateNode id="Network.t:Species" spec="speciesnetwork.Network">
+            <taxonset id="taxonsuperset" spec="TaxonSet">
+                <taxon id="speciesB" spec="TaxonSet">
+                    <taxon id="speciesB_tip1" spec="Taxon"/>
+                    <taxon id="speciesB_tip4" spec="Taxon"/>
+                    <taxon id="speciesB_tip3" spec="Taxon"/>
+                    <taxon id="speciesB_tip2" spec="Taxon"/>
+                </taxon>
+                <taxon id="speciesC" spec="TaxonSet">
+                    <taxon id="speciesC_tip3" spec="Taxon"/>
+                    <taxon id="speciesC_tip4" spec="Taxon"/>
+                    <taxon id="speciesC_tip1" spec="Taxon"/>
+                    <taxon id="speciesC_tip2" spec="Taxon"/>
+                </taxon>
+                <taxon id="speciesA" spec="TaxonSet">
+                    <taxon id="speciesA_tip3" spec="Taxon"/>
+                    <taxon id="speciesA_tip4" spec="Taxon"/>
+                    <taxon id="speciesA_tip1" spec="Taxon"/>
+                    <taxon id="speciesA_tip2" spec="Taxon"/>
+                </taxon>
+            </taxonset>
+        </stateNode>
+        <parameter id="popMean.t:Species" lower="0.0" name="stateNode">0.01</parameter>
+        <parameter id="netDivRate.t:Species" lower="0.0" name="stateNode">1.0</parameter>
+        <parameter id="turnOverRate.t:Species" lower="0.0" name="stateNode" upper="1.0">0.5</parameter>
+        <parameter id="originTime.t:Species" lower="0.0" name="stateNode">0.1</parameter>
+        <stateNode id="Tree.t:locus4" spec="speciesnetwork.EmbeddedTree">
+            <taxonset id="TaxonSet.locus4" spec="TaxonSet">
+                <alignment id="locus4" spec="FilteredAlignment" filter="601-800">
+                    <data idref="3s_6loci"/>
+                </alignment>
+            </taxonset>
+        </stateNode>
+        <stateNode id="Tree.t:locus2" spec="speciesnetwork.EmbeddedTree">
+            <taxonset id="TaxonSet.locus2" spec="TaxonSet">
+                <alignment id="locus2" spec="FilteredAlignment" data="@3s_6loci" filter="201-400"/>
+            </taxonset>
+        </stateNode>
+        <stateNode id="Tree.t:locus6" spec="speciesnetwork.EmbeddedTree">
+            <taxonset id="TaxonSet.locus6" spec="TaxonSet">
+                <alignment id="locus6" spec="FilteredAlignment" data="@3s_6loci" filter="1001-1200"/>
+            </taxonset>
+        </stateNode>
+        <stateNode id="Tree.t:locus3" spec="speciesnetwork.EmbeddedTree">
+            <taxonset id="TaxonSet.locus3" spec="TaxonSet">
+                <alignment id="locus3" spec="FilteredAlignment" data="@3s_6loci" filter="401-600"/>
+            </taxonset>
+        </stateNode>
+        <stateNode id="Tree.t:locus1" spec="speciesnetwork.EmbeddedTree">
+            <taxonset id="TaxonSet.locus1" spec="TaxonSet">
+                <alignment id="locus1" spec="FilteredAlignment" data="@3s_6loci" filter="1-200"/>
+            </taxonset>
+        </stateNode>
+        <stateNode id="Tree.t:locus5" spec="speciesnetwork.EmbeddedTree">
+            <taxonset id="TaxonSet.locus5" spec="TaxonSet">
+                <alignment id="locus5" spec="FilteredAlignment" data="@3s_6loci" filter="801-1000"/>
+            </taxonset>
+        </stateNode>
+        <parameter id="kappa.s:locus1" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="mutationRate.s:locus1" name="stateNode">1.0</parameter>
+        <parameter id="mutationRate.s:locus2" name="stateNode">1.0</parameter>
+        <parameter id="kappa.s:locus2" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="mutationRate.s:locus3" name="stateNode">1.0</parameter>
+        <parameter id="kappa.s:locus3" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="mutationRate.s:locus4" name="stateNode">1.0</parameter>
+        <parameter id="kappa.s:locus4" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="mutationRate.s:locus5" name="stateNode">1.0</parameter>
+        <parameter id="kappa.s:locus5" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="mutationRate.s:locus6" name="stateNode">1.0</parameter>
+        <parameter id="kappa.s:locus6" lower="0.0" name="stateNode">2.0</parameter>
+    </state>
+
+    <init id="SNI" spec="speciesnetwork.SpeciesNetworkInitializer" estimate="false" method="random" origin="@originTime.t:Species" speciesNetwork="@Network.t:Species">
+        <geneTree idref="Tree.t:locus4"/>
+        <geneTree idref="Tree.t:locus2"/>
+        <geneTree idref="Tree.t:locus6"/>
+        <geneTree idref="Tree.t:locus3"/>
+        <geneTree idref="Tree.t:locus1"/>
+        <geneTree idref="Tree.t:locus5"/>
+        <rebuildEmbedding id="initEmbed" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="0.0">
+            <geneTree idref="Tree.t:locus4"/>
+            <geneTree idref="Tree.t:locus2"/>
+            <geneTree idref="Tree.t:locus6"/>
+            <geneTree idref="Tree.t:locus3"/>
+            <geneTree idref="Tree.t:locus1"/>
+            <geneTree idref="Tree.t:locus5"/>
+        </rebuildEmbedding>
+        <coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" popSizes="@popMean.t:Species" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset">
+            <geneTree idref="Tree.t:locus4"/>
+            <geneTree idref="Tree.t:locus2"/>
+            <geneTree idref="Tree.t:locus6"/>
+            <geneTree idref="Tree.t:locus3"/>
+            <geneTree idref="Tree.t:locus1"/>
+            <geneTree idref="Tree.t:locus5"/>
+        </coalescentSimulator>
+    </init>
+
+    <distribution id="posterior" spec="util.CompoundDistribution">
+        <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@Network.t:Species">
+            <geneTreeWithin id="geneTree.t:locus4" spec="speciesnetwork.GeneTreeInSpeciesNetwork" geneTree="@Tree.t:locus4" speciesNetwork="@Network.t:Species"/>
+            <geneTreeWithin id="geneTree.t:locus2" spec="speciesnetwork.GeneTreeInSpeciesNetwork" geneTree="@Tree.t:locus2" speciesNetwork="@Network.t:Species"/>
+            <geneTreeWithin id="geneTree.t:locus6" spec="speciesnetwork.GeneTreeInSpeciesNetwork" geneTree="@Tree.t:locus6" speciesNetwork="@Network.t:Species"/>
+            <geneTreeWithin id="geneTree.t:locus3" spec="speciesnetwork.GeneTreeInSpeciesNetwork" geneTree="@Tree.t:locus3" speciesNetwork="@Network.t:Species"/>
+            <geneTreeWithin id="geneTree.t:locus1" spec="speciesnetwork.GeneTreeInSpeciesNetwork" geneTree="@Tree.t:locus1" speciesNetwork="@Network.t:Species"/>
+            <geneTreeWithin id="geneTree.t:locus5" spec="speciesnetwork.GeneTreeInSpeciesNetwork" geneTree="@Tree.t:locus5" speciesNetwork="@Network.t:Species"/>
+            <populationModel id="popModel" spec="speciesnetwork.ConstantPopIntegrated" mean="@popMean.t:Species">
+                <parameter id="popShape.t:Species" estimate="false" name="alpha">3.0</parameter>
+            </populationModel>
+        </distribution>
+        <distribution id="prior" spec="util.CompoundDistribution">
+            <prior id="KappaPrior.s:locus1" name="distribution" x="@kappa.s:locus1">
+                <LogNormal id="LogNormalDistributionModel.7" name="distr">
+                    <parameter id="RealParameter.3" estimate="false" name="M">1.0</parameter>
+                    <parameter id="RealParameter.4" estimate="false" lower="0.0" name="S" upper="5.0">1.25</parameter>
+                </LogNormal>
+            </prior>
+            <prior id="KappaPrior.s:locus2" name="distribution" x="@kappa.s:locus2">
+                <LogNormal id="LogNormalDistributionModel.7.locus2" name="distr">
+                    <parameter id="RealParameter.3.locus2" estimate="false" name="M">1.0</parameter>
+                    <parameter id="RealParameter.4.locus2" estimate="false" lower="0.0" name="S" upper="5.0">1.25</parameter>
+                </LogNormal>
+            </prior>
+            <prior id="KappaPrior.s:locus3" name="distribution" x="@kappa.s:locus3">
+                <LogNormal id="LogNormalDistributionModel.7.locus3" name="distr">
+                    <parameter id="RealParameter.3.locus3" estimate="false" name="M">1.0</parameter>
+                    <parameter id="RealParameter.4.locus3" estimate="false" lower="0.0" name="S" upper="5.0">1.25</parameter>
+                </LogNormal>
+            </prior>
+            <prior id="KappaPrior.s:locus4" name="distribution" x="@kappa.s:locus4">
+                <LogNormal id="LogNormalDistributionModel.7.locus4" name="distr">
+                    <parameter id="RealParameter.3.locus4" estimate="false" name="M">1.0</parameter>
+                    <parameter id="RealParameter.4.locus4" estimate="false" lower="0.0" name="S" upper="5.0">1.25</parameter>
+                </LogNormal>
+            </prior>
+            <prior id="KappaPrior.s:locus5" name="distribution" x="@kappa.s:locus5">
+                <LogNormal id="LogNormalDistributionModel.7.locus5" name="distr">
+                    <parameter id="RealParameter.3.locus5" estimate="false" name="M">1.0</parameter>
+                    <parameter id="RealParameter.4.locus5" estimate="false" lower="0.0" name="S" upper="5.0">1.25</parameter>
+                </LogNormal>
+            </prior>
+            <prior id="KappaPrior.s:locus6" name="distribution" x="@kappa.s:locus6">
+                <LogNormal id="LogNormalDistributionModel.7.locus6" name="distr">
+                    <parameter id="RealParameter.3.locus6" estimate="false" name="M">1.0</parameter>
+                    <parameter id="RealParameter.4.locus6" estimate="false" lower="0.0" name="S" upper="5.0">1.25</parameter>
+                </LogNormal>
+            </prior>
+            <prior id="netDivRatePrior.t:Species" name="distribution" x="@netDivRate.t:Species">
+                <Exponential id="Exponential.7" name="distr">
+                    <parameter id="RealParameter.5" estimate="false" name="mean">10.0</parameter>
+                </Exponential>
+            </prior>
+            <distribution id="networkPrior" spec="speciesnetwork.BirthHybridizationModel" netDiversification="@netDivRate.t:Species" network="@Network.t:Species" turnOver="@turnOverRate.t:Species">
+                <parameter id="betaShape.t:Species" estimate="false" name="betaShape">1.0</parameter>
+            </distribution>
+            <prior id="originTimePrior.t:Species" name="distribution" x="@originTime.t:Species">
+                <Exponential id="Exponential.8" name="distr">
+                    <parameter id="RealParameter.6" estimate="false" name="mean">0.1</parameter>
+                </Exponential>
+            </prior>
+            <prior id="popMeanPrior.t:Species" name="distribution" x="@popMean.t:Species">
+                <Gamma id="Gamma.0" name="distr">
+                    <parameter id="RealParameter.7" estimate="false" name="alpha">2.0</parameter>
+                    <parameter id="RealParameter.8" estimate="false" name="beta">0.005</parameter>
+                </Gamma>
+            </prior>
+            <prior id="turnOverRatePrior.t:Species" name="distribution" x="@turnOverRate.t:Species">
+                <Uniform id="Uniform.0" name="distr"/>
+            </prior>
+        </distribution>
+        <distribution id="likelihood" spec="util.CompoundDistribution">
+            <distribution id="treeLikelihood.locus1" spec="TreeLikelihood" data="@locus1" tree="@Tree.t:locus1">
+                <siteModel id="SiteModel.s:locus1" spec="SiteModel" mutationRate="@mutationRate.s:locus1">
+                    <parameter id="gammaShape.s:locus1" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:locus1" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:locus1" spec="HKY" kappa="@kappa.s:locus1">
+                        <frequencies id="empiricalFreqs.s:locus1" spec="Frequencies" data="@locus1"/>
+                    </substModel>
+                </siteModel>
+                <branchRateModel id="StrictClock.c:allloci" spec="beast.evolution.branchratemodel.StrictClockModel">
+                    <parameter id="strictClockRate.c:allloci" estimate="false" lower="0.0" name="clock.rate">1.0</parameter>
+                </branchRateModel>
+            </distribution>
+            <distribution id="treeLikelihood.locus2" spec="TreeLikelihood" branchRateModel="@StrictClock.c:allloci" data="@locus2" tree="@Tree.t:locus2">
+                <siteModel id="SiteModel.s:locus2" spec="SiteModel" mutationRate="@mutationRate.s:locus2">
+                    <parameter id="gammaShape.s:locus2" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:locus2" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:locus2" spec="HKY" kappa="@kappa.s:locus2">
+                        <frequencies id="empiricalFreqs.s:locus2" spec="Frequencies" data="@locus2"/>
+                    </substModel>
+                </siteModel>
+            </distribution>
+            <distribution id="treeLikelihood.locus3" spec="TreeLikelihood" branchRateModel="@StrictClock.c:allloci" data="@locus3" tree="@Tree.t:locus3">
+                <siteModel id="SiteModel.s:locus3" spec="SiteModel" mutationRate="@mutationRate.s:locus3">
+                    <parameter id="gammaShape.s:locus3" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:locus3" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:locus3" spec="HKY" kappa="@kappa.s:locus3">
+                        <frequencies id="empiricalFreqs.s:locus3" spec="Frequencies" data="@locus3"/>
+                    </substModel>
+                </siteModel>
+            </distribution>
+            <distribution id="treeLikelihood.locus4" spec="TreeLikelihood" branchRateModel="@StrictClock.c:allloci" data="@locus4" tree="@Tree.t:locus4">
+                <siteModel id="SiteModel.s:locus4" spec="SiteModel" mutationRate="@mutationRate.s:locus4">
+                    <parameter id="gammaShape.s:locus4" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:locus4" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:locus4" spec="HKY" kappa="@kappa.s:locus4">
+                        <frequencies id="empiricalFreqs.s:locus4" spec="Frequencies" data="@locus4"/>
+                    </substModel>
+                </siteModel>
+            </distribution>
+            <distribution id="treeLikelihood.locus5" spec="TreeLikelihood" branchRateModel="@StrictClock.c:allloci" data="@locus5" tree="@Tree.t:locus5">
+                <siteModel id="SiteModel.s:locus5" spec="SiteModel" mutationRate="@mutationRate.s:locus5">
+                    <parameter id="gammaShape.s:locus5" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:locus5" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:locus5" spec="HKY" kappa="@kappa.s:locus5">
+                        <frequencies id="empiricalFreqs.s:locus5" spec="Frequencies" data="@locus5"/>
+                    </substModel>
+                </siteModel>
+            </distribution>
+            <distribution id="treeLikelihood.locus6" spec="TreeLikelihood" branchRateModel="@StrictClock.c:allloci" data="@locus6" tree="@Tree.t:locus6">
+                <siteModel id="SiteModel.s:locus6" spec="SiteModel" mutationRate="@mutationRate.s:locus6">
+                    <parameter id="gammaShape.s:locus6" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:locus6" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:locus6" spec="HKY" kappa="@kappa.s:locus6">
+                        <frequencies id="empiricalFreqs.s:locus6" spec="Frequencies" data="@locus6"/>
+                    </substModel>
+                </siteModel>
+            </distribution>
+        </distribution>
+    </distribution>
+
+    <operator id="popMeanScale.t:Species" spec="ScaleOperator" parameter="@popMean.t:Species" scaleFactor="0.75" weight="5.0"/>
+
+    <operator id="netDivRateScale.t:Species" spec="ScaleOperator" parameter="@netDivRate.t:Species" scaleFactor="0.5" weight="10.0"/>
+
+    <operator id="turnOverRateScale.t:Species" spec="ScaleOperator" parameter="@turnOverRate.t:Species" scaleFactor="0.5" weight="10.0"/>
+
+    <operator id="gammaProbUniform.t:Species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@Network.t:Species" weight="30.0"/>
+
+    <operator id="gammaProbRndWalk.t:Species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@Network.t:Species" weight="30.0"/>
+
+    <operator id="originMultiplier.t:Species" spec="speciesnetwork.operators.OriginMultiplier" origin="@originTime.t:Species" speciesNetwork="@Network.t:Species" weight="5.0"/>
+
+    <operator id="networkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" origin="@originTime.t:Species" speciesNetwork="@Network.t:Species" weight="30.0">
+        <geneTree idref="Tree.t:locus4"/>
+        <geneTree idref="Tree.t:locus2"/>
+        <geneTree idref="Tree.t:locus6"/>
+        <geneTree idref="Tree.t:locus3"/>
+        <geneTree idref="Tree.t:locus1"/>
+        <geneTree idref="Tree.t:locus5"/>
+    </operator>
+
+    <operator id="coorNodeUniformAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="150.0">
+        <geneTree idref="Tree.t:locus4"/>
+        <geneTree idref="Tree.t:locus2"/>
+        <geneTree idref="Tree.t:locus6"/>
+        <geneTree idref="Tree.t:locus3"/>
+        <geneTree idref="Tree.t:locus1"/>
+        <geneTree idref="Tree.t:locus5"/>
+        <operator id="coorNodeUniform.t:Species" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@Network.t:Species" weight="0.0">
+            <geneTree idref="Tree.t:locus4"/>
+            <geneTree idref="Tree.t:locus2"/>
+            <geneTree idref="Tree.t:locus6"/>
+            <geneTree idref="Tree.t:locus3"/>
+            <geneTree idref="Tree.t:locus1"/>
+            <geneTree idref="Tree.t:locus5"/>
+        </operator>
+    </operator>
+
+    <operator id="nodeSliderAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="100.0">
+        <geneTree idref="Tree.t:locus4"/>
+        <geneTree idref="Tree.t:locus2"/>
+        <geneTree idref="Tree.t:locus6"/>
+        <geneTree idref="Tree.t:locus3"/>
+        <geneTree idref="Tree.t:locus1"/>
+        <geneTree idref="Tree.t:locus5"/>
+        <operator id="nodeSlider.t:Species" spec="speciesnetwork.operators.NodeSlider" origin="@originTime.t:Species" sigma="0.001" speciesNetwork="@Network.t:Species" weight="0.0"/>
+    </operator>
+
+    <operator id="relocateBranchAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="400.0">
+        <geneTree idref="Tree.t:locus4"/>
+        <geneTree idref="Tree.t:locus2"/>
+        <geneTree idref="Tree.t:locus6"/>
+        <geneTree idref="Tree.t:locus3"/>
+        <geneTree idref="Tree.t:locus1"/>
+        <geneTree idref="Tree.t:locus5"/>
+        <operator id="relocateBranch.t:Species" spec="speciesnetwork.operators.RelocateBranch" speciesNetwork="@Network.t:Species" weight="0.0"/>
+    </operator>
+
+    <operator id="addReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="100.0">
+        <geneTree idref="Tree.t:locus4"/>
+        <geneTree idref="Tree.t:locus2"/>
+        <geneTree idref="Tree.t:locus6"/>
+        <geneTree idref="Tree.t:locus3"/>
+        <geneTree idref="Tree.t:locus1"/>
+        <geneTree idref="Tree.t:locus5"/>
+        <operator id="addReticulation.t:Species" spec="speciesnetwork.operators.AddReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
+    </operator>
+
+    <operator id="deleteReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="100.0">
+        <geneTree idref="Tree.t:locus4"/>
+        <geneTree idref="Tree.t:locus2"/>
+        <geneTree idref="Tree.t:locus6"/>
+        <geneTree idref="Tree.t:locus3"/>
+        <geneTree idref="Tree.t:locus1"/>
+        <geneTree idref="Tree.t:locus5"/>
+        <operator id="deleteReticulation.t:Species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleAndEmbed.t:locus4" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="3.0">
+        <geneTree idref="Tree.t:locus4"/>
+        <operator id="scale.t:locus4" spec="ScaleOperator" scaleFactor="0.5" tree="@Tree.t:locus4" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleRootAndEmbed.t:locus4" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="3.0">
+        <geneTree idref="Tree.t:locus4"/>
+        <operator id="scaleRoot.t:locus4" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:locus4" weight="0.0"/>
+    </operator>
+
+    <operator id="uniformAndEmbed.t:locus4" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="30.0">
+        <geneTree idref="Tree.t:locus4"/>
+        <operator id="uniform.t:locus4" spec="Uniform" tree="@Tree.t:locus4" weight="0.0"/>
+    </operator>
+
+    <operator id="subSlideAndEmbed.t:locus4" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="15.0">
+        <geneTree idref="Tree.t:locus4"/>
+        <operator id="subSlide.t:locus4" spec="SubtreeSlide" tree="@Tree.t:locus4" weight="0.0"/>
+    </operator>
+
+    <operator id="narrowAndEmbed.t:locus4" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="15.0">
+        <geneTree idref="Tree.t:locus4"/>
+        <operator id="narrow.t:locus4" spec="Exchange" tree="@Tree.t:locus4" weight="0.0"/>
+    </operator>
+
+    <operator id="wideAndEmbed.t:locus4" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="5.0">
+        <geneTree idref="Tree.t:locus4"/>
+        <operator id="wide.t:locus4" spec="Exchange" isNarrow="false" tree="@Tree.t:locus4" weight="0.0"/>
+    </operator>
+
+    <operator id="WilsonBaldingAndEmbed.t:locus4" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="5.0">
+        <geneTree idref="Tree.t:locus4"/>
+        <operator id="WilsonBalding.t:locus4" spec="WilsonBalding" tree="@Tree.t:locus4" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleAndEmbed.t:locus2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="3.0">
+        <geneTree idref="Tree.t:locus2"/>
+        <operator id="scale.t:locus2" spec="ScaleOperator" scaleFactor="0.5" tree="@Tree.t:locus2" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleRootAndEmbed.t:locus2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="3.0">
+        <geneTree idref="Tree.t:locus2"/>
+        <operator id="scaleRoot.t:locus2" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:locus2" weight="0.0"/>
+    </operator>
+
+    <operator id="uniformAndEmbed.t:locus2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="30.0">
+        <geneTree idref="Tree.t:locus2"/>
+        <operator id="uniform.t:locus2" spec="Uniform" tree="@Tree.t:locus2" weight="0.0"/>
+    </operator>
+
+    <operator id="subSlideAndEmbed.t:locus2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="15.0">
+        <geneTree idref="Tree.t:locus2"/>
+        <operator id="subSlide.t:locus2" spec="SubtreeSlide" tree="@Tree.t:locus2" weight="0.0"/>
+    </operator>
+
+    <operator id="narrowAndEmbed.t:locus2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="15.0">
+        <geneTree idref="Tree.t:locus2"/>
+        <operator id="narrow.t:locus2" spec="Exchange" tree="@Tree.t:locus2" weight="0.0"/>
+    </operator>
+
+    <operator id="wideAndEmbed.t:locus2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="5.0">
+        <geneTree idref="Tree.t:locus2"/>
+        <operator id="wide.t:locus2" spec="Exchange" isNarrow="false" tree="@Tree.t:locus2" weight="0.0"/>
+    </operator>
+
+    <operator id="WilsonBaldingAndEmbed.t:locus2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="5.0">
+        <geneTree idref="Tree.t:locus2"/>
+        <operator id="WilsonBalding.t:locus2" spec="WilsonBalding" tree="@Tree.t:locus2" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleAndEmbed.t:locus6" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="3.0">
+        <geneTree idref="Tree.t:locus6"/>
+        <operator id="scale.t:locus6" spec="ScaleOperator" scaleFactor="0.5" tree="@Tree.t:locus6" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleRootAndEmbed.t:locus6" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="3.0">
+        <geneTree idref="Tree.t:locus6"/>
+        <operator id="scaleRoot.t:locus6" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:locus6" weight="0.0"/>
+    </operator>
+
+    <operator id="uniformAndEmbed.t:locus6" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="30.0">
+        <geneTree idref="Tree.t:locus6"/>
+        <operator id="uniform.t:locus6" spec="Uniform" tree="@Tree.t:locus6" weight="0.0"/>
+    </operator>
+
+    <operator id="subSlideAndEmbed.t:locus6" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="15.0">
+        <geneTree idref="Tree.t:locus6"/>
+        <operator id="subSlide.t:locus6" spec="SubtreeSlide" tree="@Tree.t:locus6" weight="0.0"/>
+    </operator>
+
+    <operator id="narrowAndEmbed.t:locus6" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="15.0">
+        <geneTree idref="Tree.t:locus6"/>
+        <operator id="narrow.t:locus6" spec="Exchange" tree="@Tree.t:locus6" weight="0.0"/>
+    </operator>
+
+    <operator id="wideAndEmbed.t:locus6" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="5.0">
+        <geneTree idref="Tree.t:locus6"/>
+        <operator id="wide.t:locus6" spec="Exchange" isNarrow="false" tree="@Tree.t:locus6" weight="0.0"/>
+    </operator>
+
+    <operator id="WilsonBaldingAndEmbed.t:locus6" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="5.0">
+        <geneTree idref="Tree.t:locus6"/>
+        <operator id="WilsonBalding.t:locus6" spec="WilsonBalding" tree="@Tree.t:locus6" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleAndEmbed.t:locus3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="3.0">
+        <geneTree idref="Tree.t:locus3"/>
+        <operator id="scale.t:locus3" spec="ScaleOperator" scaleFactor="0.5" tree="@Tree.t:locus3" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleRootAndEmbed.t:locus3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="3.0">
+        <geneTree idref="Tree.t:locus3"/>
+        <operator id="scaleRoot.t:locus3" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:locus3" weight="0.0"/>
+    </operator>
+
+    <operator id="uniformAndEmbed.t:locus3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="30.0">
+        <geneTree idref="Tree.t:locus3"/>
+        <operator id="uniform.t:locus3" spec="Uniform" tree="@Tree.t:locus3" weight="0.0"/>
+    </operator>
+
+    <operator id="subSlideAndEmbed.t:locus3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="15.0">
+        <geneTree idref="Tree.t:locus3"/>
+        <operator id="subSlide.t:locus3" spec="SubtreeSlide" tree="@Tree.t:locus3" weight="0.0"/>
+    </operator>
+
+    <operator id="narrowAndEmbed.t:locus3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="15.0">
+        <geneTree idref="Tree.t:locus3"/>
+        <operator id="narrow.t:locus3" spec="Exchange" tree="@Tree.t:locus3" weight="0.0"/>
+    </operator>
+
+    <operator id="wideAndEmbed.t:locus3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="5.0">
+        <geneTree idref="Tree.t:locus3"/>
+        <operator id="wide.t:locus3" spec="Exchange" isNarrow="false" tree="@Tree.t:locus3" weight="0.0"/>
+    </operator>
+
+    <operator id="WilsonBaldingAndEmbed.t:locus3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="5.0">
+        <geneTree idref="Tree.t:locus3"/>
+        <operator id="WilsonBalding.t:locus3" spec="WilsonBalding" tree="@Tree.t:locus3" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleAndEmbed.t:locus1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="3.0">
+        <geneTree idref="Tree.t:locus1"/>
+        <operator id="scale.t:locus1" spec="ScaleOperator" scaleFactor="0.5" tree="@Tree.t:locus1" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleRootAndEmbed.t:locus1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="3.0">
+        <geneTree idref="Tree.t:locus1"/>
+        <operator id="scaleRoot.t:locus1" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:locus1" weight="0.0"/>
+    </operator>
+
+    <operator id="uniformAndEmbed.t:locus1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="30.0">
+        <geneTree idref="Tree.t:locus1"/>
+        <operator id="uniform.t:locus1" spec="Uniform" tree="@Tree.t:locus1" weight="0.0"/>
+    </operator>
+
+    <operator id="subSlideAndEmbed.t:locus1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="15.0">
+        <geneTree idref="Tree.t:locus1"/>
+        <operator id="subSlide.t:locus1" spec="SubtreeSlide" tree="@Tree.t:locus1" weight="0.0"/>
+    </operator>
+
+    <operator id="narrowAndEmbed.t:locus1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="15.0">
+        <geneTree idref="Tree.t:locus1"/>
+        <operator id="narrow.t:locus1" spec="Exchange" tree="@Tree.t:locus1" weight="0.0"/>
+    </operator>
+
+    <operator id="wideAndEmbed.t:locus1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="5.0">
+        <geneTree idref="Tree.t:locus1"/>
+        <operator id="wide.t:locus1" spec="Exchange" isNarrow="false" tree="@Tree.t:locus1" weight="0.0"/>
+    </operator>
+
+    <operator id="WilsonBaldingAndEmbed.t:locus1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="5.0">
+        <geneTree idref="Tree.t:locus1"/>
+        <operator id="WilsonBalding.t:locus1" spec="WilsonBalding" tree="@Tree.t:locus1" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleAndEmbed.t:locus5" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="3.0">
+        <geneTree idref="Tree.t:locus5"/>
+        <operator id="scale.t:locus5" spec="ScaleOperator" scaleFactor="0.5" tree="@Tree.t:locus5" weight="0.0"/>
+    </operator>
+
+    <operator id="scaleRootAndEmbed.t:locus5" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="3.0">
+        <geneTree idref="Tree.t:locus5"/>
+        <operator id="scaleRoot.t:locus5" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:locus5" weight="0.0"/>
+    </operator>
+
+    <operator id="uniformAndEmbed.t:locus5" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="30.0">
+        <geneTree idref="Tree.t:locus5"/>
+        <operator id="uniform.t:locus5" spec="Uniform" tree="@Tree.t:locus5" weight="0.0"/>
+    </operator>
+
+    <operator id="subSlideAndEmbed.t:locus5" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="15.0">
+        <geneTree idref="Tree.t:locus5"/>
+        <operator id="subSlide.t:locus5" spec="SubtreeSlide" tree="@Tree.t:locus5" weight="0.0"/>
+    </operator>
+
+    <operator id="narrowAndEmbed.t:locus5" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="15.0">
+        <geneTree idref="Tree.t:locus5"/>
+        <operator id="narrow.t:locus5" spec="Exchange" tree="@Tree.t:locus5" weight="0.0"/>
+    </operator>
+
+    <operator id="wideAndEmbed.t:locus5" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="5.0">
+        <geneTree idref="Tree.t:locus5"/>
+        <operator id="wide.t:locus5" spec="Exchange" isNarrow="false" tree="@Tree.t:locus5" weight="0.0"/>
+    </operator>
+
+    <operator id="WilsonBaldingAndEmbed.t:locus5" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" taxonset="@taxonsuperset" weight="5.0">
+        <geneTree idref="Tree.t:locus5"/>
+        <operator id="WilsonBalding.t:locus5" spec="WilsonBalding" tree="@Tree.t:locus5" weight="0.0"/>
+    </operator>
+
+    <operator id="KappaScaler.s:locus1" spec="ScaleOperator" parameter="@kappa.s:locus1" scaleFactor="0.75" weight="1.0"/>
+
+    <operator id="FixMeanMutationRatesOperator" spec="DeltaExchangeOperator" delta="0.75" weight="2.0">
+        <parameter idref="mutationRate.s:locus1"/>
+        <parameter idref="mutationRate.s:locus2"/>
+        <parameter idref="mutationRate.s:locus3"/>
+        <parameter idref="mutationRate.s:locus4"/>
+        <parameter idref="mutationRate.s:locus5"/>
+        <parameter idref="mutationRate.s:locus6"/>
+        <weightvector id="weightparameter" spec="parameter.IntegerParameter" dimension="6" estimate="false" lower="0" upper="0">200 200 200 200 200 200</weightvector>
+    </operator>
+
+    <operator id="KappaScaler.s:locus2" spec="ScaleOperator" parameter="@kappa.s:locus2" scaleFactor="0.75" weight="1.0"/>
+
+    <operator id="KappaScaler.s:locus3" spec="ScaleOperator" parameter="@kappa.s:locus3" scaleFactor="0.75" weight="1.0"/>
+
+    <operator id="KappaScaler.s:locus4" spec="ScaleOperator" parameter="@kappa.s:locus4" scaleFactor="0.75" weight="1.0"/>
+
+    <operator id="KappaScaler.s:locus5" spec="ScaleOperator" parameter="@kappa.s:locus5" scaleFactor="0.75" weight="1.0"/>
+
+    <operator id="KappaScaler.s:locus6" spec="ScaleOperator" parameter="@kappa.s:locus6" scaleFactor="0.75" weight="1.0"/>
+
+    <logger id="screenlog" logEvery="10000" model="@posterior">
+        <log idref="posterior"/>
+        <log id="ESS.0" spec="util.ESS" arg="@posterior"/>
+        <log idref="likelihood"/>
+        <log idref="prior"/>
+        <log idref="coalescent"/>
+    </logger>
+
+    <logger id="tracelog" fileName="speciesnetwork.log" logEvery="2000" model="@posterior" sort="smart">
+        <log idref="posterior"/>
+        <log idref="likelihood"/>
+        <log idref="prior"/>
+        <log idref="coalescent"/>
+        <log idref="netDivRate.t:Species"/>
+        <log idref="turnOverRate.t:Species"/>
+        <log idref="originTime.t:Species"/>
+        <log id="NetworkLength.t:Species" spec="speciesnetwork.utils.NetworkStatLogger" speciesNetwork="@Network.t:Species"/>
+        <log idref="popMean.t:Species"/>
+        <log idref="treeLikelihood.locus4"/>
+        <log id="TreeHeight.t:locus4" spec="beast.evolution.tree.TreeStatLogger" tree="@Tree.t:locus4"/>
+        <log idref="treeLikelihood.locus2"/>
+        <log id="TreeHeight.t:locus2" spec="beast.evolution.tree.TreeStatLogger" tree="@Tree.t:locus2"/>
+        <log idref="treeLikelihood.locus6"/>
+        <log id="TreeHeight.t:locus6" spec="beast.evolution.tree.TreeStatLogger" tree="@Tree.t:locus6"/>
+        <log idref="treeLikelihood.locus3"/>
+        <log id="TreeHeight.t:locus3" spec="beast.evolution.tree.TreeStatLogger" tree="@Tree.t:locus3"/>
+        <log idref="treeLikelihood.locus1"/>
+        <log id="TreeHeight.t:locus1" spec="beast.evolution.tree.TreeStatLogger" tree="@Tree.t:locus1"/>
+        <log idref="treeLikelihood.locus5"/>
+        <log id="TreeHeight.t:locus5" spec="beast.evolution.tree.TreeStatLogger" tree="@Tree.t:locus5"/>
+        <log idref="kappa.s:locus1"/>
+        <log idref="mutationRate.s:locus1"/>
+        <log idref="mutationRate.s:locus2"/>
+        <log idref="kappa.s:locus2"/>
+        <log idref="mutationRate.s:locus3"/>
+        <log idref="kappa.s:locus3"/>
+        <log idref="mutationRate.s:locus4"/>
+        <log idref="kappa.s:locus4"/>
+        <log idref="mutationRate.s:locus5"/>
+        <log idref="kappa.s:locus5"/>
+        <log idref="mutationRate.s:locus6"/>
+        <log idref="kappa.s:locus6"/>
+    </logger>
+
+    <logger id="specieslog" fileName="speciesnetwork.trees" logEvery="2000" mode="tree">
+        <log id="speciesNetworkLoggerX" spec="speciesnetwork.utils.NetworkWithMetaDataLogger" speciesNetwork="@Network.t:Species"/>
+    </logger>
+
+    <logger id="treelog.t:locus4" fileName="$(tree).trees" logEvery="2000" mode="tree">
+        <log id="TreeWithMetaDataLogger.t:locus4" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:locus4"/>
+    </logger>
+
+    <logger id="treelog.t:locus2" fileName="$(tree).trees" logEvery="2000" mode="tree">
+        <log id="TreeWithMetaDataLogger.t:locus2" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:locus2"/>
+    </logger>
+
+    <logger id="treelog.t:locus6" fileName="$(tree).trees" logEvery="2000" mode="tree">
+        <log id="TreeWithMetaDataLogger.t:locus6" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:locus6"/>
+    </logger>
+
+    <logger id="treelog.t:locus3" fileName="$(tree).trees" logEvery="2000" mode="tree">
+        <log id="TreeWithMetaDataLogger.t:locus3" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:locus3"/>
+    </logger>
+
+    <logger id="treelog.t:locus1" fileName="$(tree).trees" logEvery="2000" mode="tree">
+        <log id="TreeWithMetaDataLogger.t:locus1" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:locus1"/>
+    </logger>
+
+    <logger id="treelog.t:locus5" fileName="$(tree).trees" logEvery="2000" mode="tree">
+        <log id="TreeWithMetaDataLogger.t:locus5" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:locus5"/>
+    </logger>
+
+    <operatorschedule id="operatorSchedule" spec="OperatorSchedule">
+        <subschedule id="operatorSubschedule" spec="OperatorSchedule" operatorPattern="^.*Species$" weight="30.0" weightIsPercentage="true"/>
+    </operatorschedule>
+
+</run>
+
+</beast>
