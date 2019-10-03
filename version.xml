@@ -1,4 +1,4 @@
-<package name="SpeciesNetwork" version="0.12.3"
+<package name="SpeciesNetwork" version="0.13.0"
          description="Bayesian inference of species networks from multilocus data"
          projectURL="https://github.com/zhangchicool/speciesnetwork">
     <depends on="beast2" atleast="2.5.2"/>
