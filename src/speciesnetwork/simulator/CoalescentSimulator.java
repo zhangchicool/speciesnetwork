@@ -321,6 +321,14 @@ public class CoalescentSimulator extends Runnable {
         // print initial species network
         out.println("    <init spec=\"beast.util.TreeParser\" id=\"newick:species\" IsLabelledNewick=\"true\" adjustTipHeights=\"false\"\n" +
                     "          newick=\"" + speciesNetwork.getOrigin().toString(df, true) + "\"/>");
+        // print initial/true gene trees
+        out.println("    <!--");
+        for (int i = 0; i < nrOfGeneTrees; i++) {
+            EmbeddedTree geneTree = geneTrees.get(i);
+            out.println("    <init spec=\"beast.util.TreeParser\" id=\"newick:gene" + (i+1) + "\" IsLabelledNewick=\"true\"\n" +
+                        "          newick=\"" + geneTree.getRoot().toNewick() + "\"/>");
+        }
+        out.println("        -->\n");
         out.println("    <run id=\"mcmc\" spec=\"MCMC\" chainLength=\"40000000\" storeEvery=\"5000\">");  // MCMC block
         out.println("        <state id=\"state\">");  // states
         // print state nodes
@@ -345,14 +353,6 @@ public class CoalescentSimulator extends Runnable {
             out.println("            </stateNode>");
         }
         out.println("        </state>\n");  // end of states
-        // print initial/true gene trees
-        out.println("        <!--");
-        for (int i = 0; i < nrOfGeneTrees; i++) {
-            EmbeddedTree geneTree = geneTrees.get(i);
-            out.println("        <init spec=\"beast.util.TreeParser\" id=\"newick:gene" + (i+1) + "\" initial=\"@tree:gene" + (i+1) + "\" taxa=\"@gene" + (i+1) + "\" IsLabelledNewick=\"true\"\n" +
-                        "              newick=\"" + geneTree.getRoot().toNewick() + "\"/>");
-        }
-        out.println("        -->");
         // starbeast initializer
         final String initMethod = initMethodInput.get();
         out.println("        <init id=\"SNI\" spec=\"speciesnetwork.SpeciesNetworkInitializer\" estimate=\"false\" method=\"" + initMethod + "\" speciesNetwork=\"@network:species\" origin=\"@originTime:species\">");

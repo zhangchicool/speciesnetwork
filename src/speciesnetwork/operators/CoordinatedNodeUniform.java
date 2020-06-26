@@ -46,6 +46,8 @@ public class CoordinatedNodeUniform extends CoordinatedOperator {
         pickedNode.setHeight(newHeight);
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
+        // update gene tree node heights (necessary only when speciation network node)
+        // return proposal ratio of this update
         return updateRubberBand(pickedNode, oldHeight, newHeight, lower, upper);
     }
 }

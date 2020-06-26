@@ -24,7 +24,7 @@ public abstract class CoordinatedOperator extends Operator {
      */
     protected double updateRubberBand(NetworkNode networkNode, final double oldHeight, final double newHeight,
                                       final double lower, final double upper) {
-        if (!networkNode.isSpeciation())  // necessary only when speciation node
+        if (!networkNode.isSpeciation())  // necessary only when speciation network node
             return 0.0;
 
         final Integer speciesBrNr = networkNode.gammaBranchNumber;

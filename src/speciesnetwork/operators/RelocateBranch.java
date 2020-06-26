@@ -26,8 +26,6 @@ import speciesnetwork.utils.SanityChecks;
 public class RelocateBranch extends Operator {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
-    public final Input<Boolean> isWideInput =
-            new Input<>("isWide", "If true, change the node height (default is true).", true);
 
     // empty constructor to facilitate construction by XML + initAndValidate
     public RelocateBranch() {
@@ -41,9 +39,6 @@ public class RelocateBranch extends Operator {
     public double proposal() {
         final Network speciesNetwork = speciesNetworkInput.get();
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
-
-        // number of branches in the network
-        final int branchCount = speciesNetwork.getBranchCount();
 
         // pick an internal node randomly
         final NetworkNode[] internalNodes = speciesNetwork.getInternalNodes();
