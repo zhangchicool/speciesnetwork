@@ -1415,7 +1415,7 @@
                 <Exponential id="Exponential.01" name="distr" mean="100.0"/>
             </prior>
             <prior id="turnOverPrior" name="distribution" x="@turnOverRate:species">
-                <Beta id="BetaDistr.01" name="distr" alpha="1.0" beta="1.0"/>
+                <Beta id="BetaDistr.01" name="distr" alpha="1.0" beta="10.0"/>
             </prior>
             <!-- prior for population sizes if using speciesnetwork.ConstantPopulation -->
             <!-- prior id="popSizesPrior" name="distribution" x="@popSizes:species">
@@ -1840,7 +1840,7 @@
     <operator id="gammaProbUniform:species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="40.0"/>
     <operator id="gammaProbRndWalk:species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="40.0"/>
 
-    <operator id="networkMultiplier:species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@network:species" weight="50.0">
+    <operator id="networkMultiplier:species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="50.0">
         <geneTree idref="tree.t:4cl"/>
         <geneTree idref="tree.t:ebs"/>
         <geneTree idref="tree.t:gi"/>
