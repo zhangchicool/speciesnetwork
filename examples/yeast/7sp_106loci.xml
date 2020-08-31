@@ -3149,7 +3149,7 @@ name="alignment">
             <prior id="turnOverRatePrior.t:Species" name="distribution" x="@turnOverRate.t:Species">
                 <Beta id="Beta.0" name="distr">
                     <parameter id="RealParameter.5" estimate="false" name="alpha">1.0</parameter>
-                    <parameter id="RealParameter.6" estimate="false" name="beta">1.0</parameter>
+                    <parameter id="RealParameter.6" estimate="false" name="beta">10.0</parameter>
                 </Beta>
             </prior>
             <distribution id="networkPrior" spec="speciesnetwork.BirthHybridizationModel" netDiversification="@netDivRate.t:Species" network="@Network.t:Species" turnOver="@turnOverRate.t:Species">
@@ -4137,7 +4137,7 @@ name="alignment">
 
     <operator id="gammaProbRndWalk.t:Species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@Network.t:Species" weight="40.0"/>
 
-    <operator id="networkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@Network.t:Species" weight="50.0">
+    <operator id="networkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" origin="@originTime.t:Species" speciesNetwork="@Network.t:Species" weight="50.0">
         <geneTree idref="Tree.t:YJL085W"/>
         <geneTree idref="Tree.t:YBR179C"/>
         <geneTree idref="Tree.t:YBR056W"/>
