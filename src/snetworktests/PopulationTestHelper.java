@@ -9,11 +9,7 @@ import static org.junit.Assert.assertTrue;
 import beast.core.State;
 import beast.evolution.alignment.TaxonSet;
 import beast.util.TreeParser;
-import speciesnetwork.NetworkParser;
-import speciesnetwork.EmbeddedTree;
-import speciesnetwork.GeneTreeInSpeciesNetwork;
-import speciesnetwork.MultispeciesCoalescent;
-import speciesnetwork.PopulationSizeModel;
+import speciesnetwork.*;
 import speciesnetwork.operators.RebuildEmbedding;
 
 abstract class PopulationTestHelper {

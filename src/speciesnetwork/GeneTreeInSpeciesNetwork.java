@@ -30,15 +30,16 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
     private EmbeddedTree geneTree;
     private Network speciesNetwork;
 
-    // the coalescent times of this gene tree for all species branches
+    // the coalescent times of this gene tree in each species branch
     protected ListMultimap<Integer, Double> coalescentTimes = ArrayListMultimap.create();
     protected ListMultimap<Integer, Double> storedCoalescentTimes = ArrayListMultimap.create();
     // the number of lineages at the tipward end of each species branch
     protected Multiset<Integer> coalescentLineageCounts = HashMultiset.create();
     protected Multiset<Integer> storedCoalescentLineageCounts = HashMultiset.create();
-
+    // the time span of each lineage in each species branch
     protected double[][] speciesOccupancy;
     protected double[][] storedSpeciesOccupancy;
+    // sum of the log inheritance probabilities (log(Lambda), part of log[f(G|Psi)])
     protected double logGammaSum;
     protected double storedLogGammaSum;
 
@@ -52,7 +53,6 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
     public void store() {
         storedCoalescentTimes.clear();
         storedCoalescentLineageCounts.clear();
-
         storedCoalescentTimes.putAll(coalescentTimes);
         storedCoalescentLineageCounts.addAll(coalescentLineageCounts);
 
@@ -113,6 +113,9 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
         final Node geneTreeRoot = geneTree.getRoot();
         final NetworkNode speciesNetworkRoot = speciesNetwork.getRoot();
         final Integer speciesRootBranchNumber = speciesNetworkRoot.gammaBranchNumber;
+        /* The recursion starts from the root of gene tree and root of species network, and moves forward in time.
+           Typically, the root age of gene tree is larger than the root age of species network, but it is not always
+           the case due to reticulations in the network or incomplete sampling of individuals in the gene tree. */
         try {
             recurseCoalescentEvents(geneTreeRoot, speciesNetworkRoot, speciesRootBranchNumber, Double.POSITIVE_INFINITY);
         } catch (Exception e) {
@@ -122,16 +125,20 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
         needsUpdate = false;
     }
 
-    // forward in time recursion, unlike StarBEAST 2
     private void recurseCoalescentEvents(final Node geneTreeNode, final NetworkNode speciesNetworkNode,
-                                         final Integer speciesBranchNumber, final double lastHeight) throws Exception {
+                                         final Integer speciesBranchNumber, final double lastHeight) {
         final double geneNodeHeight = geneTreeNode.getHeight();
         final double speciesNodeHeight = speciesNetworkNode.getHeight();
         final int geneTreeNodeNumber = geneTreeNode.getNr();
 
-        // check if coalescent node occurs in a descendant species network branch
-        if (geneNodeHeight < speciesNodeHeight) {
-            speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] += lastHeight - speciesNodeHeight;
+        if (geneTreeNode.isLeaf() && speciesNetworkNode.isLeaf()) {
+            // reach the tip with height >= 0, gene tree tip height == species tip height
+            speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] = lastHeight - speciesNodeHeight;
+            coalescentLineageCounts.add(speciesBranchNumber);
+        }
+        else if (geneNodeHeight <= speciesNodeHeight) {
+            // current gene tree node occurs in a descendant branch of current species node
+            speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] = lastHeight - speciesNodeHeight;
             coalescentLineageCounts.add(speciesBranchNumber);
             if (speciesNetworkNode.isReticulation()) {
                 final double gamma = speciesNetworkNode.inheritProb;
@@ -141,25 +148,26 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
                     logGammaSum += Math.log(1.0 - gamma);
                 }
             }
-            // traversal direction forward in time
+            // move on to the descendant species node (traversal direction forward in time)
             final int traversalNodeNumber = speciesNetworkNode.getTraversalNumber();
             final Integer nextSpeciesBranchNumber = geneTree.embedding.getDirection(geneTreeNodeNumber, traversalNodeNumber);
             assert (nextSpeciesBranchNumber >= 0);
             final NetworkNode nextSpeciesNode = speciesNetworkNode.getChildByBranch(nextSpeciesBranchNumber);
             assert nextSpeciesNode != null;
             recurseCoalescentEvents(geneTreeNode, nextSpeciesNode, nextSpeciesBranchNumber, speciesNodeHeight);
-        } else if (geneTreeNode.isLeaf()) { // assumes tip node heights are always zero
-            speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] += lastHeight;
-            coalescentLineageCounts.add(speciesBranchNumber);
-        } else {
-            speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] += lastHeight - geneNodeHeight;
+        }
+        else {
+            // current gene tree node occurs above current species node
+            speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] = lastHeight - geneNodeHeight;
             coalescentTimes.put(speciesBranchNumber, geneNodeHeight);
+            // move on to the descendant gene tree nodes (traversal direction forward in time)
             for (Node geneChildNode : geneTreeNode.getChildren()) {
                 recurseCoalescentEvents(geneChildNode, speciesNetworkNode, speciesBranchNumber, geneNodeHeight);
             }
         }
     }
 
+    /* TODO: why we need this */
     public double[][] getSpeciesOccupancy() {
         if (needsUpdate) update();
         return speciesOccupancy;
