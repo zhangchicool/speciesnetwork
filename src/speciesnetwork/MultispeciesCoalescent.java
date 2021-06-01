@@ -18,7 +18,7 @@ import speciesnetwork.utils.SanityChecks;
  * @author Huw Ogilvie
  */
 
-@Description("Calculates probability of gene trees conditioned on a species tree (the multi-species coalescent).")
+@Description("Calculates probability of gene trees conditioned on a species network (multispecies network coalescent, MSNC).")
 public class MultispeciesCoalescent extends Distribution {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
@@ -41,9 +41,9 @@ public class MultispeciesCoalescent extends Distribution {
 
         perGenePloidy = new double[nGeneTrees];
         for (int i = 0; i < nGeneTrees; i++) {
-            final GeneTreeInSpeciesNetwork geneTreeI = geneTrees.get(i);
-            perGenePloidy[i] = geneTreeI.ploidy;
-        }
+            final GeneTreeInSpeciesNetwork geneTree = geneTrees.get(i);
+            perGenePloidy[i] = geneTree.ploidy;
+        }   // obtained ploidy of each gene
 
         final Network speciesNetwork = speciesNetworkInput.get();
         final int speciesBranchCount = speciesNetwork.getBranchCount();
@@ -72,8 +72,10 @@ public class MultispeciesCoalescent extends Distribution {
 
         final NetworkNode speciesRoot = speciesNetwork.getRoot();
         final Integer rootBranchNr = speciesRoot.gammaBranchNumber;
+        // collect the start (rootward) and end (tipward) times for each species branch
         buildTimes(speciesRoot, rootBranchNr, Double.POSITIVE_INFINITY, speciesStartTimes, speciesEndTimes);
 
+        // reset all che counters
         allLineageCounts.clear();
         allEventCounts.clear();
         allCoalescentTimes.clear();
@@ -86,28 +88,32 @@ public class MultispeciesCoalescent extends Distribution {
         final List<GeneTreeInSpeciesNetwork> geneTrees = geneTreeWrapperInput.get();
         // transpose gene-branch list of lists to branch-gene list of lists
         logP = 0.0;
-        for (int j = 0; j < nGeneTrees; j++) { // for each gene "j"
+        for (int j = 0; j < nGeneTrees; j++) {  // gene tree "j"
             final GeneTreeInSpeciesNetwork geneTree = geneTrees.get(j);
             geneTree.computeCoalescentTimes();
             logP += geneTree.logGammaSum;
 
-            for (int i = 0; i < speciesBranchCount; i++) { // for each species network branch "i"
-                final List<Double> timesView = geneTree.coalescentTimes.get(i);
-                final int geneBranchEventCount = timesView.size();
-                final Double[] geneBranchCoalescentTimes = new Double[geneBranchEventCount];
-                timesView.toArray(geneBranchCoalescentTimes);
-                Arrays.sort(geneBranchCoalescentTimes);
-
+            for (int i = 0; i < speciesBranchCount; i++) {  // species network branch "i"
+                // number of lineages at the tipward end of species branch "i"
                 final int geneBranchLineageCount = geneTree.coalescentLineageCounts.count(i);
 
-                final Double[] coalescentTimesIJ = new Double[geneBranchEventCount + 2];
-                coalescentTimesIJ[0] = speciesEndTimes[i];
-                System.arraycopy(geneBranchCoalescentTimes, 0, coalescentTimesIJ, 1, geneBranchEventCount);
-                coalescentTimesIJ[geneBranchEventCount + 1] = speciesStartTimes[i];
+                final List<Double> timesView = geneTree.coalescentTimes.get(i);
+                // number of coalescent events in species branch "i"
+                final int geneBranchEventCount = timesView.size();
+                final Double[] geneBranchEventTimes = new Double[geneBranchEventCount];
+                timesView.toArray(geneBranchEventTimes);
+                // times of coalescent events in ascending order
+                Arrays.sort(geneBranchEventTimes);
+                // add branch end and start times to the coalescent times
+                final Double[] coalescentTimes = new Double[geneBranchEventCount + 2];
+                coalescentTimes[0] = speciesEndTimes[i];
+                System.arraycopy(geneBranchEventTimes, 0, coalescentTimes, 1, geneBranchEventCount);
+                coalescentTimes[geneBranchEventCount + 1] = speciesStartTimes[i];
 
-                allLineageCounts.get(i)[j] = geneBranchLineageCount;
+                // collect things together
                 allEventCounts.get(i)[j] = geneBranchEventCount;
-                allCoalescentTimes.get(i).add(coalescentTimesIJ);
+                allLineageCounts.get(i)[j] = geneBranchLineageCount;
+                allCoalescentTimes.get(i).add(coalescentTimes);
             }
         }
 

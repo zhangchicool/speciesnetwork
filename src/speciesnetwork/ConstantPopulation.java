@@ -25,11 +25,6 @@ public class ConstantPopulation extends PopulationSizeModel {
         final RealParameter popSizes = popSizesInput.get();
         final double popSize = popSizes.getValue(speciesBranchNumber);
 
-        return constantLogP(popSize, perGenePloidy, branchCoalescentTimes, branchLineageCounts, branchEventCounts);
-    }
-
-    protected static double constantLogP(double popSize, double[] perGenePloidy, List<Double[]> branchCoalescentTimes,
-                                         int[] branchLineageCounts, int[] branchEventCounts) {
         final int nGenes = perGenePloidy.length;
 
         int branchQ = 0;

@@ -23,30 +23,9 @@ public class ConstantPopIntegrated extends PopulationSizeModel {
     public void initAndValidate() {
     }
 
-    /* private void debug(int speciesBranchNumber, double[] perGenePloidy,
-            List<Double[]> branchCoalescentTimes, int[] branchLineageCounts, int[] branchEventCounts) {
-        for (int i = 0; i < branchCoalescentTimes.size(); i++) {
-            StringBuffer sb = new StringBuffer();
-            sb.append(speciesBranchNumber);
-            sb.append(".");
-            sb.append(i);
-            sb.append(": ");
-            sb.append(branchLineageCounts[i]);
-            sb.append(" - ");
-            sb.append(branchEventCounts[i]);
-            sb.append(" | ");
-            for (int j = 0; j < branchCoalescentTimes.get(i).length; j++) {
-                sb.append(branchCoalescentTimes.get(i)[j]);
-                sb.append(", ");
-            }
-            System.out.println(sb.toString());
-        }
-    } */
-
     @Override
     public double branchLogP(int speciesBranchNumber, double[] perGenePloidy,
                              List<Double[]> branchCoalescentTimes, int[] branchLineageCounts, int[] branchEventCounts) {
-        // debug(speciesBranchNumber, perGenePloidy, branchCoalescentTimes, branchLineageCounts, branchEventCounts);
         final RealParameter invgammaShape = invgammaShapeInput.get();
         final RealParameter invgammaScale = invgammaScaleInput.get();
         final RealParameter invgammaMean = invgammaMeanInput.get();
@@ -104,4 +83,24 @@ public class ConstantPopIntegrated extends PopulationSizeModel {
     public void serialize(NetworkNode speciesNetworkNode, StringBuilder buf, DecimalFormat df) {
         // do nothing
     }
+
+    /* private void debug(int speciesBranchNumber, double[] perGenePloidy,
+                       List<Double[]> branchCoalescentTimes, int[] branchLineageCounts, int[] branchEventCounts) {
+        for (int i = 0; i < branchCoalescentTimes.size(); i++) {
+            StringBuffer sb = new StringBuffer();
+            sb.append(speciesBranchNumber);
+            sb.append(".");
+            sb.append(i);
+            sb.append(": ");
+            sb.append(branchLineageCounts[i]);
+            sb.append(" - ");
+            sb.append(branchEventCounts[i]);
+            sb.append(" | ");
+            for (int j = 0; j < branchCoalescentTimes.get(i).length; j++) {
+                sb.append(branchCoalescentTimes.get(i)[j]);
+                sb.append(", ");
+            }
+            System.out.println(sb.toString());
+        }
+    } */
 }

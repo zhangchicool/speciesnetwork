@@ -167,12 +167,6 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
         }
     }
 
-    /* TODO: why we need this */
-    public double[][] getSpeciesOccupancy() {
-        if (needsUpdate) update();
-        return speciesOccupancy;
-    }
-
     /**
      * @return the first tip node which is descendant of
      * @param gTreeNode
