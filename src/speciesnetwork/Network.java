@@ -13,8 +13,8 @@ import beast.evolution.alignment.TaxonSet;
 import beast.util.TreeParser;
 
 /**
- * Network class to replace Tree class
- * It includes tip (in-degree 1/out-degree 0), bifurcation (1/2), and reticulation (2/1) nodes.
+ * Network class modelling the phylogeny of species, which includes
+ * tip (in-degree 1/out-degree 0), bifurcation (1/2), and reticulation (2/1) nodes.
  * @author Chi Zhang
  * @author Huw Ogilvie
  */
@@ -48,6 +48,7 @@ public class Network extends StateNode {
 
     /**
      * array of all nodes in the network
+     * the order must obey: leaf nodes | speciation nodes | reticulation nodes | origin node
      */
     protected NetworkNode[] nodes = null;
     private NetworkNode[] storedNodes = null;
@@ -57,16 +58,9 @@ public class Network extends StateNode {
         if (nodeCount < 0) {
             if (taxonSetInput.get() != null) {
                 makeCaterpillar(0, 1);
-                updateRelationships();
             } else {
                 makeDummy();
             }
-        }
-    }
-
-    public void updateRelationships() {
-        for (NetworkNode node: nodes) {
-            node.updateRelationships();
         }
     }
 
@@ -114,6 +108,14 @@ public class Network extends StateNode {
 
         // set internal node labels
         resetInternalNodeLabels();
+
+        updateRelationships();
+    }
+
+    public void updateRelationships() {
+        for (NetworkNode node: nodes) {
+            node.updateRelationships();
+        }
     }
 
     public NetworkNode getOrigin() {
@@ -152,6 +154,7 @@ public class Network extends StateNode {
     }
 
     public int getInternalNodeCount() {
+        // internal nodes include bifurcation and reticulation nodes, do not include origin node
         return speciationNodeCount + reticulationNodeCount;
     }
 
@@ -162,12 +165,8 @@ public class Network extends StateNode {
         return leafNodeCount + speciationNodeCount;
     }
 
-    public int getTraversalNodeCount() {
-        return speciationNodeCount + reticulationNodeCount;
-    }
-
     /**
-     * @return get the total number of branches in the network
+     * @return the total number of branches in the network
      */
     public int getBranchCount() {
         return reticulationNodeCount + nodeCount - 1;
@@ -187,15 +186,14 @@ public class Network extends StateNode {
         return nB;
     }
 
-    public NetworkNode getNode(final int nodeI) {
-        return nodes[nodeI];
+    public NetworkNode getNode(final int idx) {
+        return nodes[idx];
     }
 
     /**
      * @return an array of all the nodes in this network
      */
     public NetworkNode[] getAllNodes() {
-        // Q2HO: why not return nodes directly?
         final NetworkNode[] nodesCopy = new NetworkNode[nodeCount];
         System.arraycopy(nodes, 0, nodesCopy, 0, nodeCount);
         return nodesCopy;
@@ -329,15 +327,19 @@ public class Network extends StateNode {
 
     @Override
     public int scale(final double scale) {
+        int count = 0;
         for (NetworkNode node: nodes) {
-            node.height *= scale;
+            if (node.height > 0) {
+                node.height *= scale;
+                count++;
+            }
         }
-        return speciationNodeCount + reticulationNodeCount;
+        return count;
     }
 
     @Override
     public String toString() {
-    	return getOrigin().toString();
+        return getOrigin().toString();
     }
 
     public String toString(DecimalFormat df) {
@@ -400,10 +402,10 @@ public class Network extends StateNode {
         final Network src = (Network) other;
 
         if (src.nodeCount == nodeCount) {
-	        for (int i = 0; i < nodeCount; i++) {
-	            nodes[i].copyFrom(src.nodes[i]);
-	        }
-	        updateRelationships();
+            for (int i = 0; i < nodeCount; i++) {
+                nodes[i].copyFrom(src.nodes[i]);
+            }
+            updateRelationships();
         } else {
             nodeCount = src.nodeCount;
             speciationNodeCount = src.speciationNodeCount;
@@ -522,8 +524,8 @@ public class Network extends StateNode {
     }
 
     @Override
-    public double getArrayValue(final int nodeI) {
-        return nodes[nodeI].height;
+    public double getArrayValue(final int idx) {
+        return nodes[idx].height;
     }
 
     public void resetInternalNodeLabels() {
@@ -708,6 +710,7 @@ public class Network extends StateNode {
         leafNodeCount++;
     }
 
+    /* delete a node from the nodes array */
     public void deleteNode(NetworkNode node) {
         int index = -1;
         for (int i = 0; i < nodes.length; i++) {
@@ -734,6 +737,9 @@ public class Network extends StateNode {
             reticulationNodeCount--;
     }
 
+    /**
+     * @return true if the network has a bubble
+     */
     public boolean hasBubble() {
         for (NetworkNode hybridNode: getReticulationNodes()) {
             final int gammaBranchNr = hybridNode.gammaBranchNumber;

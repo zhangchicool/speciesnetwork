@@ -121,7 +121,7 @@ public class CoalescentSimulator extends Runnable {
         final int speciesBranchCount = speciesNetwork.getBranchCount();
         popSizes.setDimension(speciesBranchCount);
 
-        final int traversalNodeCount = speciesNetwork.getTraversalNodeCount();
+        final int traversalNodeCount = speciesNetwork.getInternalNodeCount();
         // simulate each gene tree and alignment
         for (int ig = 0; ig < nrOfGeneTrees; ig++) {
             EmbeddedTree geneTree = geneTrees.get(ig);

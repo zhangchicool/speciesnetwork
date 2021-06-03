@@ -96,7 +96,7 @@ public class RebuildEmbedding extends Operator {
     public boolean rebuildEmbedding() {
         final List<EmbeddedTree> geneTrees = geneTreesInput.get();
         final Network speciesNetwork = speciesNetworkInput.get();
-        traversalNodeCount = speciesNetwork.getTraversalNodeCount();
+        traversalNodeCount = speciesNetwork.getInternalNodeCount();
 
         for (EmbeddedTree geneTree: geneTrees) {
             geneNodeCount = geneTree.getNodeCount();
