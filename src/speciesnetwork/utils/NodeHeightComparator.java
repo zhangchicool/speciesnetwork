@@ -1,6 +1,8 @@
-package speciesnetwork;
+package speciesnetwork.utils;
 
 import java.util.Comparator;
+
+import speciesnetwork.NetworkNode;
 
 // unambiguous, so only identical nodes are considered equal
 // if height is equal, consider distance from root (depth)

@@ -23,8 +23,6 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
             new Input<>("tree", "Tree initialized from extended newick string.", Validate.REQUIRED);
     public final Input<Boolean> adjustTipHeightsInput =
             new Input<>("adjustTipHeights", "Whether tipHeights shall be adjusted (default is true).", true);
-    public final Input<Boolean> autoAddOriginInput =
-            new Input<>("autoAddOrigin", "If the root node is bifurcating, add an origin node above the root (default is true).", true);
 
     private List<String> leafOrder;
     private int nextSpeciationNr;
@@ -43,20 +41,19 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
         final Tree tree = treeInput.get();
         final Node treeRoot = tree.getRoot();
 
-        // Automatically add origin node if none exists
+        // always automatically add origin node if none exists
         Node treeOrigin;
-        if (autoAddOriginInput.get() && treeRoot.getChildCount() == 2) {
+        if (treeRoot.getChildCount() == 2) {
             treeOrigin = new Node();
-            treeOrigin.setHeight(treeRoot.getHeight() * 2.0); // set height to double the root
+            treeOrigin.setHeight(treeRoot.getHeight() * 1.5);
             treeOrigin.addChild(treeRoot);
-
             tree.addNode(treeOrigin);
             tree.setRoot(treeOrigin);
         } else {
             treeOrigin = treeRoot;
         }
 
-        // Step (1) is to initialize the node counts and array
+        // Step (1) initialize the node counts and array
         leafOrder = new ArrayList<>();
         leafNodeCount = 0;
         speciationNodeCount = 0;
@@ -66,7 +63,7 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
             if (n.getID() != null && n.getID().startsWith("#H")) {
                 hybridNodeCount++;
             } else if (n.isLeaf()) {
-            	leafOrder.add(n.getID());
+                leafOrder.add(n.getID());
                 leafNodeCount++;
             } else if (!n.isRoot()) {
                 speciationNodeCount++;
@@ -86,7 +83,7 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
         nextSpeciationNr = leafNodeCount;
         nextReticulationNr = leafNodeCount + speciationNodeCount;
 
-        // Step (2) is to recursively copy the tree to the network
+        // Step (2) recursively copy the tree to the network
         rebuildNetwork(treeOrigin);
 
         // Update the cached parents and children for each node
@@ -95,6 +92,7 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
         // Step (3) adjust network tip height to ZERO
         if (adjustTipHeightsInput.get()) {
             // all nodes should be at zero height if no date-trait is available
+            // TODO: rewrite for dated tips
             for (NetworkNode tip: getLeafNodes()) {
                 tip.setHeight(0.0);
             }

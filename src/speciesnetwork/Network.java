@@ -73,7 +73,7 @@ public class Network extends StateNode {
     }
 
     private void makeCaterpillar(final double minInternalHeight, final double step) {
-        // make a caterpillar
+        // make a caterpillar TODO: tip dates?
         final List<String> taxa = taxonSetInput.get().asStringList();
         leafNodeCount = taxa.size();
         speciationNodeCount = leafNodeCount - 1;
@@ -327,6 +327,8 @@ public class Network extends StateNode {
 
     @Override
     public int scale(final double scale) {
+        // TODO look after tips with height > 0
+        // refer to public int scale(final double scale) in Node.java
         int count = 0;
         for (NetworkNode node: nodes) {
             if (node.height > 0) {

@@ -9,9 +9,10 @@ import beast.core.State;
 import beast.core.parameter.RealParameter;
 import beast.core.Distribution;
 import beast.math.distributions.Beta;
+import speciesnetwork.utils.NodeHeightComparator;
 
 /**
- * Birth hybridization model for the species network.
+ * Birth-Hybridization model for the species network.
  * @author Chi Zhang
  */
 
@@ -39,7 +40,7 @@ public class BirthHybridizationModel extends Distribution {
 
     @Override
     public void initAndValidate() {
-        // make sure that all tips are at the same height, otherwise this Model is not appropriate
+        // make sure that all tips are at the same height, otherwise this model is not appropriate
         final Network network = networkInput.get();
         final double firstHeight = network.nodes[0].height;
         for (int i = 1; i < network.leafNodeCount; i++) {
@@ -50,7 +51,7 @@ public class BirthHybridizationModel extends Distribution {
         }
 
         // set up lambda, nu, and beta shape parameters
-        updateParameters();
+        //updateParameters();
 
         betaPrior = new Beta();
         final RealParameter betaShape;
@@ -103,7 +104,7 @@ public class BirthHybridizationModel extends Distribution {
                 nextHeight = 0.0;  // the tip
             else
                 nextHeight = nodes.get(i-1).getHeight();
-
+            // number of branches in time interval (nodeHeight, nextHeight)
             final int nBranch = network.getBranchCount((nodeHeight + nextHeight) /2.0);
             logP += (nBranch * lambda + nu * nBranch * (nBranch -1) /2) * (nextHeight - nodeHeight);
 
