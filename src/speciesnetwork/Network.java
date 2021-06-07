@@ -27,6 +27,7 @@ import beast.util.TreeParser;
 public class Network extends StateNode {
     public final Input<TaxonSet> taxonSetInput =
             new Input<>("taxonset", "Set of taxa at the leafs of the network.");
+    // TODO: trait input of dated tips
 
     /**
      * state of dirtiness of a node in the network

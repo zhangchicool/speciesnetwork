@@ -1,23 +1,18 @@
 package speciesnetwork;
 
 import java.util.*;
-import static java.lang.Math.abs;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
 
 import beast.core.Description;
-import beast.core.Function;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.StateNode;
 import beast.core.StateNodeInitialiser;
 import beast.core.parameter.RealParameter;
-import beast.evolution.alignment.*;
-import beast.evolution.alignment.distance.Distance;
-import beast.evolution.alignment.distance.JukesCantorDistance;
+import beast.core.util.Log;
+import beast.evolution.alignment.Taxon;
+import beast.evolution.alignment.TaxonSet;
 import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
-import beast.util.ClusterTree;
 import speciesnetwork.operators.RebuildEmbedding;
 import speciesnetwork.simulator.CoalescentSimulator;
 
@@ -45,14 +40,16 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
 
         private final String ename;
     }
-    public final Input<Method> initMethod = new Input<>("method", "Initialise either with a totally random state" +
-            "or a point estimate based on alignments data (default point)", Method.POINT, Method.values());
-    public final Input<Network> speciesNetworkInput
-            = new Input<>("speciesNetwork", "Species network to initialize.", Validate.REQUIRED);
+    public final Input<Method> initMethod = new Input<>("method",
+            "Initializing method (default random)", Method.RANDOM, Method.values());
+    public final Input<Network> speciesNetworkInput =
+            new Input<>("speciesNetwork", "Species network to initialize.", Validate.REQUIRED);
     public final Input<RealParameter> originInput =
             new Input<>("origin", "The time when the process started.", Validate.REQUIRED);
     public final Input<List<EmbeddedTree>> geneTreesInput =
             new Input<>("geneTree", "Gene tree to initialize.", new ArrayList<>());
+    public final Input<TaxonSet> taxonSuperSetInput = new Input<>("taxonset",
+            "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
     public final Input<RebuildEmbedding> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
             "Operator which rebuilds embedding of gene trees within species network.", Validate.REQUIRED);
     public final Input<CoalescentSimulator> coalSimulatorInput =
@@ -63,6 +60,8 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
 
     @Override
     public void initStateNodes() {
+        Log.info.println("Initializing species network and gene trees.");
+
         final Method method = initMethod.get();
         switch( method ) {
             case POINT:
@@ -94,11 +93,38 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
         sNetwork.scale(tOrigin/sNetwork.getOrigin().getHeight());
 
         if (coalSimulatorInput.get() == null) {
+            // map of species network tip names to species network tip nodes
+            final Map<String, NetworkNode> speciesTipMap = new HashMap<>();
+            for (NetworkNode speciesNode: sNetwork.getLeafNodes()) {
+                final String speciesName = speciesNode.getLabel();
+                speciesTipMap.put(speciesName, speciesNode);
+            }
+
+            // map of gene tip names to species network tip nodes
+            final Map<String, NetworkNode> geneTipMap = new HashMap<>();
+            final TaxonSet taxonSuperSet = taxonSuperSetInput.get();
+            for (Taxon species: taxonSuperSet.taxonsetInput.get()) {
+                final String speciesName = species.getID();
+                final NetworkNode speciesNode = speciesTipMap.get(speciesName);
+                final TaxonSet speciesTaxonSet = (TaxonSet) species;
+                for (Taxon geneTip: speciesTaxonSet.taxonsetInput.get()) {
+                    final String gTipName = geneTip.getID();
+                    geneTipMap.put(gTipName, speciesNode);
+                }
+            }
+
             final double rootHeight = sNetwork.getRoot().getHeight();
-            // initialize caterpillar gene trees
             final List<EmbeddedTree> geneTrees = geneTreesInput.get();
             for (final EmbeddedTree gtree : geneTrees) {
+                // initialize caterpillar gene tree
                 gtree.makeCaterpillar(rootHeight, rootHeight / gtree.getInternalNodeCount(), true);
+
+                // adjust the heights of gene tree tips to be equal to the height of corresponding species tip
+                for (Node geneLeaf: gtree.getExternalNodes()) {
+                    final String gLeafName = geneLeaf.getID();
+                    final NetworkNode speciesLeaf = geneTipMap.get(gLeafName);
+                    geneLeaf.setHeight(speciesLeaf.getHeight());
+                }
             }
         }
         else {

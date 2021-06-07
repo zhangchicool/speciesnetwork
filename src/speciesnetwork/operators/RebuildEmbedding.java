@@ -113,10 +113,10 @@ public class RebuildEmbedding extends Operator {
 
     private void getNodeHeirs(final Network speciesNetwork, final EmbeddedTree geneTree) {
         // map of species network tip names to species network tip nodes
-        final Map<String, NetworkNode> speciesNodeMap = new HashMap<>();
+        final Map<String, NetworkNode> speciesTipMap = new HashMap<>();
         for (NetworkNode speciesNode: speciesNetwork.getLeafNodes()) {
             final String speciesName = speciesNode.getLabel();
-            speciesNodeMap.put(speciesName, speciesNode);
+            speciesTipMap.put(speciesName, speciesNode);
         }
 
         // map of gene tree tip names to species network tip nodes
@@ -124,7 +124,7 @@ public class RebuildEmbedding extends Operator {
         final TaxonSet taxonSuperSet = taxonSuperSetInput.get();
         for (Taxon species: taxonSuperSet.taxonsetInput.get()) {
             final String speciesName = species.getID();
-            final NetworkNode speciesNode = speciesNodeMap.get(speciesName);
+            final NetworkNode speciesNode = speciesTipMap.get(speciesName);
             final TaxonSet speciesTaxonSet = (TaxonSet) species;
             for (Taxon geneTip: speciesTaxonSet.taxonsetInput.get()) {
                 final String gTipName = geneTip.getID();
