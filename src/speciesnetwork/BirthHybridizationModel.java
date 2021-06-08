@@ -16,7 +16,7 @@ import speciesnetwork.utils.NodeHeightComparator;
  * @author Chi Zhang
  */
 
-@Description("Birth hybridization model (i.e. no death)")
+@Description("Birth-hybridization model (i.e. no death)")
 public class BirthHybridizationModel extends Distribution {
     public final Input<Network> networkInput =
             new Input<>("network", "The species network.", Validate.REQUIRED);
@@ -45,7 +45,7 @@ public class BirthHybridizationModel extends Distribution {
         final double firstHeight = network.nodes[0].height;
         for (int i = 1; i < network.leafNodeCount; i++) {
             final double height = network.nodes[i].height;
-            if (Math.abs(firstHeight - height) > 1e-8) {
+            if (Math.abs(firstHeight - height) > 1e-6) {
                 throw new RuntimeException("Birth hybridization model cannot handle dated tips!");
             }
         }
@@ -104,12 +104,15 @@ public class BirthHybridizationModel extends Distribution {
                 nextHeight = nodes.get(i-1).getHeight();
             // number of branches in time interval (nodeHeight, nextHeight)
             final int nBranch = network.getBranchCount((nodeHeight + nextHeight) /2.0);
-            logP += (nBranch * lambda + nu * nBranch * (nBranch -1) /2) * (nextHeight - nodeHeight);
+            final double totalRate = nBranch * lambda + nu * nBranch * (nBranch -1) /2;
+            logP += totalRate * (nextHeight - nodeHeight);
 
+            // rate for a particular event at time nodeHeight
             if (node.isReticulation()) {
                 logP += Math.log(nu);
                 logP += betaPrior.logDensity(node.inheritProb);
-            } else if (!node.isOrigin()) {
+            }
+            else if (node.isSpeciation()) {
                 logP += Math.log(lambda);
             }
         }

@@ -16,7 +16,7 @@ import speciesnetwork.utils.NodeHeightComparator;
  * @author Chi Zhang
  */
 
-@Description("Birth-death hybridization model")
+@Description("Birth-death-hybridization model")
 public class BirthDeathHybridization extends Distribution {
     public final Input<Network> networkInput =
             new Input<>("network", "The species network.", Validate.REQUIRED);
