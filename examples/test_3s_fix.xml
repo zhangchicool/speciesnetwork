@@ -38,7 +38,7 @@
     <map name="prior">beast.math.distributions.Prior</map>
 
     <init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false"
-          newick="(((A:0.02,(B:0.01)#H1[&amp;gamma=0.3]:0.01)S1:0.03,(#H1:0.02,C:0.03)S2:0.02)R:0.05)"/>
+          newick="(((A:0.02,(B:0.01)#H1[&amp;gamma=0.3]:0.01)S1:0.03,(#H1:0.02,C:0.015)S2:0.02)R:0.05)"/>
     <!--
     <init spec="beast.util.TreeParser" id="newick:gene1" IsLabelledNewick="true"
           newick="((((a1:0.015486335625819959,a2:0.015486335625819959):0.011550028197273198,b2:0.027036363823093157):0.05778693796023736,c2:0.08482330178333052):0.04695268241427415,(b1:0.07090676170149966,c1:0.07090676170149966):0.060869222496105005):0.0"/>
@@ -50,7 +50,7 @@
 
     <run id="mcmc" spec="MCMC" chainLength="2000000" storeEvery="10000">
         <state id="state">
-            <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
+            <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species" adjustTipHeights="false">
                 <taxonset id="taxonsuperset" spec="TaxonSet">
                     <taxon id="A" spec="TaxonSet">
                         <taxon id="a1" spec="Taxon"/>
@@ -256,7 +256,7 @@
             <operator id="nodeSlider:species" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.005" weight="0.0"/>
         </operator>
 
-        <operator id="relocateBranchAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="150.0">
+        <!-- operator id="relocateBranchAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="150.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
@@ -280,7 +280,7 @@
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
             <operator id="deleteReticulation:species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@network:species" weight="0.0"/>
-        </operator>
+        </operator -->
 
         <logger id="screenlog" logEvery="10000" model="@posterior">
             <log idref="posterior"/>
