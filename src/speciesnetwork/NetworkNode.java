@@ -240,7 +240,7 @@ public class NetworkNode {
     }
 
     /**
-     * @return true if current node is reticulation node
+     * @return true if current node is speciation node
      */
     public boolean isSpeciation() {
         return children.size() == 2;

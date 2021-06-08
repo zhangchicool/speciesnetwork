@@ -71,6 +71,7 @@
             <parameter id="originTime:species" lower="0.0" name="stateNode">0.1</parameter>
             <parameter id="netDivRate:species" lower="0.0" name="stateNode">2.0</parameter>
             <parameter id="turnOverRate:species" lower="0.0" upper="1.0" name="stateNode">0.5</parameter>
+            <parameter id="hybridProp:species" lower="0.0" upper="1.0" name="stateNode">0.1</parameter>
             <stateNode id="tree:gene1" spec="speciesnetwork.EmbeddedTree">
                 <taxonset id="taxonset:gene1" spec="TaxonSet" alignment="@gene1"/>
             </stateNode>
@@ -109,7 +110,8 @@
                 <populationModel id="popModel" alpha="4.0" beta="0.04" spec="speciesnetwork.ConstantPopIntegrated"/>
             </distribution>
             <distribution id="prior" spec="util.CompoundDistribution">
-                <distribution id="networkPrior" spec="speciesnetwork.BirthHybridizationModel" network="@network:species" netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" betaShape="1.0"/>
+                <distribution id="networkPrior" spec="speciesnetwork.BirthDeathHybridization" network="@network:species" betaShape="1.0"
+                              netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" hybridProportion="@hybridProp:species"/>
                 <prior id="networkOrigin" name="distribution" x="@originTime:species">
                     <Exponential id="exponential.0" name="distr" mean="0.1"/>
                 </prior>
@@ -117,7 +119,10 @@
                     <Exponential id="exponential.01" name="distr" mean="10.0"/>
                 </prior>
                 <prior id="turnOverPrior" name="distribution" x="@turnOverRate:species">
-                    <Beta id="betadistr.01" name="distr" alpha="1.0" beta="9.0"/>
+                    <Beta id="betadistr.01" name="distr" alpha="1.0" beta="1.0"/>
+                </prior>
+                <prior id="hybridPropPrior" name="distribution" x="@hybridProp:species">
+                    <Beta id="betadistr.02" name="distr" alpha="1.0" beta="9.0"/>
                 </prior>
             </distribution>
             <distribution id="likelihood" spec="util.CompoundDistribution">
@@ -229,6 +234,7 @@
 
         <operator id="divrRateScale:species" spec="ScaleOperator" parameter="@netDivRate:species" scaleFactor="0.5" weight="10.0"/>
         <operator id="turnOverScale:species" spec="ScaleOperator" parameter="@turnOverRate:species" scaleFactor="0.5" weight="10.0"/>
+        <operator id="hybridPropScale:species" spec="ScaleOperator" parameter="@hybridProp:species" scaleFactor="0.5" weight="10.0"/>
         <operator id="gammaProbUniform:species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="20.0"/>
         <operator id="gammaProbRndWalk:species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="20.0"/>
 
@@ -296,6 +302,7 @@
             <log idref="coalescent"/>
             <log idref="netDivRate:species"/>
             <log idref="turnOverRate:species"/>
+            <log idref="hybridProp:species"/>
             <log idref="originTime:species"/>
             <log id="height:species" speciesNetwork="@network:species" spec="speciesnetwork.utils.NetworkStatLogger"/>
             <log id="height:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeStatLogger"/>

@@ -12,22 +12,26 @@ import beast.math.distributions.Beta;
 import speciesnetwork.utils.NodeHeightComparator;
 
 /**
- * Birth-Hybridization model for the species network.
+ * Birth-Death-Hybridization model for the species network.
  * @author Chi Zhang
  */
 
-@Description("Birth hybridization model (i.e. no death)")
-public class BirthHybridizationModel extends Distribution {
+@Description("Birth-death hybridization model")
+public class BirthDeathHybridization extends Distribution {
     public final Input<Network> networkInput =
             new Input<>("network", "The species network.", Validate.REQUIRED);
     public final Input<RealParameter> birthRateInput =
             new Input<>("birthRate", "Speciation rate, lambda.");
+    public final Input<RealParameter> deathRateInput =
+            new Input<>("deathRate", "Extinction rate, mu.");
     public final Input<RealParameter> hybridRateInput =
             new Input<>("hybridRate", "Hybridization rate, nu.");
     public final Input<RealParameter> netDiversification =
-            new Input<>("netDiversification", "Net diversification rate: lambda-nu.");
+            new Input<>("netDiversification", "Net diversification rate: lambda-mu-nu.");
     public final Input<RealParameter> turnOverInput =
-            new Input<>("turnOver", "Turn over rate: nu/lambda.");
+            new Input<>("turnOver", "Turn over rate: (mu+nu)/lambda.");
+    public final Input<RealParameter> hybridProportion =
+            new Input<>("hybridProportion", "Hybridization proportion: nu/(mu+nu).");
     public final Input<RealParameter> rhoProbInput =
             new Input<>("rho", "Sampling prob. of extant species, rho.");
     public final Input<RealParameter> betaShapeInput =
@@ -35,21 +39,11 @@ public class BirthHybridizationModel extends Distribution {
 
     private static Comparator<NetworkNode> hc = new NodeHeightComparator();
 
-    private double lambda, nu;
+    private double lambda, mu, nu;
     private Beta betaPrior;
 
     @Override
     public void initAndValidate() {
-        // make sure that all tips are at the same height, otherwise this model is not appropriate
-        final Network network = networkInput.get();
-        final double firstHeight = network.nodes[0].height;
-        for (int i = 1; i < network.leafNodeCount; i++) {
-            final double height = network.nodes[i].height;
-            if (Math.abs(firstHeight - height) > 1e-8) {
-                throw new RuntimeException("Birth hybridization model cannot handle dated tips!");
-            }
-        }
-
         // set up alpha and beta parameters (alpha = beta)
         betaPrior = new Beta();
         final RealParameter betaShape;
@@ -62,19 +56,22 @@ public class BirthHybridizationModel extends Distribution {
     }
 
     private void updateParameters() {
-        if (birthRateInput.get() != null && hybridRateInput.get() != null) {
+        if (birthRateInput.get() != null && deathRateInput.get() != null && hybridRateInput.get() != null) {
             lambda = birthRateInput.get().getValue();
+            mu = deathRateInput.get().getValue();
             nu = hybridRateInput.get().getValue();
         }
-        else if (netDiversification.get() != null && turnOverInput.get() != null) {
+        else if (netDiversification.get() != null && turnOverInput.get() != null && hybridProportion.get() != null) {
             lambda = netDiversification.get().getValue() / (1 - turnOverInput.get().getValue());
-            nu = lambda * turnOverInput.get().getValue();
-        } else {
-            throw new RuntimeException("Either specify speciationRate and hybridizationRate " +
-                    "OR specify netDiversification and turnOver.");
+            mu = lambda * turnOverInput.get().getValue() * (1 - hybridProportion.get().getValue());
+            nu = lambda * turnOverInput.get().getValue() * hybridProportion.get().getValue();
         }
-        if (lambda <= 0.0 || nu <= 0.0) {
-            throw new RuntimeException("Speciation rate and hybridization rate must be positive!");
+        else {
+            throw new RuntimeException("Either specify birthRate & deathRate & hybridizationRate " +
+                    "OR specify netDiversification & turnOver & hybridizationProportion.");
+        }
+        if (lambda <= 0.0 || mu <= 0.0 || nu <= 0.0) {
+            throw new RuntimeException("Speciation, extinction and hybridization rates must be positive!");
         }
 
         // assuming complete sampling, rho is unused
@@ -85,8 +82,8 @@ public class BirthHybridizationModel extends Distribution {
     public double calculateLogP() {
         final Network network = networkInput.get();
 
-        // sort the internal nodes according to their heights in ascending order
-        List<NetworkNode> nodes = Arrays.asList(network.getInternalNodesWithOrigin());
+        // sort the network nodes according to their heights in ascending order
+        List<NetworkNode> nodes = Arrays.asList(network.getAllNodes());
         nodes.sort(hc);
 
         // get current values of lambda and nu
@@ -94,25 +91,30 @@ public class BirthHybridizationModel extends Distribution {
 
         logP = 0.0;
         // calculate probability of the network
-        for (int i = 0; i < nodes.size(); i++) {
+        for (int i = 1; i < nodes.size(); i++) {
             final NetworkNode node = nodes.get(i);
             final double nodeHeight = node.getHeight();
-            final double nextHeight;
-            if (i == 0)  // the youngest internal node
-                nextHeight = 0.0;  // the tip
-            else
-                nextHeight = nodes.get(i-1).getHeight();
-            // number of branches in time interval (nodeHeight, nextHeight)
-            final int nBranch = network.getBranchCount((nodeHeight + nextHeight) /2.0);
-            logP += (nBranch * lambda + nu * nBranch * (nBranch -1) /2) * (nextHeight - nodeHeight);
+            final double nextHeight = nodes.get(i-1).getHeight();
 
-            if (node.isReticulation()) {
-                logP += Math.log(nu);
-                logP += betaPrior.logDensity(node.inheritProb);
-            } else if (!node.isOrigin()) {
-                logP += Math.log(lambda);
+            if (nodeHeight > 1e-6) {  // rule out extant species
+                // number of branches in time interval (nodeHeight, nextHeight)
+                final int nBranch = network.getBranchCount((nodeHeight + nextHeight) /2.0);
+                final double totalRate = nBranch * (lambda + mu) + nu * nBranch * (nBranch -1) /2;
+                logP += totalRate * (nextHeight - nodeHeight);
+
+                // rate for a particular event at time nodeHeight
+                if (node.isReticulation()) {
+                    logP += Math.log(nu);
+                    logP += betaPrior.logDensity(node.inheritProb);
+                }
+                else if (node.isSpeciation()) {
+                    logP += Math.log(lambda);
+                }
+                else if (node.isLeaf()) {
+                    logP += Math.log(mu);
+                }
             }
-        }
+         }
 
         return logP;
     }
@@ -121,9 +123,11 @@ public class BirthHybridizationModel extends Distribution {
     protected boolean requiresRecalculation() {
         return networkInput.get().isDirty() ||
                 (birthRateInput.get() != null && birthRateInput.get().somethingIsDirty()) ||
+                (deathRateInput.get() != null && deathRateInput.get().somethingIsDirty()) ||
                 (hybridRateInput.get() != null && hybridRateInput.get().somethingIsDirty()) ||
                 (netDiversification.get() != null && netDiversification.get().somethingIsDirty()) ||
-                (turnOverInput.get() != null && turnOverInput.get().somethingIsDirty());
+                (turnOverInput.get() != null && turnOverInput.get().somethingIsDirty()) ||
+                (hybridProportion.get() != null && hybridProportion.get().somethingIsDirty());
     }
 
     @Override
