@@ -26,7 +26,7 @@ import beast.util.TreeParser;
 @Description("Network representing reticulate evolution of species")
 public class Network extends StateNode {
     public final Input<TaxonSet> taxonSetInput =
-            new Input<>("taxonset", "Set of taxa at the leafs of the network.");
+            new Input<>("taxonset", "Set of taxa at the leafs of the network.", Input.Validate.REQUIRED);
     // TODO: trait input of dated tips
 
     /**
@@ -57,11 +57,7 @@ public class Network extends StateNode {
     @Override
     public void initAndValidate() {
         if (nodeCount < 0) {
-            if (taxonSetInput.get() != null) {
-                makeCaterpillar(0, 1);
-            } else {
-                makeDummy();
-            }
+            makeCaterpillar(0, 1);
         }
     }
 

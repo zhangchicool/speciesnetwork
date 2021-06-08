@@ -92,7 +92,7 @@
                 <geneTree idref="tree:gene3"/>
             </rebuildEmbedding>
             <!--
-            <coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species" taxonset="@taxonsuperset">
+            <coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species">
                 <parameter id="popSizes" estimate="false" name="popSizes">0.01</parameter>
                 <geneTree idref="tree:gene1"/>
                 <geneTree idref="tree:gene2"/>

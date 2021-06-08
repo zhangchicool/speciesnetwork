@@ -37,8 +37,6 @@ public class CoalescentSimulator extends Runnable {
             new Input<>("networkSimulator", "Species network simulator.", Validate.XOR, speciesNetworkInput);
     public final Input<RealParameter> popSizesInput =
             new Input<>("popSizes", "Constant per-branch population sizes.", Validate.REQUIRED);
-    public final Input<TaxonSet> taxonSuperSetInput =
-            new Input<>("taxonset", "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
 
     public final Input<List<EmbeddedTree>> geneTreesInput =
             new Input<>("geneTree", "Gene tree embedded in the species network.", new ArrayList<>());
@@ -140,7 +138,7 @@ public class CoalescentSimulator extends Runnable {
                 geneNodeMap.put(geneName, leafNode);
             }
             // multimap of species network tip node to gene tree tip nodes
-            final TaxonSet taxonSuperSet = taxonSuperSetInput.get();
+            final TaxonSet taxonSuperSet = speciesNetwork.taxonSetInput.get();
             for (Taxon species : taxonSuperSet.taxonsetInput.get()) {
                 final String speciesName = species.getID();
                 final NetworkNode speciesNode = speciesNodeMap.get(speciesName);
@@ -332,7 +330,7 @@ public class CoalescentSimulator extends Runnable {
         // print state nodes
         out.println("            <stateNode id=\"network:species\" spec=\"speciesnetwork.NetworkParser\" tree=\"@newick:species\">");
         out.println("                <taxonset id=\"taxonsuperset\" spec=\"TaxonSet\">");
-        final TaxonSet taxonsuperset = taxonSuperSetInput.get();
+        final TaxonSet taxonsuperset = speciesNetwork.taxonSetInput.get();
         for (Taxon speciesTip : taxonsuperset.taxonsetInput.get()) {
             out.println("                    <taxon id=\"" + speciesTip.getID() + "\" spec=\"TaxonSet\">");
             final TaxonSet speciesTaxonSet = (TaxonSet) speciesTip;
@@ -359,7 +357,7 @@ public class CoalescentSimulator extends Runnable {
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("                <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
         out.println("            </rebuildEmbedding>");
-        out.println("            <coalescentSimulator id=\"coalSim\" spec=\"speciesnetwork.simulator.CoalescentSimulator\" speciesNetwork=\"@network:species\" taxonset=\"@taxonsuperset\">");
+        out.println("            <coalescentSimulator id=\"coalSim\" spec=\"speciesnetwork.simulator.CoalescentSimulator\" speciesNetwork=\"@network:species\">");
         out.println("                <parameter id=\"popSizes\" estimate=\"false\" name=\"popSizes\">" + popSizes.getValue() + "</parameter>");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("                <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
