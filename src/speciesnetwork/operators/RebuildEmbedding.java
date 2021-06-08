@@ -28,8 +28,6 @@ import speciesnetwork.NetworkNode;
 public class RebuildEmbedding extends Operator {
     public final Input<Network> speciesNetworkInput = new Input<>("speciesNetwork",
             "The species network.", Validate.REQUIRED);
-    public final Input<TaxonSet> taxonSuperSetInput = new Input<>("taxonset",
-            "Super-set of taxon sets mapping lineages to species.", Validate.REQUIRED);
     public final Input<List<EmbeddedTree>> geneTreesInput = new Input<>("geneTree",
             "The gene tree within the species network.", new ArrayList<>());
     // operator input can be null so that the species network and gene trees are unchanged
@@ -121,7 +119,7 @@ public class RebuildEmbedding extends Operator {
 
         // map of gene tree tip names to species network tip nodes
         final Map<String, NetworkNode> geneTipMap = new HashMap<>();
-        final TaxonSet taxonSuperSet = taxonSuperSetInput.get();
+        final TaxonSet taxonSuperSet = speciesNetwork.taxonSetInput.get();
         for (Taxon species: taxonSuperSet.taxonsetInput.get()) {
             final String speciesName = species.getID();
             final NetworkNode speciesNode = speciesTipMap.get(speciesName);

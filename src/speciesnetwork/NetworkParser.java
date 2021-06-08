@@ -89,11 +89,10 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
         // Update the cached parents and children for each node
         updateRelationships();
 
-        // Step (3) adjust network tip height to ZERO
+        // Step (3) adjust network tip height to ZERO if no date-trait is available
         if (adjustTipHeightsInput.get()) {
-            // all nodes should be at zero height if no date-trait is available
-            // TODO: rewrite for dated tips
             for (NetworkNode tip: getLeafNodes()) {
+                // TODO: rewrite for date-traits
                 tip.setHeight(0.0);
             }
         }
