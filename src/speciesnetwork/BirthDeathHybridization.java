@@ -41,6 +41,7 @@ public class BirthDeathHybridization extends Distribution {
 
     private double lambda, mu, nu;
     private Beta betaPrior;
+    final static double EPSILON = 1e-8;
 
     @Override
     public void initAndValidate() {
@@ -67,7 +68,7 @@ public class BirthDeathHybridization extends Distribution {
             nu = lambda * turnOverInput.get().getValue() * hybridProportion.get().getValue();
         }
         else {
-            throw new RuntimeException("Either specify birthRate & deathRate & hybridizationRate " +
+            throw new IllegalArgumentException("Either specify birthRate & deathRate & hybridizationRate " +
                     "OR specify netDiversification & turnOver & hybridizationProportion.");
         }
         if (lambda <= 0.0 || mu <= 0.0 || nu <= 0.0) {
@@ -96,7 +97,7 @@ public class BirthDeathHybridization extends Distribution {
             final double nodeHeight = node.getHeight();
             final double nextHeight = nodes.get(i-1).getHeight();
 
-            if (nodeHeight > 1e-6) {  // rule out extant species
+            if (nodeHeight > EPSILON) {  // rule out extant species
                 // number of branches in time interval (nodeHeight, nextHeight)
                 final int nBranch = network.getBranchCount((nodeHeight + nextHeight) /2.0);
                 final double totalRate = nBranch * (lambda + mu) + nu * nBranch * (nBranch -1) /2;

@@ -10,6 +10,7 @@ import beast.core.Description;
 import beast.core.Input;
 import beast.core.StateNode;
 import beast.evolution.alignment.TaxonSet;
+import beast.evolution.tree.TraitSet;
 import beast.util.TreeParser;
 
 /**
@@ -26,8 +27,9 @@ import beast.util.TreeParser;
 @Description("Network representing reticulate evolution of species")
 public class Network extends StateNode {
     public final Input<TaxonSet> taxonSetInput =
-            new Input<>("taxonset", "Set of taxa at the leafs of the network.", Input.Validate.REQUIRED);
-    // TODO: trait input of dated tips
+            new Input<>("taxonset", "Set of taxa at the leafs of the network.");
+    public final Input<List<TraitSet>> traitListInput = new Input<>("trait",
+            "trait information for initializing traits (like node dates) in the network", new ArrayList<>());
 
     /**
      * state of dirtiness of a node in the network
@@ -37,7 +39,6 @@ public class Network extends StateNode {
      */
     public static final int IS_CLEAN = 0, IS_DIRTY = 1, IS_FILTHY = 2;
 
-    // number of nodes
     protected int nodeCount = -1;
     private int storedNodeCount = -1;
     protected int speciationNodeCount = -1;
@@ -54,10 +55,21 @@ public class Network extends StateNode {
     protected NetworkNode[] nodes = null;
     private NetworkNode[] storedNodes = null;
 
+    // trait set which specifies leaf node times
+    protected TraitSet timeTraitSet = null;
+
     @Override
     public void initAndValidate() {
         if (nodeCount < 0) {
             makeCaterpillar(0, 1);
+        }
+
+        // process all available time traits
+        processTraits(traitListInput.get());
+
+        // ensure network is compatible with time traits
+        if (timeTraitSet != null) {
+            adjustNodeHeights(getOrigin());
         }
     }
 
@@ -70,7 +82,7 @@ public class Network extends StateNode {
     }
 
     private void makeCaterpillar(final double minInternalHeight, final double step) {
-        // make a caterpillar TODO: tip dates?
+        // make a caterpillar species tree
         final List<String> taxa = taxonSetInput.get().asStringList();
         leafNodeCount = taxa.size();
         speciationNodeCount = leafNodeCount - 1;
@@ -112,6 +124,53 @@ public class Network extends StateNode {
     public void updateRelationships() {
         for (NetworkNode node: nodes) {
             node.updateRelationships();
+        }
+    }
+
+    /**
+     * @return date trait set if available, null otherwise.
+     */
+    public TraitSet getDateTrait() {
+        return timeTraitSet;
+    }
+
+    /**
+     * @return true if network has a date/time trait set associated
+     */
+    public boolean hasDateTrait() {
+        return timeTraitSet != null;
+    }
+
+    /* set the date trait set for this network.
+       A null value simply removes the existing trait set. */
+    public void setDateTrait(TraitSet traitSet) {
+        if (hasDateTrait()) {
+            traitListInput.get().remove(timeTraitSet);
+        }
+
+        if (traitSet != null)
+            traitListInput.get().add(traitSet);
+
+        timeTraitSet = traitSet;
+    }
+
+    protected void processTraits(List<TraitSet> traitList) {
+        for (TraitSet traitSet : traitList) {
+            for (NetworkNode node : getLeafNodes()) {
+                final String speciesName = node.getLabel();
+                if (speciesName != null) {
+                    final double value = traitSet.getValue(speciesName);
+                    // add trait to node meta data
+                    node.setMetaData(traitSet.getTraitName(), value);
+
+                    // also update tip node height
+                    if (traitSet.isDateTrait()) {
+                       node.setHeight(value);
+                    }
+                }
+            }
+            if (traitSet.isDateTrait())
+                timeTraitSet = traitSet;
         }
     }
 
@@ -251,6 +310,8 @@ public class Network extends StateNode {
         return reticulationNodes;
     }
 
+    /* set visited indicator to false for all nodes
+       This is typically called before a recursive function to avoid duplicated traversal in the network */
     public void resetAllVisited() {
         for (NetworkNode node: nodes) {
             node.setVisited(false);
@@ -322,18 +383,36 @@ public class Network extends StateNode {
         }
     }
 
-    @Override
-    public int scale(final double scale) {
-        // TODO look after tips with height > 0
-        // refer to public int scale(final double scale) in Node.java
-        int count = 0;
-        for (NetworkNode node: nodes) {
-            if (node.height > 0) {
-                node.height *= scale;
-                count++;
+    /* adjust node heights to no negative branch lengths exist
+       This can occur if leaf heights given as traits are incompatible with the existing network. */
+    public void adjustNodeHeights(NetworkNode node) {
+        if (!node.isLeaf()) {
+            for (final NetworkNode child : node.getChildren()) {
+                adjustNodeHeights(child);
+            }
+            for (final NetworkNode child : node.getChildren()) {
+                // bump up a small amount
+                final double minHeight = child.height + 0.001;
+                if (node.height < minHeight)
+                    node.height = minHeight;
             }
         }
-        return count;
+    }
+
+    @Override
+    public int scale(final double scale) {
+        int dof = 0;
+        for (NetworkNode node : getInternalNodesWithOrigin()) {
+            node.height *= scale;
+            dof++;
+
+            // check for negative branch length
+            for (NetworkNode child : node.getChildren()) {
+                if (child.isLeaf() && child.height > node.height)
+                    throw new RuntimeException("Scale gives negative branch length!");
+            }
+        }
+        return dof;
     }
 
     @Override

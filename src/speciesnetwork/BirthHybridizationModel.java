@@ -37,6 +37,7 @@ public class BirthHybridizationModel extends Distribution {
 
     private double lambda, nu;
     private Beta betaPrior;
+    final static double EPSILON = 1e-8;
 
     @Override
     public void initAndValidate() {
@@ -45,7 +46,7 @@ public class BirthHybridizationModel extends Distribution {
         final double firstHeight = network.nodes[0].height;
         for (int i = 1; i < network.leafNodeCount; i++) {
             final double height = network.nodes[i].height;
-            if (Math.abs(firstHeight - height) > 1e-6) {
+            if (Math.abs(firstHeight - height) > EPSILON) {
                 throw new RuntimeException("Birth hybridization model cannot handle dated tips!");
             }
         }
@@ -70,7 +71,7 @@ public class BirthHybridizationModel extends Distribution {
             lambda = netDiversification.get().getValue() / (1 - turnOverInput.get().getValue());
             nu = lambda * turnOverInput.get().getValue();
         } else {
-            throw new RuntimeException("Either specify speciationRate and hybridizationRate " +
+            throw new IllegalArgumentException("Either specify speciationRate and hybridizationRate " +
                     "OR specify netDiversification and turnOver.");
         }
         if (lambda <= 0.0 || nu <= 0.0) {

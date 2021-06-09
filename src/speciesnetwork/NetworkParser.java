@@ -90,9 +90,8 @@ public class NetworkParser extends Network implements StateNodeInitialiser {
         updateRelationships();
 
         // Step (3) adjust network tip height to ZERO if no date-trait is available
-        if (adjustTipHeightsInput.get()) {
-            for (NetworkNode tip: getLeafNodes()) {
-                // TODO: rewrite for date-traits
+        if (adjustTipHeightsInput.get() && traitListInput.get() == null) {
+            for (NetworkNode tip : getLeafNodes()) {
                 tip.setHeight(0.0);
             }
         }
