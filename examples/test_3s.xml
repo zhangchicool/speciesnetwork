@@ -228,8 +228,8 @@
             <operator id="WilsonBalding:gene3" spec="WilsonBalding" tree="@tree:gene3" weight="0.0"/>
         </operator>
 
-        <operator id="divrRateScale:species" spec="ScaleOperator" parameter="@netDivRate:species" scaleFactor="0.5" weight="10.0"/>
-        <operator id="turnOverScale:species" spec="ScaleOperator" parameter="@turnOverRate:species" scaleFactor="0.5" weight="10.0"/>
+        <operator id="divrRateScale:species" spec="ScaleOperator" parameter="@netDivRate:species" scaleFactor="0.5" weight="5.0"/>
+        <operator id="turnOverScale:species" spec="ScaleOperator" parameter="@turnOverRate:species" scaleFactor="0.5" weight="5.0"/>
         <operator id="gammaProbUniform:species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="20.0"/>
         <operator id="gammaProbRndWalk:species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="20.0"/>
 
@@ -250,7 +250,7 @@
                 <geneTree idref="tree:gene3"/>
             </operator>
         </operator>
-        <operator id="nodeSliderAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="80.0">
+        <operator id="nodeSliderAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="50.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
