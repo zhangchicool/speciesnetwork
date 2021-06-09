@@ -77,6 +77,7 @@
             <parameter id="originTime:species" lower="0.0" name="stateNode">0.1</parameter>
             <parameter id="netDivRate:species" lower="0.0" name="stateNode">2.0</parameter>
             <parameter id="turnOverRate:species" lower="0.0" upper="1.0" name="stateNode">0.5</parameter>
+            <parameter id="hybridProp:species" lower="0.0" upper="1.0" name="stateNode">0.1</parameter>
             <stateNode id="tree:gene1" spec="speciesnetwork.EmbeddedTree">
                 <taxonset id="taxonset:gene1" spec="TaxonSet" alignment="@gene1"/>
             </stateNode>
@@ -92,13 +93,13 @@
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
-            <rebuildEmbedding id="initEmbed" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="0.0">
+            <rebuildEmbedding id="initEmbed" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="0.0">
                 <geneTree idref="tree:gene1"/>
                 <geneTree idref="tree:gene2"/>
                 <geneTree idref="tree:gene3"/>
             </rebuildEmbedding>
             <!--
-            <coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species" taxonset="@taxonsuperset">
+            <coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species">
                 <parameter id="popSizes" estimate="false" name="popSizes">0.01</parameter>
                 <geneTree idref="tree:gene1"/>
                 <geneTree idref="tree:gene2"/>
@@ -115,7 +116,8 @@
                 <populationModel id="popModel" alpha="4.0" beta="0.04" spec="speciesnetwork.ConstantPopIntegrated"/>
             </distribution>
             <distribution id="prior" spec="util.CompoundDistribution">
-                <distribution id="networkPrior" spec="speciesnetwork.BirthHybridizationModel" network="@network:species" netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" betaShape="1.0"/>
+                <distribution id="networkPrior" spec="speciesnetwork.BirthDeathHybridization" network="@network:species" betaShape="1.0"
+                              netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" hybridProportion="@hybridProp:species"/>
                 <prior id="networkOrigin" name="distribution" x="@originTime:species">
                     <Exponential id="exponential.0" name="distr" mean="0.1"/>
                 </prior>
@@ -123,7 +125,10 @@
                     <Exponential id="exponential.01" name="distr" mean="10.0"/>
                 </prior>
                 <prior id="turnOverPrior" name="distribution" x="@turnOverRate:species">
-                    <Beta id="betadistr.01" name="distr" alpha="1.0" beta="9.0"/>
+                    <Beta id="betadistr.01" name="distr" alpha="1.0" beta="1.0"/>
+                </prior>
+                <prior id="hybridPropPrior" name="distribution" x="@hybridProp:species">
+                    <Beta id="betadistr.02" name="distr" alpha="1.0" beta="9.0"/>
                 </prior>
             </distribution>
             <distribution id="likelihood" spec="util.CompoundDistribution">
@@ -148,93 +153,94 @@
             </distribution>
         </distribution>
 
-        <operator id="scaleAndEmbed:gene1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="3.0">
+        <operator id="scaleAndEmbed:gene1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="3.0">
             <geneTree idref="tree:gene1"/>
             <operator id="scale:gene1" spec="ScaleOperator" scaleFactor="0.5" tree="@tree:gene1" weight="0.0"/>
         </operator>
-        <operator id="scaleRootAndEmbed:gene1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="3.0">
+        <operator id="scaleRootAndEmbed:gene1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="3.0">
             <geneTree idref="tree:gene1"/>
             <operator id="scaleRoot:gene1" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree:gene1" weight="0.0"/>
         </operator>
-        <operator id="uniformAndEmbed:gene1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="30.0">
+        <operator id="uniformAndEmbed:gene1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="30.0">
             <geneTree idref="tree:gene1"/>
             <operator id="uniform:gene1" spec="Uniform" tree="@tree:gene1" weight="0.0"/>
         </operator>
-        <operator id="subSlideAndEmbed:gene1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="15.0">
+        <operator id="subSlideAndEmbed:gene1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="15.0">
             <geneTree idref="tree:gene1"/>
             <operator id="subSlide:gene1" spec="SubtreeSlide" tree="@tree:gene1" weight="0.0"/>
         </operator>
-        <operator id="narrowAndEmbed:gene1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="15.0">
+        <operator id="narrowAndEmbed:gene1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="15.0">
             <geneTree idref="tree:gene1"/>
             <operator id="narrow:gene1" spec="Exchange" tree="@tree:gene1" weight="0.0"/>
         </operator>
-        <operator id="wideAndEmbed:gene1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="5.0">
+        <operator id="wideAndEmbed:gene1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="5.0">
             <geneTree idref="tree:gene1"/>
             <operator id="wide:gene1" spec="Exchange" isNarrow="false" tree="@tree:gene1" weight="0.0"/>
         </operator>
-        <operator id="WilsonBaldingAndEmbed:gene1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="5.0">
+        <operator id="WilsonBaldingAndEmbed:gene1" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="5.0">
             <geneTree idref="tree:gene1"/>
             <operator id="WilsonBalding:gene1" spec="WilsonBalding" tree="@tree:gene1" weight="0.0"/>
         </operator>
-        <operator id="scaleAndEmbed:gene2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="3.0">
+        <operator id="scaleAndEmbed:gene2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="3.0">
             <geneTree idref="tree:gene2"/>
             <operator id="scale:gene2" spec="ScaleOperator" scaleFactor="0.5" tree="@tree:gene2" weight="0.0"/>
         </operator>
-        <operator id="scaleRootAndEmbed:gene2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="3.0">
+        <operator id="scaleRootAndEmbed:gene2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="3.0">
             <geneTree idref="tree:gene2"/>
             <operator id="scaleRoot:gene2" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree:gene2" weight="0.0"/>
         </operator>
-        <operator id="uniformAndEmbed:gene2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="30.0">
+        <operator id="uniformAndEmbed:gene2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="30.0">
             <geneTree idref="tree:gene2"/>
             <operator id="uniform:gene2" spec="Uniform" tree="@tree:gene2" weight="0.0"/>
         </operator>
-        <operator id="subSlideAndEmbed:gene2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="15.0">
+        <operator id="subSlideAndEmbed:gene2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="15.0">
             <geneTree idref="tree:gene2"/>
             <operator id="subSlide:gene2" spec="SubtreeSlide" tree="@tree:gene2" weight="0.0"/>
         </operator>
-        <operator id="narrowAndEmbed:gene2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="15.0">
+        <operator id="narrowAndEmbed:gene2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="15.0">
             <geneTree idref="tree:gene2"/>
             <operator id="narrow:gene2" spec="Exchange" tree="@tree:gene2" weight="0.0"/>
         </operator>
-        <operator id="wideAndEmbed:gene2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="5.0">
+        <operator id="wideAndEmbed:gene2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="5.0">
             <geneTree idref="tree:gene2"/>
             <operator id="wide:gene2" spec="Exchange" isNarrow="false" tree="@tree:gene2" weight="0.0"/>
         </operator>
-        <operator id="WilsonBaldingAndEmbed:gene2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="5.0">
+        <operator id="WilsonBaldingAndEmbed:gene2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="5.0">
             <geneTree idref="tree:gene2"/>
             <operator id="WilsonBalding:gene2" spec="WilsonBalding" tree="@tree:gene2" weight="0.0"/>
         </operator>
-        <operator id="scaleAndEmbed:gene3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="3.0">
+        <operator id="scaleAndEmbed:gene3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="3.0">
             <geneTree idref="tree:gene3"/>
             <operator id="scale:gene3" spec="ScaleOperator" scaleFactor="0.5" tree="@tree:gene3" weight="0.0"/>
         </operator>
-        <operator id="scaleRootAndEmbed:gene3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="3.0">
+        <operator id="scaleRootAndEmbed:gene3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="3.0">
             <geneTree idref="tree:gene3"/>
             <operator id="scaleRoot:gene3" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@tree:gene3" weight="0.0"/>
         </operator>
-        <operator id="uniformAndEmbed:gene3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="30.0">
+        <operator id="uniformAndEmbed:gene3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="30.0">
             <geneTree idref="tree:gene3"/>
             <operator id="uniform:gene3" spec="Uniform" tree="@tree:gene3" weight="0.0"/>
         </operator>
-        <operator id="subSlideAndEmbed:gene3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="15.0">
+        <operator id="subSlideAndEmbed:gene3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="15.0">
             <geneTree idref="tree:gene3"/>
             <operator id="subSlide:gene3" spec="SubtreeSlide" tree="@tree:gene3" weight="0.0"/>
         </operator>
-        <operator id="narrowAndEmbed:gene3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="15.0">
+        <operator id="narrowAndEmbed:gene3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="15.0">
             <geneTree idref="tree:gene3"/>
             <operator id="narrow:gene3" spec="Exchange" tree="@tree:gene3" weight="0.0"/>
         </operator>
-        <operator id="wideAndEmbed:gene3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="5.0">
+        <operator id="wideAndEmbed:gene3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="5.0">
             <geneTree idref="tree:gene3"/>
             <operator id="wide:gene3" spec="Exchange" isNarrow="false" tree="@tree:gene3" weight="0.0"/>
         </operator>
-        <operator id="WilsonBaldingAndEmbed:gene3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="5.0">
+        <operator id="WilsonBaldingAndEmbed:gene3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="5.0">
             <geneTree idref="tree:gene3"/>
             <operator id="WilsonBalding:gene3" spec="WilsonBalding" tree="@tree:gene3" weight="0.0"/>
         </operator>
 
         <operator id="divrRateScale:species" spec="ScaleOperator" parameter="@netDivRate:species" scaleFactor="0.5" weight="10.0"/>
         <operator id="turnOverScale:species" spec="ScaleOperator" parameter="@turnOverRate:species" scaleFactor="0.5" weight="10.0"/>
+        <operator id="hybridPropScale:species" spec="ScaleOperator" parameter="@hybridProp:species" scaleFactor="0.5" weight="10.0"/>
         <operator id="gammaProbUniform:species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="20.0"/>
         <operator id="gammaProbRndWalk:species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="20.0"/>
 
@@ -245,7 +251,7 @@
             <geneTree idref="tree:gene3"/>
         </operator>
 
-        <operator id="coordNodeUniformAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="80.0">
+        <operator id="coordNodeUniformAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="80.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
@@ -255,38 +261,38 @@
                 <geneTree idref="tree:gene3"/>
             </operator>
         </operator>
-        <operator id="nodeSliderAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="80.0">
+        <operator id="nodeSliderAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="80.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
             <operator id="nodeSlider:species" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.005" weight="0.0"/>
         </operator>
 
-        <operator id="relocateBranchAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="150.0">
+        <!-- operator id="relocateBranchAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="150.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
             <operator id="relocateBranch:species" spec="speciesnetwork.operators.RelocateBranch" speciesNetwork="@network:species" weight="0.0"/>
         </operator>
-        <operator id="flipReticulationAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="15.0">
+        <operator id="flipReticulationAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="15.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
             <operator id="flipReticulation:species" spec="speciesnetwork.operators.FlipReticulation" speciesNetwork="@network:species" weight="0.0"/>
         </operator>
 
-        <operator id="addReticulationAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="80.0">
+        <operator id="addReticulationAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="80.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
             <operator id="addReticulation:species" spec="speciesnetwork.operators.AddReticulation" speciesNetwork="@network:species" weight="0.0"/>
         </operator>
-        <operator id="deleteReticulationAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" taxonset="@taxonsuperset" weight="80.0">
+        <operator id="deleteReticulationAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="80.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
             <operator id="deleteReticulation:species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@network:species" weight="0.0"/>
-        </operator>
+        </operator -->
 
         <logger id="screenlog" logEvery="10000" model="@posterior">
             <log idref="posterior"/>
@@ -302,6 +308,7 @@
             <log idref="coalescent"/>
             <log idref="netDivRate:species"/>
             <log idref="turnOverRate:species"/>
+            <log idref="hybridProp:species"/>
             <log idref="originTime:species"/>
             <log id="height:species" speciesNetwork="@network:species" spec="speciesnetwork.utils.NetworkStatLogger"/>
             <log id="height:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeStatLogger"/>
