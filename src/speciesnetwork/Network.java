@@ -454,17 +454,15 @@ public class Network extends StateNode {
     }
 
     private static void copyNetwork(Network src, Network dst) {
-        final int copyNodeCount = src.nodeCount;
-
         dst.setID(src.getID());
-        dst.nodeCount = copyNodeCount;
+        dst.nodeCount = src.nodeCount;
         dst.speciationNodeCount = src.speciationNodeCount;
         dst.leafNodeCount = src.leafNodeCount;
         dst.reticulationNodeCount = src.reticulationNodeCount;
 
-        dst.nodes = new NetworkNode[copyNodeCount];
-        dst.storedNodes = new NetworkNode[copyNodeCount];
-        for (int i = 0; i < copyNodeCount; i++) {
+        dst.nodes = new NetworkNode[src.nodeCount];
+        dst.storedNodes = new NetworkNode[src.nodeCount];
+        for (int i = 0; i < src.nodeCount; i++) {
             dst.nodes[i] = new NetworkNode(dst);
             dst.nodes[i].copyFrom(src.nodes[i]);
         }
@@ -479,25 +477,11 @@ public class Network extends StateNode {
     public void assignFromFragile(final StateNode other) {
         final Network src = (Network) other;
 
-        if (src.nodeCount == nodeCount) {
-            for (int i = 0; i < nodeCount; i++) {
-                nodes[i].copyFrom(src.nodes[i]);
-            }
-            updateRelationships();
-        } else {
-            nodeCount = src.nodeCount;
-            speciationNodeCount = src.speciationNodeCount;
-            leafNodeCount = src.leafNodeCount;
-            reticulationNodeCount = src.reticulationNodeCount;
-
-            nodes = new NetworkNode[src.nodeCount];
-            storedNodes = new NetworkNode[src.nodeCount];
-            for (int i = 0; i < src.nodeCount; i++) {
-                nodes[i] = new NetworkNode(this);
-                nodes[i].copyFrom(src.nodes[i]);
-            }
-            updateRelationships();
+        // assumes src.nodeCount == nodeCount
+        for (int i = 0; i < nodeCount; i++) {
+            nodes[i].copyFrom(src.nodes[i]);
         }
+        updateRelationships();
     }
 
     /**

@@ -66,8 +66,8 @@ public class NetworkNode {
 
     private void initProps() {
         label = null;
-        inheritProb = 0.5;
         height = 0.0;
+        inheritProb = 0.5;
         childBranchNumbers = new ArrayList<>();
         children = HashMultiset.create();
         parents = HashMultiset.create();
@@ -78,12 +78,12 @@ public class NetworkNode {
     /* instantiate a new network node with the same height, labels and metadata as a tree node
        this does not copy the parents or children */
     public NetworkNode(Node treeNode) {
-        height = treeNode.getHeight();
         label = treeNode.getID();
+        height = treeNode.getHeight();
         metaDataString = treeNode.metaDataString;
-        for (String metaDataKey: treeNode.getMetaDataNames()) {
-            Object metaDataValue = treeNode.getMetaData(metaDataKey);
-            metaData.put(metaDataKey, metaDataValue);
+        for (String key : treeNode.getMetaDataNames()) {
+            Object value = treeNode.getMetaData(key);
+            metaData.put(key, value);
         }
     }
 
@@ -97,12 +97,22 @@ public class NetworkNode {
 
     protected static void copyNode(NetworkNode src, NetworkNode dst) {
         dst.label = src.label;
-        dst.inheritProb = src.inheritProb;
         dst.height = src.height;
+        dst.inheritProb = src.inheritProb;
         dst.childBranchNumbers.clear();
         dst.childBranchNumbers.addAll(src.childBranchNumbers);
+        dst.gammaBranchNumber = src.gammaBranchNumber;
+        // children and parents will be sorted out using updateRelationships()
         dst.children.clear();
         dst.parents.clear();
+        dst.nodeNumber = src.nodeNumber;
+        // also copy meta data?
+        dst.metaDataString = src.metaDataString;
+        dst.metaData.clear();
+        for (String key : src.getMetaDataNames()) {
+            Object value = src.getMetaData(key);
+            dst.metaData.put(key,value);
+        }
         dst.isDirty = src.isDirty;
     }
 

@@ -13,9 +13,8 @@ import beast.core.State;
 import speciesnetwork.utils.SanityChecks;
 
 /**
- * @author Remco Bouckaert
- * @author Joseph Heled
  * @author Huw Ogilvie
+ * @author Chi Zhang
  */
 
 @Description("Calculates probability of gene trees conditioned on a species network (multispecies network coalescent, MSNC).")
