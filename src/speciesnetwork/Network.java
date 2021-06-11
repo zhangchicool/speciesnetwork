@@ -10,11 +10,12 @@ import beast.core.Description;
 import beast.core.Input;
 import beast.core.StateNode;
 import beast.evolution.alignment.TaxonSet;
+import beast.evolution.tree.TraitSet;
 import beast.util.TreeParser;
 
 /**
- * Network class to replace Tree class
- * It includes tip (in-degree 1/out-degree 0), bifurcation (1/2), and reticulation (2/1) nodes.
+ * Network class modelling the phylogeny of species, which includes
+ * tip (in-degree 1/out-degree 0), bifurcation (1/2), and reticulation (2/1) nodes.
  * @author Chi Zhang
  * @author Huw Ogilvie
  */
@@ -27,6 +28,8 @@ import beast.util.TreeParser;
 public class Network extends StateNode {
     public final Input<TaxonSet> taxonSetInput =
             new Input<>("taxonset", "Set of taxa at the leafs of the network.");
+    public final Input<List<TraitSet>> traitListInput = new Input<>("trait",
+            "trait information for initializing traits (like node dates) in the network", new ArrayList<>());
 
     /**
      * state of dirtiness of a node in the network
@@ -36,7 +39,6 @@ public class Network extends StateNode {
      */
     public static final int IS_CLEAN = 0, IS_DIRTY = 1, IS_FILTHY = 2;
 
-    // number of nodes
     protected int nodeCount = -1;
     private int storedNodeCount = -1;
     protected int speciationNodeCount = -1;
@@ -48,25 +50,26 @@ public class Network extends StateNode {
 
     /**
      * array of all nodes in the network
+     * the order must obey: leaf nodes | speciation nodes | reticulation nodes | origin node
      */
     protected NetworkNode[] nodes = null;
     private NetworkNode[] storedNodes = null;
 
+    // trait set which specifies leaf node times
+    protected TraitSet timeTraitSet = null;
+
     @Override
     public void initAndValidate() {
         if (nodeCount < 0) {
-            if (taxonSetInput.get() != null) {
-                makeCaterpillar(0, 1);
-                updateRelationships();
-            } else {
-                makeDummy();
-            }
+            makeCaterpillar(0, 1);
         }
-    }
 
-    public void updateRelationships() {
-        for (NetworkNode node: nodes) {
-            node.updateRelationships();
+        // process all available time traits
+        processTraits(traitListInput.get());
+
+        // ensure network is compatible with time traits
+        if (timeTraitSet != null) {
+            adjustNodeHeights(getOrigin());
         }
     }
 
@@ -79,7 +82,7 @@ public class Network extends StateNode {
     }
 
     private void makeCaterpillar(final double minInternalHeight, final double step) {
-        // make a caterpillar
+        // make a caterpillar species tree
         final List<String> taxa = taxonSetInput.get().asStringList();
         leafNodeCount = taxa.size();
         speciationNodeCount = leafNodeCount - 1;
@@ -114,6 +117,61 @@ public class Network extends StateNode {
 
         // set internal node labels
         resetInternalNodeLabels();
+
+        updateRelationships();
+    }
+
+    public void updateRelationships() {
+        for (NetworkNode node: nodes) {
+            node.updateRelationships();
+        }
+    }
+
+    /**
+     * @return date trait set if available, null otherwise.
+     */
+    public TraitSet getDateTrait() {
+        return timeTraitSet;
+    }
+
+    /**
+     * @return true if network has a date/time trait set associated
+     */
+    public boolean hasDateTrait() {
+        return timeTraitSet != null;
+    }
+
+    /* set the date trait set for this network.
+       A null value simply removes the existing trait set. */
+    public void setDateTrait(TraitSet traitSet) {
+        if (hasDateTrait()) {
+            traitListInput.get().remove(timeTraitSet);
+        }
+
+        if (traitSet != null)
+            traitListInput.get().add(traitSet);
+
+        timeTraitSet = traitSet;
+    }
+
+    protected void processTraits(List<TraitSet> traitList) {
+        for (TraitSet traitSet : traitList) {
+            for (NetworkNode node : getLeafNodes()) {
+                final String speciesName = node.getLabel();
+                if (speciesName != null) {
+                    final double value = traitSet.getValue(speciesName);
+                    // add trait to node meta data
+                    node.setMetaData(traitSet.getTraitName(), value);
+
+                    // also update tip node height
+                    if (traitSet.isDateTrait()) {
+                       node.setHeight(value);
+                    }
+                }
+            }
+            if (traitSet.isDateTrait())
+                timeTraitSet = traitSet;
+        }
     }
 
     public NetworkNode getOrigin() {
@@ -152,6 +210,7 @@ public class Network extends StateNode {
     }
 
     public int getInternalNodeCount() {
+        // internal nodes include bifurcation and reticulation nodes, do not include origin node
         return speciationNodeCount + reticulationNodeCount;
     }
 
@@ -162,12 +221,8 @@ public class Network extends StateNode {
         return leafNodeCount + speciationNodeCount;
     }
 
-    public int getTraversalNodeCount() {
-        return speciationNodeCount + reticulationNodeCount;
-    }
-
     /**
-     * @return get the total number of branches in the network
+     * @return the total number of branches in the network
      */
     public int getBranchCount() {
         return reticulationNodeCount + nodeCount - 1;
@@ -187,15 +242,14 @@ public class Network extends StateNode {
         return nB;
     }
 
-    public NetworkNode getNode(final int nodeI) {
-        return nodes[nodeI];
+    public NetworkNode getNode(final int idx) {
+        return nodes[idx];
     }
 
     /**
      * @return an array of all the nodes in this network
      */
     public NetworkNode[] getAllNodes() {
-        // Q2HO: why not return nodes directly?
         final NetworkNode[] nodesCopy = new NetworkNode[nodeCount];
         System.arraycopy(nodes, 0, nodesCopy, 0, nodeCount);
         return nodesCopy;
@@ -256,6 +310,8 @@ public class Network extends StateNode {
         return reticulationNodes;
     }
 
+    /* set visited indicator to false for all nodes
+       This is typically called before a recursive function to avoid duplicated traversal in the network */
     public void resetAllVisited() {
         for (NetworkNode node: nodes) {
             node.setVisited(false);
@@ -327,17 +383,41 @@ public class Network extends StateNode {
         }
     }
 
+    /* adjust node heights to no negative branch lengths exist
+       This can occur if leaf heights given as traits are incompatible with the existing network. */
+    public void adjustNodeHeights(NetworkNode node) {
+        if (!node.isLeaf()) {
+            for (final NetworkNode child : node.getChildren()) {
+                adjustNodeHeights(child);
+            }
+            for (final NetworkNode child : node.getChildren()) {
+                // bump up a small amount
+                final double minHeight = child.height + 0.001;
+                if (node.height < minHeight)
+                    node.height = minHeight;
+            }
+        }
+    }
+
     @Override
     public int scale(final double scale) {
-        for (NetworkNode node: nodes) {
+        int dof = 0;
+        for (NetworkNode node : getInternalNodesWithOrigin()) {
             node.height *= scale;
+            dof++;
+
+            // check for negative branch length
+            for (NetworkNode child : node.getChildren()) {
+                if (child.isLeaf() && child.height > node.height)
+                    throw new RuntimeException("Scale gives negative branch length!");
+            }
         }
-        return speciationNodeCount + reticulationNodeCount;
+        return dof;
     }
 
     @Override
     public String toString() {
-    	return getOrigin().toString();
+        return getOrigin().toString();
     }
 
     public String toString(DecimalFormat df) {
@@ -374,17 +454,15 @@ public class Network extends StateNode {
     }
 
     private static void copyNetwork(Network src, Network dst) {
-        final int copyNodeCount = src.nodeCount;
-
         dst.setID(src.getID());
-        dst.nodeCount = copyNodeCount;
+        dst.nodeCount = src.nodeCount;
         dst.speciationNodeCount = src.speciationNodeCount;
         dst.leafNodeCount = src.leafNodeCount;
         dst.reticulationNodeCount = src.reticulationNodeCount;
 
-        dst.nodes = new NetworkNode[copyNodeCount];
-        dst.storedNodes = new NetworkNode[copyNodeCount];
-        for (int i = 0; i < copyNodeCount; i++) {
+        dst.nodes = new NetworkNode[src.nodeCount];
+        dst.storedNodes = new NetworkNode[src.nodeCount];
+        for (int i = 0; i < src.nodeCount; i++) {
             dst.nodes[i] = new NetworkNode(dst);
             dst.nodes[i].copyFrom(src.nodes[i]);
         }
@@ -399,25 +477,11 @@ public class Network extends StateNode {
     public void assignFromFragile(final StateNode other) {
         final Network src = (Network) other;
 
-        if (src.nodeCount == nodeCount) {
-	        for (int i = 0; i < nodeCount; i++) {
-	            nodes[i].copyFrom(src.nodes[i]);
-	        }
-	        updateRelationships();
-        } else {
-            nodeCount = src.nodeCount;
-            speciationNodeCount = src.speciationNodeCount;
-            leafNodeCount = src.leafNodeCount;
-            reticulationNodeCount = src.reticulationNodeCount;
-
-            nodes = new NetworkNode[src.nodeCount];
-            storedNodes = new NetworkNode[src.nodeCount];
-            for (int i = 0; i < src.nodeCount; i++) {
-                nodes[i] = new NetworkNode(this);
-                nodes[i].copyFrom(src.nodes[i]);
-            }
-            updateRelationships();
+        // assumes src.nodeCount == nodeCount
+        for (int i = 0; i < nodeCount; i++) {
+            nodes[i].copyFrom(src.nodes[i]);
         }
+        updateRelationships();
     }
 
     /**
@@ -522,8 +586,8 @@ public class Network extends StateNode {
     }
 
     @Override
-    public double getArrayValue(final int nodeI) {
-        return nodes[nodeI].height;
+    public double getArrayValue(final int idx) {
+        return nodes[idx].height;
     }
 
     public void resetInternalNodeLabels() {
@@ -708,6 +772,7 @@ public class Network extends StateNode {
         leafNodeCount++;
     }
 
+    /* delete a node from the nodes array */
     public void deleteNode(NetworkNode node) {
         int index = -1;
         for (int i = 0; i < nodes.length; i++) {
@@ -734,6 +799,9 @@ public class Network extends StateNode {
             reticulationNodeCount--;
     }
 
+    /**
+     * @return true if the network has a bubble
+     */
     public boolean hasBubble() {
         for (NetworkNode hybridNode: getReticulationNodes()) {
             final int gammaBranchNr = hybridNode.gammaBranchNumber;

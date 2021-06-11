@@ -43,21 +43,26 @@ public class NetworkMultiplier extends Operator {
 
         final double scaler = Math.exp (tuning * (Randomizer.nextDouble() - 0.5));
 
-        // scale all internal network nodes (including origin)
+        // scale all internal network nodes
         speciesNetwork.startEditing(this);
-        for (NetworkNode snNode : speciesNetwork.getInternalNodesWithOrigin()) {
+        for (NetworkNode snNode : speciesNetwork.getInternalNodes()) {
             final double newHeight = scaler * snNode.getHeight();
             snNode.setHeight(newHeight);
-
-            if (snNode.isOrigin()) {
-                final RealParameter originTime = originInput.get();
-                if (outsideBounds(newHeight, originTime))
-                    return Double.NEGATIVE_INFINITY;
-                originTime.setValue(newHeight);
-            }
         }
+
+        // check species network validity
+        final double tOrigin = originInput.get().getValue();
+        final double tMRCA = speciesNetwork.getRoot().getHeight();
+        if (tOrigin < tMRCA)
+            return Double.NEGATIVE_INFINITY;
+        for (NetworkNode snLeaf : speciesNetwork.getLeafNodes()) {
+            final NetworkNode parent = snLeaf.getParentByBranch(snLeaf.gammaBranchNumber);
+            if (parent.getHeight() < snLeaf.getHeight())
+                return Double.NEGATIVE_INFINITY;
+        }
+
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
-        double logProposalRatio =  Math.log(scaler) * (speciesNetwork.getInternalNodeCount() + 1);
+        double logProposalRatio =  Math.log(scaler) * speciesNetwork.getInternalNodeCount();
 
         // also scale all gene tree internal nodes
         for (Tree gTree : geneTreesInput.get()) {
@@ -65,6 +70,14 @@ public class NetworkMultiplier extends Operator {
                 final double newHeight = scaler * gNode.getHeight();
                 gNode.setHeight(newHeight);
             }
+
+            // check gene tree validity
+            for (Node gLeaf : gTree.getExternalNodes()) {
+                final Node parent = gLeaf.getParent();
+                if (parent.getHeight() < gLeaf.getHeight())
+                    return Double.NEGATIVE_INFINITY;
+            }
+
             logProposalRatio += Math.log(scaler) * gTree.getInternalNodeCount();
         }
 

@@ -11,7 +11,7 @@ import beast.core.Description;
  * @author Joseph Heled
  */
 
-@Description("Calculates probability of coalescence events within a branch based on a demographic function.")
+@Description("Calculates probability of coalescent events within a branch based on a demographic function.")
 public abstract class PopulationSizeModel extends CalculationNode {
     abstract public double branchLogP(int speciesNetworkPopNumber, double[] perGenePloidy,
                                       List<Double[]> branchCoalescentTimes, int[] branchLineageCounts, int[] branchEventCounts);

@@ -14,7 +14,7 @@
     <init spec='beast.util.TreeParser' id='newick:species' IsLabelledNewick="true" adjustTipHeights="false"
           newick="(((A:0.035,((B:0.012,(C:0.01)#H2[&amp;gamma=0.7]:0.002)S3:0.018)#H1[&amp;gamma=0.6]:0.005)S1:0.015,(#H1:0.01,(#H2:0.005,D:0.015)S4:0.025)S2:0.01)R:0.05)"/>
 
-<!-- run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="test_gene.xml" networkOperator="false" initMethod="random" -->
+<!-- run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="test_gene.xml" networkOperator="false" -->
     <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="test_gene.trees" iterations="100">
         <state id="state">
             <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">

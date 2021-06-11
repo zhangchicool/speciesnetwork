@@ -37,29 +37,50 @@
     <map name="OneOnX">beast.math.distributions.OneOnX</map>
     <map name="prior">beast.math.distributions.Prior</map>
 
+    <init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false"
+          newick="(((A:2.0,(B:1.0)#H1[&amp;gamma=0.3]:1.0)S1:3.0,(#H1:2.0,C:2.0)S2:2.0)R:3.0)"/>
+
+    <!-- TODO
+    <init spec="beast.util.TreeParser" id="newick:gene1" IsLabelledNewick="true"
+          newick="((((a1:0.015486335625819959,a2:0.015486335625819959):0.011550028197273198,b2:0.027036363823093157):0.05778693796023736,c2:0.08482330178333052):0.04695268241427415,(b1:0.07090676170149966,c1:0.07090676170149966):0.060869222496105005):0.0"/>
+    <init spec="beast.util.TreeParser" id="newick:gene2" IsLabelledNewick="true"
+          newick="((a1:0.018500432803927776,(b2:0.00386346915702543,b3:0.00386346915702543):0.014636963646902345):0.04960144398638929,((b1:0.014153584463938329,b4:0.014153584463938329):0.05214326980030233,c1:0.06629685426424066):0.001805022526076408):0.0"/>
+    <init spec="beast.util.TreeParser" id="newick:gene3" IsLabelledNewick="true"
+          newick="(((a1:0.03556624423508001,(a2:0.030002350069789695,(b1:0.007549115881014078,b2:0.007549115881014078):0.022453234188775616):0.0055638941652903125):0.02400410169340688,c1:0.05957034592848689):0.01620792796892636,(b3:0.06210020959853823,c2:0.06210020959853823):0.013678064298875019):0.0"/>
+    -->
+
     <run id="mcmc" spec="MCMC" chainLength="2000000" storeEvery="10000">
         <state id="state">
-            <stateNode id="network:species" spec="speciesnetwork.Network">
-                <taxonset id="taxonsuperset" spec="TaxonSet">
-                    <taxon id="A" spec="TaxonSet">
-                        <taxon id="a1" spec="Taxon"/>
-                        <taxon id="a2" spec="Taxon"/>
-                    </taxon>
-                    <taxon id="B" spec="TaxonSet">
-                        <taxon id="b1" spec="Taxon"/>
-                        <taxon id="b2" spec="Taxon"/>
-                        <taxon id="b3" spec="Taxon"/>
-                        <taxon id="b4" spec="Taxon"/>
-                    </taxon>
-                    <taxon id="C" spec="TaxonSet">
-                        <taxon id="c1" spec="Taxon"/>
-                        <taxon id="c2" spec="Taxon"/>
-                    </taxon>
-                </taxonset>
+            <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
+            <!-- stateNode id="network:species" spec="speciesnetwork.Network" -->
+                <trait id="date.t:species" spec="beast.evolution.tree.TraitSet" traitname="date-backward">
+                    A=0,
+                    B=0,
+                    C=1.0
+                    <taxa id="taxonsuperset" spec="TaxonSet">
+                        <taxon id="A" spec="TaxonSet">
+                            <taxon id="a1" spec="Taxon"/>
+                            <taxon id="a2" spec="Taxon"/>
+                        </taxon>
+                        <taxon id="B" spec="TaxonSet">
+                            <taxon id="b1" spec="Taxon"/>
+                            <taxon id="b2" spec="Taxon"/>
+                            <taxon id="b3" spec="Taxon"/>
+                            <taxon id="b4" spec="Taxon"/>
+                        </taxon>
+                        <taxon id="C" spec="TaxonSet">
+                            <taxon id="c1" spec="Taxon"/>
+                            <taxon id="c2" spec="Taxon"/>
+                        </taxon>
+                    </taxa>
+                </trait>
+                <taxonset idref="taxonsuperset"/>
             </stateNode>
-            <parameter id="originTime:species" lower="0.0" name="stateNode">0.1</parameter>
-            <parameter id="netDivRate:species" lower="0.0" name="stateNode">2.0</parameter>
+            <parameter id="originTime:species" lower="0.0" name="stateNode">10.0</parameter>
+            <parameter id="netDivRate:species" lower="0.0" name="stateNode">0.1</parameter>
             <parameter id="turnOverRate:species" lower="0.0" upper="1.0" name="stateNode">0.5</parameter>
+            <parameter id="hybridProp:species" lower="0.0" upper="1.0" name="stateNode">0.1</parameter>
+            <parameter id="clockRate:gene" lower="0.0" name="stateNode">0.01</parameter>
             <stateNode id="tree:gene1" spec="speciesnetwork.EmbeddedTree">
                 <taxonset id="taxonset:gene1" spec="TaxonSet" alignment="@gene1"/>
             </stateNode>
@@ -82,7 +103,7 @@
             </rebuildEmbedding>
             <!--
             <coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species">
-                <parameter id="popSizes" estimate="false" name="popSizes">0.01</parameter>
+                <parameter id="popSizes" estimate="false" name="popSizes">1.0</parameter>
                 <geneTree idref="tree:gene1"/>
                 <geneTree idref="tree:gene2"/>
                 <geneTree idref="tree:gene3"/>
@@ -95,18 +116,25 @@
                 <geneTreeWithin id="geneTree:gene1" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene1"/>
                 <geneTreeWithin id="geneTree:gene2" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene2"/>
                 <geneTreeWithin id="geneTree:gene3" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene3"/>
-                <populationModel id="popModel" alpha="4.0" beta="0.04" spec="speciesnetwork.ConstantPopIntegrated"/>
+                <populationModel id="popModel" alpha="4.0" beta="4.0" spec="speciesnetwork.ConstantPopIntegrated"/>
             </distribution>
             <distribution id="prior" spec="util.CompoundDistribution">
-                <distribution id="networkPrior" spec="speciesnetwork.BirthHybridizationModel" network="@network:species" netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" betaShape="1.0"/>
+                <distribution id="networkPrior" spec="speciesnetwork.BirthDeathHybridization" network="@network:species" betaShape="1.0"
+                              netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" hybridProportion="@hybridProp:species"/>
                 <prior id="networkOrigin" name="distribution" x="@originTime:species">
-                    <Exponential id="exponential.0" name="distr" mean="0.1"/>
+                    <Exponential id="exponential.0" name="distr" mean="10.0"/>
                 </prior>
                 <prior id="netDivPrior" name="distribution" x="@netDivRate:species">
-                    <Exponential id="exponential.01" name="distr" mean="10.0"/>
+                    <Exponential id="exponential.01" name="distr" mean="0.1"/>
                 </prior>
                 <prior id="turnOverPrior" name="distribution" x="@turnOverRate:species">
-                    <Beta id="betadistr.01" name="distr" alpha="1.0" beta="10.0"/>
+                    <Beta id="betadistr.01" name="distr" alpha="1.0" beta="1.0"/>
+                </prior>
+                <prior id="hybridPropPrior" name="distribution" x="@hybridProp:species">
+                    <Beta id="betadistr.02" name="distr" alpha="1.0" beta="9.0"/>
+                </prior>
+                <prior id="clockRatePrior" name="distribution" x="@clockRate:gene">
+                    <Uniform id="uniformdistr.01" name="distr" lower="0.0" upper="1.0"/>
                 </prior>
             </distribution>
             <distribution id="likelihood" spec="util.CompoundDistribution">
@@ -114,19 +142,19 @@
                     <siteModel id="siteModel:gene1" mutationRate="1.0" spec="SiteModel">
                         <substModel id="jc:gene1" spec="JukesCantor"/>
                     </siteModel>
-                    <branchRateModel id="strictClock:gene1" clock.rate="1.0" spec="StrictClockModel"/>
+                    <branchRateModel id="strictClock:gene" clock.rate="@clockRate:gene" spec="StrictClockModel"/>
                 </distribution>
                 <distribution id="likelihood:gene2" data="@gene2" tree="@tree:gene2" spec="TreeLikelihood">
                     <siteModel id="siteModel:gene2" mutationRate="1.0" spec="SiteModel">
                         <substModel id="jc:gene2" spec="JukesCantor"/>
                     </siteModel>
-                    <branchRateModel id="strictClock:gene2" clock.rate="1.0" spec="StrictClockModel"/>
+                    <branchRateModel idref="strictClock:gene"/>
                 </distribution>
                 <distribution id="likelihood:gene3" data="@gene3" tree="@tree:gene3" spec="TreeLikelihood">
                     <siteModel id="siteModel:gene3" mutationRate="1.0" spec="SiteModel">
                         <substModel id="jc:gene3" spec="JukesCantor"/>
                     </siteModel>
-                    <branchRateModel id="strictClock:gene3" clock.rate="1.0" spec="StrictClockModel"/>
+                    <branchRateModel idref="strictClock:gene"/>
                 </distribution>
             </distribution>
         </distribution>
@@ -216,10 +244,13 @@
             <operator id="WilsonBalding:gene3" spec="WilsonBalding" tree="@tree:gene3" weight="0.0"/>
         </operator>
 
+        <operator id="clockScaler:gene" spec="ScaleOperator" parameter="@clockRate:gene" scaleFactor="0.5" weight="5.0"/>
+
         <operator id="divrRateScale:species" spec="ScaleOperator" parameter="@netDivRate:species" scaleFactor="0.5" weight="5.0"/>
         <operator id="turnOverScale:species" spec="ScaleOperator" parameter="@turnOverRate:species" scaleFactor="0.5" weight="5.0"/>
-        <operator id="gammaProbUniform:species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="20.0"/>
-        <operator id="gammaProbRndWalk:species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="20.0"/>
+        <operator id="hybridPropScale:species" spec="ScaleOperator" parameter="@hybridProp:species" scaleFactor="0.5" weight="5.0"/>
+        <operator id="gammaProbUniform:species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="10.0"/>
+        <operator id="gammaProbRndWalk:species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="10.0"/>
 
         <operator id="originMultiplier:species" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="5.0"/>
         <operator id="networkMultiplier:species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="10.0">
@@ -242,10 +273,10 @@
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
-            <operator id="nodeSlider:species" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.005" weight="0.0"/>
+            <operator id="nodeSlider:species" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.5" weight="0.0"/>
         </operator>
 
-        <operator id="relocateBranchAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="150.0">
+        <!-- operator id="relocateBranchAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="150.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
@@ -269,7 +300,7 @@
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
             <operator id="deleteReticulation:species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@network:species" weight="0.0"/>
-        </operator>
+        </operator -->
 
         <logger id="screenlog" logEvery="10000" model="@posterior">
             <log idref="posterior"/>
@@ -285,7 +316,9 @@
             <log idref="coalescent"/>
             <log idref="netDivRate:species"/>
             <log idref="turnOverRate:species"/>
+            <log idref="hybridProp:species"/>
             <log idref="originTime:species"/>
+            <log idref="clockRate:gene"/>
             <log id="height:species" speciesNetwork="@network:species" spec="speciesnetwork.utils.NetworkStatLogger"/>
             <log id="height:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeStatLogger"/>
             <log id="height:gene2" tree="@tree:gene2" spec="beast.evolution.tree.TreeStatLogger"/>

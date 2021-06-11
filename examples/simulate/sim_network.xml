@@ -3,16 +3,10 @@
     <run id="networkSimulator" outputFileName="test_net.trees" iterations="100"
          spec="speciesnetwork.simulator.BirthHybridSimulator">
         <speciesNetwork id="network:species" spec="speciesnetwork.Network">
-            <taxonset id="taxonSuperset" spec="TaxonSet">
-                <taxon id="A" spec="TaxonSet">
-                    <taxon id="a1" spec="Taxon"/>
-                </taxon>
-                <taxon id="B" spec="TaxonSet">
-                    <taxon id="b1" spec="Taxon"/>
-                </taxon>
-                <taxon id="C" spec="TaxonSet">
-                    <taxon id="c1" spec="Taxon"/>
-                </taxon>
+            <taxonset id="taxonSpecies" spec="TaxonSet">
+                <taxon id="A" spec="Taxon"/>
+                <taxon id="B" spec="Taxon"/>
+                <taxon id="C" spec="Taxon"/>
             </taxonset>
         </speciesNetwork>
         <parameter id="time.origin" name="origin">0.1</parameter>

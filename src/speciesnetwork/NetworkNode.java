@@ -10,33 +10,25 @@ import beast.core.Description;
 import beast.evolution.tree.Node;
 
 /**
- * NetworkNode is equivalent to Node but can have 2 parents or 2 children.
+ * NetworkNode: tip (one parent no child), bifurcation (one parent two children), reticulation (two parents one child)
  * @author Chi Zhang
  * @author Huw Ogilvie
  */
 
 @Description("Network node for binary rooted network")
 public class NetworkNode {
-    /**
-     * the taxonomic name of this node
-     */
+    // the taxonomic name of this node
     protected String label;
 
     protected int nodeNumber;
 
-    /**
-     * height of this node
-     */
+    // height of this node
     protected double height;
 
-    /**
-     * inheritance probability associated with the gamma branch
-     */
+    // inheritance probability associated with the gamma branch
     protected double inheritProb;
 
-    /**
-     * children and parents of this node
-     */
+    // children and parents of this node
     public List<Integer> childBranchNumbers;
     public Integer gammaBranchNumber;
     protected Multiset<NetworkNode> children;
@@ -44,51 +36,23 @@ public class NetworkNode {
 
     /**
      * status of this node after an operation is performed on the state
-     *
      * A Node IS_DIRTY if its value (like height) has changed.
      * A Node IS_FILTHY if its parent or child has changed.
      * Otherwise the node IS_CLEAN.
      */
     protected int isDirty;
 
-    /**
-     * used when summarizing posterior distribution
-     */
+    // used when summarizing posterior distribution
     public Integer subnetworkNr;
     public Double topologySupport;
 
-    public void updateRelationships() {
-        nodeNumber = -1;
-        for (int i = 0; i < network.nodes.length; i++) {
-            if (network.nodes[i] == this) {
-                nodeNumber = i;
-                break;
-            }
-        }
-        if (nodeNumber < 0) {
-            throw new RuntimeException("Node is not attached to the network!");
-        }
-
-        gammaBranchNumber = network.getBranchNumber(nodeNumber);
-        parents = updateParents();
-        children = updateChildren();
-
-        isDirty |= Network.IS_DIRTY;
-    }
-
-    /**
-     * meta-data contained in square brackets in Newick
-     */
+    // meta-data contained in square brackets in Newick
     protected String metaDataString;
 
-    /**
-     * arbitrarily labeled metadata on this node
-     */
+    // arbitrarily labeled metadata on this node
     protected Map<String, Object> metaData = new TreeMap<>();
 
-    /**
-     * the network that this node is a part of
-     */
+    // the network that this node is a part of
     protected Network network;
 
     public NetworkNode() {
@@ -102,8 +66,8 @@ public class NetworkNode {
 
     private void initProps() {
         label = null;
-        inheritProb = 0.5;
         height = 0.0;
+        inheritProb = 0.5;
         childBranchNumbers = new ArrayList<>();
         children = HashMultiset.create();
         parents = HashMultiset.create();
@@ -114,12 +78,12 @@ public class NetworkNode {
     /* instantiate a new network node with the same height, labels and metadata as a tree node
        this does not copy the parents or children */
     public NetworkNode(Node treeNode) {
-        height = treeNode.getHeight();
         label = treeNode.getID();
+        height = treeNode.getHeight();
         metaDataString = treeNode.metaDataString;
-        for (String metaDataKey: treeNode.getMetaDataNames()) {
-            Object metaDataValue = treeNode.getMetaData(metaDataKey);
-            metaData.put(metaDataKey, metaDataValue);
+        for (String key : treeNode.getMetaDataNames()) {
+            Object value = treeNode.getMetaData(key);
+            metaData.put(key, value);
         }
     }
 
@@ -133,12 +97,22 @@ public class NetworkNode {
 
     protected static void copyNode(NetworkNode src, NetworkNode dst) {
         dst.label = src.label;
-        dst.inheritProb = src.inheritProb;
         dst.height = src.height;
+        dst.inheritProb = src.inheritProb;
         dst.childBranchNumbers.clear();
         dst.childBranchNumbers.addAll(src.childBranchNumbers);
+        dst.gammaBranchNumber = src.gammaBranchNumber;
+        // children and parents will be sorted out using updateRelationships()
         dst.children.clear();
         dst.parents.clear();
+        dst.nodeNumber = src.nodeNumber;
+        // also copy meta data?
+        dst.metaDataString = src.metaDataString;
+        dst.metaData.clear();
+        for (String key : src.getMetaDataNames()) {
+            Object value = src.getMetaData(key);
+            dst.metaData.put(key,value);
+        }
         dst.isDirty = src.isDirty;
     }
 
@@ -166,9 +140,6 @@ public class NetworkNode {
         }
     }
 
-    /**
-     * set meta-data according to pattern.
-     */
     public void setMetaData(final String pattern, final Object value) {
         metaData.put(pattern, value);
     }
@@ -179,14 +150,6 @@ public class NetworkNode {
 
     public Set<String> getMetaDataNames() {
         return metaData.keySet();
-    }
-
-    public int getParentCount() {
-        return parents.size();
-    }
-
-    public int getChildCount() {
-        return children.size();
     }
 
     public Multiset<NetworkNode> getParents() {
@@ -200,11 +163,11 @@ public class NetworkNode {
     protected Multiset<NetworkNode> updateParents() {
         final Multiset<NetworkNode> parents = HashMultiset.create();
 
-        for (NetworkNode n: network.nodes) {
-            for (Integer i: n.childBranchNumbers) {
+        for (NetworkNode node: network.nodes) {
+            for (Integer i: node.childBranchNumbers) {
                 final int childNodeNumber = network.getNodeNumber(i);
                 final NetworkNode childNode = network.nodes[childNodeNumber];
-                if (childNode == this) parents.add(n);
+                if (childNode == this) parents.add(node);
             }
         }
 
@@ -223,7 +186,26 @@ public class NetworkNode {
         return children;
     }
 
-    public NetworkNode getParentByBranch(int branchNr) {
+    public void updateRelationships() {
+        nodeNumber = -1;
+        for (int i = 0; i < network.nodes.length; i++) {
+            if (network.nodes[i] == this) {
+                nodeNumber = i;
+                break;
+            }
+        }
+        if (nodeNumber < 0) {
+            throw new RuntimeException("Node is not attached to the network!");
+        }
+
+        gammaBranchNumber = network.getBranchNumber(nodeNumber);
+        parents = updateParents();
+        children = updateChildren();
+
+        isDirty |= Network.IS_DIRTY;
+    }
+
+    public NetworkNode getParentByBranch(Integer branchNr) {
         for (NetworkNode parent: parents) {
             if (parent.childBranchNumbers.contains(branchNr))
                 return parent;
@@ -231,9 +213,9 @@ public class NetworkNode {
         return null;
     }
 
-    public NetworkNode getChildByBranch(Integer childBranchNr) {
-        if (childBranchNumbers.contains(childBranchNr)) {
-            final int childNodeNumber = network.getNodeNumber(childBranchNr);
+    public NetworkNode getChildByBranch(Integer branchNr) {
+        if (childBranchNumbers.contains(branchNr)) {
+            final int childNodeNumber = network.getNodeNumber(branchNr);
             return network.nodes[childNodeNumber];
         }
         return null;
@@ -268,7 +250,7 @@ public class NetworkNode {
     }
 
     /**
-     * @return true if current node is reticulation node
+     * @return true if current node is speciation node
      */
     public boolean isSpeciation() {
         return children.size() == 2;
@@ -291,8 +273,8 @@ public class NetworkNode {
     private boolean touched = false; // this is only used inside this class
 
     private void resetAllTouched() {
-        for (NetworkNode n: network.nodes) {
-            n.touched = false;
+        for (NetworkNode node: network.nodes) {
+            node.touched = false;
         }
     }
 
@@ -340,7 +322,7 @@ public class NetworkNode {
             setMetaData("gamma", inheritProb);
             processMetaData(true);  // write gamma prob associated with the branch
         } else {
-            processMetaData(false); // do not write gamma prob
+            processMetaData(false); // do not write gamma prob at the other branch
         }
         subStr.append(getNewickMetaData(inXML));
 
@@ -376,7 +358,7 @@ public class NetworkNode {
             }
         }
         if (metaStr.length() > 0)
-            metaDataString = metaStr.toString().substring(0, metaStr.length() - 1);
+            metaDataString = metaStr.substring(0, metaStr.length() - 1);
         else
             metaDataString = "";
     }
@@ -414,7 +396,7 @@ public class NetworkNode {
     }
 
     /**
-     * returns total node count (leaf, internal including root) of subtree defined by this node
+     * @return total node count in sub-network defined by this node (including this node itself)
      */
     public int getNodeCount() {
         resetAllTouched();
@@ -458,7 +440,7 @@ public class NetworkNode {
     private int recurseSpeciationNodeCount() {
         if (touched) return 0;
 
-        // don't count reticulation nodes
+        // only count speciation nodes
         int nodeCount = (children.size() == 2) ? 1 : 0;
         for (NetworkNode child: children) {
             nodeCount += child.recurseSpeciationNodeCount();
@@ -486,15 +468,15 @@ public class NetworkNode {
     }
 
     public void printDeets() {
-        System.out.println(String.format("%s: %s", "label", label));
-        System.out.println(String.format("%s: %f", "inheritProb", inheritProb));
-        System.out.println(String.format("%s: %f", "height", height));
-        System.out.println(String.format("%s: %d", "nodeNr", nodeNumber));
-        System.out.println(String.format("%s: %d", "branchNr", gammaBranchNumber));
-        System.out.println(String.format("%s: %d", "nParents", parents.size()));
-        System.out.println(String.format("%s: %d", "nChildren", children.size()));
+        System.out.printf("%s: %s %n", "label", label);
+        System.out.printf("%s: %f %n", "inheritProb", inheritProb);
+        System.out.printf("%s: %f %n", "height", height);
+        System.out.printf("%s: %d %n", "nodeNr", nodeNumber);
+        System.out.printf("%s: %d %n", "branchNr", gammaBranchNumber);
+        System.out.printf("%s: %d %n", "nParents", parents.size());
+        System.out.printf("%s: %d %n", "nChildren", children.size());
         for (Integer i: childBranchNumbers) {
-            System.out.println(String.format("%s: %d", "childBranchNumber", i));
+            System.out.printf("%s: %d %n", "childBranchNumber", i);
         }
         System.out.println();
     }

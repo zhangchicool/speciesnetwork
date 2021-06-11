@@ -39,7 +39,6 @@ public final class SanityChecks {
 
         if (nChildren == 0) {
             assert nParents == 1;
-            assert node.getHeight() == 0.0;
         } else if (nParents == 0 || nParents == 2) {
             assert nChildren == 1;
         } else {

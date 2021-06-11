@@ -110,8 +110,7 @@ public class SummarizePosterior extends Runnable {
         // in descending order of topology frequencies, calculate node summaries
         final Multiset<Integer> allNetworkNrs = binnedNetworks.keys();
         final ImmutableMultiset<Integer> orderedNetworkNrs = Multisets.copyHighestCountFirst(allNetworkNrs);
-        final Set<Integer> uniqueNetworkNrs = new LinkedHashSet<>();
-        uniqueNetworkNrs.addAll(orderedNetworkNrs);
+        final Set<Integer> uniqueNetworkNrs = new LinkedHashSet<>(orderedNetworkNrs);
 
         progressStream.println("Writing summary networks with heights and gamma probs");
         final String outputFileName = outputFileNameInput.get();
