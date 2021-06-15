@@ -119,7 +119,7 @@
                 <populationModel id="popModel" alpha="4.0" beta="4.0" spec="speciesnetwork.ConstantPopIntegrated"/>
             </distribution>
             <distribution id="prior" spec="util.CompoundDistribution">
-                <distribution id="networkPrior" spec="speciesnetwork.BirthDeathHybridization" network="@network:species" betaShape="1.0"
+                <distribution id="networkPrior" spec="speciesnetwork.BirthDeathHybridization" network="@network:species" betaShape="2.0"
                               netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" hybridProportion="@hybridProp:species"/>
                 <prior id="networkOrigin" name="distribution" x="@originTime:species">
                     <Exponential id="exponential.0" name="distr" mean="10.0"/>
