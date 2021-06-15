@@ -33,17 +33,17 @@
 			beast.evolution.tree.Tree.taxa,
 			beast.evolution.tree.Tree.taxonset,
 			beast.evolution.tree.Tree.trait,
-	        beast.evolution.tree.RandomTree.initial,
-	        beast.evolution.tree.RandomTree.taxa,
-	        beast.evolution.tree.RandomTree.taxonset,
-	        beast.evolution.tree.RandomTree.trait,
-	        beast.evolution.tree.RandomTree.estimate,
-	        beast.util.TreeParser.initial,
+			beast.evolution.tree.RandomTree.initial,
+			beast.evolution.tree.RandomTree.taxa,
+			beast.evolution.tree.RandomTree.taxonset,
+			beast.evolution.tree.RandomTree.trait,
+			beast.evolution.tree.RandomTree.estimate,
+			beast.util.TreeParser.initial,
 			beast.util.TreeParser.taxa,
 			beast.util.TreeParser.taxonset,
 			beast.util.TreeParser.trait,
 			beast.util.TreeParser.estimate,
-	        beast.util.ClusterTree.initial,
+			beast.util.ClusterTree.initial,
 			beast.util.ClusterTree.taxa,
 			beast.util.ClusterTree.taxonset,
 			beast.util.ClusterTree.trait,
@@ -87,7 +87,7 @@
 		<panel spec="BeautiPanelConfig" panelname="Partitions" tiptext="Data Partitions" path="distribution/distribution[id='likelihood']/distribution/data" hasPartitions="none" icon="0.pngx" forceExpansion="FALSE" type="beast.evolution.alignment.Alignment"/>
 		<mergepoint id="aux-partitions-panels"/>
 
-		<panel spec="BeautiPanelConfig" panelname="Taxon sets" tiptext="Specify taxon sets that make up species" path="operator[id='coorNodeUniformAndEmbed.t:Species']/taxonset" hasPartitions="none" icon="1.pngx" forceExpansion="TRUE"/>
+		<panel spec="BeautiPanelConfig" panelname="Taxon sets" tiptext="Specify taxon sets that make up species" path="state/stateNode[id='Network.t:Species']/taxonset" hasPartitions="none" icon="1.pngx" forceExpansion="TRUE"/>
 
 		<panel spec="BeautiPanelConfig" panelname="Gene Ploidy" tiptext="The ploidy for each gene (locus)" path="distribution/distribution[id='coalescent']/geneTreeWithin" hasPartitions="none" icon="2.pngx" forceExpansion="TRUE"/>
 
@@ -156,32 +156,32 @@
 			<operator id="mutationRateScaler.s:$(n)" spec="ScaleOperator" scaleFactor="0.75" weight="1.0" parameter="@mutationRate.s:$(n)"/>
 			<operator id="gammaShapeScaler.s:$(n)" scaleFactor="0.75" spec="ScaleOperator" weight="1.0" parameter="@gammaShape.s:$(n)"/>
 			<operator id="clockRateScaler.c:$(n)" spec="ScaleOperator" scaleFactor="0.5" weight="3.0" parameter="@strictClockRate.c:$(n)"/>
-			<operator id="strictUpDownAndEmbed.c:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
+			<operator id="strictUpDownAndEmbed.c:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
 				<operator id="strictUpDown.c:$(n)" spec="UpDownOperator" scaleFactor="0.95" weight="0.0">
 					<up idref="strictClockRate.c:$(n)"/>
 					<down idref="Tree.t:$(n)"/>
 				</operator>
 			</operator>
 
-			<operator id="scaleAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
+			<operator id="scaleAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
 				<operator id="scale.t:$(n)" spec="ScaleOperator" scaleFactor="0.5" tree="@Tree.t:$(n)" weight="0.0"/>
 			</operator>
-			<operator id="scaleRootAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
+			<operator id="scaleRootAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
 				<operator id="scaleRoot.t:$(n)" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:$(n)" weight="0.0"/>
 			</operator>
-			<operator id="uniformAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="30.0">
+			<operator id="uniformAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="30.0">
 				<operator id="uniform.t:$(n)" spec="Uniform" tree="@Tree.t:$(n)" weight="0.0"/>
 			</operator>
-			<operator id="subSlideAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="15.0">
+			<operator id="subSlideAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="15.0">
 				<operator id="subSlide.t:$(n)" spec="SubtreeSlide" tree="@Tree.t:$(n)" weight="0.0"/>
 			</operator>
-			<operator id="narrowAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="15.0">
+			<operator id="narrowAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="15.0">
 				<operator id="narrow.t:$(n)" spec="Exchange" tree="@Tree.t:$(n)" weight="0.0"/>
 			</operator>
-			<operator id="wideAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="5.0">
+			<operator id="wideAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="5.0">
 				<operator id="wide.t:$(n)" spec="Exchange" isNarrow="false" tree="@Tree.t:$(n)" weight="0.0"/>
 			</operator>
-			<operator id="WilsonBaldingAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="5.0">
+			<operator id="WilsonBaldingAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="5.0">
 				<operator id="WilsonBalding.t:$(n)" spec="WilsonBalding" tree="@Tree.t:$(n)" weight="0.0"/>
 			</operator>
 
@@ -252,7 +252,7 @@
 			<mergepoint id="aux-partitiontemplate"/>
 		</partitiontemplate>
 
-		<mergepoint id="snSubstModelTemplates"/>
+		<mergepoint id="substModelTemplates"/>
 		<mergepoint id="snClockModelTemplates"/>
 		<mergepoint id="parametricDistributions"/>
 
@@ -330,27 +330,27 @@
 
 		<operator id="coorNetworkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="30.0"/>
 
-		<operator id="coorNodeUniformAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="150.0">
+		<operator id="coorNodeUniformAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="150.0">
 			<operator id="coorNodeUniform.t:Species" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
-		<operator id="nodeSliderAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="100.0">
+		<operator id="nodeSliderAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="100.0">
 			<operator id="nodeSlider.t:Species" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" isNormal="true" sigma="0.001" weight="0.0"/>
 		</operator> <!-- user should adjust sigma to a reasonable value -->
 
-		<operator id="relocateBranchAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="400.0">
+		<operator id="relocateBranchAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="400.0">
 			<operator id="relocateBranch.t:Species" spec="speciesnetwork.operators.RelocateBranch" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
-		<operator id="flipReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="30.0">
+		<operator id="flipReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="30.0">
 			<operator id="flipReticulation.t:Species" spec="speciesnetwork.operators.FlipReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
-		<operator id="addReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="150.0">
+		<operator id="addReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="150.0">
 			<operator id="addReticulation.t:Species" spec="speciesnetwork.operators.AddReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
-		<operator id="deleteReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="150.0">
+		<operator id="deleteReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="150.0">
 			<operator id="deleteReticulation.t:Species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
@@ -382,8 +382,8 @@
 
 		<init id="SNI" estimate="false" method="random" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@Network.t:Species">
 			<origin id="originTime.t:Species" spec="parameter.RealParameter" value="0.1" lower="0.0" estimate="true"/>
-			<rebuildEmbedding id="initEmbed" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="0.0"/>
-			<coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" popSizes="@popMean.t:Species"/>
+			<rebuildEmbedding id="initEmbed" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="0.0"/>
+			<coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@Network.t:Species" popSizes="@popMean.t:Species"/>
 		</init>
 	</run>
 
