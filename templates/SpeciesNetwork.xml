@@ -144,10 +144,10 @@
             <operator id="narrowAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="15.0">
                 <operator id="narrow.t:$(n)" spec="Exchange" tree="@Tree.t:$(n)" weight="0.0"/>
             </operator>
-            <operator id="wideAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="5.0">
+            <operator id="wideAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="10.0">
                 <operator id="wide.t:$(n)" spec="Exchange" isNarrow="false" tree="@Tree.t:$(n)" weight="0.0"/>
             </operator>
-            <operator id="WilsonBaldingAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="5.0">
+            <operator id="WilsonBaldingAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="10.0">
                 <operator id="WilsonBalding.t:$(n)" spec="WilsonBalding" tree="@Tree.t:$(n)" weight="0.0"/>
             </operator>
 
@@ -254,7 +254,7 @@
             <distribution spec="CompoundDistribution" id="prior">
                 <!-- species network priors -->
                 <distribution id="networkPrior" spec="speciesnetwork.BirthHybridizationModel" network="@Network.t:Species">
-                    <betaShape id="betaShape.t:Species" spec="parameter.RealParameter" value="1.0" estimate="false"/>
+                    <betaShape id="betaShape.t:Species" spec="parameter.RealParameter" value="2.0" estimate="false"/>
                     <netDiversification id="netDivRate.t:Species" spec="parameter.RealParameter" value="1.0" lower="0.0" estimate="true"/>
                     <turnOver id="turnOverRate.t:Species" spec="parameter.RealParameter" value="0.5" lower="0.0" upper="1.0" estimate="true"/>
                 </distribution>
@@ -281,39 +281,38 @@
             <subschedule id="operatorSubschedule" spec="OperatorSchedule" weight="20" weightIsPercentage="true" operatorPattern="^.*Species$"/>
         </operatorschedule>
 
-        <operator id="popMeanScale.t:Species" spec="ScaleOperator" scaleFactor="0.75" weight="5.0" parameter="@popMean.t:Species"/>
+        <operator id="popMeanScale.t:Species" spec="ScaleOperator" scaleFactor="0.75" weight="3.0" parameter="@popMean.t:Species"/>
 
-        <operator id="netDivRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="10.0" parameter="@netDivRate.t:Species"/>
-        <operator id="turnOverRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="10.0" parameter="@turnOverRate.t:Species"/>
+        <operator id="netDivRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="2.0" parameter="@netDivRate.t:Species"/>
+        <operator id="turnOverRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="2.0" parameter="@turnOverRate.t:Species"/>
 
-        <operator id="gammaProbUniform.t:Species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@Network.t:Species" weight="30.0"/>
-        <operator id="gammaProbRndWalk.t:Species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@Network.t:Species" weight="30.0"/>
+        <operator id="gammaProbUniform.t:Species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@Network.t:Species" weight="10.0"/>
+        <operator id="gammaProbRndWalk.t:Species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@Network.t:Species" weight="10.0"/>
 
         <operator id="originMultiplier.t:Species" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="5.0"/>
+        <operator id="coorNetworkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="5.0"/>
 
-        <operator id="coorNetworkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="30.0"/>
-
-        <operator id="coorNodeUniformAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="150.0">
+        <operator id="coorNodeUniformAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="80.0">
             <operator id="coorNodeUniform.t:Species" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@Network.t:Species" weight="0.0"/>
         </operator>
 
-        <operator id="nodeSliderAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="100.0">
+        <operator id="nodeSliderAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="30.0">
             <operator id="nodeSlider.t:Species" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" isNormal="true" sigma="0.001" weight="0.0"/>
         </operator> <!-- user should adjust sigma to a reasonable value -->
 
-        <operator id="relocateBranchAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="400.0">
+        <operator id="relocateBranchAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="100.0">
             <operator id="relocateBranch.t:Species" spec="speciesnetwork.operators.RelocateBranch" speciesNetwork="@Network.t:Species" weight="0.0"/>
         </operator>
 
-        <operator id="flipReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="30.0">
+        <operator id="flipReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="20.0">
             <operator id="flipReticulation.t:Species" spec="speciesnetwork.operators.FlipReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
         </operator>
 
-        <operator id="addReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="150.0">
+        <operator id="addReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="60.0">
             <operator id="addReticulation.t:Species" spec="speciesnetwork.operators.AddReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
         </operator>
 
-        <operator id="deleteReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="150.0">
+        <operator id="deleteReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="60.0">
             <operator id="deleteReticulation.t:Species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
         </operator>
 
@@ -332,11 +331,11 @@
             <log idref="likelihood"/>
             <log idref="prior"/>
             <log idref="coalescent"/>
+            <log idref="popMean.t:Species"/>
+            <log idref="originTime.t:Species"/>
             <log idref="netDivRate.t:Species"/>
             <log idref="turnOverRate.t:Species"/>
-            <log idref="originTime.t:Species"/>
             <log id="NetworkLength.t:Species" spec="speciesnetwork.utils.NetworkStatLogger" speciesNetwork="@Network.t:Species"/>
-            <log idref="popMean.t:Species"/>
         </logger>
 
         <logger id="specieslog" logEvery="5000" fileName="speciesnetwork.trees" mode="tree">
