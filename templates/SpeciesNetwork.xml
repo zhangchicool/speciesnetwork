@@ -217,8 +217,8 @@
 
         <mergepoint id="snSubstModelTemplates"/>
         <mergepoint id="snClockModelTemplates"/>
+        <mergepoint id="snNetworkPriorTemplates"/>
         <mergepoint id="parametricDistributions"/>
-
     </beauticonfig>
 
     <taxonset spec="beast.evolution.alignment.TaxonSet" id="taxonsuperset">
@@ -253,17 +253,16 @@
             </distribution>
             <distribution spec="CompoundDistribution" id="prior">
                 <!-- species network priors -->
-                <distribution id="networkPrior" spec="speciesnetwork.BirthHybridizationModel" network="@Network.t:Species">
-                    <betaShape id="betaShape.t:Species" spec="parameter.RealParameter" value="2.0" estimate="false"/>
+                <distribution id="BirthHybridModel.t:Species" spec="speciesnetwork.BirthHybridizationModel" network="@Network.t:Species">
                     <netDiversification id="netDivRate.t:Species" spec="parameter.RealParameter" value="1.0" lower="0.0" estimate="true"/>
                     <turnOver id="turnOverRate.t:Species" spec="parameter.RealParameter" value="0.5" lower="0.0" upper="1.0" estimate="true"/>
                 </distribution>
-                <distribution id="netDivRatePrior.t:Species" spec="beast.math.distributions.Prior" x="@netDivRate.t:Species">
+                <!-- distribution id="netDivRatePrior.t:Species" spec="beast.math.distributions.Prior" x="@netDivRate.t:Species">
                     <distr spec="beast.math.distributions.OneOnX"/>
                 </distribution>
                 <prior id="turnOverRatePrior.t:Species" name="distribution" x="@turnOverRate.t:Species">
                     <distr spec="beast.math.distributions.Uniform" lower="0.0" upper="1.0"/>
-                </prior>
+                </prior -->
                 <prior id="originTimePrior.t:Species" name="distribution" x="@originTime.t:Species">
                     <distr spec="beast.math.distributions.OneOnX"/>
                 </prior>
@@ -283,8 +282,8 @@
 
         <operator id="popMeanScale.t:Species" spec="ScaleOperator" scaleFactor="0.75" weight="3.0" parameter="@popMean.t:Species"/>
 
-        <operator id="netDivRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="2.0" parameter="@netDivRate.t:Species"/>
-        <operator id="turnOverRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="2.0" parameter="@turnOverRate.t:Species"/>
+        <!-- operator id="netDivRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="2.0" parameter="@netDivRate.t:Species"/>
+        <operator id="turnOverRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="2.0" parameter="@turnOverRate.t:Species"/ -->
 
         <operator id="gammaProbUniform.t:Species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@Network.t:Species" weight="10.0"/>
         <operator id="gammaProbRndWalk.t:Species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@Network.t:Species" weight="10.0"/>
@@ -333,8 +332,8 @@
             <log idref="coalescent"/>
             <log idref="popMean.t:Species"/>
             <log idref="originTime.t:Species"/>
-            <log idref="netDivRate.t:Species"/>
-            <log idref="turnOverRate.t:Species"/>
+            <!-- log idref="netDivRate.t:Species"/>
+            <log idref="turnOverRate.t:Species"/ -->
             <log id="NetworkLength.t:Species" spec="speciesnetwork.utils.NetworkStatLogger" speciesNetwork="@Network.t:Species"/>
         </logger>
 

@@ -23,7 +23,7 @@
             <connect srcID="clockRatePrior.c:$(n)" targetID="prior" inputName="distribution" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true">
                 Prior on the overall clock rate of partition c:$(n)
             </connect>
-            <connect srcID="clockRateScaler.c:$(n)" targetID="mcmc" inputName="operator" if="inposterior(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
+            <connect srcID="clockRateScaler.c:$(n)" targetID="mcmc" inputName="operator" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
 
             <connect srcID="strictClockRate.c:$(n)" targetID="tracelog" inputName="log" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
         </subtemplate>
