@@ -5,7 +5,7 @@ import java.util.List;
 
 import beast.core.BEASTInterface;
 
-public class SpeciesNetworkAlignmentProvider extends BeautiAlignmentProvider {
+public class SNAlignmentProvider extends BeautiAlignmentProvider {
 
 	@Override
 	public List<BEASTInterface> getAlignments(BeautiDoc doc, File[] files) {
