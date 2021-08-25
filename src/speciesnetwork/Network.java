@@ -3,6 +3,8 @@ package speciesnetwork;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import beast.core.Citation;
@@ -54,6 +56,7 @@ public class Network extends StateNode {
      */
     protected NetworkNode[] nodes = null;
     private NetworkNode[] storedNodes = null;
+    private static Comparator<NetworkNode> hc = new NodeHeightComparator();
 
     // trait set which specifies leaf node times
     protected TraitSet timeTraitSet = null;
@@ -598,6 +601,35 @@ public class Network extends StateNode {
         for (int i = 0; i < reticulationNodeCount; i++) {
             nodes[leafNodeCount + speciationNodeCount + i].setLabel("#H" + (i+1));
         }
+    }
+
+    /**
+     * @return the backbone tree of this network
+     */
+    public Network getBackboneTree () {
+        // make a copy of the current network to modify
+        Network backbone = new Network();
+        backbone.assignFrom(this);
+
+        // get and sort the hybridization nodes
+        List<NetworkNode> hNodes = Arrays.asList(backbone.getReticulationNodes());
+        hNodes.sort(hc);
+
+        // start deleting from the oldest to the youngest
+        // this guarantees every hybridization branch can be safely deleted
+        for (int i = hNodes.size() - 1; i >= 0; i--) {
+            final NetworkNode node = hNodes.get(i);
+            if (node.getGammaProb() < 0.5) {
+                // delete the gamma branch
+                backbone.deleteReticulationBranch(node.gammaBranchNumber);
+            }
+            else {
+                // delete the alternative branch
+                backbone.deleteReticulationBranch(node.gammaBranchNumber + 1);
+            }
+        }
+
+        return backbone;
     }
 
     /**

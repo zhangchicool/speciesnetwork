@@ -11,8 +11,8 @@ import beast.core.Input.Validate;
 import beast.core.Loggable;
 import speciesnetwork.Network;
 
-@Description("Logs network annotated with metadata")
-public class NetworkWithMetaDataLogger extends BEASTObject implements Loggable {
+@Description("Logs backbone tree annotated with metadata")
+public class BackboneTreeLogger extends BEASTObject implements Loggable {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network to be logged.", Validate.REQUIRED);
     public final Input<Integer> decimalPlacesInput = new Input<>("dp",
@@ -42,10 +42,11 @@ public class NetworkWithMetaDataLogger extends BEASTObject implements Loggable {
     public void log(long sample, PrintStream out) {
         // make sure we get the current version of the inputs
         Network network = (Network) speciesNetworkInput.get().getCurrent();
+        Network backbone = network.getBackboneTree();
 
-        // write out the species network with meta data
+        // write out the backbone tree with meta data
         out.print("tree STATE_" + sample + " = ");
-        out.print(network.toString(df));
+        out.print(backbone.toString(df));
         out.print(";");
     }
 
