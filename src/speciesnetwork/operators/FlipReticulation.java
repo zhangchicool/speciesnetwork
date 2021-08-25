@@ -7,7 +7,7 @@ import beast.core.Operator;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
-import speciesnetwork.utils.SanityChecks;
+import speciesnetwork.SanityChecks;
 
 /**
  * @author Chi Zhang

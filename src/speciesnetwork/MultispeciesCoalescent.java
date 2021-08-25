@@ -10,7 +10,6 @@ import beast.core.Distribution;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.State;
-import speciesnetwork.utils.SanityChecks;
 
 /**
  * @author Huw Ogilvie

@@ -7,7 +7,7 @@ import beast.core.Operator;
 import beast.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
-import speciesnetwork.utils.SanityChecks;
+import speciesnetwork.SanityChecks;
 
 /**
  * This proposal adds a reticulation event by connecting two existing branches (with length l1 and l2) with a new branch.

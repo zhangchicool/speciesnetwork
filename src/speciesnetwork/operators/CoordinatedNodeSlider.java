@@ -14,7 +14,7 @@ import beast.evolution.tree.Node;
 import speciesnetwork.EmbeddedTree;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
-import speciesnetwork.utils.SanityChecks;
+import speciesnetwork.SanityChecks;
 
 /**
  * @author Chi Zhang
