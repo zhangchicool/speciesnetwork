@@ -14,6 +14,7 @@ import beast.core.StateNode;
 import beast.evolution.alignment.TaxonSet;
 import beast.evolution.tree.TraitSet;
 import beast.util.TreeParser;
+import speciesnetwork.utils.NodeHeightComparator;
 
 /**
  * Network class modelling the phylogeny of species, which includes
