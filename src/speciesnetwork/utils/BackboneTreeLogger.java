@@ -3,18 +3,15 @@ package speciesnetwork.utils;
 import java.io.PrintStream;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
 import beast.core.BEASTObject;
 import beast.core.Description;
-import beast.core.Function;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.Loggable;
-import beast.core.StateNode;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 import speciesnetwork.NodeHeightComparator;
@@ -85,7 +82,6 @@ public class BackboneTreeLogger extends BEASTObject implements Loggable {
                 // delete the alternative branch
                 backbone.deleteReticulationBranch(node.gammaBranchNumber + 1);
             }
-
         }
 
         return backbone;
