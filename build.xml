@@ -147,7 +147,7 @@
 		</copy>
 		<copy todir="${package_dir}/lib">
 			<fileset dir="${distspeciesnetwork}" includes="speciesnetwork.package.jar" />
-			<fileset dir="${libspeciesnetwork}" includes="guava-21.0.jar" />
+			<fileset dir="${libspeciesnetwork}" includes="guava-*.jar" />
 		</copy>
 		<copy todir="${package_dir}/examples">
 			<fileset dir="examples" />

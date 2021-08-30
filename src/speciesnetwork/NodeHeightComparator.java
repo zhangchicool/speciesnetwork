@@ -1,4 +1,4 @@
-package speciesnetwork.utils;
+package speciesnetwork;
 
 import java.util.Comparator;
 
