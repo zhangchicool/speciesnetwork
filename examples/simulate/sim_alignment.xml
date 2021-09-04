@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<beast namespace="beast.core:beast.evolution.alignment:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.app" version="2.4">
+<beast namespace="beast.core:beast.evolution.alignment:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.app" version="2.6">
     <data id="gene1" name="alignment">
         <sequence id="gene1_a1" taxon="a1" totalcount="4" value="-"/>
         <sequence id="gene1_a2" taxon="a2" totalcount="4" value="-"/>
@@ -49,6 +49,56 @@
         <sequence id="gene5_c2" taxon="c2" totalcount="4" value="-"/>
         <sequence id="gene5_d1" taxon="d1" totalcount="4" value="-"/>
         <sequence id="gene5_d2" taxon="d2" totalcount="4" value="-"/>
+    </data>
+    <data id="gene6" name="alignment">
+        <sequence id="gene6_a1" taxon="a1" totalcount="4" value="-"/>
+        <sequence id="gene6_a2" taxon="a2" totalcount="4" value="-"/>
+        <sequence id="gene6_b1" taxon="b1" totalcount="4" value="-"/>
+        <sequence id="gene6_b2" taxon="b2" totalcount="4" value="-"/>
+        <sequence id="gene6_c1" taxon="c1" totalcount="4" value="-"/>
+        <sequence id="gene6_c2" taxon="c2" totalcount="4" value="-"/>
+        <sequence id="gene6_d1" taxon="d1" totalcount="4" value="-"/>
+        <sequence id="gene6_d2" taxon="d2" totalcount="4" value="-"/>
+    </data>
+    <data id="gene7" name="alignment">
+        <sequence id="gene7_a1" taxon="a1" totalcount="4" value="-"/>
+        <sequence id="gene7_a2" taxon="a2" totalcount="4" value="-"/>
+        <sequence id="gene7_b1" taxon="b1" totalcount="4" value="-"/>
+        <sequence id="gene7_b2" taxon="b2" totalcount="4" value="-"/>
+        <sequence id="gene7_c1" taxon="c1" totalcount="4" value="-"/>
+        <sequence id="gene7_c2" taxon="c2" totalcount="4" value="-"/>
+        <sequence id="gene7_d1" taxon="d1" totalcount="4" value="-"/>
+        <sequence id="gene7_d2" taxon="d2" totalcount="4" value="-"/>
+    </data>
+    <data id="gene8" name="alignment">
+        <sequence id="gene8_a1" taxon="a1" totalcount="4" value="-"/>
+        <sequence id="gene8_a2" taxon="a2" totalcount="4" value="-"/>
+        <sequence id="gene8_b1" taxon="b1" totalcount="4" value="-"/>
+        <sequence id="gene8_b2" taxon="b2" totalcount="4" value="-"/>
+        <sequence id="gene8_c1" taxon="c1" totalcount="4" value="-"/>
+        <sequence id="gene8_c2" taxon="c2" totalcount="4" value="-"/>
+        <sequence id="gene8_d1" taxon="d1" totalcount="4" value="-"/>
+        <sequence id="gene8_d2" taxon="d2" totalcount="4" value="-"/>
+    </data>
+    <data id="gene9" name="alignment">
+        <sequence id="gene9_a1" taxon="a1" totalcount="4" value="-"/>
+        <sequence id="gene9_a2" taxon="a2" totalcount="4" value="-"/>
+        <sequence id="gene9_b1" taxon="b1" totalcount="4" value="-"/>
+        <sequence id="gene9_b2" taxon="b2" totalcount="4" value="-"/>
+        <sequence id="gene9_c1" taxon="c1" totalcount="4" value="-"/>
+        <sequence id="gene9_c2" taxon="c2" totalcount="4" value="-"/>
+        <sequence id="gene9_d1" taxon="d1" totalcount="4" value="-"/>
+        <sequence id="gene9_d2" taxon="d2" totalcount="4" value="-"/>
+    </data>
+    <data id="gene10" name="alignment">
+        <sequence id="gene10_a1" taxon="a1" totalcount="4" value="-"/>
+        <sequence id="gene10_a2" taxon="a2" totalcount="4" value="-"/>
+        <sequence id="gene10_b1" taxon="b1" totalcount="4" value="-"/>
+        <sequence id="gene10_b2" taxon="b2" totalcount="4" value="-"/>
+        <sequence id="gene10_c1" taxon="c1" totalcount="4" value="-"/>
+        <sequence id="gene10_c2" taxon="c2" totalcount="4" value="-"/>
+        <sequence id="gene10_d1" taxon="d1" totalcount="4" value="-"/>
+        <sequence id="gene10_d2" taxon="d2" totalcount="4" value="-"/>
     </data>
 
     <siteModel id="siteModel:genex" mutationRate="1.0" proportionInvariant="0.0" spec="SiteModel">
@@ -102,21 +152,44 @@
             <stateNode id="tree:gene5" spec="speciesnetwork.EmbeddedTree">
                 <taxonset id="taxonset:gene5" spec="TaxonSet" alignment="@gene5"/>
             </stateNode>
+            <stateNode id="tree:gene6" spec="speciesnetwork.EmbeddedTree">
+                <taxonset id="taxonset:gene6" spec="TaxonSet" alignment="@gene6"/>
+            </stateNode>
+            <stateNode id="tree:gene7" spec="speciesnetwork.EmbeddedTree">
+                <taxonset id="taxonset:gene7" spec="TaxonSet" alignment="@gene7"/>
+            </stateNode>
+            <stateNode id="tree:gene8" spec="speciesnetwork.EmbeddedTree">
+                <taxonset id="taxonset:gene8" spec="TaxonSet" alignment="@gene8"/>
+            </stateNode>
+            <stateNode id="tree:gene9" spec="speciesnetwork.EmbeddedTree">
+                <taxonset id="taxonset:gene9" spec="TaxonSet" alignment="@gene9"/>
+            </stateNode>
+            <stateNode id="tree:gene10" spec="speciesnetwork.EmbeddedTree">
+                <taxonset id="taxonset:gene10" spec="TaxonSet" alignment="@gene10"/>
+            </stateNode>
         </state>
 
         <speciesNetwork idref="network:species"/>
-        <!-- networkSimulator id="network:simulated" spec="speciesnetwork.simulator.BirthHybridSimulator"
-            speciesNetwork="@network:species" birthRate="20" hybridRate="10" tmrca="0.05" nHybrid="2"/ --> <!-- origin="0.1" -->
         <parameter id="popsizes" name="popSizes">0.01</parameter>
         <geneTree idref="tree:gene1"/>
         <geneTree idref="tree:gene2"/>
         <geneTree idref="tree:gene3"/>
         <geneTree idref="tree:gene4"/>
         <geneTree idref="tree:gene5"/>
+        <geneTree idref="tree:gene6"/>
+        <geneTree idref="tree:gene7"/>
+        <geneTree idref="tree:gene8"/>
+        <geneTree idref="tree:gene9"/>
+        <geneTree idref="tree:gene10"/>
         <sequenceSimulator id="seqgen:gene1" spec="seqgen.SequenceSimulator" data="@gene1" tree="@tree:gene1" siteModel="@siteModel:genex" sequencelength="200"/>
         <sequenceSimulator id="seqgen:gene2" spec="seqgen.SequenceSimulator" data="@gene2" tree="@tree:gene2" siteModel="@siteModel:genex" sequencelength="200"/>
         <sequenceSimulator id="seqgen:gene3" spec="seqgen.SequenceSimulator" data="@gene3" tree="@tree:gene3" siteModel="@siteModel:genex" sequencelength="200"/>
         <sequenceSimulator id="seqgen:gene4" spec="seqgen.SequenceSimulator" data="@gene4" tree="@tree:gene4" siteModel="@siteModel:genex" sequencelength="200"/>
         <sequenceSimulator id="seqgen:gene5" spec="seqgen.SequenceSimulator" data="@gene5" tree="@tree:gene5" siteModel="@siteModel:genex" sequencelength="200"/>
+        <sequenceSimulator id="seqgen:gene6" spec="seqgen.SequenceSimulator" data="@gene6" tree="@tree:gene6" siteModel="@siteModel:genex" sequencelength="200"/>
+        <sequenceSimulator id="seqgen:gene7" spec="seqgen.SequenceSimulator" data="@gene7" tree="@tree:gene7" siteModel="@siteModel:genex" sequencelength="200"/>
+        <sequenceSimulator id="seqgen:gene8" spec="seqgen.SequenceSimulator" data="@gene8" tree="@tree:gene8" siteModel="@siteModel:genex" sequencelength="200"/>
+        <sequenceSimulator id="seqgen:gene9" spec="seqgen.SequenceSimulator" data="@gene9" tree="@tree:gene9" siteModel="@siteModel:genex" sequencelength="200"/>
+        <sequenceSimulator id="seqgen:gene10" spec="seqgen.SequenceSimulator" data="@gene10" tree="@tree:gene10" siteModel="@siteModel:genex" sequencelength="200"/>
     </run>
 </beast>

@@ -42,6 +42,8 @@
             </stateNode>
         </state>
         <speciesNetwork idref="network:species"/>
+        <!-- networkSimulator id="network:simulated" spec="speciesnetwork.simulator.BirthHybridSimulator"
+            speciesNetwork="@network:species" birthRate="20" hybridRate="10" tmrca="0.05" nHybrid="2"/ --> <!-- origin="0.1" -->
         <parameter id="popsizes" name="popSizes">0.01</parameter>
         <geneTree idref="tree:gene"/>
     </run>
