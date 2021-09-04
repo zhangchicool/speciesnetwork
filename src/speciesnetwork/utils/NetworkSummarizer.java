@@ -1,4 +1,4 @@
-package speciesnetwork.tools;
+package speciesnetwork.utils;
 
 import java.io.*;
 import java.math.RoundingMode;
@@ -32,7 +32,7 @@ import speciesnetwork.NetworkParser;
  */
 
 @Description("Summarize the posterior distribution of species networks.")
-public class SummarizePosterior extends Runnable {
+public class NetworkSummarizer extends Runnable {
     public final Input<String> inputFileNameInput = new Input<>("inputFileName",
             "Name of the file that contains networks in extended newick format.", Validate.REQUIRED);
     public final Input<String> outputFileNameInput = new Input<>("outputFileName",

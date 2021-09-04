@@ -1,4 +1,4 @@
-package speciesnetwork.tools;
+package speciesnetwork.utils;
 
 import java.io.*;
 import java.math.RoundingMode;

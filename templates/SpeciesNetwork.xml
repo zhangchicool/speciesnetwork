@@ -221,7 +221,7 @@
         <mergepoint id="parametricDistributions"/>
     </beauticonfig>
 
-    <taxonset spec="beast.evolution.alignment.TaxonSet" id="taxonsuperset">
+    <taxonset spec="beast.evolution.alignment.TaxonSet" id="taxonSuperset">
         <!--
         need to specify at least one taxon for a TaxonSet, so insert a dummy taxon here
         This one is cleared by the TaxonSetInputEditor
@@ -231,7 +231,7 @@
         </taxon>
     </taxonset>
 
-    <stateNode spec="speciesnetwork.Network" id="Network.t:Species" taxonset="@taxonsuperset" estimate="true"/>
+    <stateNode spec="speciesnetwork.Network" id="Network.t:Species" taxonset="@taxonSuperset" estimate="true"/>
 
     <!-- framework for main model -->
     <run spec="MCMC" id="mcmc" storeEvery="5000" chainLength="100000000">

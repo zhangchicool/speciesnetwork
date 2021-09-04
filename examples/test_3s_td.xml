@@ -57,7 +57,7 @@
                     A=0,
                     B=0,
                     C=1.0
-                    <taxa id="taxonsuperset" spec="TaxonSet">
+                    <taxa id="taxonSuperset" spec="TaxonSet">
                         <taxon id="A" spec="TaxonSet">
                             <taxon id="a1" spec="Taxon"/>
                             <taxon id="a2" spec="Taxon"/>
@@ -74,7 +74,7 @@
                         </taxon>
                     </taxa>
                 </trait>
-                <taxonset idref="taxonsuperset"/>
+                <taxonset idref="taxonSuperset"/>
             </stateNode>
             <parameter id="originTime:species" lower="0.0" name="stateNode">10.0</parameter>
             <parameter id="netDivRate:species" lower="0.0" name="stateNode">0.1</parameter>

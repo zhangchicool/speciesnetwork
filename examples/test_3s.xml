@@ -40,7 +40,7 @@
     <run id="mcmc" spec="MCMC" chainLength="2000000" storeEvery="10000">
         <state id="state">
             <stateNode id="network:species" spec="speciesnetwork.Network">
-                <taxonset id="taxonsuperset" spec="TaxonSet">
+                <taxonset id="taxonSuperset" spec="TaxonSet">
                     <taxon id="A" spec="TaxonSet">
                         <taxon id="a1" spec="Taxon"/>
                         <taxon id="a2" spec="Taxon"/>

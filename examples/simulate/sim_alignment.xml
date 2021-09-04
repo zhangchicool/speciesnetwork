@@ -61,24 +61,31 @@
     <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="test_4s.xml" networkOperator="true" initMethod="random">
         <state id="state">
             <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
-                <taxonset id="taxonSuperset" spec="TaxonSet">
-                    <taxon id="A" spec="TaxonSet">
-                        <taxon id="a1" spec="Taxon"/>
-                        <taxon id="a2" spec="Taxon"/>
-                    </taxon>
-                    <taxon id="B" spec="TaxonSet">
-                        <taxon id="b1" spec="Taxon"/>
-                        <taxon id="b2" spec="Taxon"/>
-                    </taxon>
-                    <taxon id="C" spec="TaxonSet">
-                        <taxon id="c1" spec="Taxon"/>
-                        <taxon id="c2" spec="Taxon"/>
-                    </taxon>
-                    <taxon id="D" spec="TaxonSet">
-                        <taxon id="d1" spec="Taxon"/>
-                        <taxon id="d2" spec="Taxon"/>
-                    </taxon>
-                </taxonset>
+                <trait id="date.t:species" spec="beast.evolution.tree.TraitSet" traitname="date-backward">
+                    A=0.02,
+                    B=0.005,
+                    C=0,
+                    D=0.003
+                    <taxa id="taxonSuperset" spec="TaxonSet">
+                        <taxon id="A" spec="TaxonSet">
+                            <taxon id="a1" spec="Taxon"/>
+                            <taxon id="a2" spec="Taxon"/>
+                        </taxon>
+                        <taxon id="B" spec="TaxonSet">
+                            <taxon id="b1" spec="Taxon"/>
+                            <taxon id="b2" spec="Taxon"/>
+                        </taxon>
+                        <taxon id="C" spec="TaxonSet">
+                            <taxon id="c1" spec="Taxon"/>
+                            <taxon id="c2" spec="Taxon"/>
+                        </taxon>
+                        <taxon id="D" spec="TaxonSet">
+                            <taxon id="d1" spec="Taxon"/>
+                            <taxon id="d2" spec="Taxon"/>
+                        </taxon>
+                    </taxa>
+                </trait>
+                <taxonset idref="taxonSuperset"/>
             </stateNode>
             <stateNode id="tree:gene1" spec="speciesnetwork.EmbeddedTree">
                 <taxonset id="taxonset:gene1" spec="TaxonSet" alignment="@gene1"/>
