@@ -58,7 +58,7 @@
     <init spec='beast.util.TreeParser' id='newick:species' IsLabelledNewick="true" adjustTipHeights="false"
           newick="(((A:0.035,((B:0.012,(C:0.01)#H2[&amp;gamma=0.7]:0.002)S3:0.018)#H1[&amp;gamma=0.6]:0.005)S1:0.015,(#H1:0.01,(#H2:0.005,D:0.015)S4:0.025)S2:0.01)R:0.05)"/>
 
-    <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="test_4s.xml" networkOperator="true" initMethod="random">
+    <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="test_4s.xml" networkOperator="true">
         <state id="state">
             <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
                 <trait id="date.t:species" spec="beast.evolution.tree.TraitSet" traitname="date-backward">
@@ -108,7 +108,6 @@
         <!-- networkSimulator id="network:simulated" spec="speciesnetwork.simulator.BirthHybridSimulator"
             speciesNetwork="@network:species" birthRate="20" hybridRate="10" tmrca="0.05" nHybrid="2"/ --> <!-- origin="0.1" -->
         <parameter id="popsizes" name="popSizes">0.01</parameter>
-        <taxonset idref="taxonSuperset"/>
         <geneTree idref="tree:gene1"/>
         <geneTree idref="tree:gene2"/>
         <geneTree idref="tree:gene3"/>

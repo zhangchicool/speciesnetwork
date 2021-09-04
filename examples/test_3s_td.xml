@@ -327,6 +327,9 @@
         <logger id="specieslog" fileName="test_3s.xml.species.trees" logEvery="1000" mode="tree">
             <log id="networkLogger:species" spec="speciesnetwork.utils.NetworkWithMetaDataLogger" speciesNetwork="@network:species"/>
         </logger>
+        <logger id="backbonelog" fileName="test_3s.xml.backbone.trees" logEvery="1000" mode="tree">
+            <log id="backboneLogger:species" spec="speciesnetwork.utils.BackboneTreeLogger" speciesNetwork="@network:species"/>
+        </logger>
         <logger id="treelog:gene1" fileName="test_3s.xml.gene1.trees" logEvery="1000" mode="tree">
             <log id="treeLogger:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeWithMetaDataLogger"/>
         </logger>

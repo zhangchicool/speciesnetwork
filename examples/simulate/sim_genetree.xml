@@ -43,7 +43,6 @@
         </state>
         <speciesNetwork idref="network:species"/>
         <parameter id="popsizes" name="popSizes">0.01</parameter>
-        <taxonset idref="taxonSuperset"/>
         <geneTree idref="tree:gene"/>
     </run>
 </beast>

@@ -150,6 +150,13 @@ public class CoalescentSimulator extends Runnable {
                 }
             }
 
+            // adjust the heights of gene tree tips to be equal to the height of corresponding species tip
+            for (NetworkNode speciesLeaf: speciesNetwork.getLeafNodes()) {
+                for (Node geneLeaf : networkNodeGeneLineagesMap.get(speciesLeaf)) {
+                    geneLeaf.setHeight(speciesLeaf.getHeight());
+                }
+            }
+
             // reset visited indicator
             speciesNetwork.resetAllVisited();
             // simulate the gene tree
@@ -236,7 +243,7 @@ public class CoalescentSimulator extends Runnable {
     }
 
     private List<Node> simulateCoalescentEvents(Collection<Node> lineages, double bottomHeight,
-                                                double topHeight, double pNu, EmbeddedTree geneTree) {
+                                                double topHeight, double pNe, EmbeddedTree geneTree) {
         // start from the lineages at the bottom
         List<Node> currentLineages = new ArrayList<>(lineages);
         double currentHeight = bottomHeight;
@@ -247,7 +254,7 @@ public class CoalescentSimulator extends Runnable {
         while (currentLineages.size() > 1 && currentHeight < topHeight) {
             // generate a coalescent waiting time
             final int nLineage = currentLineages.size();
-            final double coalescentRate = nLineage * (nLineage - 1) / (2 * pNu);
+            final double coalescentRate = nLineage * (nLineage - 1) / (2 * pNe);
             final double waitingTime = Randomizer.nextExponential(coalescentRate);
             currentHeight += waitingTime;
 
