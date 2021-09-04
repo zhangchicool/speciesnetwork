@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beast namespace="beast.core:beast.core.util:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.branchratemodel:beast.evolution.likelihood" version="2.4">
+<beast namespace="beast.core:beast.core.util:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.branchratemodel:beast.evolution.likelihood" version="2.6">
     <data id="gene1" name="alignment">
         <sequence id="seq_1_1" taxon="a1" value="CTCTTGTGGACGCCATCGCCGATATTCCAGCAGACAGAAGGCAATGCAGAAGAACGCCGATAGTACAAGTACGGTTAAGCTTTATCTATTGGTCGCATGCGTCCGCTATTCTCTTCCGTACCGTTTCCCGCACGGCAATACCGTAGGAAAGTGAAAAAAAAGTTACACCCCTAACCGTGATCTGGCAACATTCTACTAGT"/>
         <sequence id="seq_1_2" taxon="a2" value="CTCTTGTGGACGCCATCGCCGATATTCCAGCAGACAGAGGGCAATGCAGAAGAACGCCGATAGTACAAGTCCGGTTAAGCTTTATCTACTGGTCGCATGCGTCCGCTATTCTCTTCCGTACCGGTTCCCACACGGCAATTCCGTTGGAAAGTGAAAAAAAAGATACACCCCTAACCGAGATCTGGCAACATTCTACTAGT"/>
@@ -249,8 +249,8 @@
         <operator id="divrRateScale:species" spec="ScaleOperator" parameter="@netDivRate:species" scaleFactor="0.5" weight="5.0"/>
         <operator id="turnOverScale:species" spec="ScaleOperator" parameter="@turnOverRate:species" scaleFactor="0.5" weight="5.0"/>
         <operator id="hybridPropScale:species" spec="ScaleOperator" parameter="@hybridProp:species" scaleFactor="0.5" weight="5.0"/>
-        <operator id="gammaProbUniform:species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="10.0"/>
-        <operator id="gammaProbRndWalk:species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="10.0"/>
+        <operator id="gammaProbUniform:species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@network:species" weight="20.0"/>
+        <operator id="gammaProbRndWalk:species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@network:species" weight="20.0"/>
 
         <operator id="originMultiplier:species" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="5.0"/>
         <operator id="networkMultiplier:species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@network:species" origin="@originTime:species" weight="10.0">
@@ -304,7 +304,6 @@
 
         <logger id="screenlog" logEvery="10000" model="@posterior">
             <log idref="posterior"/>
-            <log id="ESS.0" spec="util.ESS" arg="@posterior"/>
             <log idref="likelihood"/>
             <log idref="prior"/>
             <log idref="coalescent"/>

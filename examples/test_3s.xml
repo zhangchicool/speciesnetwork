@@ -274,7 +274,6 @@
 
         <logger id="screenlog" logEvery="10000" model="@posterior">
             <log idref="posterior"/>
-            <log id="ESS.0" spec="util.ESS" arg="@posterior"/>
             <log idref="likelihood"/>
             <log idref="prior"/>
             <log idref="coalescent"/>
