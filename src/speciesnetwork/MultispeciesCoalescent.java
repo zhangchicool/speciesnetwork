@@ -26,7 +26,7 @@ public class MultispeciesCoalescent extends Distribution {
             new Input<>("populationModel", "The species network population model.", Validate.REQUIRED);
 
     private int nGeneTrees;
-    private double[] perGenePloidy;
+    private double[] genePloidy;
 
     final private List<int[]> allLineageCounts = new ArrayList<>();
     final private List<int[]> allEventCounts = new ArrayList<>();
@@ -37,10 +37,9 @@ public class MultispeciesCoalescent extends Distribution {
         final List<GeneTreeInSpeciesNetwork> geneTrees = geneTreeWrapperInput.get();
         nGeneTrees = geneTrees.size();
 
-        perGenePloidy = new double[nGeneTrees];
+        genePloidy = new double[nGeneTrees];
         for (int i = 0; i < nGeneTrees; i++) {
-            final GeneTreeInSpeciesNetwork geneTree = geneTrees.get(i);
-            perGenePloidy[i] = geneTree.ploidy;
+            genePloidy[i] = geneTrees.get(i).ploidy;
         }   // obtained ploidy of each gene
 
         final Network speciesNetwork = speciesNetworkInput.get();
@@ -121,7 +120,7 @@ public class MultispeciesCoalescent extends Distribution {
             final int[] branchLineageCounts = allLineageCounts.get(i);
             final int[] branchEventCounts = allEventCounts.get(i);
 
-            logP += populationModel.branchLogP(i, perGenePloidy, branchCoalescentTimes, branchLineageCounts, branchEventCounts);
+            logP += populationModel.branchLogP(i, genePloidy, branchCoalescentTimes, branchLineageCounts, branchEventCounts);
         }
 
         return logP;

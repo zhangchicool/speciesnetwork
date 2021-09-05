@@ -1,7 +1,5 @@
 package speciesnetwork;
 
-import java.util.List;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multiset;
@@ -36,9 +34,6 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
     // the number of lineages at the tipward end of each species branch
     protected Multiset<Integer> coalescentLineageCounts = HashMultiset.create();
     protected Multiset<Integer> storedCoalescentLineageCounts = HashMultiset.create();
-    // the time span of each lineage in each species branch
-    protected double[][] speciesOccupancy;
-    protected double[][] storedSpeciesOccupancy;
     // sum of the log inheritance probabilities (log(Lambda), part of log[f(G|Psi)])
     protected double logGammaSum;
     protected double storedLogGammaSum;
@@ -53,12 +48,9 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
     public void store() {
         storedCoalescentTimes.clear();
         storedCoalescentLineageCounts.clear();
+
         storedCoalescentTimes.putAll(coalescentTimes);
         storedCoalescentLineageCounts.addAll(coalescentLineageCounts);
-
-        storedSpeciesOccupancy = new double[speciesOccupancy.length][speciesOccupancy[0].length];
-        System.arraycopy(speciesOccupancy, 0, storedSpeciesOccupancy, 0, speciesOccupancy.length);
-        
         storedLogGammaSum = logGammaSum;
 
         super.store();
@@ -68,17 +60,14 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
     public void restore() {
         ListMultimap<Integer, Double> tmpCoalescentTimes = coalescentTimes;
         Multiset<Integer> tmpCoalescentLineageCounts = coalescentLineageCounts;
-        double[][] tmpSpeciesOccupancy = speciesOccupancy;
         double tmpLogGammaSum = logGammaSum;
 
         coalescentTimes = storedCoalescentTimes;
         coalescentLineageCounts = storedCoalescentLineageCounts;
-        speciesOccupancy = storedSpeciesOccupancy;
         logGammaSum = storedLogGammaSum;
 
         storedCoalescentTimes = tmpCoalescentTimes;
         storedCoalescentLineageCounts = tmpCoalescentLineageCounts;
-        storedSpeciesOccupancy = tmpSpeciesOccupancy;
         storedLogGammaSum = tmpLogGammaSum;
 
         super.restore();
@@ -98,19 +87,14 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
     }
 
     private void update() {
-        speciesNetwork = speciesNetworkInput.get();
-        geneTree = geneTreeInput.get();
-        logGammaSum = 0.0;
-
-        final int geneTreeNodeCount = geneTree.getNodeCount();
-        final int speciesBranchCount = speciesNetwork.getBranchCount();
-        speciesOccupancy = new double[geneTreeNodeCount][speciesBranchCount];
-
         // reset coalescent arrays as these values need to be recomputed after any changes to the species or gene tree
         coalescentLineageCounts.clear();
         coalescentTimes.clear();
+        logGammaSum = 0.0;
 
+        geneTree = geneTreeInput.get();
         final Node geneTreeRoot = geneTree.getRoot();
+        speciesNetwork = speciesNetworkInput.get();
         final NetworkNode speciesNetworkRoot = speciesNetwork.getRoot();
         final Integer speciesRootBranchNumber = speciesNetworkRoot.gammaBranchNumber;
         /* The recursion starts from the root of gene tree and root of species network, and moves forward in time.
@@ -133,12 +117,12 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
 
         if (geneTreeNode.isLeaf() && speciesNetworkNode.isLeaf()) {
             // reach the tip with height >= 0, gene tree tip height == species tip height
-            speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] = lastHeight - speciesNodeHeight;
+            // speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] = lastHeight - speciesNodeHeight;
             coalescentLineageCounts.add(speciesBranchNumber);
         }
         else if (geneNodeHeight <= speciesNodeHeight) {
             // current gene tree node occurs in a descendant branch of current species node
-            speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] = lastHeight - speciesNodeHeight;
+            // speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] = lastHeight - speciesNodeHeight;
             coalescentLineageCounts.add(speciesBranchNumber);
             if (speciesNetworkNode.isReticulation()) {
                 final double gamma = speciesNetworkNode.inheritProb;
@@ -158,30 +142,12 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
         }
         else {
             // current gene tree node occurs above current species node
-            speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] = lastHeight - geneNodeHeight;
+            // speciesOccupancy[geneTreeNodeNumber][speciesBranchNumber] = lastHeight - geneNodeHeight;
             coalescentTimes.put(speciesBranchNumber, geneNodeHeight);
             // move on to the descendant gene tree nodes (traversal direction forward in time)
             for (Node geneChildNode : geneTreeNode.getChildren()) {
                 recurseCoalescentEvents(geneChildNode, speciesNetworkNode, speciesBranchNumber, geneNodeHeight);
             }
         }
-    }
-
-    /**
-     * @return the first tip node which is descendant of
-     * @param gTreeNode
-     * this can be in Tree.java as gTreeNode.getGeneTreeTipDescendant()
-     */
-    public Node getGeneNodeDescendantTip(Node gTreeNode) {
-        final List<Node> gTreeTips = geneTree.getExternalNodes();  // tips
-        for (Node tip : gTreeTips) {
-            Node node = tip;
-            while(node != null && !node.equals(gTreeNode)) {
-                node = node.getParent();
-            }
-            if (node != null)
-                return tip;  // find you!
-        }
-        return null;  // looped all the tips but nothing found
     }
 }

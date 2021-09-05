@@ -48,10 +48,10 @@ public class SpeciesNetworkInitializer extends Tree implements StateNodeInitiali
             new Input<>("origin", "The time when the process started.", Validate.REQUIRED);
     public final Input<List<EmbeddedTree>> geneTreesInput =
             new Input<>("geneTree", "Gene tree to initialize.", new ArrayList<>());
-    public final Input<RebuildEmbedding> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
-            "Operator which rebuilds embedding of gene trees within species network.", Validate.REQUIRED);
     public final Input<CoalescentSimulator> coalSimulatorInput =
             new Input<>("coalescentSimulator", "Simulate gene trees to initialize.");
+    public final Input<RebuildEmbedding> rebuildEmbeddingInput = new Input<>("rebuildEmbedding",
+            "Operator which rebuilds embedding of gene trees within species network.", Validate.REQUIRED);
 
     // @Override
     // public void initAndValidate() { super.initAndValidate(); }

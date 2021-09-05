@@ -76,6 +76,7 @@
                 </trait>
                 <taxonset idref="taxonSuperset"/>
             </stateNode>
+            <parameter id="popMean:species" lower="0.0" name="stateNode">1.0</parameter>
             <parameter id="originTime:species" lower="0.0" name="stateNode">10.0</parameter>
             <parameter id="netDivRate:species" lower="0.0" name="stateNode">0.1</parameter>
             <parameter id="turnOverRate:species" lower="0.0" upper="1.0" name="stateNode">0.5</parameter>
@@ -93,20 +94,16 @@
         </state>
 
         <init id="SNI" spec="speciesnetwork.SpeciesNetworkInitializer" estimate="false" method="random" speciesNetwork="@network:species" origin="@originTime:species">
-            <geneTree idref="tree:gene1"/>
-            <geneTree idref="tree:gene2"/>
-            <geneTree idref="tree:gene3"/>
+            <coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species" popSizes="@popMean:species" >
+                <geneTree idref="tree:gene1"/>
+                <geneTree idref="tree:gene2"/>
+                <geneTree idref="tree:gene3"/>
+            </coalescentSimulator>
             <rebuildEmbedding id="initEmbed" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="0.0">
                 <geneTree idref="tree:gene1"/>
                 <geneTree idref="tree:gene2"/>
                 <geneTree idref="tree:gene3"/>
             </rebuildEmbedding>
-            <coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species">
-                <parameter id="popSizes" estimate="false" name="popSizes">1.0</parameter>
-                <geneTree idref="tree:gene1"/>
-                <geneTree idref="tree:gene2"/>
-                <geneTree idref="tree:gene3"/>
-            </coalescentSimulator>
         </init>
 
         <distribution id="posterior" spec="util.CompoundDistribution">
@@ -114,12 +111,15 @@
                 <geneTreeWithin id="geneTree:gene1" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene1"/>
                 <geneTreeWithin id="geneTree:gene2" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene2"/>
                 <geneTreeWithin id="geneTree:gene3" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene3"/>
-                <populationModel id="popModel" alpha="4.0" beta="4.0" spec="speciesnetwork.ConstantPopIntegrated"/>
+                <populationModel id="popModel" alpha="4.0" mean="@popMean:species" spec="speciesnetwork.ConstantPopIntegrated"/>
             </distribution>
             <distribution id="prior" spec="util.CompoundDistribution">
                 <distribution id="networkPrior" spec="speciesnetwork.BirthDeathHybridization" network="@network:species" betaShape="2.0"
                               netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" hybridProportion="@hybridProp:species"/>
-                <prior id="networkOrigin" name="distribution" x="@originTime:species">
+                <prior id="popMeanPrior" name="distribution" x="@popMean:species">
+                    <Gamma id="gammadistr.0" name="distr" alpha="3.0" beta="0.4"/>
+                </prior>
+                <prior id="originPrior" name="distribution" x="@originTime:species">
                     <Exponential id="exponential.0" name="distr" mean="10.0"/>
                 </prior>
                 <prior id="netDivPrior" name="distribution" x="@netDivRate:species">
@@ -132,7 +132,7 @@
                     <Beta id="betadistr.02" name="distr" alpha="1.0" beta="9.0"/>
                 </prior>
                 <prior id="clockRatePrior" name="distribution" x="@clockRate:gene">
-                    <Uniform id="uniformdistr.01" name="distr" lower="0.0" upper="1.0"/>
+                    <Uniform id="uniformdistr.0" name="distr" lower="0.0" upper="1.0"/>
                 </prior>
             </distribution>
             <distribution id="likelihood" spec="util.CompoundDistribution">
@@ -244,6 +244,7 @@
 
         <operator id="clockScaler:gene" spec="ScaleOperator" parameter="@clockRate:gene" scaleFactor="0.5" weight="5.0"/>
 
+        <operator id="popMeanScale:species" spec="ScaleOperator" parameter="@popMean:species" scaleFactor="0.5" weight="5.0"/>
         <operator id="divrRateScale:species" spec="ScaleOperator" parameter="@netDivRate:species" scaleFactor="0.5" weight="5.0"/>
         <operator id="turnOverScale:species" spec="ScaleOperator" parameter="@turnOverRate:species" scaleFactor="0.5" weight="5.0"/>
         <operator id="hybridPropScale:species" spec="ScaleOperator" parameter="@hybridProp:species" scaleFactor="0.5" weight="5.0"/>
@@ -315,6 +316,7 @@
             <log idref="turnOverRate:species"/>
             <log idref="hybridProp:species"/>
             <log idref="originTime:species"/>
+            <log idref="popMean:species"/>
             <log idref="clockRate:gene"/>
             <log id="height:species" speciesNetwork="@network:species" spec="speciesnetwork.utils.NetworkStatLogger"/>
             <log id="height:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeStatLogger"/>

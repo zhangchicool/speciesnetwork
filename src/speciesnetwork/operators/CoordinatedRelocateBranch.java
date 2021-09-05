@@ -9,9 +9,11 @@ import beast.core.Input.Validate;
 import beast.core.Operator;
 import beast.util.Randomizer;
 import speciesnetwork.EmbeddedTree;
+import speciesnetwork.MultispeciesCoalescent;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 import speciesnetwork.SanityChecks;
+import speciesnetwork.simulator.CoalescentSimulator;
 
 /**
  * Pick an internal network node randomly.
@@ -29,8 +31,10 @@ import speciesnetwork.SanityChecks;
 public class CoordinatedRelocateBranch extends Operator {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
-    public final Input<List<EmbeddedTree>> geneTreesInput = new Input<>("geneTree",
-            "The gene tree within the species network.", new ArrayList<>());
+    public final Input<MultispeciesCoalescent> MSNCInput =
+            new Input<>("MSNC", "The multispecies network coalescent.", Validate.REQUIRED);
+    public final Input<CoalescentSimulator> coalSimulatorInput = new Input<>("coalescentSimulator",
+            "Simulate gene trees given the species network.", Validate.REQUIRED);
 
     @Override
     public void initAndValidate() {
@@ -41,14 +45,9 @@ public class CoordinatedRelocateBranch extends Operator {
         final Network speciesNetwork = speciesNetworkInput.get();
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
-        final List<EmbeddedTree> geneTrees = geneTreesInput.get();
-        final int nLoci = geneTrees.size();  // if nLoci == 0 (no input), gene trees are not changed
-
-        double logProposalRatio = 0.0;
-        // calculate coalescent probs of current gene trees in current species network
-        for (EmbeddedTree geneTree : geneTrees) {
-            // logProposalRatio +=
-        }
+        // calculate coalescent prob. of current gene trees in current species network
+        final MultispeciesCoalescent MSNC = MSNCInput.get();
+        double logProposalRatio = MSNC.calculateLogP();
 
         // start moving species network
         speciesNetwork.startEditing(this);
@@ -269,13 +268,10 @@ public class CoordinatedRelocateBranch extends Operator {
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
         // update gene trees (simulate random gene trees under MSNC)
-        // calculate coalescent probs of new gene trees in new species network
-        for (EmbeddedTree geneTree : geneTrees) {
-            // simulate new gene tree
+        coalSimulatorInput.get().simulate();
 
-
-            //logProposalRatio -= ;
-        }
+        // calculate coalescent prob. of new gene trees in new species network
+        logProposalRatio -= MSNC.calculateLogP();
 
         return logProposalRatio;
     }
