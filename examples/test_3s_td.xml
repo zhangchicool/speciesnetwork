@@ -101,14 +101,12 @@
                 <geneTree idref="tree:gene2"/>
                 <geneTree idref="tree:gene3"/>
             </rebuildEmbedding>
-            <!--
             <coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species">
                 <parameter id="popSizes" estimate="false" name="popSizes">1.0</parameter>
                 <geneTree idref="tree:gene1"/>
                 <geneTree idref="tree:gene2"/>
                 <geneTree idref="tree:gene3"/>
             </coalescentSimulator>
-            -->
         </init>
 
         <distribution id="posterior" spec="util.CompoundDistribution">
