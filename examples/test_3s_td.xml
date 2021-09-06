@@ -94,7 +94,7 @@
         </state>
 
         <init id="SNI" spec="speciesnetwork.SpeciesNetworkInitializer" estimate="false" method="random" speciesNetwork="@network:species" origin="@originTime:species">
-            <coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species" popSizes="@popMean:species" >
+            <coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@network:species" popSizes="@popMean:species">
                 <geneTree idref="tree:gene1"/>
                 <geneTree idref="tree:gene2"/>
                 <geneTree idref="tree:gene3"/>
@@ -185,6 +185,7 @@
             <geneTree idref="tree:gene1"/>
             <operator id="WilsonBalding:gene1" spec="WilsonBalding" tree="@tree:gene1" weight="0.0"/>
         </operator>
+
         <operator id="scaleAndEmbed:gene2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="3.0">
             <geneTree idref="tree:gene2"/>
             <operator id="scale:gene2" spec="ScaleOperator" scaleFactor="0.5" tree="@tree:gene2" weight="0.0"/>
@@ -213,6 +214,7 @@
             <geneTree idref="tree:gene2"/>
             <operator id="WilsonBalding:gene2" spec="WilsonBalding" tree="@tree:gene2" weight="0.0"/>
         </operator>
+
         <operator id="scaleAndEmbed:gene3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="3.0">
             <geneTree idref="tree:gene3"/>
             <operator id="scale:gene3" spec="ScaleOperator" scaleFactor="0.5" tree="@tree:gene3" weight="0.0"/>
@@ -257,22 +259,15 @@
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
         </operator>
-
-        <operator id="coordNodeUniformAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="80.0">
+        <operator id="coordNodeUniform:species" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@network:species" weight="50.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
-            <operator id="coordNodeUniform:species" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@network:species" weight="0.0">
-                <geneTree idref="tree:gene1"/>
-                <geneTree idref="tree:gene2"/>
-                <geneTree idref="tree:gene3"/>
-            </operator>
         </operator>
-        <operator id="nodeSliderAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="50.0">
+        <operator id="coordNodeSlider:species" spec="speciesnetwork.operators.CoordinatedNodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.5" weight="50.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
-            <operator id="nodeSlider:species" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.5" weight="0.0"/>
         </operator>
 
         <!-- operator id="relocateBranchAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="150.0">

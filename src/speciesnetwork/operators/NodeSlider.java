@@ -21,7 +21,7 @@ public class NodeSlider extends Operator {
     public final Input<RealParameter> originInput =
             new Input<>("origin", "The time when the process started.", Validate.REQUIRED);
     public final Input<Boolean> isNormalInput =
-            new Input<>("isNormal", "Using normal proposal (default: uniform proposal).", true);
+            new Input<>("isNormal", "Using normal proposal (default).", true);
     public final Input<Double> sigmaInput =
             new Input<>("sigma", "Standard deviation of the normal proposal (default is 0.01).", 0.01);
     public final Input<Double> windowSizeInput =

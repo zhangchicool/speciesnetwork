@@ -12,6 +12,7 @@ import beast.core.parameter.RealParameter;
 import beast.util.Randomizer;
 import beast.evolution.tree.Node;
 import speciesnetwork.EmbeddedTree;
+import speciesnetwork.Embedding;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 import speciesnetwork.SanityChecks;
@@ -30,7 +31,7 @@ public class CoordinatedNodeSlider extends Operator {
     public final Input<RealParameter> originInput =
             new Input<>("origin", "The time when the process started.", Validate.REQUIRED);
     public final Input<Boolean> isNormalInput =
-            new Input<>("isNormal", "Using normal proposal (default: uniform proposal).", true);
+            new Input<>("isNormal", "Using normal proposal (default).", true);
     public final Input<Double> sigmaInput =
             new Input<>("sigma", "Standard deviation of the normal proposal (default is 0.01).", 0.01);
     public final Input<Double> windowSizeInput =
@@ -89,8 +90,8 @@ public class CoordinatedNodeSlider extends Operator {
         pickedNode.setHeight(newHeight);
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
-        // update gene tree node heights (necessary only when speciation network node)
-        // return proposal ratio of this update
+        // update gene tree node heights, return proposal ratio of this update
+        // this move does not break gene tree embeddings thus no need to rebuild
         return updateRubberBand(pickedNode, oldHeight, newHeight, lower, upper);
     }
 
@@ -106,38 +107,64 @@ public class CoordinatedNodeSlider extends Operator {
      */
     protected double updateRubberBand(NetworkNode networkNode, final double oldHeight, final double newHeight,
                                       final double lower, final double upper) {
-        if (!networkNode.isSpeciation())  // necessary only when speciation network node
-            return 0.0;
-
-        final Integer speciesBrNr = networkNode.gammaBranchNumber;
-        final NetworkNode parentNode = networkNode.getParentByBranch(speciesBrNr);
-
         final List<EmbeddedTree> geneTrees = geneTreesInput.get();
-        final int nLoci = geneTrees.size();  // if nLoci == 0 (no input), gene trees are not changed
 
         int m = 0;  // # gene node heights changed relative to 'upper'
         int n = 0;  // # gene node heights changed relative to 'lower'
-        for (EmbeddedTree geneTree : geneTrees) {  // loop over all loci
-            geneTree.startEditing(this);  // Tell BEAST that *all* gene trees will be edited
-
-            // update the gene tree node heights
-            for (Node gNode : geneTree.getInternalNodes()) {
-                final double gNodeHeight = gNode.getHeight();
-
-                if (oldHeight <= gNodeHeight && gNodeHeight < upper) {
-                    if (networkNode.isRoot() ||
-                            isWithinChildBranch(parentNode, Collections.singletonList(speciesBrNr), gNode, geneTree, upper)) {
-                        // update the node height relative to 'upper'
-                        final double gNewNodeHeight = upper - (upper - gNodeHeight) * (upper - newHeight) / (upper - oldHeight);
-                        gNode.setHeight(gNewNodeHeight);
-                        m++;
+        if (networkNode.isSpeciation()) {
+            final Integer speciesBrNr = networkNode.gammaBranchNumber;
+            final NetworkNode parentNode = networkNode.getParentByBranch(speciesBrNr);
+            for (EmbeddedTree geneTree : geneTrees) {
+                Embedding embedding = geneTree.embedding;
+                geneTree.startEditing(this);  // *all* gene trees will be edited
+                // update the gene tree node heights
+                for (Node gNode : geneTree.getInternalNodes()) {
+                    final double gNodeHeight = gNode.getHeight();
+                    if (oldHeight <= gNodeHeight && gNodeHeight < upper) {
+                        if (networkNode.isRoot() ||
+                            isWithinChildBranch(parentNode, Collections.singletonList(speciesBrNr), gNode, embedding, upper)) {
+                            // update the node height relative to 'upper'
+                            final double gNewNodeHeight = upper - (upper - gNodeHeight) * (upper - newHeight) / (upper - oldHeight);
+                            gNode.setHeight(gNewNodeHeight);
+                            m++;
+                        }
+                    } else if (lower < gNodeHeight && gNodeHeight < oldHeight) {
+                        if (isWithinChildBranch(networkNode, networkNode.childBranchNumbers, gNode, embedding, oldHeight)) {
+                            // update the node height relative to 'lower'
+                            final double gNewNodeHeight = lower + (gNodeHeight - lower) * (newHeight - lower) / (oldHeight - lower);
+                            gNode.setHeight(gNewNodeHeight);
+                            n++;
+                        }
                     }
-                } else if (lower < gNodeHeight && gNodeHeight < oldHeight) {
-                    if (isWithinChildBranch(networkNode, networkNode.childBranchNumbers, gNode, geneTree, upper)) {
-                        // update the node height relative to 'lower'
-                        final double gNewNodeHeight = lower + (gNodeHeight - lower) * (newHeight - lower) / (oldHeight - lower);
-                        gNode.setHeight(gNewNodeHeight);
-                        n++;
+                }
+            }
+        }
+        else if (networkNode.isReticulation()) {
+            final Integer snLeftBrNr = networkNode.gammaBranchNumber;
+            final Integer snRightBrNr = networkNode.gammaBranchNumber + 1;
+            final NetworkNode parentLNode = networkNode.getParentByBranch(snLeftBrNr);
+            final NetworkNode parentRNode = networkNode.getParentByBranch(snRightBrNr);
+            for (EmbeddedTree geneTree : geneTrees) {
+                Embedding embedding = geneTree.embedding;
+                geneTree.startEditing(this);  // *all* gene trees will be edited
+                // update the gene tree node heights
+                for (Node gNode : geneTree.getInternalNodes()) {
+                    final double gNodeHeight = gNode.getHeight();
+                    if (oldHeight <= gNodeHeight && gNodeHeight < upper) {
+                        if (isWithinChildBranch(parentLNode, Collections.singletonList(snLeftBrNr),  gNode, embedding, parentLNode.getHeight()) ||
+                            isWithinChildBranch(parentRNode, Collections.singletonList(snRightBrNr), gNode, embedding, parentRNode.getHeight())) {
+                            // update the node height relative to 'upper'
+                            final double gNewNodeHeight = upper - (upper - gNodeHeight) * (upper - newHeight) / (upper - oldHeight);
+                            gNode.setHeight(gNewNodeHeight);
+                            m++;
+                        }
+                    } else if (lower < gNodeHeight && gNodeHeight < oldHeight) {
+                        if (isWithinChildBranch(networkNode, networkNode.childBranchNumbers, gNode, embedding, oldHeight)) {
+                            // update the node height relative to 'lower'
+                            final double gNewNodeHeight = lower + (gNodeHeight - lower) * (newHeight - lower) / (oldHeight - lower);
+                            gNode.setHeight(gNewNodeHeight);
+                            n++;
+                        }
                     }
                 }
             }
@@ -148,13 +175,13 @@ public class CoordinatedNodeSlider extends Operator {
     }
 
     /* check if a gene tree node is within certain child branches of the network node */
-    private boolean isWithinChildBranch(NetworkNode snNode, List<Integer> childBrNrs,
-                                        Node gNode, EmbeddedTree geneTree, final double upper) {
+    private boolean isWithinChildBranch(NetworkNode snNode, List<Integer> childBrNrs, Node gNode,
+                                        Embedding embedding, final double upper) {
         final int traversalNodeNr = snNode.getTraversalNumber();
         int withinBrNr;
         Node treNode = gNode;
         do {
-            withinBrNr = geneTree.embedding.getDirection(treNode.getNr(), traversalNodeNr);
+            withinBrNr = embedding.getDirection(treNode.getNr(), traversalNodeNr);
             treNode = treNode.getParent();
         }
         while (withinBrNr < 0 && treNode != null && treNode.getHeight() < upper);

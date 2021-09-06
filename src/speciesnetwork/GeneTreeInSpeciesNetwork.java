@@ -22,11 +22,11 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
             new Input<>("geneTree", "Gene tree embedded in the species network.", Validate.REQUIRED);
     public final Input<Double> ploidyInput =
             new Input<>("ploidy", "Ploidy (copy number) for this gene (default is 2).", 2.0);
-    protected double ploidy;
 
-    private boolean needsUpdate;
+    protected double ploidy;
     private EmbeddedTree geneTree;
     private Network speciesNetwork;
+    private boolean needsUpdate;
 
     // the coalescent times of this gene tree in each species branch
     protected ListMultimap<Integer, Double> coalescentTimes = ArrayListMultimap.create();

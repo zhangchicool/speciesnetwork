@@ -221,15 +221,10 @@
             <geneTree idref="tree:gene3"/>
         </operator>
 
-        <operator id="coordNodeUniformAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="80.0">
+        <operator id="coordNodeUniform:species" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@network:species" weight="80.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
-            <operator id="coordNodeUniform:species" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@network:species" weight="0.0">
-                <geneTree idref="tree:gene1"/>
-                <geneTree idref="tree:gene2"/>
-                <geneTree idref="tree:gene3"/>
-            </operator>
         </operator>
         <operator id="nodeSliderAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="50.0">
             <geneTree idref="tree:gene1"/>
