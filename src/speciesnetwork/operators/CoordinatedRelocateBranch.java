@@ -47,7 +47,7 @@ public class CoordinatedRelocateBranch extends Operator {
 
         // calculate coalescent prob. of current gene trees in current species network
         final MultispeciesCoalescent MSNC = MSNCInput.get();
-        double logProposalRatio = MSNC.calculateLogP();
+        double logProposalRatio = MSNC.coalescentProb();
 
         // start moving species network
         speciesNetwork.startEditing(this);
@@ -271,7 +271,7 @@ public class CoordinatedRelocateBranch extends Operator {
         coalSimulatorInput.get().simulate();
 
         // calculate coalescent prob. of new gene trees in new species network
-        logProposalRatio -= MSNC.calculateLogP();
+        logProposalRatio -= MSNC.coalescentProb();
 
         return logProposalRatio;
     }

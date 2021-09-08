@@ -86,7 +86,7 @@ public class BirthDeathHybridization extends Distribution {
         List<NetworkNode> nodes = Arrays.asList(network.getAllNodes());
         nodes.sort(hc);
 
-        // get current values of lambda and nu
+        // get current values of lambda, mu and nu
         updateParameters();
 
         logP = 0.0;
@@ -114,7 +114,7 @@ public class BirthDeathHybridization extends Distribution {
                     logP += Math.log(mu);
                 }
             }
-         }
+        }
 
         return logP;
     }

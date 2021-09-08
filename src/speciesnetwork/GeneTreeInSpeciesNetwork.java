@@ -26,7 +26,6 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
     protected double ploidy;
     private EmbeddedTree geneTree;
     private Network speciesNetwork;
-    private boolean needsUpdate;
 
     // the coalescent times of this gene tree in each species branch
     protected ListMultimap<Integer, Double> coalescentTimes = ArrayListMultimap.create();
@@ -40,8 +39,7 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
 
     @Override
     public boolean requiresRecalculation() {
-        needsUpdate = geneTreeInput.isDirty() || speciesNetworkInput.isDirty();
-        return needsUpdate;
+        return geneTreeInput.isDirty() || speciesNetworkInput.isDirty();
     }
 
     @Override
@@ -77,16 +75,12 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
         ploidy = ploidyInput.get();
         geneTree = geneTreeInput.get();
         speciesNetwork = speciesNetworkInput.get();
-        needsUpdate = true;
     }
 
     protected void computeCoalescentTimes() {
-        if (needsUpdate) {
-            update();
-        }
-    }
+        if (!requiresRecalculation())
+            return;
 
-    private void update() {
         // reset coalescent arrays as these values need to be recomputed after any changes to the species or gene tree
         coalescentLineageCounts.clear();
         coalescentTimes.clear();
@@ -105,8 +99,6 @@ public class GeneTreeInSpeciesNetwork extends CalculationNode {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        needsUpdate = false;
     }
 
     private void recurseCoalescentEvents(final Node geneTreeNode, final NetworkNode speciesNetworkNode,

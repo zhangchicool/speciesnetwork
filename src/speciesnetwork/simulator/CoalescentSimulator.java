@@ -122,9 +122,6 @@ public class CoalescentSimulator extends Runnable {
         for (int ig = 0; ig < nrOfGeneTrees; ig++) {
             EmbeddedTree geneTree = geneTrees.get(ig);
 
-            // initialize embedding matrix to -1 (no traversal)
-            geneTree.embedding.reset(traversalNodeCount);
-
             networkNodeGeneLineagesMap.clear();
             // generate map of tip names to tip nodes
             final Map<String, NetworkNode> speciesNodeMap = new HashMap<>();
@@ -159,6 +156,8 @@ public class CoalescentSimulator extends Runnable {
 
             // reset visited indicator
             speciesNetwork.resetAllVisited();
+            // initialize embedding matrix to -1 (no traversal)
+            geneTree.embedding.reset(traversalNodeCount);
             // simulate the gene tree
             nodeIndex = 0;
             simulateGeneTree(speciesNetwork.getRoot(), geneTree, ploidies.getValue(ig));
@@ -497,7 +496,8 @@ public class CoalescentSimulator extends Runnable {
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
-        out.println("        <operator id=\"coorNodeSlider:species\" spec=\"speciesnetwork.operators.CoordinatedNodeSlider\" speciesNetwork=\"@network:species\" origin=\"@originTime:species\" isNormal=\"true\" sigma=\"0.005\" weight=\"60.0\">");
+        out.println("        <operator id=\"coorNodeSlider:species\" spec=\"speciesnetwork.operators.CoordinatedNodeSlider\" speciesNetwork=\"@network:species\" isNormal=\"true\" sigma=\"0.005\" weight=\"60.0\">");
+        out.println("            <origin idref=\"originTime:species\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++)
             out.println("            <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
         out.println("        </operator>");
