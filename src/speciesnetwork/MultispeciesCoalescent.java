@@ -48,16 +48,6 @@ public class MultispeciesCoalescent extends Distribution {
         populationModel.initPopSizes(speciesBranchCount);
     }
 
-    private void buildTimes(NetworkNode node, Integer branchNumber, double parentHeight, double[] startTimes, double[] endTimes) {
-        final double nodeHeight = node.getHeight();
-        endTimes[branchNumber] = nodeHeight;
-        startTimes[branchNumber] = parentHeight;
-        for (int childBranchNr: node.childBranchNumbers) {
-            final NetworkNode childNode = node.getChildByBranch(childBranchNr);
-            buildTimes(childNode, childBranchNr, nodeHeight, startTimes, endTimes);
-        }
-    }
-
     @Override
     public double calculateLogP() {
         logP = coalescentProb();
@@ -74,7 +64,6 @@ public class MultispeciesCoalescent extends Distribution {
         final int speciesBranchCount = speciesNetwork.getBranchCount();
         double[] speciesStartTimes = new double[speciesBranchCount]; // the earlier date (rootward end)
         double[] speciesEndTimes = new double[speciesBranchCount]; // the later date (tipward end)
-
         final NetworkNode speciesRoot = speciesNetwork.getRoot();
         final Integer rootBranchNr = speciesRoot.gammaBranchNumber;
         // collect the start (rootward) and end (tipward) times for each species branch
@@ -100,23 +89,23 @@ public class MultispeciesCoalescent extends Distribution {
 
             for (int i = 0; i < speciesBranchCount; i++) {  // species network branch "i"
                 // number of lineages at the tipward end of species branch "i"
-                final int geneBranchLineageCount = geneTree.coalescentLineageCounts.count(i);
+                final int lineageCount = geneTree.coalescentLineageCounts.count(i);
 
                 final List<Double> timesView = geneTree.coalescentTimes.get(i);
                 // number of coalescent events in species branch "i"
-                final int geneBranchEventCount = timesView.size();
+                final int eventCount = timesView.size();
 
-                final Double[] coalescentTimes = new Double[geneBranchEventCount + 2];
+                final Double[] coalescentTimes = new Double[eventCount + 2];
                 timesView.toArray(coalescentTimes);
                 // add branch start and end times to the coalescent times
-                coalescentTimes[geneBranchEventCount] = speciesStartTimes[i];
-                coalescentTimes[geneBranchEventCount+1] = speciesEndTimes[i];
+                coalescentTimes[eventCount] = speciesStartTimes[i];
+                coalescentTimes[eventCount+1] = speciesEndTimes[i];
                 // sort times of coalescent events in ascending order
                 Arrays.sort(coalescentTimes);
 
                 // collect things together
-                allEventCounts.get(i)[j] = geneBranchEventCount;
-                allLineageCounts.get(i)[j] = geneBranchLineageCount;
+                allEventCounts.get(i)[j] = eventCount;
+                allLineageCounts.get(i)[j] = lineageCount;
                 allCoalescentTimes.get(i).add(coalescentTimes);
             }
         }
@@ -131,6 +120,16 @@ public class MultispeciesCoalescent extends Distribution {
         }
 
         return logProb;
+    }
+
+    private void buildTimes(NetworkNode node, Integer branchNumber, double parentHeight, double[] startTimes, double[] endTimes) {
+        final double nodeHeight = node.getHeight();
+        endTimes[branchNumber] = nodeHeight;
+        startTimes[branchNumber] = parentHeight;
+        for (int childBranchNr: node.childBranchNumbers) {
+            final NetworkNode childNode = node.getChildByBranch(childBranchNr);
+            buildTimes(childNode, childBranchNr, nodeHeight, startTimes, endTimes);
+        }
     }
 
     @Override

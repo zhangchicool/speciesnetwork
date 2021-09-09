@@ -8,7 +8,7 @@ import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.Operator;
 import beast.util.Randomizer;
-import speciesnetwork.EmbeddedTree;
+import speciesnetwork.GeneTreeInSpeciesNetwork;
 import speciesnetwork.MultispeciesCoalescent;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
@@ -267,11 +267,24 @@ public class CoordinatedRelocateBranch extends Operator {
 
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
-        // update gene trees (simulate random gene trees under MSNC)
-        coalSimulatorInput.get().simulate();
+        // update (and startEditing) gene trees (simulate random gene trees under MSNC)
+        CoalescentSimulator geneTreesSimulator = coalSimulatorInput.get();
+        geneTreesSimulator.simulate();
+        geneTreesSimulator.popSizesInput.get().getCurrentEditable(this);  // hack to let state&node properly stored
+
+        // to maintain coalescentTimes, first store, then restore after calculating coalescent prob
+        final List<GeneTreeInSpeciesNetwork> geneTrees = MSNC.geneTreeWrapperInput.get();
+        for (GeneTreeInSpeciesNetwork geneTree: geneTrees) {
+            geneTree.store();
+        }
 
         // calculate coalescent prob. of new gene trees in new species network
+        // do NOT call MSNC.calculateLogP(); doing that would update 'logP' which should not be changed at this stage
         logProposalRatio -= MSNC.coalescentProb();
+
+        for (GeneTreeInSpeciesNetwork geneTree: geneTrees) {
+            geneTree.restore();
+        }
 
         return logProposalRatio;
     }
