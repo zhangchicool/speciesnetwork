@@ -20,7 +20,6 @@ abstract class PopulationTestHelper {
     TreeParser speciesTree;
     NetworkParser speciesNetwork;
     List<EmbeddedTree> geneTrees = new ArrayList<>();
-    List<GeneTreeInSpeciesNetwork> geneTreeWrappers = new ArrayList<>();
 
     State state = null;
     MultispeciesCoalescent msc;
@@ -48,7 +47,7 @@ abstract class PopulationTestHelper {
         populationModel.initPopSizes(popSize);
 
         msc = new MultispeciesCoalescent();
-        msc.initByName("speciesNetwork", speciesNetwork, "geneTreeWithin", geneTreeWrappers, "populationModel", populationModel);
+        msc.initByName("speciesNetwork", speciesNetwork, "geneTree", geneTrees, "populationModel", populationModel);
 
         double calculatedLogP = msc.calculateLogP();
         assertEquals(expectedLogP, calculatedLogP, allowedError);
@@ -78,19 +77,17 @@ abstract class PopulationTestHelper {
             final int nCol = embedding.length / nRow;
             embeddedTree.embedding.reset(nCol);
             for (int r = 0; r < nRow; r++) {
-            	for (int c = 0; c < nCol; c++)
-            		embeddedTree.embedding.setDirection(r, c, embedding[r * nCol + c]);
+                for (int c = 0; c < nCol; c++)
+                    embeddedTree.embedding.setDirection(r, c, embedding[r * nCol + c]);
             }
 
             geneTrees.add(embeddedTree);
-            GeneTreeInSpeciesNetwork geneTreeWrapper = new GeneTreeInSpeciesNetwork();
-            geneTreeWrapper.initByName("geneTree", embeddedTree, "ploidy", ploidy, "speciesNetwork", speciesNetwork);
-            geneTreeWrappers.add(geneTreeWrapper);
+
         }
         if (reembed) { // rebuild the embedding
             RebuildEmbedding rebuildOperator = new RebuildEmbedding();
             rebuildOperator.initByName("speciesNetwork", speciesNetwork, "taxonset", speciesSuperset,
-                                       "geneTree", geneTrees);
+                    "geneTree", geneTrees);
             assertTrue(rebuildOperator.rebuildEmbedding());
         }
     }
