@@ -121,15 +121,6 @@ public class BirthHybridizationModel extends Distribution {
     }
 
     @Override
-    protected boolean requiresRecalculation() {
-        return networkInput.get().isDirty() ||
-                (birthRateInput.get() != null && birthRateInput.get().somethingIsDirty()) ||
-                (hybridRateInput.get() != null && hybridRateInput.get().somethingIsDirty()) ||
-                (netDiversification.get() != null && netDiversification.get().somethingIsDirty()) ||
-                (turnOverInput.get() != null && turnOverInput.get().somethingIsDirty());
-    }
-
-    @Override
     public List<String> getArguments() {
         return null;
     }

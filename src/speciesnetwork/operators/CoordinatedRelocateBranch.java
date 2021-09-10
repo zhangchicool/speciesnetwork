@@ -8,7 +8,7 @@ import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.Operator;
 import beast.util.Randomizer;
-import speciesnetwork.GeneTreeInSpeciesNetwork;
+import speciesnetwork.EmbeddedTree;
 import speciesnetwork.MultispeciesCoalescent;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
@@ -31,6 +31,8 @@ import speciesnetwork.simulator.CoalescentSimulator;
 public class CoordinatedRelocateBranch extends Operator {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
+    public final Input<List<EmbeddedTree>> geneTreesInput = new Input<>("geneTree",
+            "The gene tree within the species network.", new ArrayList<>());
     public final Input<MultispeciesCoalescent> MSNCInput =
             new Input<>("MSNC", "The multispecies network coalescent.", Validate.REQUIRED);
     public final Input<CoalescentSimulator> coalSimulatorInput = new Input<>("coalescentSimulator",
@@ -267,24 +269,18 @@ public class CoordinatedRelocateBranch extends Operator {
 
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
-        // update (and startEditing) gene trees (simulate random gene trees under MSNC)
+        // update gene trees (simulate random gene trees under MSNC)
+        final List<EmbeddedTree> geneTrees = geneTreesInput.get();
+        for (EmbeddedTree geneTree : geneTrees) {
+            geneTree.startEditing(this);  // *all* gene trees will be edited
+        }
         CoalescentSimulator geneTreesSimulator = coalSimulatorInput.get();
         geneTreesSimulator.simulate();
         geneTreesSimulator.popSizesInput.get().getCurrentEditable(this);  // hack to let state&node properly stored
 
-        // to maintain coalescentTimes, first store, then restore after calculating coalescent prob
-        final List<GeneTreeInSpeciesNetwork> geneTrees = MSNC.geneTreeWrapperInput.get();
-        for (GeneTreeInSpeciesNetwork geneTree: geneTrees) {
-            geneTree.store();
-        }
-
         // calculate coalescent prob. of new gene trees in new species network
         // do NOT call MSNC.calculateLogP(); doing that would update 'logP' which should not be changed at this stage
         logProposalRatio -= MSNC.coalescentProb();
-
-        for (GeneTreeInSpeciesNetwork geneTree: geneTrees) {
-            geneTree.restore();
-        }
 
         return logProposalRatio;
     }

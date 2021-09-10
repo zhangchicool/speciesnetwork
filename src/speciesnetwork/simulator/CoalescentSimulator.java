@@ -41,7 +41,7 @@ public class CoalescentSimulator extends Runnable {
     public final Input<List<EmbeddedTree>> geneTreesInput =
             new Input<>("geneTree", "Gene tree embedded in the species network.", new ArrayList<>());
     public final Input<RealParameter> ploidiesInput =
-            new Input<>("ploidy", "Ploidy (copy number) for each gene (default is 2).");
+            new Input<>("ploidy", "Ploidy (copy number) array for all genes (default is 2).");
     public final Input<List<SequenceSimulator>> seqSimulatorsInput =
             new Input<>("sequenceSimulator", "Sequence simulator.", new ArrayList<>());
 
@@ -388,7 +388,7 @@ public class CoalescentSimulator extends Runnable {
         // coalescent
         out.println("            <distribution id=\"coalescent\" spec=\"speciesnetwork.MultispeciesCoalescent\" speciesNetwork=\"@network:species\">");
         for (int i = 0; i < nrOfGeneTrees; i++) {
-            out.println("                <geneTreeWithin id=\"geneTree:gene" + (i+1) + "\" spec=\"speciesnetwork.GeneTreeInSpeciesNetwork\" speciesNetwork=\"@network:species\" geneTree=\"@tree:gene" + (i+1) + "\"/>");
+            out.println("                <geneTree idref=\"tree:gene" + (i+1) + "\"/>");
         }
         out.println("                <!-- populationModel id=\"popModel\" popSizes=\"@popSizes\" spec=\"speciesnetwork.ConstantPopulation\"/ -->");
         out.println("                <populationModel id=\"popModel\" alpha=\"5.0\" mean=\"@popMean:species\" spec=\"speciesnetwork.ConstantPopIntegrated\"/>");

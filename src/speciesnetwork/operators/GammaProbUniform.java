@@ -30,7 +30,7 @@ public class GammaProbUniform extends Operator {
         final int randomIndex = Randomizer.nextInt(nReticulations) + speciesNetwork.getReticulationOffset();
         final NetworkNode randomNode = speciesNetwork.getNode(randomIndex);
 
-        final Double newGamma = Randomizer.nextDouble();
+        final double newGamma = Randomizer.nextDouble();
         randomNode.setGammaProb(newGamma);
 
         return 0.0;
