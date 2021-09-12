@@ -98,6 +98,7 @@
                 <geneTree idref="tree:gene1"/>
                 <geneTree idref="tree:gene2"/>
                 <geneTree idref="tree:gene3"/>
+                <ploidy idref="ploidy:gene"/>
             </coalescentSimulator>
             <rebuildEmbedding id="initEmbed" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="0.0">
                 <geneTree idref="tree:gene1"/>
@@ -108,9 +109,10 @@
 
         <distribution id="posterior" spec="util.CompoundDistribution">
             <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
-                <geneTreeWithin id="geneTree:gene1" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene1"/>
-                <geneTreeWithin id="geneTree:gene2" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene2"/>
-                <geneTreeWithin id="geneTree:gene3" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@network:species" geneTree="@tree:gene3"/>
+                <geneTree idref="tree:gene1"/>
+                <geneTree idref="tree:gene2"/>
+                <geneTree idref="tree:gene3"/>
+                <parameter id="ploidy:gene" name="ploidy" dimension="3">2.0 2.0 2.0</parameter>
                 <populationModel id="popModel" alpha="4.0" mean="@popMean:species" spec="speciesnetwork.ConstantPopIntegrated"/>
             </distribution>
             <distribution id="prior" spec="util.CompoundDistribution">
@@ -264,13 +266,33 @@
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
         </operator>
-        <operator id="coordNodeSlider:species" spec="speciesnetwork.operators.CoordinatedNodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.5" weight="50.0">
+        <operator id="coordNodeSlider:species" spec="speciesnetwork.operators.CoordinatedNodeSlider" speciesNetwork="@network:species" isNormal="true" sigma="0.5" weight="50.0">
+            <origin idref="originTime:species"/>
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
         </operator>
 
-        <!-- operator id="relocateBranchAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="150.0">
+        <operator id="coordRelocateBranch:species" spec="speciesnetwork.operators.CoordinatedRelocateBranch" speciesNetwork="@network:species" MSNC="@coalescent" weight="100.0">
+            <coalescentSimulator idref="coalSim"/>
+            <geneTree idref="tree:gene1"/>
+            <geneTree idref="tree:gene2"/>
+            <geneTree idref="tree:gene3"/>
+        </operator>
+        <operator id="coordAddReticulation:species" spec="speciesnetwork.operators.CoordinatedAddReticulation" speciesNetwork="@network:species" MSNC="@coalescent" weight="80.0">
+            <coalescentSimulator idref="coalSim"/>
+            <geneTree idref="tree:gene1"/>
+            <geneTree idref="tree:gene2"/>
+            <geneTree idref="tree:gene3"/>
+        </operator>
+        <operator id="coordDelReticulation:species" spec="speciesnetwork.operators.CoordinatedDeleteReticulation" speciesNetwork="@network:species" MSNC="@coalescent" weight="80.0">
+            <coalescentSimulator idref="coalSim"/>
+            <geneTree idref="tree:gene1"/>
+            <geneTree idref="tree:gene2"/>
+            <geneTree idref="tree:gene3"/>
+        </operator>
+
+        <operator id="relocateBranchAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="100.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
@@ -282,7 +304,6 @@
             <geneTree idref="tree:gene3"/>
             <operator id="flipReticulation:species" spec="speciesnetwork.operators.FlipReticulation" speciesNetwork="@network:species" weight="0.0"/>
         </operator>
-
         <operator id="addReticulationAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="80.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
@@ -294,7 +315,7 @@
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
             <operator id="deleteReticulation:species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@network:species" weight="0.0"/>
-        </operator -->
+        </operator>
 
         <logger id="screenlog" logEvery="10000" model="@posterior">
             <log idref="posterior"/>

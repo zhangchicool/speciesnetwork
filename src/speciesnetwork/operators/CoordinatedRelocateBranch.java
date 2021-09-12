@@ -27,7 +27,7 @@ import speciesnetwork.simulator.CoalescentSimulator;
 
 @Description("Relocate the source of an edge starting with speciation node, " +
              "or the destination of an edge ending with hybridization node." +
-             "Also update the affected gene tree lineages to maintain compatibility.")
+             "Also update the affected gene trees to maintain compatibility.")
 public class CoordinatedRelocateBranch extends Operator {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
