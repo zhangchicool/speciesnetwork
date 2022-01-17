@@ -82,13 +82,13 @@
             <parameter id="turnOverRate:species" lower="0.0" upper="1.0" name="stateNode">0.5</parameter>
             <parameter id="hybridProp:species" lower="0.0" upper="1.0" name="stateNode">0.1</parameter>
             <parameter id="clockRate:gene" lower="0.0" name="stateNode">0.01</parameter>
-            <stateNode id="tree:gene1" spec="speciesnetwork.EmbeddedTree">
+            <stateNode id="tree:gene1" spec="speciesnetwork.EmbeddedTree" ploidy="2.0">
                 <taxonset id="taxonset:gene1" spec="TaxonSet" alignment="@gene1"/>
             </stateNode>
-            <stateNode id="tree:gene2" spec="speciesnetwork.EmbeddedTree">
+            <stateNode id="tree:gene2" spec="speciesnetwork.EmbeddedTree" ploidy="2.0">
                 <taxonset id="taxonset:gene2" spec="TaxonSet" alignment="@gene2"/>
             </stateNode>
-            <stateNode id="tree:gene3" spec="speciesnetwork.EmbeddedTree">
+            <stateNode id="tree:gene3" spec="speciesnetwork.EmbeddedTree" ploidy="2.0">
                 <taxonset id="taxonset:gene3" spec="TaxonSet" alignment="@gene3"/>
             </stateNode>
         </state>
@@ -98,7 +98,6 @@
                 <geneTree idref="tree:gene1"/>
                 <geneTree idref="tree:gene2"/>
                 <geneTree idref="tree:gene3"/>
-                <ploidy idref="ploidy:gene"/>
             </coalescentSimulator>
             <rebuildEmbedding id="initEmbed" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="0.0">
                 <geneTree idref="tree:gene1"/>
@@ -112,7 +111,6 @@
                 <geneTree idref="tree:gene1"/>
                 <geneTree idref="tree:gene2"/>
                 <geneTree idref="tree:gene3"/>
-                <parameter id="ploidy:gene" name="ploidy" dimension="3">2.0 2.0 2.0</parameter>
                 <populationModel id="popModel" alpha="4.0" mean="@popMean:species" spec="speciesnetwork.ConstantPopIntegrated"/>
             </distribution>
             <distribution id="prior" spec="util.CompoundDistribution">

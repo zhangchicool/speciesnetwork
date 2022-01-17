@@ -15,7 +15,6 @@ import beast.core.Distribution;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.State;
-import beast.core.parameter.RealParameter;
 import beast.evolution.tree.Node;
 
 /**
@@ -29,13 +28,10 @@ public class MultispeciesCoalescent extends Distribution {
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
     public final Input<List<EmbeddedTree>> geneTreesInput =
             new Input<>("geneTree", "Gene tree embedded in the species network.", new ArrayList<>());
-    public final Input<RealParameter> ploidiesInput =
-            new Input<>("ploidy", "Ploidy (copy number) array for all genes (default is 2).");
     public final Input<PopulationSizeModel> populationModelInput =
             new Input<>("populationModel", "The species network population model.", Validate.REQUIRED);
 
     private int nGeneTrees;
-    private RealParameter ploidies;
 
     // list of map(species branch -> [coalescent times]) for each gene
     private final List<ListMultimap<Integer, Double>> coalescentTimes = new ArrayList<>();
@@ -55,10 +51,6 @@ public class MultispeciesCoalescent extends Distribution {
         if (geneTrees == null)
             throw new RuntimeException("Check gene tree input!");
         nGeneTrees = geneTrees.size();
-
-        if ((ploidies = ploidiesInput.get()) == null)
-            ploidies = new RealParameter("2.0");  // default
-        ploidies.setDimension(nGeneTrees);
 
         final Network speciesNetwork = speciesNetworkInput.get();
         final int speciesBranchCount = speciesNetwork.getBranchCount();
@@ -148,7 +140,7 @@ public class MultispeciesCoalescent extends Distribution {
                 allLineageCounts.get(i)[j] = lineageCount;
                 allCoalescentTimes.get(i).add(coalTimes);
             }
-            genePloidy[j] = ploidies.getValue(j);
+            genePloidy[j] = geneTrees.get(j).ploidy;
         }
 
         // now calculate coalescent prob. by looping over the species branches

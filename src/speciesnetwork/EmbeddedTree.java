@@ -1,10 +1,15 @@
 package speciesnetwork;
 
+import beast.core.Input;
 import beast.core.StateNode;
 import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
 
 public class EmbeddedTree extends Tree {
+    public final Input<Double> ploidiesInput =
+            new Input<>("ploidy", "Ploidy (copy number) for this gene (default is 2).", 2.0);
+
+    public double ploidy;
     public Embedding embedding;
     private Embedding storedEmbedding;
 
@@ -22,6 +27,7 @@ public class EmbeddedTree extends Tree {
     @Override
     public void initAndValidate() {
         super.initAndValidate();
+        ploidy = ploidiesInput.get();
         embedding = new Embedding(nodeCount);
         storedEmbedding = new Embedding(nodeCount);
     }

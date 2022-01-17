@@ -40,8 +40,6 @@ public class CoalescentSimulator extends Runnable {
 
     public final Input<List<EmbeddedTree>> geneTreesInput =
             new Input<>("geneTree", "Gene tree embedded in the species network.", new ArrayList<>());
-    public final Input<RealParameter> ploidiesInput =
-            new Input<>("ploidy", "Ploidy (copy number) array for all genes (default is 2).");
     public final Input<List<SequenceSimulator>> seqSimulatorsInput =
             new Input<>("sequenceSimulator", "Sequence simulator.", new ArrayList<>());
 
@@ -71,10 +69,6 @@ public class CoalescentSimulator extends Runnable {
         if (geneTrees == null)
             throw new RuntimeException("Check gene tree input!");
         nrOfGeneTrees = geneTrees.size();
-
-        if ((ploidies = ploidiesInput.get()) == null)
-            ploidies = new RealParameter("2.0");  // default
-        ploidies.setDimension(nrOfGeneTrees);
 
         seqSimulators = seqSimulatorsInput.get();
     }
@@ -160,7 +154,7 @@ public class CoalescentSimulator extends Runnable {
             geneTree.embedding.reset(traversalNodeCount);
             // simulate the gene tree
             nodeIndex = 0;
-            simulateGeneTree(speciesNetwork.getRoot(), geneTree, ploidies.getValue(ig));
+            simulateGeneTree(speciesNetwork.getRoot(), geneTree);
 
             // simulate alignment on the gene tree
             if (seqSimulators.size() > ig) {
@@ -170,11 +164,11 @@ public class CoalescentSimulator extends Runnable {
     }
 
     // recursively simulate lineages coalescent in each population
-    private void simulateGeneTree(NetworkNode snNode, EmbeddedTree geneTree, double ploidy) {
+    private void simulateGeneTree(NetworkNode snNode, EmbeddedTree geneTree) {
         if (snNode.isVisited())
             return;
         for (NetworkNode c: snNode.getChildren()) {
-            simulateGeneTree(c, geneTree, ploidy);
+            simulateGeneTree(c, geneTree);
         }
 
         snNode.setVisited(true);  // set visited indicator
@@ -198,13 +192,13 @@ public class CoalescentSimulator extends Runnable {
             final double lPopSize = popSizes.getValue(lBranchNumber);
             final double lTopHeight = lParent.getHeight();
             List<Node> lineagesAtLTop =
-                    simulateCoalescentEvents(lineagesAtLBottom, bottomHeight, lTopHeight, ploidy*lPopSize, geneTree);
+                    simulateCoalescentEvents(lineagesAtLBottom, bottomHeight, lTopHeight, lPopSize, geneTree);
             final Integer rBranchNumber = snNode.gammaBranchNumber + 1;
             NetworkNode rParent = snNode.getParentByBranch(rBranchNumber);
             final double rPopSize = popSizes.getValue(rBranchNumber);
             final double rTopHeight = rParent.getHeight();
             List<Node> lineagesAtRTop =
-                    simulateCoalescentEvents(lineagesAtRBottom, bottomHeight, rTopHeight, ploidy*rPopSize, geneTree);
+                    simulateCoalescentEvents(lineagesAtRBottom, bottomHeight, rTopHeight, rPopSize, geneTree);
 
             networkNodeGeneLineagesMap.putAll(lParent, lineagesAtLTop);
             networkNodeGeneLineagesMap.putAll(rParent, lineagesAtRTop);
@@ -228,7 +222,7 @@ public class CoalescentSimulator extends Runnable {
                 topHeight = sParent.getHeight();
 
             List<Node> lineagesAtTop =
-                    simulateCoalescentEvents(lineagesAtBottom, bottomHeight, topHeight, ploidy*popSize, geneTree);
+                    simulateCoalescentEvents(lineagesAtBottom, bottomHeight, topHeight, popSize, geneTree);
             if (sParent.isOrigin()) {
                 geneTree.setRoot(lineagesAtTop.get(0));
             } else {
@@ -242,7 +236,7 @@ public class CoalescentSimulator extends Runnable {
     }
 
     private List<Node> simulateCoalescentEvents(Collection<Node> lineages, double bottomHeight,
-                                                double topHeight, double pNe, EmbeddedTree geneTree) {
+                                                double topHeight, double Ne, EmbeddedTree geneTree) {
         // start from the lineages at the bottom
         List<Node> currentLineages = new ArrayList<>(lineages);
         double currentHeight = bottomHeight;
@@ -253,7 +247,7 @@ public class CoalescentSimulator extends Runnable {
         while (currentLineages.size() > 1 && currentHeight < topHeight) {
             // generate a coalescent waiting time
             final int nLineage = currentLineages.size();
-            final double coalescentRate = nLineage * (nLineage - 1) / (2 * pNe);
+            final double coalescentRate = nLineage * (nLineage - 1) / (2 * Ne * geneTree.ploidy);
             final double waitingTime = Randomizer.nextExponential(coalescentRate);
             currentHeight += waitingTime;
 
