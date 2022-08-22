@@ -35,6 +35,7 @@ import speciesnetwork.simulator.CoalescentSimulator;
  * @author Chi Zhang
  */
 
+@Deprecated  // not working properly
 @Description("Add a reticulation branch to the species network." +
              "Also update the affected gene trees to maintain compatibility.")
 public class CoordinatedAddReticulation extends Operator {

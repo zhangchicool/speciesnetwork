@@ -25,6 +25,7 @@ import speciesnetwork.simulator.CoalescentSimulator;
  * @author Chi Zhang
  */
 
+@Deprecated  // not working properly
 @Description("Relocate the source of an edge starting with speciation node, " +
              "or the destination of an edge ending with hybridization node." +
              "Also update the affected gene trees to maintain compatibility.")

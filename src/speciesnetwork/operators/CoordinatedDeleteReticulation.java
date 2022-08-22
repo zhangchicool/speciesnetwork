@@ -32,6 +32,7 @@ import speciesnetwork.simulator.CoalescentSimulator;
  * @author Chi Zhang
  */
 
+@Deprecated  // not working properly
 @Description("Delete a reticulation branch from the species network." +
              "Also update the affected gene trees to maintain compatibility.")
 public class CoordinatedDeleteReticulation extends Operator {
