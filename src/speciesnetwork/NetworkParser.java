@@ -5,8 +5,8 @@ import java.util.List;
 
 import beast.base.core.Description;
 import beast.base.core.Input;
-import beast.base.core.StateNode;
-import beast.base.core.StateNodeInitialiser;
+import beast.base.inference.StateNode;
+import beast.base.inference.StateNodeInitialiser;
 import beast.base.evolution.tree.Node;
 import beast.base.evolution.tree.Tree;
 import beast.base.core.Input.Validate;

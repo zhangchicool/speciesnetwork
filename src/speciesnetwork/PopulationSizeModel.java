@@ -3,7 +3,7 @@ package speciesnetwork;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import beast.base.core.CalculationNode;
+import beast.base.inference.CalculationNode;
 import beast.base.core.Description;
 
 /**

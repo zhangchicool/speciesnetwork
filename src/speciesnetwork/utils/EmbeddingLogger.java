@@ -2,7 +2,7 @@ package speciesnetwork.utils;
 
 import java.io.PrintStream;
 
-import beast.base.core.CalculationNode;
+import beast.base.inference.CalculationNode;
 import beast.base.core.Description;
 import beast.base.core.Function;
 import beast.base.core.Input;

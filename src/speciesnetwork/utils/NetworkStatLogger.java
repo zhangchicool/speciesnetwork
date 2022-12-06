@@ -2,12 +2,12 @@ package speciesnetwork.utils;
 
 import java.io.PrintStream;
 
-import beast.base.core.CalculationNode;
+import beast.base.inference.CalculationNode;
 import beast.base.core.Description;
 import beast.base.core.Function;
 import beast.base.core.Input;
 import beast.base.core.Input.Validate;
-import beast.base.core.util.Log;
+import beast.base.core.Log;
 import beast.base.core.Loggable;
 import speciesnetwork.Network;
 

@@ -6,9 +6,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import beast.base.core.State;
+import beast.base.inference.State;
 import beast.base.evolution.alignment.TaxonSet;
-import beast.base.util.TreeParser;
+import beast.base.evolution.tree.TreeParser;
 import speciesnetwork.*;
 import speciesnetwork.operators.RebuildEmbedding;
 

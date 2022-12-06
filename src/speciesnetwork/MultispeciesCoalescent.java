@@ -11,10 +11,10 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multiset;
 
 import beast.base.core.Description;
-import beast.base.core.Distribution;
+import beast.base.inference.Distribution;
 import beast.base.core.Input;
 import beast.base.core.Input.Validate;
-import beast.base.core.State;
+import beast.base.inference.State;
 import beast.base.evolution.tree.Node;
 
 /**

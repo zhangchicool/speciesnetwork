@@ -4,7 +4,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import beast.base.inference.parameter.RealParameter;
-import beast.base.util.TreeParser;
+import beast.base.evolution.tree.TreeParser;
 import speciesnetwork.NetworkParser;
 import speciesnetwork.BirthHybridizationModel;
 

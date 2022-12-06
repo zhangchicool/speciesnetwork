@@ -10,10 +10,10 @@ import java.util.List;
 import beast.base.core.Citation;
 import beast.base.core.Description;
 import beast.base.core.Input;
-import beast.base.core.StateNode;
+import beast.base.inference.StateNode;
 import beast.base.evolution.alignment.TaxonSet;
 import beast.base.evolution.tree.TraitSet;
-import beast.base.util.TreeParser;
+import beast.base.evolution.tree.TreeParser;
 
 /**
  * Network class modelling the phylogeny of species, which includes

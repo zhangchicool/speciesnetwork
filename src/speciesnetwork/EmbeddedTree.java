@@ -1,7 +1,7 @@
 package speciesnetwork;
 
 import beast.base.core.Input;
-import beast.base.core.StateNode;
+import beast.base.inference.StateNode;
 import beast.base.evolution.tree.Node;
 import beast.base.evolution.tree.Tree;
 

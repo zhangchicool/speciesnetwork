@@ -7,12 +7,12 @@ import java.util.*;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-import beast.base.app.seqgen.*;
+import beastfx.app.seqgen.*;
 import beast.base.core.Description;
 import beast.base.core.Input;
 import beast.base.core.Input.Validate;
-import beast.base.core.Runnable;
-import beast.base.core.State;
+import beast.base.inference.Runnable;
+import beast.base.inference.State;
 import beast.base.inference.parameter.RealParameter;
 import beast.base.evolution.alignment.*;
 import beast.base.evolution.tree.Node;
@@ -315,13 +315,13 @@ public class CoalescentSimulator extends Runnable {
                     "    <map name=\"OneOnX\">beast.base.math.distributions.OneOnX</map>\n" +
                     "    <map name=\"prior\">beast.base.math.distributions.Prior</map>\n");
         // print initial species network
-        out.println("    <init spec=\"beast.base.util.TreeParser\" id=\"newick:species\" IsLabelledNewick=\"true\" adjustTipHeights=\"false\"\n" +
+        out.println("    <init spec=\"beast.base.evolution.tree.TreeParser\" id=\"newick:species\" IsLabelledNewick=\"true\" adjustTipHeights=\"false\"\n" +
                     "          newick=\"" + speciesNetwork.getOrigin().toString(df, true) + "\"/>");
         // print initial/true gene trees
         out.println("    <!--");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             EmbeddedTree geneTree = geneTrees.get(i);
-            out.println("    <init spec=\"beast.base.util.TreeParser\" id=\"newick:gene" + (i+1) + "\" IsLabelledNewick=\"true\"\n" +
+            out.println("    <init spec=\"beast.base.evolution.tree.TreeParser\" id=\"newick:gene" + (i+1) + "\" IsLabelledNewick=\"true\"\n" +
                         "          newick=\"" + geneTree.getRoot().toNewick() + "\"/>");
         }
         out.println("        -->\n");

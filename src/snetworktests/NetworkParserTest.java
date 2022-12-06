@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-import beast.base.util.TreeParser;
+import beast.base.evolution.tree.TreeParser;
 import speciesnetwork.NetworkParser;
 
 public class NetworkParserTest {
