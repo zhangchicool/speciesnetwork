@@ -553,7 +553,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("        </logger>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("        <logger id=\"treelog:gene" + (i + 1) + "\" fileName=\"" + outputFileName + ".gene" + (i+1) + ".trees\" logEvery=\"2000\" mode=\"tree\">");
-            out.println("            <log id=\"treeLogger:gene" + (i+1) + "\" tree=\"@tree:gene" + (i+1) + "\" spec=\"beast.base.evolution.tree.TreeWithMetaDataLogger\"/>");
+            out.println("            <log id=\"treeLogger:gene" + (i+1) + "\" tree=\"@tree:gene" + (i+1) + "\" spec=\"beast.base.evolution.TreeWithMetaDataLogger\"/>");
             out.println("        </logger>");
         }
         out.println("    </run>");  // end of MCMC

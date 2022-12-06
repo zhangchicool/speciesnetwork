@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<beast namespace="beast.core:beast.evolution.alignment:beast.app" version="2.4">
+<beast namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.alignment:beast.app" version="2.4">
     <data id="gene" name="alignment">
         <sequence id="gene_a1" taxon="a1" totalcount="4" value="-"/>
         <sequence id="gene_a2" taxon="a2" totalcount="4" value="-"/>
@@ -11,7 +11,7 @@
         <sequence id="gene_d2" taxon="d2" totalcount="4" value="-"/>
     </data>
 
-    <init spec='beast.util.TreeParser' id='newick:species' IsLabelledNewick="true" adjustTipHeights="false"
+    <init spec='beast.base.evolution.tree.TreeParser' id='newick:species' IsLabelledNewick="true" adjustTipHeights="false"
           newick="(((A:0.035,((B:0.012,(C:0.01)#H2[&amp;gamma=0.7]:0.002)S3:0.018)#H1[&amp;gamma=0.6]:0.005)S1:0.015,(#H1:0.01,(#H2:0.005,D:0.015)S4:0.025)S2:0.01)R:0.05)"/>
 
 <!-- run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="test_gene.xml" networkOperator="false" -->

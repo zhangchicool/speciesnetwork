@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<beast namespace="beast.core:beast.app" version="2.4">
+<beast namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.app" version="2.4">
     <run id="network.summary" spec="speciesnetwork.utils.NetworkSummarizer"
          inputFileName="test_3s.xml.species.trees" outputFileName="test_3s.xml.summary.trees" burnin="401"/>
 </beast>

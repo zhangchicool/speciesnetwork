@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<beast namespace="beast.core:beast.evolution.alignment:beast.app" version="2.4">
+<beast namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.alignment:beast.app" version="2.4">
     <run id="networkSimulator" outputFileName="test_net.trees" iterations="100"
          spec="speciesnetwork.simulator.BirthHybridSimulator">
         <speciesNetwork id="network:species" spec="speciesnetwork.Network">
