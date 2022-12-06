@@ -1,5 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<beast namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.alignment:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.app" version="2.6">
+<beast version="2.7" namespace="beast.base.core:beast.base.inference:beast.base.util:
+                  beast.base.math:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:
+                  beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:
+                  beast.base.evolution.substitutionmodel:beast.base.evolution.branchratemodel:
+                  beast.base.evolution.likelihood:beastfx.app:
+                  speciesnetwork:speciesnetwork.operators:speciesnetwork.simulator:
+                  speciesnetwork.tools:speciesnetwork.utils">
+
     <data id="gene1" name="alignment">
         <sequence id="gene1_a1" taxon="a1" totalcount="4" value="-"/>
         <sequence id="gene1_a2" taxon="a2" totalcount="4" value="-"/>

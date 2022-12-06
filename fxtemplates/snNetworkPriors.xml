@@ -1,4 +1,11 @@
-<beast version="2.0" namespace="beast.app.beauti:beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.branchratemodel:beast.base.evolution.speciation:beast.base.evolution.tree.coalescent:beast.pkgmgmt:beast.base.core:beast.base.inference.util:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood:beast.evolution:beast.base.inference.distribution">
+<beast version="2.7" namespace="beast.base.core:beast.base.inference:
+                     beast.base.evolution.branchratemodel:beast.base.evolution.speciation:
+                     beast.base.evolution.tree.coalescent:beast.base.inference.util:
+                     beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:
+                     beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:
+                     beast.base.evolution.likelihood:beast.evolution:beast.base.inference.distribution:
+                     speciesnetwork.operators:speciesnetwork.utils:speciesnetwork.simulator:speciesnetwork">
+
     <!-- network priors -->
     <mergewith point="snNetworkPriorTemplates">
         <!-- Birth Hybridization model (no death) -->
