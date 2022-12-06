@@ -3,8 +3,8 @@ package snetworktests;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-import beast.core.parameter.RealParameter;
-import beast.util.TreeParser;
+import beast.base.inference.parameter.RealParameter;
+import beast.base.util.TreeParser;
 import speciesnetwork.NetworkParser;
 import speciesnetwork.BirthHybridizationModel;
 

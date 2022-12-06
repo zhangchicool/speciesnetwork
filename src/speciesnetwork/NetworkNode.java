@@ -6,8 +6,8 @@ import java.util.*;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 
-import beast.core.Description;
-import beast.evolution.tree.Node;
+import beast.base.core.Description;
+import beast.base.evolution.tree.Node;
 
 /**
  * NetworkNode: tip (one parent no child), bifurcation (one parent two children), reticulation (two parents one child)

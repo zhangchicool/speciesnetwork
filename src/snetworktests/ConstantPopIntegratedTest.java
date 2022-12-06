@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 
-import beast.core.parameter.RealParameter;
-import beast.evolution.alignment.Taxon;
-import beast.evolution.alignment.TaxonSet;
+import beast.base.inference.parameter.RealParameter;
+import beast.base.evolution.alignment.Taxon;
+import beast.base.evolution.alignment.TaxonSet;
 import speciesnetwork.ConstantPopIntegrated;
 import speciesnetwork.PopulationSizeModel;
 

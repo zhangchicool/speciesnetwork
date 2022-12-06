@@ -1,5 +1,51 @@
-<package name="SpeciesNetwork" version="0.13.0"
+<package name="SpeciesNetwork" version="1.0.0"
          description="Bayesian inference of species networks from multilocus data"
          projectURL="https://github.com/zhangchicool/speciesnetwork">
-    <depends on="beast2" atleast="2.5.2"/>
+    <depends on='BEAST.base' atleast='2.7.2'/>
+    <depends on='BEAST.app' atleast='2.7.2'/>
+
+    <service type="beastfx.app.inputeditor.InputEditor">
+        <provider classname="speciesnetwork.app.beauti.SNTipDatesInputEditor"/>
+    </service>
+
+    <service type="beast.base.core.BEASTInterface">
+        <provider classname="speciesnetwork.app.beauti.SpeciesNetworkAlignmentProvider"/>
+        <provider classname="speciesnetwork.BirthHybridizationModel"/>
+        <provider classname="speciesnetwork.ConstantPopIntegrated"/>
+        <provider classname="speciesnetwork.ConstantPopulation"/>
+        <provider classname="speciesnetwork.EmbeddedTree"/>
+        <provider classname="speciesnetwork.Embedding"/>
+        <provider classname="speciesnetwork.GeneTreeInSpeciesNetwork"/>
+        <provider classname="speciesnetwork.MultispeciesCoalescent"/>
+        <provider classname="speciesnetwork.Network"/>
+        <provider classname="speciesnetwork.NetworkNode"/>
+        <provider classname="speciesnetwork.NetworkParser"/>
+        <provider classname="speciesnetwork.NodeHeightComparator"/>
+        <provider classname="speciesnetwork.PopulationSizeModel"/>
+        <provider classname="speciesnetwork.SpeciesNetworkInitializer"/>
+        <provider classname="speciesnetwork.operators.AddReticulation"/>
+        <provider classname="speciesnetwork.operators.CoordinatedNodeSlider"/>
+        <provider classname="speciesnetwork.operators.CoordinatedNodeUniform"/>
+        <provider classname="speciesnetwork.operators.CoordinatedOperator"/>
+        <provider classname="speciesnetwork.operators.DeleteReticulation"/>
+        <provider classname="speciesnetwork.operators.FlipReticulation"/>
+        <provider classname="speciesnetwork.operators.GammaProbRndWalk"/>
+        <provider classname="speciesnetwork.operators.GammaProbUniform"/>
+        <provider classname="speciesnetwork.operators.NetworkMultiplier"/>
+        <provider classname="speciesnetwork.operators.NodeSlider"/>
+        <provider classname="speciesnetwork.operators.NodeUniform"/>
+        <provider classname="speciesnetwork.operators.OriginMultiplier"/>
+        <provider classname="speciesnetwork.operators.RebuildEmbedding"/>
+        <provider classname="speciesnetwork.operators.RelocateBranch"/>
+        <provider classname="speciesnetwork.simulator.BirthHybridSimulator"/>
+        <provider classname="speciesnetwork.simulator.CoalescentSimulator"/>
+        <!--        <provider classname="speciesnetwork.tools.SummarizeNetwork"/>-->
+        <provider classname="speciesnetwork.tools.SummarizePosterior"/>
+        <provider classname="speciesnetwork.utils.BackboneTreeLogger"/>
+        <provider classname="speciesnetwork.utils.EmbeddingLogger"/>
+        <provider classname="speciesnetwork.utils.NetworkStatLogger"/>
+        <provider classname="speciesnetwork.utils.NetworkWithMetaDataLogger"/>
+        <provider classname="speciesnetwork.utils.SanityChecks"/>
+    </service>
+
 </package>

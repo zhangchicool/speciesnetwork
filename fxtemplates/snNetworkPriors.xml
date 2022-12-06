@@ -1,0 +1,107 @@
+<beast version="2.0" namespace="beast.app.beauti:beast.core:beast.evolution.branchratemodel:beast.evolution.speciation:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood:beast.evolution:beast.math.distributions">
+    <!-- network priors -->
+    <mergewith point="snNetworkPriorTemplates">
+        <!-- Birth Hybridization model (no death) -->
+        <subtemplate id="BirthHybridModel" class="speciesnetwork.BirthHybridizationModel" mainid="BirthHybridModel.t:$(n)">
+            <![CDATA[
+            <distribution id="BirthHybridModel.t:$(n)" spec="speciesnetwork.BirthHybridizationModel" network="@Network.t:$(n)">
+                <betaShape id="betaShape.t:$(n)" spec="parameter.RealParameter" value="2.0" estimate="false"/>
+                <netDiversification id="netDivRate.t:$(n)" spec="parameter.RealParameter" value="1.0" lower="0.0" estimate="true"/>
+                <turnOver id="turnOverRate.t:$(n)" spec="parameter.RealParameter" value="0.5" lower="0.0" upper="1.0" estimate="true"/>
+            </distribution>
+
+            <prior id="netDivRatePrior.t:$(n)" x="@netDivRate.t:$(n)">
+                <distr spec="beast.math.distributions.OneOnX"/>
+            </prior>
+            <prior id="turnOverRatePrior.t:$(n)" x="@turnOverRate.t:$(n)">
+                 <distr spec="beast.math.distributions.Beta" alpha="1.0" beta="10.0"/>
+            </prior>
+
+            <operator id="netDivRateScale.t:$(n)" spec="ScaleOperator" scaleFactor="0.5" weight="2.0" parameter="@netDivRate.t:$(n)"/>
+            <operator id="turnOverRateScale.t:$(n)" spec="ScaleOperator" scaleFactor="0.5" weight="2.0" parameter="@turnOverRate.t:$(n)"/>
+]]>
+
+            <connect srcID="BirthHybridModel.t:$(n)" targetID="prior" inputName="distribution" if="inposterior(BirthHybridModel.t:$(n)) and inposterior(Network.t:$(n)) and Network.t:$(n)/estimate=true">
+                Birth-Hybridization prior applied to the species network
+            </connect>
+            <connect srcID="netDivRate.t:$(n)" targetID="state" inputName="stateNode" if="inposterior(BirthHybridModel.t:$(n)) and inposterior(netDivRate.t:$(n)) and netDivRate.t:$(n)/estimate=true"/>
+            <connect srcID="turnOverRate.t:$(n)" targetID="state" inputName="stateNode" if="inposterior(BirthHybridModel.t:$(n)) and inposterior(turnOverRate.t:$(n)) and turnOverRate.t:$(n)/estimate=true"/>
+
+            <connect srcID="netDivRatePrior.t:$(n)" targetID="prior" inputName="distribution" if="inposterior(BirthHybridModel.t:$(n)) and inposterior(netDivRate.t:$(n)) and netDiverRate.t:$(n)/estimate=true">
+                Prior on net diversification rate (speciation - hybridization) applied to the species network
+            </connect>
+            <connect srcID="turnOverRatePrior.t:$(n)" targetID="prior" inputName="distribution" if="inposterior(BirthHybridModel.t:$(n)) and inposterior(turnOverRate.t:$(n)) and turnOverRate.t:$(n)/estimate=true">
+                Prior on turn over fraction (hybridization / speciation) applied to the species network
+            </connect>
+
+            <connect srcID="netDivRateScale.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(BirthHybridModel.t:$(n)) and inposterior(netDivRate.t:$(n)) and netDivRate.t:$(n)/estimate=true">
+                Scale the net diversification rate for the species network
+            </connect>
+            <connect srcID="turnOverRateScale.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(BirthHybridModel.t:$(n)) and inposterior(turnOverRate.t:$(n)) and turnOverRate.t:$(n)/estimate=true">
+                Scale the turn over fraction for the species network
+            </connect>
+
+            <connect srcID="BirthHybridModel.t:$(n)" targetID="tracelog" inputName="log" if="inposterior(BirthHybridModel.t:$(n)) and inposterior(Network.t:$(n)) and Network.t:$(n)/estimate=true"/>
+            <connect srcID="netDivRate.t:$(n)" targetID="tracelog" inputName="log" if="inposterior(BirthHybridModel.t:$(n)) and inposterior(netDivRate.t:$(n)) and netDivRate.t:$(n)/estimate=true"/>
+            <connect srcID="turnOverRate.t:$(n)" targetID="tracelog" inputName="log" if="inposterior(BirthHybridModel.t:$(n)) and inposterior(turnOverRate.t:$(n)) and turnOverRate.t:$(n)/estimate=true"/>
+        </subtemplate>
+
+        <!-- Birth Death Hybridization model (for tip dates) -->
+        <subtemplate id="BDHybridModel" class="speciesnetwork.BirthDeathHybridization" mainid="BDHybridModel.t:$(n)">
+            <![CDATA[
+            <distribution id="BDHybridModel.t:$(n)" spec="speciesnetwork.BirthDeathHybridization" network="@Network.t:$(n)">
+                <betaShape id="betaShape.t:$(n)" spec="parameter.RealParameter" value="2.0" estimate="false"/>
+                <netDiversification id="netDivRate.t:$(n)" spec="parameter.RealParameter" value="1.0" lower="0.0" estimate="true"/>
+                <turnOver id="turnOverRate.t:$(n)" spec="parameter.RealParameter" value="0.5" lower="0.0" upper="1.0" estimate="true"/>
+                <hybridProportion id="hybridProp.t:$(n)" spec="parameter.RealParameter" value="0.1" lower="0.0" upper="1.0" estimate="true"/>
+            </distribution>
+
+            <prior id="netDivRatePrior.t:$(n)" x="@netDivRate.t:$(n)">
+                <distr spec="beast.math.distributions.OneOnX"/>
+            </prior>
+            <prior id="turnOverRatePrior.t:$(n)" x="@turnOverRate.t:$(n)">
+                 <distr spec="beast.math.distributions.Beta" alpha="1.0" beta="1.0"/>
+            </prior>
+            <prior id="hybridPropPrior.t:$(n)" x="@hybridProp.t:$(n)">
+                 <distr spec="beast.math.distributions.Beta" alpha="1.0" beta="9.0"/>
+            </prior>
+
+            <operator id="netDivRateScale.t:$(n)" spec="ScaleOperator" scaleFactor="0.5" weight="2.0" parameter="@netDivRate.t:$(n)"/>
+            <operator id="turnOverRateScale.t:$(n)" spec="ScaleOperator" scaleFactor="0.5" weight="2.0" parameter="@turnOverRate.t:$(n)"/>
+            <operator id="hybridPropScale.t:$(n)" spec="ScaleOperator" scaleFactor="0.5" weight="2.0" parameter="@hybridProp.t:$(n)"/>
+]]>
+
+            <connect srcID="BDHybridModel.t:$(n)" targetID="prior" inputName="distribution" if="inposterior(BDHybridModel.t:$(n)) and inposterior(Network.t:$(n)) and Network.t:$(n)/estimate=true">
+                Birth-Death-Hybridization prior applied to the species network
+            </connect>
+            <connect srcID="netDivRate.t:$(n)" targetID="state" inputName="stateNode" if="inposterior(BDHybridModel.t:$(n)) and inposterior(netDivRate.t:$(n)) and netDivRate.t:$(n)/estimate=true"/>
+            <connect srcID="turnOverRate.t:$(n)" targetID="state" inputName="stateNode" if="inposterior(BDHybridModel.t:$(n)) and inposterior(turnOverRate.t:$(n)) and turnOverRate.t:$(n)/estimate=true"/>
+            <connect srcID="hybridProp.t:$(n)" targetID="state" inputName="stateNode" if="inposterior(BDHybridModel.t:$(n)) and inposterior(hybridProp.t:$(n)) and hybridProp.t:$(n)/estimate=true"/>
+
+            <connect srcID="netDivRatePrior.t:$(n)" targetID="prior" inputName="distribution" if="inposterior(BDHybridModel.t:$(n)) and inposterior(netDivRate.t:$(n)) and netDiverRate.t:$(n)/estimate=true">
+                Prior on net diversification rate (speciation - extinction - hybridization) applied to the species network
+            </connect>
+            <connect srcID="turnOverRatePrior.t:$(n)" targetID="prior" inputName="distribution" if="inposterior(BDHybridModel.t:$(n)) and inposterior(turnOverRate.t:$(n)) and turnOverRate.t:$(n)/estimate=true">
+                Prior on turn over fraction ((extinction + hybridization) / speciation) applied to the species network
+            </connect>
+            <connect srcID="hybridPropPrior.t:$(n)" targetID="prior" inputName="distribution" if="inposterior(BDHybridModel.t:$(n)) and inposterior(hybridProp.t:$(n)) and hybridProp.t:$(n)/estimate=true">
+                Prior on hybridization fraction (hybridization / (extinction + hybridization)) applied to the species network
+            </connect>
+
+            <connect srcID="netDivRateScale.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(BDHybridModel.t:$(n)) and inposterior(netDivRate.t:$(n)) and netDivRate.t:$(n)/estimate=true">
+                Scale the net diversification rate for the species network
+            </connect>
+            <connect srcID="turnOverRateScale.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(BDHybridModel.t:$(n)) and inposterior(turnOverRate.t:$(n)) and turnOverRate.t:$(n)/estimate=true">
+                Scale the turn over fraction for the species network
+            </connect>
+            <connect srcID="hybridPropScale.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(BDHybridModel.t:$(n)) and inposterior(hybridProp.t:$(n)) and hybridProp.t:$(n)/estimate=true">
+                Scale the hybridization fraction for the species network
+            </connect>
+
+            <connect srcID="BDHybridModel.t:$(n)" targetID="tracelog" inputName="log" if="inposterior(BDHybridModel.t:$(n)) and inposterior(Network.t:$(n)) and Network.t:$(n)/estimate=true"/>
+            <connect srcID="netDivRate.t:$(n)" targetID="tracelog" inputName="log" if="inposterior(BDHybridModel.t:$(n)) and inposterior(netDivRate.t:$(n)) and netDivRate.t:$(n)/estimate=true"/>
+            <connect srcID="turnOverRate.t:$(n)" targetID="tracelog" inputName="log" if="inposterior(BDHybridModel.t:$(n)) and inposterior(turnOverRate.t:$(n)) and turnOverRate.t:$(n)/estimate=true"/>
+            <connect srcID="hybridProp.t:$(n)" targetID="tracelog" inputName="log" if="inposterior(BDHybridModel.t:$(n)) and inposterior(hybridProp.t:$(n)) and hybridProp.t:$(n)/estimate=true"/>
+        </subtemplate>
+    </mergewith>
+</beast>

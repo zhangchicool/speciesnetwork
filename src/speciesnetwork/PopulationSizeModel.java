@@ -3,8 +3,8 @@ package speciesnetwork;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import beast.core.CalculationNode;
-import beast.core.Description;
+import beast.base.core.CalculationNode;
+import beast.base.core.Description;
 
 /**
  * @author Huw Ogilvie

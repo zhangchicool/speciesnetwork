@@ -7,13 +7,13 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import beast.core.Citation;
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.StateNode;
-import beast.evolution.alignment.TaxonSet;
-import beast.evolution.tree.TraitSet;
-import beast.util.TreeParser;
+import beast.base.core.Citation;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.core.StateNode;
+import beast.base.evolution.alignment.TaxonSet;
+import beast.base.evolution.tree.TraitSet;
+import beast.base.util.TreeParser;
 
 /**
  * Network class modelling the phylogeny of species, which includes
@@ -571,7 +571,7 @@ public class Network extends StateNode {
     }
 
     /**
-     * @see beast.core.Loggable *
+     * @see beast.base.core.Loggable *
      */
     @Override
     public void close(PrintStream out) {
