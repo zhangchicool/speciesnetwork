@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='SpeciesNetwork' beautistatus='noAutoSetClockRate' namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" required="" version="2.5">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='SpeciesNetwork' beautistatus='noAutoSetClockRate' namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:beast.pkgmgmt:beast.base.core:beast.base.inference.util:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood" required="" version="2.5">
 
 <data id="3s_6loci">
     <sequence id="seq_speciesA_tip1" taxon="speciesA_tip1" totalcount="4" value="TGGCGGACGTTAGTTACGCTGCAAAGGCTCTCTAAGATTGTCCGGAGCTGTAGACACATTCCACCTTGTGCGTCTGGACTTGCGTCACGTTTGAGCGACTTCCCTCCCGGCTACCGTACGTTAGAGTGGAGTCACTTTTTTGAGTGGATATGTAGGTCCTCTGAATAAGTTAATTGAAGTGTGTCATCGACTCCGGCCTGCATGTACAAGGCGTGCTGAGAATCCCCGAGCATTCGTGGGCGCTCTAACGATCTGTTGACCATAAAGAGTCTTGGTAGGATCCCTTTATGAGATGACTTCAAACGTGATGGGGCGCCATGCTGTGAAACTTAGCCCGTTCGGATATCGAGTTGGAAGAAGCTTTTTCTAGGGCACTTCCAACCATTTACTGCATTACACAACCCCCTACGTCAGCACCGTCCATCTCCTATTTTACAGGCGAGACTTCGTTAGCGACCATCTATAAACTCACTCTCCGGGTAAGTCTAATGCAAAAGGAGATGAAACAAAGGCAACGGAGCACGAATCCCCTGTTCGGCCACGAGGGCTGCCGTGTACGTACGCAACAAGAATGCCCCACACCCAGTTGCTTCGGGTATACTAGTCGTTCCCTAATTTAGCTATAACTCTAGGCAAGGCTGGATCATAGTTACTGCCGACACTCCAACGCAGGGGGTGCCTACTCCCAATCCTATCGTTAGAGTTAGCGGCATCTATACAAACCGTTTGGTTTATAAGTGTTGGCGCGCATTATTGCCAAGGACGTGCACGTACTCATCCCGCCCCCAGAACCTTGTGGCTGGTAAGTAACACCACAGGAGACAATCGAATCCATCCGTCCGAAGGTAGAAACTCGAGGGTCCCCCTCCGGTCAACCTCTATCCATCGGTCTCGCATATATCCGGTTAAGATGACAGGCATTGCGCCTTTTTTCGAAGGAATACTACGGCCCTCGAATCATCCCCTAGCAGGGTGCACTGTAGAAGGTCTCCTAGCCGTCCTCTATCGTCTGATACGGGCCAACATCCCTCTGCGCCGTAAGAGGATGAAAGCTGGAACCAGTTGATCCCTGATTCAGACGCAGTTCGTAACACGCAATAAGTCAGGGGTCGGCTGGTCTAGTGTCTTACACAATTGCGAACCACTTAGAACCAACCAGTTGTCCCTATCCACAGACCATAACCCGCACAACAAAATCAA"/>
@@ -16,19 +16,19 @@
 </data>
 
 
-<map name="Uniform" >beast.math.distributions.Uniform</map>
-<map name="Exponential" >beast.math.distributions.Exponential</map>
-<map name="LogNormal" >beast.math.distributions.LogNormalDistributionModel</map>
-<map name="Normal" >beast.math.distributions.Normal</map>
-<map name="Beta" >beast.math.distributions.Beta</map>
-<map name="Gamma" >beast.math.distributions.Gamma</map>
-<map name="LaplaceDistribution" >beast.math.distributions.LaplaceDistribution</map>
-<map name="prior" >beast.math.distributions.Prior</map>
-<map name="InverseGamma" >beast.math.distributions.InverseGamma</map>
-<map name="OneOnX" >beast.math.distributions.OneOnX</map>
+<map name="Uniform" >beast.base.inference.distribution.Uniform</map>
+<map name="Exponential" >beast.base.inference.distribution.Exponential</map>
+<map name="LogNormal" >beast.base.inference.distribution.LogNormalDistributionModel</map>
+<map name="Normal" >beast.base.inference.distribution.Normal</map>
+<map name="Beta" >beast.base.inference.distribution.Beta</map>
+<map name="Gamma" >beast.base.inference.distribution.Gamma</map>
+<map name="LaplaceDistribution" >beast.base.inference.distribution.LaplaceDistribution</map>
+<map name="prior" >beast.base.inference.distribution.Prior</map>
+<map name="InverseGamma" >beast.base.inference.distribution.InverseGamma</map>
+<map name="OneOnX" >beast.base.inference.distribution.OneOnX</map>
 
 
-<init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false"
+<init spec="beast.base.evolution.tree.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false"
       newick="(((speciesA:0.02,(speciesB:0.01)#H1[&amp;gamma=0.3]:0.01):0.03,(#H1:0.02,speciesC:0.03):0.02):0.05)"/>
 
 <run id="mcmc" spec="MCMC" chainLength="20000000" storeEvery="5000">
@@ -130,7 +130,7 @@
         </coalescentSimulator>
     </init>
 
-    <distribution id="posterior" spec="util.CompoundDistribution">
+    <distribution id="posterior" spec="beast.base.inference.CompoundDistribution">
         <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@Network.t:Species">
             <geneTreeWithin id="geneTree.t:locus4" spec="speciesnetwork.GeneTreeInSpeciesNetwork" geneTree="@Tree.t:locus4" speciesNetwork="@Network.t:Species"/>
             <geneTreeWithin id="geneTree.t:locus2" spec="speciesnetwork.GeneTreeInSpeciesNetwork" geneTree="@Tree.t:locus2" speciesNetwork="@Network.t:Species"/>
@@ -142,7 +142,7 @@
                 <parameter id="popShape.t:Species" estimate="false" name="alpha">3.0</parameter>
             </populationModel>
         </distribution>
-        <distribution id="prior" spec="util.CompoundDistribution">
+        <distribution id="prior" spec="beast.base.inference.CompoundDistribution">
             <prior id="KappaPrior.s:locus1" name="distribution" x="@kappa.s:locus1">
                 <LogNormal id="LogNormalDistributionModel.7" name="distr">
                     <parameter id="RealParameter.3" estimate="false" name="M">1.0</parameter>
@@ -202,7 +202,7 @@
                 <Uniform id="Uniform.0" name="distr"/>
             </prior>
         </distribution>
-        <distribution id="likelihood" spec="util.CompoundDistribution">
+        <distribution id="likelihood" spec="beast.base.inference.CompoundDistribution">
             <distribution id="treeLikelihood.locus1" spec="TreeLikelihood" data="@locus1" tree="@Tree.t:locus1">
                 <siteModel id="SiteModel.s:locus1" spec="SiteModel" mutationRate="@mutationRate.s:locus1">
                     <parameter id="gammaShape.s:locus1" estimate="false" name="shape">1.0</parameter>
@@ -211,7 +211,7 @@
                         <frequencies id="empiricalFreqs.s:locus1" spec="Frequencies" data="@locus1"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel id="StrictClock.c:allloci" spec="beast.evolution.branchratemodel.StrictClockModel">
+                <branchRateModel id="StrictClock.c:allloci" spec="beast.base.evolution.branchratemodel.StrictClockModel">
                     <parameter id="strictClockRate.c:allloci" estimate="false" lower="0.0" name="clock.rate">1.0</parameter>
                 </branchRateModel>
             </distribution>
@@ -564,17 +564,17 @@
         <log id="NetworkLength.t:Species" spec="speciesnetwork.utils.NetworkStatLogger" speciesNetwork="@Network.t:Species"/>
         <log idref="popMean.t:Species"/>
         <log idref="treeLikelihood.locus4"/>
-        <log id="TreeHeight.t:locus4" spec="beast.evolution.tree.TreeStatLogger" tree="@Tree.t:locus4"/>
+        <log id="TreeHeight.t:locus4" spec="beast.base.evolution.tree.TreeStatLogger" tree="@Tree.t:locus4"/>
         <log idref="treeLikelihood.locus2"/>
-        <log id="TreeHeight.t:locus2" spec="beast.evolution.tree.TreeStatLogger" tree="@Tree.t:locus2"/>
+        <log id="TreeHeight.t:locus2" spec="beast.base.evolution.tree.TreeStatLogger" tree="@Tree.t:locus2"/>
         <log idref="treeLikelihood.locus6"/>
-        <log id="TreeHeight.t:locus6" spec="beast.evolution.tree.TreeStatLogger" tree="@Tree.t:locus6"/>
+        <log id="TreeHeight.t:locus6" spec="beast.base.evolution.tree.TreeStatLogger" tree="@Tree.t:locus6"/>
         <log idref="treeLikelihood.locus3"/>
-        <log id="TreeHeight.t:locus3" spec="beast.evolution.tree.TreeStatLogger" tree="@Tree.t:locus3"/>
+        <log id="TreeHeight.t:locus3" spec="beast.base.evolution.tree.TreeStatLogger" tree="@Tree.t:locus3"/>
         <log idref="treeLikelihood.locus1"/>
-        <log id="TreeHeight.t:locus1" spec="beast.evolution.tree.TreeStatLogger" tree="@Tree.t:locus1"/>
+        <log id="TreeHeight.t:locus1" spec="beast.base.evolution.tree.TreeStatLogger" tree="@Tree.t:locus1"/>
         <log idref="treeLikelihood.locus5"/>
-        <log id="TreeHeight.t:locus5" spec="beast.evolution.tree.TreeStatLogger" tree="@Tree.t:locus5"/>
+        <log id="TreeHeight.t:locus5" spec="beast.base.evolution.tree.TreeStatLogger" tree="@Tree.t:locus5"/>
         <log idref="kappa.s:locus1"/>
         <log idref="mutationRate.s:locus1"/>
         <log idref="mutationRate.s:locus2"/>
@@ -594,27 +594,27 @@
     </logger>
 
     <logger id="treelog.t:locus4" fileName="$(tree).trees" logEvery="2000" mode="tree">
-        <log id="TreeWithMetaDataLogger.t:locus4" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:locus4"/>
+        <log id="TreeWithMetaDataLogger.t:locus4" spec="beast.base.evolution.TreeWithMetaDataLogger" tree="@Tree.t:locus4"/>
     </logger>
 
     <logger id="treelog.t:locus2" fileName="$(tree).trees" logEvery="2000" mode="tree">
-        <log id="TreeWithMetaDataLogger.t:locus2" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:locus2"/>
+        <log id="TreeWithMetaDataLogger.t:locus2" spec="beast.base.evolution.TreeWithMetaDataLogger" tree="@Tree.t:locus2"/>
     </logger>
 
     <logger id="treelog.t:locus6" fileName="$(tree).trees" logEvery="2000" mode="tree">
-        <log id="TreeWithMetaDataLogger.t:locus6" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:locus6"/>
+        <log id="TreeWithMetaDataLogger.t:locus6" spec="beast.base.evolution.TreeWithMetaDataLogger" tree="@Tree.t:locus6"/>
     </logger>
 
     <logger id="treelog.t:locus3" fileName="$(tree).trees" logEvery="2000" mode="tree">
-        <log id="TreeWithMetaDataLogger.t:locus3" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:locus3"/>
+        <log id="TreeWithMetaDataLogger.t:locus3" spec="beast.base.evolution.TreeWithMetaDataLogger" tree="@Tree.t:locus3"/>
     </logger>
 
     <logger id="treelog.t:locus1" fileName="$(tree).trees" logEvery="2000" mode="tree">
-        <log id="TreeWithMetaDataLogger.t:locus1" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:locus1"/>
+        <log id="TreeWithMetaDataLogger.t:locus1" spec="beast.base.evolution.TreeWithMetaDataLogger" tree="@Tree.t:locus1"/>
     </logger>
 
     <logger id="treelog.t:locus5" fileName="$(tree).trees" logEvery="2000" mode="tree">
-        <log id="TreeWithMetaDataLogger.t:locus5" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:locus5"/>
+        <log id="TreeWithMetaDataLogger.t:locus5" spec="beast.base.evolution.TreeWithMetaDataLogger" tree="@Tree.t:locus5"/>
     </logger>
 
     <operatorschedule id="operatorSchedule" spec="OperatorSchedule">

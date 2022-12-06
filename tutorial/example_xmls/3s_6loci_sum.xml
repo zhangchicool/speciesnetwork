@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beast namespace="beast.core:beast.app" version="2.5">
+<beast namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.app" version="2.5">
 <run id="network.summary" spec="speciesnetwork.tools.SummarizePosterior"
 inputFileName="speciesnetwork.trees" outputFileName="speciesnetwork.sum.trees" burnin="2501"/>
 </beast>
