@@ -24,8 +24,10 @@
 	<path id="classpath">
         <pathelement path="${buildspeciesnetwork}" />
 		<fileset dir="${libBeast2}" includes="*.jar" />
+		<fileset dir="${libBeast2}/junit" includes="*.jar" />
 		<fileset dir="${libspeciesnetwork}" includes="*.jar" />
         <pathelement path="${beast2classpath}" />
+		<pathelement path="../BeastFX/build" />
 	</path>
 
 	<!-- start -->
@@ -137,7 +139,7 @@
 		<mkdir dir="${package_dir}" />
 		<mkdir dir="${package_dir}/lib" />
 		<mkdir dir="${package_dir}/examples" />
-		<mkdir dir="${package_dir}/templates" />
+		<mkdir dir="${package_dir}/fxtemplates" />
 
 		<copy todir="${package_dir}">
 			<fileset file="version.xml" />
@@ -152,8 +154,8 @@
 		<copy todir="${package_dir}/examples">
 			<fileset dir="examples" />
 		</copy>
-		<copy todir="${package_dir}/templates">
-			<fileset dir="templates" />
+		<copy todir="${package_dir}/fxtemplates">
+			<fileset dir="fxtemplates" />
 		</copy>
 
 		<jar jarfile="${distspeciesnetwork}/speciesnetwork.package.zip">
