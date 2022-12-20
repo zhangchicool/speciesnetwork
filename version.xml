@@ -9,7 +9,7 @@
     </service>
 
     <service type="beast.base.core.BEASTInterface">
-        <provider classname="speciesnetwork.app.beauti.SpeciesNetworkAlignmentProvider"/>
+        <provider classname="speciesnetwork.app.beauti.SNAlignmentProvider"/>
         <provider classname="speciesnetwork.BirthHybridizationModel"/>
         <provider classname="speciesnetwork.BirthDeathHybridization"/>
         <provider classname="speciesnetwork.ConstantPopIntegrated"/>

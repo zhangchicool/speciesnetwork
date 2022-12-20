@@ -100,7 +100,7 @@ public class MultispeciesCoalescent extends Distribution {
             bottomLineageCounts.add(bottomLineageCountsJ);
         }
 
-        // reset all che counters
+        // reset all the counters
         allLineageCounts.clear();
         allEventCounts.clear();
         allCoalescentTimes.clear();

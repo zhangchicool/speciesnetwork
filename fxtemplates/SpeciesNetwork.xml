@@ -116,11 +116,15 @@
 		<panel spec="beastfx.app.inputeditor.BeautiPanelConfig" panelname="MCMC" tiptext="MCMC parameters" path="" hasPartitions="none" icon="9.pngx" forceExpansion="TRUE"/>
 		<mergepoint id="aux-panels"/>
 
-		<alignmentProvider id="Import Alignment" spec="speciesnetwork.app.beauti.SpeciesNetworkAlignmentProvider" template="@SpeciesNetworkPartitionTemplate"/>
+		<alignmentProvider id="Import Alignment" spec="speciesnetwork.app.beauti.SNAlignmentProvider" template="@SpeciesNetworkPartitionTemplate"/>
 
 		<partitiontemplate id="SpeciesNetworkPartitionTemplate" spec="beastfx.app.inputeditor.BeautiSubTemplate" class="beast.base.evolution.likelihood.TreeLikelihood" mainid="mcmc">
 <![CDATA[
+
+			<!--
 			<geneTreeWithin id="geneTree.t:$(n)" ploidy="2.0" spec="speciesnetwork.GeneTreeInSpeciesNetwork" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)"/>
+			-->
+
 
 			<!-- site model -->
 			<plugin spec="SiteModel" id="SiteModel.s:$(n)" gammaCategoryCount="0">
@@ -337,27 +341,27 @@
 
 		<operator id="coorNetworkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="30.0"/>
 
-		<operator id="coorNodeUniformAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="150.0">
+		<operator id="coorNodeUniformAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="150.0">
 			<operator id="coorNodeUniform.t:Species" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
-		<operator id="nodeSliderAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="100.0">
+		<operator id="nodeSliderAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="100.0">
 			<operator id="nodeSlider.t:Species" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" isNormal="true" sigma="0.001" weight="0.0"/>
 		</operator> <!-- user should adjust sigma to a reasonable value -->
 
-		<operator id="relocateBranchAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="400.0">
+		<operator id="relocateBranchAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="400.0">
 			<operator id="relocateBranch.t:Species" spec="speciesnetwork.operators.RelocateBranch" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
-		<operator id="flipReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="30.0">
+		<operator id="flipReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="30.0">
 			<operator id="flipReticulation.t:Species" spec="speciesnetwork.operators.FlipReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
-		<operator id="addReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="150.0">
+		<operator id="addReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="150.0">
 			<operator id="addReticulation.t:Species" spec="speciesnetwork.operators.AddReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
-		<operator id="deleteReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="150.0">
+		<operator id="deleteReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="150.0">
 			<operator id="deleteReticulation.t:Species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
 		</operator>
 
@@ -389,8 +393,8 @@
 
 		<init id="SNI" estimate="false" method="random" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@Network.t:Species">
 			<origin id="originTime.t:Species" spec="parameter.RealParameter" value="0.1" lower="0.0" estimate="true"/>
-			<rebuildEmbedding id="initEmbed" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" weight="0.0"/>
-			<coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" popSizes="@popMean.t:Species"/>
+			<rebuildEmbedding id="initEmbed" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="0.0"/>
+			<coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@Network.t:Species" popSizes="@popMean.t:Species"/>
 		</init>
 	</run>
 
