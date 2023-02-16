@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beast version="2.7" namespace="beast.base.core:beast.base.inference:beast.base.util:
-                  beast.base.math:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:
-                  beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:
+<beast version="2.7" namespace="beast.base.core:beast.base.inference:beast.base.util:beast.base.math:
+                  beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:
+                  beast.base.evolution.operator:beast.base.evolution.sitemodel:
                   beast.base.evolution.substitutionmodel:beast.base.evolution.branchratemodel:
-                  beast.base.evolution.likelihood:beastfx.app:
-                  speciesnetwork:speciesnetwork.operators:speciesnetwork.simulator:
-                  speciesnetwork.tools:speciesnetwork.utils">
+                  beast.base.evolution.likelihood:beast.base.inference.operator:beastfx.app:
+                  speciesnetwork:speciesnetwork.operators:speciesnetwork.simulator:speciesnetwork.utils">
 
     <data id="gene1" name="alignment">
         <sequence id="seq_1_1" taxon="a1" value="CTCTTGTGGACGCCATCGCCGATATTCCAGCAGACAGAAGGCAATGCAGAAGAACGCCGATAGTACAAGTACGGTTAAGCTTTATCTATTGGTCGCATGCGTCCGCTATTCTCTTCCGTACCGTTTCCCGCACGGCAATACCGTAGGAAAGTGAAAAAAAAGTTACACCCCTAACCGTGATCTGGCAACATTCTACTAGT"/>
@@ -251,7 +250,7 @@
             <operator id="WilsonBalding:gene3" spec="WilsonBalding" tree="@tree:gene3" weight="0.0"/>
         </operator>
 
-        <operator id="clockScaler:gene" spec="ScaleOperator" parameter="@clockRate:gene" scaleFactor="0.5" weight="5.0"/>
+        <operator id="clockScaler:gene" spec="ScaleOperator" parameter="@clockRate:gene" scaleFactor="0.5" weight="8.0"/>
 
         <operator id="popMeanScale:species" spec="ScaleOperator" parameter="@popMean:species" scaleFactor="0.5" weight="5.0"/>
         <operator id="divrRateScale:species" spec="ScaleOperator" parameter="@netDivRate:species" scaleFactor="0.5" weight="5.0"/>
@@ -266,6 +265,7 @@
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
         </operator>
+
         <operator id="coordNodeUniform:species" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@network:species" weight="50.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
@@ -273,25 +273,6 @@
         </operator>
         <operator id="coordNodeSlider:species" spec="speciesnetwork.operators.CoordinatedNodeSlider" speciesNetwork="@network:species" isNormal="true" sigma="0.5" weight="50.0">
             <origin idref="originTime:species"/>
-            <geneTree idref="tree:gene1"/>
-            <geneTree idref="tree:gene2"/>
-            <geneTree idref="tree:gene3"/>
-        </operator>
-
-        <operator id="coordRelocateBranch:species" spec="speciesnetwork.operators.CoordinatedRelocateBranch" speciesNetwork="@network:species" MSNC="@coalescent" weight="100.0">
-            <coalescentSimulator idref="coalSim"/>
-            <geneTree idref="tree:gene1"/>
-            <geneTree idref="tree:gene2"/>
-            <geneTree idref="tree:gene3"/>
-        </operator>
-        <operator id="coordAddReticulation:species" spec="speciesnetwork.operators.CoordinatedAddReticulation" speciesNetwork="@network:species" MSNC="@coalescent" weight="80.0">
-            <coalescentSimulator idref="coalSim"/>
-            <geneTree idref="tree:gene1"/>
-            <geneTree idref="tree:gene2"/>
-            <geneTree idref="tree:gene3"/>
-        </operator>
-        <operator id="coordDelReticulation:species" spec="speciesnetwork.operators.CoordinatedDeleteReticulation" speciesNetwork="@network:species" MSNC="@coalescent" weight="80.0">
-            <coalescentSimulator idref="coalSim"/>
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
@@ -309,6 +290,7 @@
             <geneTree idref="tree:gene3"/>
             <operator id="flipReticulation:species" spec="speciesnetwork.operators.FlipReticulation" speciesNetwork="@network:species" weight="0.0"/>
         </operator>
+
         <operator id="addReticulationAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="80.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
@@ -321,6 +303,25 @@
             <geneTree idref="tree:gene3"/>
             <operator id="deleteReticulation:species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@network:species" weight="0.0"/>
         </operator>
+
+        <!-- operator id="coordRelocateBranch:species" spec="speciesnetwork.operators.CoordinatedRelocateBranch" speciesNetwork="@network:species" MSNC="@coalescent" weight="100.0">
+            <coalescentSimulator idref="coalSim"/>
+            <geneTree idref="tree:gene1"/>
+            <geneTree idref="tree:gene2"/>
+            <geneTree idref="tree:gene3"/>
+        </operator>
+        <operator id="coordAddReticulation:species" spec="speciesnetwork.operators.CoordinatedAddReticulation" speciesNetwork="@network:species" MSNC="@coalescent" weight="80.0">
+            <coalescentSimulator idref="coalSim"/>
+            <geneTree idref="tree:gene1"/>
+            <geneTree idref="tree:gene2"/>
+            <geneTree idref="tree:gene3"/>
+        </operator>
+        <operator id="coordDelReticulation:species" spec="speciesnetwork.operators.CoordinatedDeleteReticulation" speciesNetwork="@network:species" MSNC="@coalescent" weight="80.0">
+            <coalescentSimulator idref="coalSim"/>
+            <geneTree idref="tree:gene1"/>
+            <geneTree idref="tree:gene2"/>
+            <geneTree idref="tree:gene3"/>
+        </operator -->
 
         <logger id="screenlog" logEvery="10000" model="@posterior">
             <log idref="posterior"/>

@@ -17,6 +17,7 @@ public class NetworkStatLogger extends CalculationNode implements Loggable, Func
             new Input<>("speciesNetwork", "The species network to be logged.", Validate.REQUIRED);
     public final Input<Boolean> logHeightInput = new Input<>("logHeight", "If true, root height will be logged.", true);
     public final Input<Boolean> logLengthInput = new Input<>("logLength", "If true, network length will be logged.", true);
+    public final Input<Boolean> logReticuInput = new Input<>("logReticulation", "If true, log the number of reticulation nodes.", false);
 
     @Override
     public void initAndValidate() {
@@ -34,6 +35,9 @@ public class NetworkStatLogger extends CalculationNode implements Loggable, Func
         if (logLengthInput.get()) {
             out.print(speciesNetwork.getID() + ".length\t");
         }
+        if (logReticuInput.get()) {
+            out.print(speciesNetwork.getID() + ".n_reticus\t");
+        }
     }
 
     @Override
@@ -48,6 +52,10 @@ public class NetworkStatLogger extends CalculationNode implements Loggable, Func
             final double rootBrl = speciesNetwork.getOrigin().getHeight() - speciesNetwork.getRoot().getHeight();
             out.print(speciesNetwork.getNetworkLength() - rootBrl + "\t");
         }
+        if (logReticuInput.get()) {
+            // number of reticulation nodes
+            out.print(speciesNetwork.getReticulationNodeCount() + "\t");
+        }
     }
 
 	@Override
@@ -57,7 +65,7 @@ public class NetworkStatLogger extends CalculationNode implements Loggable, Func
 
     @Override
     public int getDimension() {
-        return 2;
+        return 3;
     }
 
     @Override

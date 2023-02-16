@@ -34,7 +34,7 @@ public class EmbeddingLogger extends CalculationNode implements Loggable, Functi
         out.print(embedding.toString());
     }
 
-	@Override
+    @Override
     public void close(PrintStream out) {
         // nothing to do
     }

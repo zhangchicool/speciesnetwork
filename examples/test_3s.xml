@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beast version="2.7" namespace="beast.base.core:beast.base.inference:beast.base.util:
-                  beast.base.math:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:
-                  beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:
+<beast version="2.7" namespace="beast.base.core:beast.base.inference:beast.base.util:beast.base.math:
+                  beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:
+                  beast.base.evolution.operator:beast.base.evolution.sitemodel:
                   beast.base.evolution.substitutionmodel:beast.base.evolution.branchratemodel:
-                  beast.base.evolution.likelihood:beastfx.app:
-                  speciesnetwork:speciesnetwork.operators:speciesnetwork.simulator:
-                  speciesnetwork.tools:speciesnetwork.utils">
+                  beast.base.evolution.likelihood:beast.base.inference.operator:beastfx.app:
+                  speciesnetwork:speciesnetwork.operators:speciesnetwork.simulator:speciesnetwork.utils">
 
     <data id="gene1" name="alignment">
         <sequence id="seq_1_1" taxon="a1" value="CTCTTGTGGACGCCATCGCCGATATTCCAGCAGACAGAAGGCAATGCAGAAGAACGCCGATAGTACAAGTACGGTTAAGCTTTATCTATTGGTCGCATGCGTCCGCTATTCTCTTCCGTACCGTTTCCCGCACGGCAATACCGTAGGAAAGTGAAAAAAAAGTTACACCCCTAACCGTGATCTGGCAACATTCTACTAGT"/>
@@ -159,6 +158,7 @@
             <geneTree idref="tree:gene1"/>
             <operator id="WilsonBalding:gene1" spec="WilsonBalding" tree="@tree:gene1" weight="0.0"/>
         </operator>
+
         <operator id="scaleAndEmbed:gene2" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="3.0">
             <geneTree idref="tree:gene2"/>
             <operator id="scale:gene2" spec="ScaleOperator" scaleFactor="0.5" tree="@tree:gene2" weight="0.0"/>
@@ -187,6 +187,7 @@
             <geneTree idref="tree:gene2"/>
             <operator id="WilsonBalding:gene2" spec="WilsonBalding" tree="@tree:gene2" weight="0.0"/>
         </operator>
+
         <operator id="scaleAndEmbed:gene3" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="3.0">
             <geneTree idref="tree:gene3"/>
             <operator id="scale:gene3" spec="ScaleOperator" scaleFactor="0.5" tree="@tree:gene3" weight="0.0"/>
@@ -228,7 +229,7 @@
             <geneTree idref="tree:gene3"/>
         </operator>
 
-        <operator id="coordNodeUniform:species" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@network:species" weight="80.0">
+        <operator id="coordNodeUniform:species" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@network:species" weight="50.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
@@ -240,7 +241,7 @@
             <operator id="nodeSlider:species" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@network:species" origin="@originTime:species" isNormal="true" sigma="0.005" weight="0.0"/>
         </operator>
 
-        <operator id="relocateBranchAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="150.0">
+        <operator id="relocateBranchAndEmbed:species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@network:species" weight="100.0">
             <geneTree idref="tree:gene1"/>
             <geneTree idref="tree:gene2"/>
             <geneTree idref="tree:gene3"/>
