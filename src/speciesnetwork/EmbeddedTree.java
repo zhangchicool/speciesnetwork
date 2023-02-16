@@ -1,9 +1,9 @@
 package speciesnetwork;
 
-import beast.core.Input;
-import beast.core.StateNode;
-import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
+import beast.base.core.Input;
+import beast.base.inference.StateNode;
+import beast.base.evolution.tree.Node;
+import beast.base.evolution.tree.Tree;
 
 public class EmbeddedTree extends Tree {
     public final Input<Double> ploidiesInput =

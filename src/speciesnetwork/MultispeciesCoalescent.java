@@ -10,12 +10,12 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multiset;
 
-import beast.core.Description;
-import beast.core.Distribution;
-import beast.core.Input;
-import beast.core.Input.Validate;
-import beast.core.State;
-import beast.evolution.tree.Node;
+import beast.base.core.Description;
+import beast.base.inference.Distribution;
+import beast.base.core.Input;
+import beast.base.core.Input.Validate;
+import beast.base.inference.State;
+import beast.base.evolution.tree.Node;
 
 /**
  * @author Huw Ogilvie
@@ -100,7 +100,7 @@ public class MultispeciesCoalescent extends Distribution {
             bottomLineageCounts.add(bottomLineageCountsJ);
         }
 
-        // reset all che counters
+        // reset all the counters
         allLineageCounts.clear();
         allEventCounts.clear();
         allCoalescentTimes.clear();

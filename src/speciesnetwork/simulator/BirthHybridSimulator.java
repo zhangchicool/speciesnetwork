@@ -4,13 +4,13 @@ import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.Input.Validate;
-import beast.core.Runnable;
-import beast.core.parameter.RealParameter;
-import beast.evolution.alignment.TaxonSet;
-import beast.util.Randomizer;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.core.Input.Validate;
+import beast.base.inference.Runnable;
+import beast.base.inference.parameter.RealParameter;
+import beast.base.evolution.alignment.TaxonSet;
+import beast.base.util.Randomizer;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
 

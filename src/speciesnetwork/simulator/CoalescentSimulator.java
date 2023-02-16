@@ -7,16 +7,16 @@ import java.util.*;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-import beast.app.seqgen.*;
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.Input.Validate;
-import beast.core.Runnable;
-import beast.core.State;
-import beast.core.parameter.RealParameter;
-import beast.evolution.alignment.*;
-import beast.evolution.tree.Node;
-import beast.util.Randomizer;
+import beastfx.app.seqgen.*;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.core.Input.Validate;
+import beast.base.inference.Runnable;
+import beast.base.inference.State;
+import beast.base.inference.parameter.RealParameter;
+import beast.base.evolution.alignment.*;
+import beast.base.evolution.tree.Node;
+import beast.base.util.Randomizer;
 import speciesnetwork.EmbeddedTree;
 import speciesnetwork.Network;
 import speciesnetwork.NetworkNode;
@@ -286,8 +286,8 @@ public class CoalescentSimulator extends Runnable {
         DecimalFormat df = new DecimalFormat("#.########");
         // print header
         out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        out.println("<beast namespace=\"beast.core:beast.core.util:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.evolution.operators:" +
-                    "beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.branchratemodel:beast.evolution.likelihood\" version=\"2.6\">");
+        out.println("<beast namespace=\"beast.base.core:beast.base.core.util:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:beast.base.evolution.operators:" +
+                    "beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.branchratemodel:beast.base.evolution.likelihood\" version=\"2.6\">");
         // print sequence data
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("    <data id=\"gene" + (i+1) + "\" name=\"alignment\">");
@@ -304,24 +304,24 @@ public class CoalescentSimulator extends Runnable {
             out.println("    </data>");
         }
         out.println("");  // mappings
-        out.println("    <map name=\"Uniform\">beast.math.distributions.Uniform</map>\n" +
-                    "    <map name=\"Exponential\">beast.math.distributions.Exponential</map>\n" +
-                    "    <map name=\"LogNormal\">beast.math.distributions.LogNormalDistributionModel</map>\n" +
-                    "    <map name=\"Normal\">beast.math.distributions.Normal</map>\n" +
-                    "    <map name=\"Beta\">beast.math.distributions.Beta</map>\n" +
-                    "    <map name=\"Gamma\">beast.math.distributions.Gamma</map>\n" +
-                    "    <map name=\"LaplaceDistribution\">beast.math.distributions.LaplaceDistribution</map>\n" +
-                    "    <map name=\"InverseGamma\">beast.math.distributions.InverseGamma</map>\n" +
-                    "    <map name=\"OneOnX\">beast.math.distributions.OneOnX</map>\n" +
-                    "    <map name=\"prior\">beast.math.distributions.Prior</map>\n");
+        out.println("    <map name=\"Uniform\">beast.base.math.distributions.Uniform</map>\n" +
+                    "    <map name=\"Exponential\">beast.base.math.distributions.Exponential</map>\n" +
+                    "    <map name=\"LogNormal\">beast.base.math.distributions.LogNormalDistributionModel</map>\n" +
+                    "    <map name=\"Normal\">beast.base.math.distributions.Normal</map>\n" +
+                    "    <map name=\"Beta\">beast.base.math.distributions.Beta</map>\n" +
+                    "    <map name=\"Gamma\">beast.base.math.distributions.Gamma</map>\n" +
+                    "    <map name=\"LaplaceDistribution\">beast.base.math.distributions.LaplaceDistribution</map>\n" +
+                    "    <map name=\"InverseGamma\">beast.base.math.distributions.InverseGamma</map>\n" +
+                    "    <map name=\"OneOnX\">beast.base.math.distributions.OneOnX</map>\n" +
+                    "    <map name=\"prior\">beast.base.math.distributions.Prior</map>\n");
         // print initial species network
-        out.println("    <init spec=\"beast.util.TreeParser\" id=\"newick:species\" IsLabelledNewick=\"true\" adjustTipHeights=\"false\"\n" +
+        out.println("    <init spec=\"beast.base.evolution.tree.TreeParser\" id=\"newick:species\" IsLabelledNewick=\"true\" adjustTipHeights=\"false\"\n" +
                     "          newick=\"" + speciesNetwork.getOrigin().toString(df, true) + "\"/>");
         // print initial/true gene trees
         out.println("    <!--");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             EmbeddedTree geneTree = geneTrees.get(i);
-            out.println("    <init spec=\"beast.util.TreeParser\" id=\"newick:gene" + (i+1) + "\" IsLabelledNewick=\"true\"\n" +
+            out.println("    <init spec=\"beast.base.evolution.tree.TreeParser\" id=\"newick:gene" + (i+1) + "\" IsLabelledNewick=\"true\"\n" +
                         "          newick=\"" + geneTree.getRoot().toNewick() + "\"/>");
         }
         out.println("        -->\n");
@@ -329,7 +329,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("        <state id=\"state\">");  // states
         // print state nodes
         out.println("            <stateNode id=\"network:species\" spec=\"speciesnetwork.NetworkParser\" tree=\"@newick:species\">");
-        out.println("                <trait id=\"date.t:species\" spec=\"beast.evolution.tree.TraitSet\" traitname=\"date-backward\">");
+        out.println("                <trait id=\"date.t:species\" spec=\"beast.base.evolution.tree.TraitSet\" traitname=\"date-backward\">");
         int j = 0;
         for (NetworkNode tip : speciesNetwork.getLeafNodes()) {
             if (j < speciesNetwork.getLeafNodeCount() - 1)
@@ -542,7 +542,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("            <log idref=\"clockRate:gene\"/>");
         out.println("            <log id=\"height:species\" speciesNetwork=\"@network:species\" spec=\"speciesnetwork.utils.NetworkStatLogger\"/>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
-            out.println("            <log id=\"height:gene" + (i+1) + "\" tree=\"@tree:gene" + (i+1) + "\" spec=\"beast.evolution.tree.TreeStatLogger\"/>");
+            out.println("            <log id=\"height:gene" + (i+1) + "\" tree=\"@tree:gene" + (i+1) + "\" spec=\"beast.base.evolution.tree.TreeStatLogger\"/>");
         }
         out.println("        </logger>");
         out.println("        <logger id=\"specieslog\" fileName=\"" + outputFileName + ".species.trees\" logEvery=\"2000\" mode=\"tree\">");
@@ -553,7 +553,7 @@ public class CoalescentSimulator extends Runnable {
         out.println("        </logger>");
         for (int i = 0; i < nrOfGeneTrees; i++) {
             out.println("        <logger id=\"treelog:gene" + (i + 1) + "\" fileName=\"" + outputFileName + ".gene" + (i+1) + ".trees\" logEvery=\"2000\" mode=\"tree\">");
-            out.println("            <log id=\"treeLogger:gene" + (i+1) + "\" tree=\"@tree:gene" + (i+1) + "\" spec=\"beast.evolution.tree.TreeWithMetaDataLogger\"/>");
+            out.println("            <log id=\"treeLogger:gene" + (i+1) + "\" tree=\"@tree:gene" + (i+1) + "\" spec=\"beast.base.evolution.TreeWithMetaDataLogger\"/>");
             out.println("        </logger>");
         }
         out.println("    </run>");  // end of MCMC

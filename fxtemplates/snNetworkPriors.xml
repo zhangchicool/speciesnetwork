@@ -1,4 +1,11 @@
-<beast version="2.0" namespace="beast.app.beauti:beast.core:beast.evolution.branchratemodel:beast.evolution.speciation:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood:beast.evolution:beast.math.distributions">
+<beast version="2.7" namespace="beast.base.core:beast.base.inference:
+                     beast.base.evolution.branchratemodel:beast.base.evolution.speciation:
+                     beast.base.evolution.tree.coalescent:beast.base.inference.util:
+                     beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:
+                     beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:
+                     beast.base.evolution.likelihood:beast.evolution:beast.base.inference.distribution:
+                     speciesnetwork.operators:speciesnetwork.utils:speciesnetwork.simulator:speciesnetwork">
+
     <!-- network priors -->
     <mergewith point="snNetworkPriorTemplates">
         <!-- Birth Hybridization model (no death) -->
@@ -11,10 +18,10 @@
             </distribution>
 
             <prior id="netDivRatePrior.t:$(n)" x="@netDivRate.t:$(n)">
-                <distr spec="beast.math.distributions.OneOnX"/>
+                <distr spec="beast.base.inference.distribution.OneOnX"/>
             </prior>
             <prior id="turnOverRatePrior.t:$(n)" x="@turnOverRate.t:$(n)">
-                 <distr spec="beast.math.distributions.Beta" alpha="1.0" beta="10.0"/>
+                 <distr spec="beast.base.inference.distribution.Beta" alpha="1.0" beta="10.0"/>
             </prior>
 
             <operator id="netDivRateScale.t:$(n)" spec="ScaleOperator" scaleFactor="0.5" weight="2.0" parameter="@netDivRate.t:$(n)"/>
@@ -57,13 +64,13 @@
             </distribution>
 
             <prior id="netDivRatePrior.t:$(n)" x="@netDivRate.t:$(n)">
-                <distr spec="beast.math.distributions.OneOnX"/>
+                <distr spec="beast.base.inference.distribution.OneOnX"/>
             </prior>
             <prior id="turnOverRatePrior.t:$(n)" x="@turnOverRate.t:$(n)">
-                 <distr spec="beast.math.distributions.Beta" alpha="1.0" beta="1.0"/>
+                 <distr spec="beast.base.inference.distribution.Beta" alpha="1.0" beta="1.0"/>
             </prior>
             <prior id="hybridPropPrior.t:$(n)" x="@hybridProp.t:$(n)">
-                 <distr spec="beast.math.distributions.Beta" alpha="1.0" beta="9.0"/>
+                 <distr spec="beast.base.inference.distribution.Beta" alpha="1.0" beta="9.0"/>
             </prior>
 
             <operator id="netDivRateScale.t:$(n)" spec="ScaleOperator" scaleFactor="0.5" weight="2.0" parameter="@netDivRate.t:$(n)"/>

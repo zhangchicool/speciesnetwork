@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.Input.Validate;
-import beast.core.Operator;
-import beast.util.Randomizer;
-import beast.evolution.tree.Node;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.core.Input.Validate;
+import beast.base.inference.Operator;
+import beast.base.util.Randomizer;
+import beast.base.evolution.tree.Node;
 import speciesnetwork.EmbeddedTree;
 import speciesnetwork.Embedding;
 import speciesnetwork.Network;

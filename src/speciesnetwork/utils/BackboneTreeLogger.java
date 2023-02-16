@@ -4,11 +4,11 @@ import java.io.PrintStream;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
-import beast.core.BEASTObject;
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.Input.Validate;
-import beast.core.Loggable;
+import beast.base.core.BEASTObject;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.core.Input.Validate;
+import beast.base.core.Loggable;
 import speciesnetwork.Network;
 
 @Description("Logs backbone tree annotated with metadata")

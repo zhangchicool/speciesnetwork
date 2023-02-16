@@ -2,13 +2,13 @@ package speciesnetwork;
 
 import java.util.*;
 
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.Input.Validate;
-import beast.core.State;
-import beast.core.parameter.RealParameter;
-import beast.core.Distribution;
-import beast.math.distributions.Beta;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.core.Input.Validate;
+import beast.base.inference.State;
+import beast.base.inference.parameter.RealParameter;
+import beast.base.inference.Distribution;
+import beast.base.inference.distribution.Beta;
 
 /**
  * Birth-Death-Hybridization model for the species network.

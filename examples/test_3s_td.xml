@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beast namespace="beast.core:beast.core.util:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.branchratemodel:beast.evolution.likelihood" version="2.6">
+<beast version="2.7" namespace="beast.base.core:beast.base.inference:beast.base.util:
+                  beast.base.math:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:
+                  beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:
+                  beast.base.evolution.substitutionmodel:beast.base.evolution.branchratemodel:
+                  beast.base.evolution.likelihood:beastfx.app:
+                  speciesnetwork:speciesnetwork.operators:speciesnetwork.simulator:
+                  speciesnetwork.tools:speciesnetwork.utils">
+
     <data id="gene1" name="alignment">
         <sequence id="seq_1_1" taxon="a1" value="CTCTTGTGGACGCCATCGCCGATATTCCAGCAGACAGAAGGCAATGCAGAAGAACGCCGATAGTACAAGTACGGTTAAGCTTTATCTATTGGTCGCATGCGTCCGCTATTCTCTTCCGTACCGTTTCCCGCACGGCAATACCGTAGGAAAGTGAAAAAAAAGTTACACCCCTAACCGTGATCTGGCAACATTCTACTAGT"/>
         <sequence id="seq_1_2" taxon="a2" value="CTCTTGTGGACGCCATCGCCGATATTCCAGCAGACAGAGGGCAATGCAGAAGAACGCCGATAGTACAAGTCCGGTTAAGCTTTATCTACTGGTCGCATGCGTCCGCTATTCTCTTCCGTACCGGTTCCCACACGGCAATTCCGTTGGAAAGTGAAAAAAAAGATACACCCCTAACCGAGATCTGGCAACATTCTACTAGT"/>
@@ -26,26 +33,26 @@
         <sequence id="seq_3_7" taxon="c2" value="CTTCGACCGACCGGCCTACATGACACGAACCCACGATCGGTAGATCTACTCTAGAATTATTCGTAACTATCGTCAACCTTGCAGCTCCTCCCTGGTCCCTAGGATATAACCCTTAGTGTAGTCATATTCGAAGCTCATCACTTTAACACAGTTCCGGTACCATCCTCCATCCTACGGATCTCCTTTCTTGATGCTTCTAT"/>
     </data>
 
-    <map name="Uniform">beast.math.distributions.Uniform</map>
-    <map name="Exponential">beast.math.distributions.Exponential</map>
-    <map name="LogNormal">beast.math.distributions.LogNormalDistributionModel</map>
-    <map name="Normal">beast.math.distributions.Normal</map>
-    <map name="Beta">beast.math.distributions.Beta</map>
-    <map name="Gamma">beast.math.distributions.Gamma</map>
-    <map name="LaplaceDistribution">beast.math.distributions.LaplaceDistribution</map>
-    <map name="InverseGamma">beast.math.distributions.InverseGamma</map>
-    <map name="OneOnX">beast.math.distributions.OneOnX</map>
-    <map name="prior">beast.math.distributions.Prior</map>
+    <map name="Uniform">beast.base.inference.distribution.Uniform</map>
+    <map name="Exponential">beast.base.inference.distribution.Exponential</map>
+    <map name="LogNormal">beast.base.inference.distribution.LogNormalDistributionModel</map>
+    <map name="Normal">beast.base.inference.distribution.Normal</map>
+    <map name="Beta">beast.base.inference.distribution.Beta</map>
+    <map name="Gamma">beast.base.inference.distribution.Gamma</map>
+    <map name="LaplaceDistribution">beast.base.inference.distribution.LaplaceDistribution</map>
+    <map name="InverseGamma">beast.base.inference.distribution.InverseGamma</map>
+    <map name="OneOnX">beast.base.inference.distribution.OneOnX</map>
+    <map name="prior">beast.base.inference.distribution.Prior</map>
 
-    <init spec="beast.util.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false"
+    <init spec="beast.base.evolution.tree.TreeParser" id="newick:species" IsLabelledNewick="true" adjustTipHeights="false"
           newick="(((A:2.0,(B:1.0)#H1[&amp;gamma=0.3]:1.0)S1:3.0,(#H1:2.0,C:2.0)S2:2.0)R:3.0)"/>
 
     <!-- TODO
-    <init spec="beast.util.TreeParser" id="newick:gene1" IsLabelledNewick="true"
+    <init spec="beast.base.evolution.tree.TreeParser" id="newick:gene1" IsLabelledNewick="true"
           newick="((((a1:0.015486335625819959,a2:0.015486335625819959):0.011550028197273198,b2:0.027036363823093157):0.05778693796023736,c2:0.08482330178333052):0.04695268241427415,(b1:0.07090676170149966,c1:0.07090676170149966):0.060869222496105005):0.0"/>
-    <init spec="beast.util.TreeParser" id="newick:gene2" IsLabelledNewick="true"
+    <init spec="beast.base.evolution.tree.TreeParser" id="newick:gene2" IsLabelledNewick="true"
           newick="((a1:0.018500432803927776,(b2:0.00386346915702543,b3:0.00386346915702543):0.014636963646902345):0.04960144398638929,((b1:0.014153584463938329,b4:0.014153584463938329):0.05214326980030233,c1:0.06629685426424066):0.001805022526076408):0.0"/>
-    <init spec="beast.util.TreeParser" id="newick:gene3" IsLabelledNewick="true"
+    <init spec="beast.base.evolution.tree.TreeParser" id="newick:gene3" IsLabelledNewick="true"
           newick="(((a1:0.03556624423508001,(a2:0.030002350069789695,(b1:0.007549115881014078,b2:0.007549115881014078):0.022453234188775616):0.0055638941652903125):0.02400410169340688,c1:0.05957034592848689):0.01620792796892636,(b3:0.06210020959853823,c2:0.06210020959853823):0.013678064298875019):0.0"/>
     -->
 
@@ -53,7 +60,7 @@
         <state id="state">
             <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
             <!-- stateNode id="network:species" spec="speciesnetwork.Network" -->
-                <trait id="date.t:species" spec="beast.evolution.tree.TraitSet" traitname="date-backward">
+                <trait id="date.t:species" spec="beast.base.evolution.tree.TraitSet" traitname="date-backward">
                     A=0,
                     B=0,
                     C=1.0
@@ -106,14 +113,14 @@
             </rebuildEmbedding>
         </init>
 
-        <distribution id="posterior" spec="util.CompoundDistribution">
+        <distribution id="posterior" spec="beast.base.inference.CompoundDistribution">
             <distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@network:species">
                 <geneTree idref="tree:gene1"/>
                 <geneTree idref="tree:gene2"/>
                 <geneTree idref="tree:gene3"/>
                 <populationModel id="popModel" alpha="4.0" mean="@popMean:species" spec="speciesnetwork.ConstantPopIntegrated"/>
             </distribution>
-            <distribution id="prior" spec="util.CompoundDistribution">
+            <distribution id="prior" spec="beast.base.inference.CompoundDistribution">
                 <distribution id="networkPrior" spec="speciesnetwork.BirthDeathHybridization" network="@network:species" betaShape="2.0"
                               netDiversification="@netDivRate:species" turnOver="@turnOverRate:species" hybridProportion="@hybridProp:species"/>
                 <prior id="popMeanPrior" name="distribution" x="@popMean:species">
@@ -135,7 +142,7 @@
                     <Uniform id="uniformdistr.0" name="distr" lower="0.0" upper="1.0"/>
                 </prior>
             </distribution>
-            <distribution id="likelihood" spec="util.CompoundDistribution">
+            <distribution id="likelihood" spec="beast.base.inference.CompoundDistribution">
                 <distribution id="likelihood:gene1" data="@gene1" tree="@tree:gene1" spec="TreeLikelihood">
                     <siteModel id="siteModel:gene1" mutationRate="1.0" spec="SiteModel">
                         <substModel id="jc:gene1" spec="JukesCantor"/>
@@ -333,9 +340,9 @@
             <log idref="popMean:species"/>
             <log idref="clockRate:gene"/>
             <log id="height:species" speciesNetwork="@network:species" spec="speciesnetwork.utils.NetworkStatLogger"/>
-            <log id="height:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeStatLogger"/>
-            <log id="height:gene2" tree="@tree:gene2" spec="beast.evolution.tree.TreeStatLogger"/>
-            <log id="height:gene3" tree="@tree:gene3" spec="beast.evolution.tree.TreeStatLogger"/>
+            <log id="height:gene1" tree="@tree:gene1" spec="beast.base.evolution.tree.TreeStatLogger"/>
+            <log id="height:gene2" tree="@tree:gene2" spec="beast.base.evolution.tree.TreeStatLogger"/>
+            <log id="height:gene3" tree="@tree:gene3" spec="beast.base.evolution.tree.TreeStatLogger"/>
         </logger>
         <logger id="specieslog" fileName="test_3s.xml.species.trees" logEvery="1000" mode="tree">
             <log id="networkLogger:species" spec="speciesnetwork.utils.NetworkWithMetaDataLogger" speciesNetwork="@network:species"/>
@@ -344,13 +351,13 @@
             <log id="backboneLogger:species" spec="speciesnetwork.utils.BackboneTreeLogger" speciesNetwork="@network:species"/>
         </logger>
         <logger id="treelog:gene1" fileName="test_3s.xml.gene1.trees" logEvery="1000" mode="tree">
-            <log id="treeLogger:gene1" tree="@tree:gene1" spec="beast.evolution.tree.TreeWithMetaDataLogger"/>
+            <log id="treeLogger:gene1" tree="@tree:gene1" spec="beast.base.evolution.TreeWithMetaDataLogger"/>
         </logger>
         <logger id="treelog:gene2" fileName="test_3s.xml.gene2.trees" logEvery="1000" mode="tree">
-            <log id="treeLogger:gene2" tree="@tree:gene2" spec="beast.evolution.tree.TreeWithMetaDataLogger"/>
+            <log id="treeLogger:gene2" tree="@tree:gene2" spec="beast.base.evolution.TreeWithMetaDataLogger"/>
         </logger>
         <logger id="treelog:gene3" fileName="test_3s.xml.gene3.trees" logEvery="1000" mode="tree">
-            <log id="treeLogger:gene3" tree="@tree:gene3" spec="beast.evolution.tree.TreeWithMetaDataLogger"/>
+            <log id="treeLogger:gene3" tree="@tree:gene3" spec="beast.base.evolution.TreeWithMetaDataLogger"/>
         </logger>
     </run>
 </beast>

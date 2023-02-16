@@ -1,0 +1,401 @@
+<beast version="2.7" namespace="beast.base.core:beast.base.inference:
+                     beast.base.evolution.branchratemodel:beast.base.evolution.speciation:
+                     beast.base.evolution.tree.coalescent:beast.base.inference.util:
+                     beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:
+                     beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:
+                     beast.base.evolution.likelihood:beast.evolution:beast.base.inference.distribution:
+                     speciesnetwork.operators:speciesnetwork.utils:speciesnetwork.simulator:speciesnetwork"
+	   templateinfo="SpeciesNetwork template for strict or gene tree relaxed clocks.">
+
+	<map name="connect" reserved="true">beastfx.app.inputeditor.BeautiConnector</map>
+	<map name="subtemplate" reserved="true">beastfx.app.inputeditor.BeautiSubTemplate</map>
+	<map name="Uniform">beast.base.inference.distribution.Uniform</map>
+	<map name="Normal">beast.base.inference.distribution.Normal</map>
+	<map name="OneOnX">beast.base.inference.distribution.OneOnX</map>
+	<map name="LogNormal">beast.base.inference.distribution.LogNormalDistributionModel</map>
+	<map name="Exponential">beast.base.inference.distribution.Exponential</map>
+	<map name="Gamma">beast.base.inference.distribution.Gamma</map>
+	<map name="Beta">beast.base.inference.distribution.Beta</map>
+	<map name="LaplaceDistribution">beast.base.inference.distribution.LaplaceDistribution</map>
+	<map name="InverseGamma">beast.base.inference.distribution.InverseGamma</map>
+	<map name="prior">beast.base.inference.distribution.Prior</map>
+
+	<beauticonfig spec="beastfx.app.inputeditor.BeautiConfig"
+		inputLabelMap="beast.base.inference.MCMC.operator=Operators,
+			beast.base.inference.MCMC.logger=Loggers,
+			beast.base.evolution.sitemodel.SiteModel.mutationRate=Substitution Rate"
+		inlinePlugins ="beast.base.inference.MCMC.distribution,
+			beast.base.evolution.sitemodel.SiteModel.substModel,
+			beast.base.evolution.tree.coalescent.ExponentialGrowth,
+			beast.base.evolution.tree.coalescent.ConstantPopulation,
+			beast.base.evolution.tree.coalescent.Coalescent,
+			beast.base.inference.State.stateNode"
+		collapsedPlugins ="beast.base.inference.MCMC.logger"
+		suppressPlugins = "beast.base.inference.MCMC.operator,
+			beast.base.inference.MCMC.operatorschedule,
+			beast.base.inference.MCMC.state,
+			beast.base.inference.MCMC.distribution,
+			beast.base.inference.MCMC.init,
+			beast.base.evolution.tree.Tree,
+			beast.base.evolution.tree.Tree.taxa,
+			beast.base.evolution.tree.Tree.taxonset,
+			beast.base.evolution.tree.Tree.trait,
+	        beast.base.evolution.tree.coalescent.RandomTree.initial,
+	        beast.base.evolution.tree.coalescent.RandomTree.taxa,
+	        beast.base.evolution.tree.coalescent.RandomTree.taxonset,
+	        beast.base.evolution.tree.coalescent.RandomTree.trait,
+	        beast.base.evolution.tree.coalescent.RandomTree.estimate,
+	        beast.base.evolution.tree.TreeParser.initial,
+			beast.base.evolution.tree.TreeParser.taxa,
+			beast.base.evolution.tree.TreeParser.taxonset,
+			beast.base.evolution.tree.TreeParser.trait,
+			beast.base.evolution.tree.TreeParser.estimate,
+	        beast.base.evolution.tree.ClusterTree.initial,
+			beast.base.evolution.tree.ClusterTree.taxa,
+			beast.base.evolution.tree.ClusterTree.taxonset,
+			beast.base.evolution.tree.ClusterTree.trait,
+			beast.base.evolution.tree.ClusterTree.estimate,
+			beast.base.evolution.tree.Tree.nodetype,
+			beast.base.evolution.tree.Tree.adjustTreeNodeHeights,
+			beast.base.evolution.substitutionmodel.WAG.rates,
+			beast.base.evolution.substitutionmodel.WAG.frequencies,
+			beast.base.evolution.substitutionmodel.JTT.rates,
+			beast.base.evolution.substitutionmodel.JTT.frequencies,
+			beast.base.evolution.substitutionmodel.Blosum62.rates,
+			beast.base.evolution.substitutionmodel.Blosum62.frequencies,
+			beast.base.evolution.substitutionmodel.Dayhoff.rates,
+			beast.base.evolution.substitutionmodel.Dayhoff.frequencies,
+			beast.base.evolution.substitutionmodel.CPREV.rates,
+			beast.base.evolution.substitutionmodel.CPREV.frequencies,
+			beast.base.evolution.substitutionmodel.MTREV.rates,
+			beast.base.evolution.substitutionmodel.MTREV.frequencies,
+			beast.base.evolution.substitutionmodel.GTR.rates,
+			beast.base.evolution.substitutionmodel.JukesCantor.frequencies,
+			beast.base.inference.distribution.Prior.x,
+			beast.base.evolution.tree.MRCAPrior.tree,
+			beast.base.evolution.tree.MRCAPrior.monophyletic,
+			beast.base.evolution.tree.MRCAPrior.taxonset,
+			beast.base.evolution.branchratemodel.UCRelaxedClockModel.tree,
+			beast.base.evolution.branchratemodel.UCRelaxedClockModel.rateCategories,
+			beast.base.evolution.operator.ScaleOperator.indicator,
+			beast.base.inference.Operator.weight,
+			beast.base.inference.Logger.model,
+			speciesnetwork.EmbeddedTree,
+			speciesnetwork.EmbeddedTree.taxa,
+			speciesnetwork.EmbeddedTree.taxonset,
+			speciesnetwork.EmbeddedTree.trait,
+			speciesnetwork.EmbeddedTree.estimate,
+			speciesnetwork.GeneTreeInSpeciesNetwork.speciesNetwork,
+			speciesnetwork.GeneTreeInSpeciesNetwork.geneTree,
+			speciesnetwork.BirthHybridizationModel.network,
+			speciesnetwork.BirthHybridizationModel.birthRate,
+			speciesnetwork.BirthHybridizationModel.hybridRate,
+			speciesnetwork.BirthHybridizationModel.rho"
+		buttonLabelMap="beast.app.beauti.BeautiInitDlg.&gt;&gt; details=Edit parameters">
+
+		<panel spec="beastfx.app.inputeditor.BeautiPanelConfig" panelname="Partitions" tiptext="Data Partitions" path="distribution/distribution[id='likelihood']/distribution/data" hasPartitions="none" icon="0.pngx" forceExpansion="FALSE" type="beast.base.evolution.alignment.Alignment"/>
+		<mergepoint id="aux-partitions-panels"/>
+
+		<panel spec="beastfx.app.inputeditor.BeautiPanelConfig" panelname="Taxon sets" tiptext="Specify taxon sets that make up species" path="state/stateNode[id='Network.t:Species']/taxonset" hasPartitions="none" icon="1.pngx" forceExpansion="TRUE"/>
+
+		<panel spec="beastfx.app.inputeditor.BeautiPanelConfig" panelname="Gene Ploidy" tiptext="The ploidy for each gene (locus)" path="init[id='SNI']/geneTree" hasPartitions="none" icon="2.pngx" forceExpansion="TRUE"/>
+
+		<panel spec="beastfx.app.inputeditor.BeautiPanelConfig" panelname="Site Model" tiptext="Site model and substitution model specifications" path="siteModel" hasPartitions="SiteModel" icon="3.pngx" forceExpansion="TRUE"/>
+		<mergepoint id="aux-sitemodel-panels"/>
+
+		<panel spec="beastfx.app.inputeditor.BeautiPanelConfig" panelname="Clock Model" tiptext="Clock model" path="branchRateModel" hasPartitions="ClockModel" icon="4.pngx" forceExpansion="TRUE"/>
+		<mergepoint id="aux-clockmodel-panels"/>
+
+		<panel spec="beastfx.app.inputeditor.BeautiPanelConfig" panelname="Initialization" tiptext="Initial state" path="state/stateNode" hasPartitions="none" icon="6.pngx" forceExpansion="TRUE_START_COLLAPSED" isVisible="false"/>
+		<mergepoint id="aux-initilisation-panels"/>
+
+		<panel spec="beastfx.app.inputeditor.BeautiPanelConfig" panelname="Priors" tiptext="Other priors" path="distribution/distribution[id='prior']/distribution" hasPartitions="none" icon="7.pngx" forceExpansion="TRUE_START_COLLAPSED" type="beast.base.inference.Distribution" buttonStatus="ADD_ONLY"/>
+		<mergepoint id="aux-priors-panels"/>
+
+		<panel spec="beastfx.app.inputeditor.BeautiPanelConfig" panelname="Operators" tiptext="MCMC Operator details" path="operator" hasPartitions="none" icon="8.pngx" forceExpansion="TRUE_START_COLLAPSED" isVisible="false"/>
+		<mergepoint id="aux-operators-panels"/>
+
+		<panel spec="beastfx.app.inputeditor.BeautiPanelConfig" panelname="MCMC" tiptext="MCMC parameters" path="" hasPartitions="none" icon="9.pngx" forceExpansion="TRUE"/>
+		<mergepoint id="aux-panels"/>
+
+		<alignmentProvider id="Import Alignment" spec="speciesnetwork.app.beauti.SNAlignmentProvider" template="@SpeciesNetworkPartitionTemplate"/>
+
+		<partitiontemplate id="SpeciesNetworkPartitionTemplate" spec="beastfx.app.inputeditor.BeautiSubTemplate" class="beast.base.evolution.likelihood.TreeLikelihood" mainid="mcmc">
+<![CDATA[
+
+			
+
+
+			<!-- site model -->
+			<plugin spec="SiteModel" id="SiteModel.s:$(n)" gammaCategoryCount="0">
+				<!--substModel will be automatically detected /-->
+				<proportionInvariant spec="parameter.RealParameter" id="proportionInvariant.s:$(n)" value="0.0" lower="0" upper="1" estimate="false"/>
+				<mutationRate spec="parameter.RealParameter" id="mutationRate.s:$(n)" value="1.0" estimate="false"/>
+				<shape spec="parameter.RealParameter" id="gammaShape.s:$(n)" value="1.0" estimate="false"/>
+			</plugin>
+
+			<plugin spec="TreeLikelihood" id="treeLikelihood.$(n)">
+				<data idref="data"/>
+				<tree idref="Tree.t:$(n)"/>
+				<siteModel idref="SiteModel.s:$(n)"/>
+				<branchRateModel id="StrictClock.c:$(n)" spec="StrictClockModel">
+					<clock.rate id="strictClockRate.c:$(n)" spec="parameter.RealParameter" lower="0.0" value="1.0" estimate="true"/>
+				</branchRateModel>
+			</plugin>
+
+			<prior id="MutationRatePrior.s:$(n)" x="@mutationRate.s:$(n)">
+				<distr spec="OneOnX"/>
+			</prior>
+
+			<!-- tree and its properties -->
+			<taxonset id="TaxonSet.$(n)" spec="beast.base.evolution.alignment.TaxonSet" alignment="@$(n)"/>
+			<plugin spec="speciesnetwork.EmbeddedTree" id="Tree.t:$(n)" taxonset="@TaxonSet.$(n)"/>
+
+			<plugin id="TreeHeight.t:$(n)" spec="beast.base.evolution.tree.TreeStatLogger" tree="@Tree.t:$(n)"/>
+
+			<prior id="GammaShapePrior.s:$(n)" x="@gammaShape.s:$(n)">
+				<distr spec="beast.base.inference.distribution.Exponential">
+					<mean id="GammaShapePriorMean.s:$(n)" spec="parameter.RealParameter" lower="0.0" value="1.0" estimate="false"/>
+				</distr>
+			</prior>
+
+			<prior id="PropInvariantPrior.t:$(n)" x="@proportionInvariant.s:$(n)">
+				<distr spec="beast.base.inference.distribution.Uniform" lower="0.0" upper="1.0"/>
+			</prior>
+
+			<operator id="proportionInvariantScaler.s:$(n)" spec="ScaleOperator" scaleFactor="0.75" weight="1.0" parameter="@proportionInvariant.s:$(n)"/>
+			<operator id="mutationRateScaler.s:$(n)" spec="ScaleOperator" scaleFactor="0.75" weight="1.0" parameter="@mutationRate.s:$(n)"/>
+			<operator id="gammaShapeScaler.s:$(n)" scaleFactor="0.75" spec="ScaleOperator" weight="1.0" parameter="@gammaShape.s:$(n)"/>
+			<operator id="clockRateScaler.c:$(n)" spec="ScaleOperator" scaleFactor="0.5" weight="3.0" parameter="@strictClockRate.c:$(n)"/>
+			<operator id="strictUpDownAndEmbed.c:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
+				<operator id="strictUpDown.c:$(n)" spec="UpDownOperator" scaleFactor="0.95" weight="0.0">
+					<up idref="strictClockRate.c:$(n)"/>
+					<down idref="Tree.t:$(n)"/>
+				</operator>
+			</operator>
+
+			<operator id="scaleAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
+				<operator id="scale.t:$(n)" spec="ScaleOperator" scaleFactor="0.5" tree="@Tree.t:$(n)" weight="0.0"/>
+			</operator>
+			<operator id="scaleRootAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
+				<operator id="scaleRoot.t:$(n)" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:$(n)" weight="0.0"/>
+			</operator>
+			<operator id="uniformAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="30.0">
+				<operator id="uniform.t:$(n)" spec="Uniform" tree="@Tree.t:$(n)" weight="0.0"/>
+			</operator>
+			<operator id="subSlideAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="15.0">
+				<operator id="subSlide.t:$(n)" spec="SubtreeSlide" tree="@Tree.t:$(n)" weight="0.0"/>
+			</operator>
+			<operator id="narrowAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="15.0">
+				<operator id="narrow.t:$(n)" spec="Exchange" tree="@Tree.t:$(n)" weight="0.0"/>
+			</operator>
+			<operator id="wideAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="5.0">
+				<operator id="wide.t:$(n)" spec="Exchange" isNarrow="false" tree="@Tree.t:$(n)" weight="0.0"/>
+			</operator>
+			<operator id="WilsonBaldingAndEmbed.t:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="5.0">
+				<operator id="WilsonBalding.t:$(n)" spec="WilsonBalding" tree="@Tree.t:$(n)" weight="0.0"/>
+			</operator>
+
+			<logger id="treelog.t:$(n)" spec="beast.base.inference.Logger" logEvery="5000" fileName="$(tree).trees" mode="tree">
+				<log id="TreeWithMetaDataLogger.t:$(n)" spec="beast.base.evolution.TreeWithMetaDataLogger" tree="@Tree.t:$(n)"/>
+			</logger>
+]]>
+
+			<connect srcID="treeLikelihood.$(n)" targetID="likelihood" inputName="distribution" if="isInitializing"/>
+
+			<connect srcID="geneTree.t:$(n)" targetID="coalescent" inputName="geneTree" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<!-- hack to ensure that treePrior.$(n) is always deleted from prior, since it is already part of coalescent -->
+			<connect srcID="geneTree.t:$(n)" targetID="prior" inputName="distribution" if="Tree.t:$(n)/estimate=XXX"/>
+
+			<connect srcID="MutationRatePrior.s:$(n)" targetID="prior" inputName="distribution" if="inposterior(mutationRate.s:$(n)) and mutationRate.s:$(n)/estimate=true"/>
+            <connect srcID="GammaShapePrior.s:$(n)" targetID="prior" inputName="distribution" if="inlikelihood(gammaShape.s:$(n)) and gammaShape.s:$(n)/estimate=true"/>
+            <connect srcID="PropInvariantPrior.s:$(n)" targetID="prior" inputName="distribution" if="inlikelihood(proportionInvariant.s:$(n)) and proportionInvariant.s:$(n)/estimate=true"/>
+
+			<connect srcID="Tree.t:$(n)" targetID="state" inputName="stateNode" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="mutationRate.s:$(n)" targetID="state" inputName="stateNode" if="inposterior(mutationRate.s:$(n)) and mutationRate.s:$(n)/estimate=true"/>
+			<connect srcID="gammaShape.s:$(n)" targetID="state" inputName="stateNode" if="inposterior(gammaShape.s:$(n)) and gammaShape.s:$(n)/estimate=true"/>
+            <connect srcID="proportionInvariant.s:$(n)" targetID="state" inputName="stateNode" if="inposterior(proportionInvariant.s:$(n)) and proportionInvariant.s:$(n)/estimate=true"/>
+			<connect srcID="strictClockRate.c:$(n)" targetID="state" inputName="stateNode" if="inposterior(StrictClock.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
+
+			<connect srcID="mutationRateScaler.s:$(n)" targetID="mcmc" inputName="operator" if="inposterior(mutationRate.s:$(n)) and mutationRate.s:$(n)/estimate=true"/>
+			<connect srcID="gammaShapeScaler.s:$(n)" targetID="mcmc" inputName="operator" if="inposterior(gammaShape.s:$(n)) and gammaShape.s:$(n)/estimate=true"/>
+            <connect srcID="proportionInvariantScaler.s:$(n)" targetID="mcmc" inputName="operator" if="inposterior(proportionInvariant.s:$(n)) and proportionInvariant.s:$(n)/estimate=true"/>
+			<connect srcID="clockRateScaler.c:$(n)" targetID="mcmc" inputName="operator" if="inposterior(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
+			<connect srcID="strictUpDownAndEmbed.c:$(n)" targetID="mcmc" inputName="operator" if="inlikelihood(strictClockRate.c:$(n)) and inlikelihood(Tree.t:$(n)) and strictClockRate.c:$(n)/estimate=true and Tree.t:$(n)/estimate=true">
+				Scale up substitution rate c:$(n) and scale down tree t:($n)
+			</connect>
+			<connect srcID="strictClockRate.c:$(n)" targetID="strictUpDown.c:$(n)" inputName="up" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
+
+			<connect srcID="scaleAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="scaleRootAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="uniformAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="subSlideAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="narrowAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="wideAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="WilsonBaldingAndEmbed.t:$(n)" targetID="mcmc" inputName="operator" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+
+			<connect srcID="treeLikelihood.$(n)" targetID="tracelog" inputName="log" if="inlikelihood(treeLikelihood.$(n))"/>
+			<connect srcID="treePrior.t:$(n)" targetID="tracelog" inputName="log" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="TreeHeight.t:$(n)" targetID="tracelog" inputName="log" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+			<connect srcID="proportionInvariant.s:$(n)" targetID="tracelog" inputName="log" if="inlikelihood(proportionInvariant.s:$(n)) and proportionInvariant.s:$(n)/estimate=true"/>
+			<connect srcID="mutationRate.s:$(n)" targetID="tracelog" inputName="log" if="inlikelihood(mutationRate.s:$(n)) and mutationRate.s:$(n)/estimate=true"/>
+			<connect srcID="gammaShape.s:$(n)" targetID="tracelog" inputName="log" if="inlikelihood(gammaShape.s:$(n)) and gammaShape.s:$(n)/estimate=true"/>
+			<connect srcID="strictClockRate.c:$(n)" targetID="tracelog" inputName="log" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
+
+            <connect srcID="treelog.t:$(n)" targetID="mcmc" inputName="logger" if="inposterior(Tree.t:$(n)) and Tree.t:$(n)/estimate=true"/>
+
+			<connect srcID="Tree.t:$(n)" targetID="coorNetworkMultiplier.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="coorNodeUniformAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="coorNodeUniform.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="nodeSliderAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="relocateBranchAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="flipReticulationAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="addReticulationAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+			<connect srcID="Tree.t:$(n)" targetID="deleteReticulationAndEmbed.t:Species" inputName="geneTree" if="Tree.t:$(n)/estimate=true"/>
+
+			<connect srcID="SNI" targetID="mcmc" inputName="init" if="inposterior(Network.t:Species)"/>
+			<connect srcID="Tree.t:$(n)" targetID="SNI" inputName="geneTree" if="inposterior(Tree.t:$(n))"/>
+			<connect srcID="Tree.t:$(n)" targetID="initEmbed" inputName="geneTree" if="inposterior(Tree.t:$(n))"/>
+			<connect srcID="Tree.t:$(n)" targetID="coalSim" inputName="geneTree" if="inposterior(Tree.t:$(n))"/>
+
+            <connect srcID="operatorSchedule" targetID="mcmc" inputName="operatorschedule" if="inposterior(Network.t:Species)"/>
+
+			<mergepoint id="aux-partitiontemplate"/>
+		</partitiontemplate>
+
+		<mergepoint id="snSubstModelTemplates"/>
+		<mergepoint id="snClockModelTemplates"/>
+		<mergepoint id="parametricDistributions"/>
+
+	</beauticonfig>
+
+	<taxonset spec="beast.base.evolution.alignment.TaxonSet" id="taxonsuperset">
+		<!--
+		need to specify at least one taxon for a TaxonSet, so insert a dummy taxon here
+		This one is cleared by the TaxonSetInputEditor
+		-->
+		<taxon spec="beast.base.evolution.alignment.TaxonSet" id="Beauti2DummyTaxonSet">
+			<taxon spec="beast.base.evolution.alignment.Taxon" id="dummyTaxon"/>
+		</taxon>
+	</taxonset>
+
+	<stateNode spec="speciesnetwork.Network" id="Network.t:Species" taxonset="@taxonsuperset" estimate="true"/>
+
+	<!-- framework for main model -->
+	<run spec="MCMC" id="mcmc" storeEvery="5000" chainLength="50000000">
+
+		<state storeEvery="5000" id="state">
+			<stateNode idref="Network.t:Species"/>
+			<stateNode idref="popMean.t:Species"/>
+			<stateNode idref="netDivRate.t:Species"/>
+			<stateNode idref="turnOverRate.t:Species"/>
+			<stateNode idref="originTime.t:Species"/>
+		</state>
+
+		<distribution spec="CompoundDistribution" id="posterior">
+			<distribution id="coalescent" spec="speciesnetwork.MultispeciesCoalescent" speciesNetwork="@Network.t:Species">
+				<populationModel id="popModel" spec="speciesnetwork.ConstantPopIntegrated">
+					<alpha id="popShape.t:Species" spec="parameter.RealParameter" value="3.0" estimate="false"/>
+					<mean id="popMean.t:Species" spec="parameter.RealParameter" value="0.01" lower="0.0" estimate="true"/>
+				</populationModel>
+			</distribution>
+			<distribution spec="CompoundDistribution" id="prior">
+				<!-- species network priors -->
+				<distribution id="networkPrior" spec="speciesnetwork.BirthHybridizationModel" network="@Network.t:Species">
+					<betaShape id="betaShape.t:Species" spec="parameter.RealParameter" value="1.0" estimate="false"/>
+					<netDiversification id="netDivRate.t:Species" spec="parameter.RealParameter" value="1.0" lower="0.0" estimate="true"/>
+					<turnOver id="turnOverRate.t:Species" spec="parameter.RealParameter" value="0.5" lower="0.0" upper="1.0" estimate="true"/>
+				</distribution>
+				<distribution id="netDivRatePrior.t:Species" spec="beast.base.inference.distribution.Prior" x="@netDivRate.t:Species">
+					<distr spec="beast.base.inference.distribution.OneOnX"/>
+				</distribution>
+				<prior id="turnOverRatePrior.t:Species" name="distribution" x="@turnOverRate.t:Species">
+                    <distr spec="beast.base.inference.distribution.Uniform" lower="0.0" upper="1.0"/>
+				</prior>
+				<prior id="originTimePrior.t:Species" name="distribution" x="@originTime.t:Species">
+					<distr spec="beast.base.inference.distribution.OneOnX"/>
+				</prior>
+				<distribution id="popMeanPrior.t:Species" spec="beast.base.inference.distribution.Prior" x="@popMean.t:Species">
+					<distr spec="beast.base.inference.distribution.OneOnX"/>
+				</distribution>
+				<mergepoint id="aux-priors"/>
+			</distribution>
+			<distribution spec="CompoundDistribution" id="likelihood">
+				<mergepoint id="aux-likelihoods"/>
+			</distribution>
+		</distribution>
+
+        <operatorschedule id="operatorSchedule" spec="OperatorSchedule">
+            <subschedule id="operatorSubschedule" spec="OperatorSchedule" weight="30" weightIsPercentage="true" operatorPattern="^.*Species$"/>
+        </operatorschedule>
+
+		<operator id="popMeanScale.t:Species" spec="ScaleOperator" scaleFactor="0.75" weight="5.0" parameter="@popMean.t:Species"/>
+
+		<operator id="netDivRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="10.0" parameter="@netDivRate.t:Species"/>
+		<operator id="turnOverRateScale.t:Species" spec="ScaleOperator" scaleFactor="0.5" weight="10.0" parameter="@turnOverRate.t:Species"/>
+
+		<operator id="gammaProbUniform.t:Species" spec="speciesnetwork.operators.GammaProbUniform" speciesNetwork="@Network.t:Species" weight="30.0"/>
+		<operator id="gammaProbRndWalk.t:Species" spec="speciesnetwork.operators.GammaProbRndWalk" speciesNetwork="@Network.t:Species" weight="30.0"/>
+
+        <operator id="originMultiplier.t:Species" spec="speciesnetwork.operators.OriginMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="5.0"/>
+
+		<operator id="coorNetworkMultiplier.t:Species" spec="speciesnetwork.operators.NetworkMultiplier" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" weight="30.0"/>
+
+		<operator id="coorNodeUniformAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="150.0">
+			<operator id="coorNodeUniform.t:Species" spec="speciesnetwork.operators.CoordinatedNodeUniform" speciesNetwork="@Network.t:Species" weight="0.0"/>
+		</operator>
+
+		<operator id="nodeSliderAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="100.0">
+			<operator id="nodeSlider.t:Species" spec="speciesnetwork.operators.NodeSlider" speciesNetwork="@Network.t:Species" origin="@originTime.t:Species" isNormal="true" sigma="0.001" weight="0.0"/>
+		</operator> <!-- user should adjust sigma to a reasonable value -->
+
+		<operator id="relocateBranchAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="400.0">
+			<operator id="relocateBranch.t:Species" spec="speciesnetwork.operators.RelocateBranch" speciesNetwork="@Network.t:Species" weight="0.0"/>
+		</operator>
+
+		<operator id="flipReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="30.0">
+			<operator id="flipReticulation.t:Species" spec="speciesnetwork.operators.FlipReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
+		</operator>
+
+		<operator id="addReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="150.0">
+			<operator id="addReticulation.t:Species" spec="speciesnetwork.operators.AddReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
+		</operator>
+
+		<operator id="deleteReticulationAndEmbed.t:Species" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="150.0">
+			<operator id="deleteReticulation.t:Species" spec="speciesnetwork.operators.DeleteReticulation" speciesNetwork="@Network.t:Species" weight="0.0"/>
+		</operator>
+
+		<logger id="screenlog" logEvery="5000">
+			<model idref="posterior"/>
+			<log idref="posterior"/>
+			<ESS spec="ESS" name="log" arg="@posterior"/>
+			<log idref="likelihood"/>
+			<log idref="prior"/>
+			<log idref="coalescent"/>
+		</logger>
+
+		<logger id="tracelog" logEvery="5000" fileName="speciesnetwork.log" sort="smart">
+			<model idref="posterior"/>
+			<log idref="posterior"/>
+			<log idref="likelihood"/>
+			<log idref="prior"/>
+			<log idref="coalescent"/>
+			<log idref="netDivRate.t:Species"/>
+			<log idref="turnOverRate.t:Species"/>
+			<log idref="originTime.t:Species"/>
+			<log id="NetworkLength.t:Species" spec="speciesnetwork.utils.NetworkStatLogger" speciesNetwork="@Network.t:Species"/>
+            <log idref="popMean.t:Species"/>
+		</logger>
+
+		<logger id="specieslog" logEvery="5000" fileName="speciesnetwork.trees" mode="tree">
+			<log id="speciesNetworkLoggerX" spec="speciesnetwork.utils.NetworkWithMetaDataLogger" speciesNetwork="@Network.t:Species"/>
+		</logger>
+
+		<init id="SNI" estimate="false" method="random" spec="speciesnetwork.SpeciesNetworkInitializer" speciesNetwork="@Network.t:Species">
+			<origin id="originTime.t:Species" spec="parameter.RealParameter" value="0.1" lower="0.0" estimate="true"/>
+			<rebuildEmbedding id="initEmbed" spec="speciesnetwork.operators.RebuildEmbedding" speciesNetwork="@Network.t:Species" weight="0.0"/>
+			<coalescentSimulator id="coalSim" spec="speciesnetwork.simulator.CoalescentSimulator" speciesNetwork="@Network.t:Species" popSizes="@popMean.t:Species"/>
+		</init>
+	</run>
+
+</beast>
