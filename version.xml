@@ -16,23 +16,20 @@
         <provider classname="speciesnetwork.ConstantPopulation"/>
         <provider classname="speciesnetwork.EmbeddedTree"/>
         <provider classname="speciesnetwork.Embedding"/>
-        <provider classname="speciesnetwork.GeneTreeInSpeciesNetwork"/>
         <provider classname="speciesnetwork.MultispeciesCoalescent"/>
         <provider classname="speciesnetwork.Network"/>
         <provider classname="speciesnetwork.NetworkNode"/>
         <provider classname="speciesnetwork.NetworkParser"/>
         <provider classname="speciesnetwork.NodeHeightComparator"/>
         <provider classname="speciesnetwork.PopulationSizeModel"/>
+        <provider classname="speciesnetwork.SanityChecks"/>
         <provider classname="speciesnetwork.SpeciesNetworkInitializer"/>
-        <provider classname="speciesnetwork.operators.AddReticulation"/>
         <provider classname="speciesnetwork.operators.CoordinatedNodeSlider"/>
         <provider classname="speciesnetwork.operators.CoordinatedNodeUniform"/>
-        <provider classname="speciesnetwork.operators.CoordinatedOperator"/>
-<!--  test_3s_td.xml      -->
-        <provider classname="speciesnetwork.operators.CoordinatedAddReticulation"/>
+        <!-- provider classname="speciesnetwork.operators.CoordinatedAddReticulation"/>
         <provider classname="speciesnetwork.operators.CoordinatedDeleteReticulation"/>
-        <provider classname="speciesnetwork.operators.CoordinatedRelocateBranch"/>
-
+        <provider classname="speciesnetwork.operators.CoordinatedRelocateBranch"/  -->
+        <provider classname="speciesnetwork.operators.AddReticulation"/>
         <provider classname="speciesnetwork.operators.DeleteReticulation"/>
         <provider classname="speciesnetwork.operators.FlipReticulation"/>
         <provider classname="speciesnetwork.operators.GammaProbRndWalk"/>
@@ -45,14 +42,10 @@
         <provider classname="speciesnetwork.operators.RelocateBranch"/>
         <provider classname="speciesnetwork.simulator.BirthHybridSimulator"/>
         <provider classname="speciesnetwork.simulator.CoalescentSimulator"/>
-        <!--        <provider classname="speciesnetwork.tools.SummarizeNetwork"/>-->
-        <provider classname="speciesnetwork.tools.SummarizePosterior"/>
         <provider classname="speciesnetwork.utils.BackboneTreeLogger"/>
         <provider classname="speciesnetwork.utils.EmbeddingLogger"/>
         <provider classname="speciesnetwork.utils.NetworkStatLogger"/>
         <provider classname="speciesnetwork.utils.NetworkSummarizer"/>
         <provider classname="speciesnetwork.utils.NetworkWithMetaDataLogger"/>
-        <provider classname="speciesnetwork.utils.SanityChecks"/>
     </service>
-
 </package>

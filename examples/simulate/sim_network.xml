@@ -1,11 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<beast version="2.7" namespace="beast.base.core:beast.base.inference:beast.base.util:
-                  beast.base.math:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:
-                  beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:
+<beast version="2.7" namespace="beast.base.core:beast.base.inference:beast.base.util:beast.base.math:
+                  beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:
+                  beast.base.evolution.operator:beast.base.evolution.sitemodel:
                   beast.base.evolution.substitutionmodel:beast.base.evolution.branchratemodel:
-                  beast.base.evolution.likelihood:beastfx.app:
-                  speciesnetwork:speciesnetwork.operators:speciesnetwork.simulator:
-                  speciesnetwork.tools:speciesnetwork.utils">
+                  beast.base.evolution.likelihood:beast.base.inference.operator:beastfx.app:
+                  speciesnetwork:speciesnetwork.operators:speciesnetwork.simulator:speciesnetwork.utils">
 
     <run id="networkSimulator" outputFileName="test_net.trees" iterations="100"
          spec="speciesnetwork.simulator.BirthHybridSimulator">

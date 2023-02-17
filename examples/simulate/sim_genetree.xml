@@ -1,11 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<beast version="2.7" namespace="beast.base.core:beast.base.inference:beast.base.util:
-                  beast.base.math:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:
-                  beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:
+<beast version="2.7" namespace="beast.base.core:beast.base.inference:beast.base.util:beast.base.math:
+                  beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:
+                  beast.base.evolution.operator:beast.base.evolution.sitemodel:
                   beast.base.evolution.substitutionmodel:beast.base.evolution.branchratemodel:
-                  beast.base.evolution.likelihood:beastfx.app:
-                  speciesnetwork:speciesnetwork.operators:speciesnetwork.simulator:
-                  speciesnetwork.tools:speciesnetwork.utils">
+                  beast.base.evolution.likelihood:beast.base.inference.operator:beastfx.app:
+                  speciesnetwork:speciesnetwork.operators:speciesnetwork.simulator:speciesnetwork.utils">
 
     <data id="gene" name="alignment">
         <sequence id="gene_a1" taxon="a1" totalcount="4" value="-"/>
@@ -22,28 +21,28 @@
           newick="(((A:0.035,((B:0.012,(C:0.01)#H2[&amp;gamma=0.7]:0.002)S3:0.018)#H1[&amp;gamma=0.6]:0.005)S1:0.015,(#H1:0.01,(#H2:0.005,D:0.015)S4:0.025)S2:0.01)R:0.05)"/>
 
 <!-- run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="test_gene.xml" networkOperator="false" -->
-    <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="test_gene.trees" iterations="100">
+    <run id="coalSimulator" spec="speciesnetwork.simulator.CoalescentSimulator" outputFileName="test" iterations="100">
         <state id="state">
             <stateNode id="network:species" spec="speciesnetwork.NetworkParser" tree="@newick:species">
-				<taxonset id="taxonSuperset" spec="TaxonSet">
-					<taxon id="A" spec="TaxonSet">
-						<taxon id="a1" spec="Taxon"/>
-						<taxon id="a2" spec="Taxon"/>
-					</taxon>
-					<taxon id="B" spec="TaxonSet">
-						<taxon id="b1" spec="Taxon"/>
-						<taxon id="b2" spec="Taxon"/>
-					</taxon>
-					<taxon id="C" spec="TaxonSet">
-						<taxon id="c1" spec="Taxon"/>
-						<taxon id="c2" spec="Taxon"/>
-					</taxon>
-					<taxon id="D" spec="TaxonSet">
-						<taxon id="d1" spec="Taxon"/>
-						<taxon id="d2" spec="Taxon"/>
-					</taxon>
-				</taxonset>
-			</stateNode>
+                <taxonset id="taxonSuperset" spec="TaxonSet">
+                    <taxon id="A" spec="TaxonSet">
+                        <taxon id="a1" spec="Taxon"/>
+                        <taxon id="a2" spec="Taxon"/>
+                    </taxon>
+                    <taxon id="B" spec="TaxonSet">
+                        <taxon id="b1" spec="Taxon"/>
+                        <taxon id="b2" spec="Taxon"/>
+                    </taxon>
+                    <taxon id="C" spec="TaxonSet">
+                        <taxon id="c1" spec="Taxon"/>
+                        <taxon id="c2" spec="Taxon"/>
+                    </taxon>
+                    <taxon id="D" spec="TaxonSet">
+                        <taxon id="d1" spec="Taxon"/>
+                        <taxon id="d2" spec="Taxon"/>
+                    </taxon>
+                </taxonset>
+            </stateNode>
             <stateNode id="tree:gene" spec="speciesnetwork.EmbeddedTree">
                 <taxonset id="taxonset:gene" spec="TaxonSet" alignment="@gene"/>
             </stateNode>

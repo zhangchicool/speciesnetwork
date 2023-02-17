@@ -6,44 +6,44 @@
                      beast.base.evolution.likelihood:beast.evolution:beast.base.inference.distribution:
                      speciesnetwork.operators:speciesnetwork.utils:speciesnetwork.simulator:speciesnetwork">
 
-	<mergewith point="snClockModelTemplates">
-		<!-- Plain ol' strict clock -->
-		<subtemplate id="StrictClock" class="beast.base.evolution.branchratemodel.StrictClockModel" mainid="StrictClock.c:$(n)">
+    <mergewith point="snClockModelTemplates">
+        <!-- Plain ol' strict clock -->
+        <subtemplate id="StrictClock" class="beast.base.evolution.branchratemodel.StrictClockModel" mainid="StrictClock.c:$(n)">
 <![CDATA[
-			<branchRateModel spec="StrictClockModel" id="StrictClock.c:$(n)">
-				<clock.rate id="strictClockRate.c:$(n)" spec="parameter.RealParameter" lower="0.0" value="1.0" estimate="true"/>
-			</branchRateModel>
+            <branchRateModel spec="StrictClockModel" id="StrictClock.c:$(n)">
+                <clock.rate id="strictClockRate.c:$(n)" spec="parameter.RealParameter" lower="0.0" value="1.0" estimate="true"/>
+            </branchRateModel>
 
-			<operator id="clockRateScaler.c:$(n)" spec="ScaleOperator" scaleFactor="0.5" weight="3.0" parameter="@strictClockRate.c:$(n)"/>
-			<operator id="strictUpDownAndEmbed.c:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
-				<operator id="strictUpDown.c:$(n)" spec="UpDownOperator" scaleFactor="0.95" weight="0.0">
-					<up idref="strictClockRate.c:$(n)"/>
-					<down idref="Tree.t:$(n)"/>
-				</operator>
-			</operator>
+            <operator id="clockRateScaler.c:$(n)" spec="ScaleOperator" scaleFactor="0.5" weight="3.0" parameter="@strictClockRate.c:$(n)"/>
+            <operator id="strictUpDownAndEmbed.c:$(n)" spec="speciesnetwork.operators.RebuildEmbedding" taxonset="@taxonsuperset" speciesNetwork="@Network.t:Species" geneTree="@Tree.t:$(n)" weight="3.0">
+                <operator id="strictUpDown.c:$(n)" spec="UpDownOperator" scaleFactor="0.95" weight="0.0">
+                    <up idref="strictClockRate.c:$(n)"/>
+                    <down idref="Tree.t:$(n)"/>
+                </operator>
+            </operator>
 
-			<prior id="clockRatePrior.c:$(n)" x="@strictClockRate.c:$(n)">
-				<distr spec="beast.base.inference.distribution.LogNormalDistributionModel" meanInRealSpace="true">
-					<S id="clockRatePriorStdev.s:$(n)" spec="parameter.RealParameter" lower="0.0" value="0.6" estimate="false"/>
-					<M id="clockRatePriorMean.s:$(n)" spec="parameter.RealParameter" lower="0.0" value="1.0" estimate="false"/>
-				</distr>
-			</prior>
+            <prior id="clockRatePrior.c:$(n)" x="@strictClockRate.c:$(n)">
+                <distr spec="beast.base.inference.distribution.LogNormalDistributionModel" meanInRealSpace="true">
+                    <S id="clockRatePriorStdev.s:$(n)" spec="parameter.RealParameter" lower="0.0" value="0.6" estimate="false"/>
+                    <M id="clockRatePriorMean.s:$(n)" spec="parameter.RealParameter" lower="0.0" value="1.0" estimate="false"/>
+                </distr>
+            </prior>
 ]]>
 
-			<connect srcID="strictClockRate.c:$(n)" targetID="state" inputName="stateNode" if="inposterior(StrictClock.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
+            <connect srcID="strictClockRate.c:$(n)" targetID="state" inputName="stateNode" if="inposterior(StrictClock.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
 
-			<connect srcID="clockRatePrior.c:$(n)" targetID="prior" inputName="distribution" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true">
-				Prior on the overall clock rate of partition c:$(n)
-			</connect>
-			<connect srcID="clockRateScaler.c:$(n)" targetID="mcmc" inputName="operator" if="inposterior(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
-			<connect srcID="strictUpDownAndEmbed.c:$(n)" targetID="mcmc" inputName="operator" if="inlikelihood(strictClockRate.c:$(n)) and inlikelihood(Tree.t:$(n)) and strictClockRate.c:$(n)/estimate=true and Tree.t:$(n)/estimate=true">
-				Scale up substitution rate c:$(n) and scale down tree t:($n)
-			</connect>
-			<connect srcID="strictClockRate.c:$(n)" targetID="strictUpDown.c:$(n)" inputName="up" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
+            <connect srcID="clockRatePrior.c:$(n)" targetID="prior" inputName="distribution" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true">
+                Prior on the overall clock rate of partition c:$(n)
+            </connect>
+            <connect srcID="clockRateScaler.c:$(n)" targetID="mcmc" inputName="operator" if="inposterior(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
+            <connect srcID="strictUpDownAndEmbed.c:$(n)" targetID="mcmc" inputName="operator" if="inlikelihood(strictClockRate.c:$(n)) and inlikelihood(Tree.t:$(n)) and strictClockRate.c:$(n)/estimate=true and Tree.t:$(n)/estimate=true">
+                Scale up substitution rate c:$(n) and scale down tree t:($n)
+            </connect>
+            <connect srcID="strictClockRate.c:$(n)" targetID="strictUpDown.c:$(n)" inputName="up" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
 
-			<connect srcID="strictClockRate.c:$(n)" targetID="tracelog" inputName="log" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
-		</subtemplate>
+            <connect srcID="strictClockRate.c:$(n)" targetID="tracelog" inputName="log" if="inlikelihood(strictClockRate.c:$(n)) and strictClockRate.c:$(n)/estimate=true"/>
+        </subtemplate>
 
-	</mergewith>
+    </mergewith>
 
 </beast>
