@@ -343,8 +343,7 @@ public class NetworkNode {
             if (!name.contains("gamma") || withGamma) {
                 Object value = getMetaData(name);
                 metaStr.append(name).append("=");
-                if (value instanceof Object[]) {
-                    Object[] values = (Object[]) value;
+                if (value instanceof Object[] values) {
                     metaStr.append("{");
                     for (int i = 0; i < values.length; i++) {
                         if (i > 0) metaStr.append(",");
