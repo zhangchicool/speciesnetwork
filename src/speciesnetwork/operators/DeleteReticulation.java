@@ -47,6 +47,7 @@ public class DeleteReticulation extends Operator {
         final int nHybridNodes = speciesNetwork.getReticulationNodeCount();
         if (nHybridNodes == 0)  // there is no reticulation branch to delete
             return Double.NEGATIVE_INFINITY;
+
         // number of reticulation branches in the current network
         final int nReticulationBranches = 2 * nHybridNodes;  // m'
 

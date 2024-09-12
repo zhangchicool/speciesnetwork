@@ -33,6 +33,10 @@ import speciesnetwork.SanityChecks;
 public class AddReticulation extends Operator {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
+    public final Input<Interger> maxReticulationInput =
+            new Input<>("maxReticulation", "Maximum number of reticulation nodes.");
+
+    private int maxHybridNodes;
 
     // empty constructor to facilitate construction by XML + initAndValidate
     public AddReticulation() {
@@ -40,12 +44,20 @@ public class AddReticulation extends Operator {
 
     @Override
     public void initAndValidate() {
+        if (maxReticulationInput.get() == null)
+            maxHybridNodes = 10;
+        else
+            maxHybridNodes = maxReticulationInput.get();
     }
 
     @Override
     public double proposal() {
         final Network speciesNetwork = speciesNetworkInput.get();
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
+
+        final int nHybridNodes = speciesNetwork.getReticulationNodeCount();
+        if (nHybridNodes > maxHybridNodes)  // prevent too many reticulations
+            return Double.NEGATIVE_INFINITY;
 
         // number of branches in the current network
         final int nBranches = speciesNetwork.getBranchCount();  // k
