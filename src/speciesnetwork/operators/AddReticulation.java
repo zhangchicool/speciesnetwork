@@ -56,7 +56,7 @@ public class AddReticulation extends Operator {
         SanityChecks.checkNetworkSanity(speciesNetwork.getOrigin());
 
         final int nHybridNodes = speciesNetwork.getReticulationNodeCount();
-        if (nHybridNodes > maxHybridNodes)  // prevent too many reticulations
+        if (nHybridNodes >= maxHybridNodes)  // prevent too many reticulations
             return Double.NEGATIVE_INFINITY;
 
         // number of branches in the current network
