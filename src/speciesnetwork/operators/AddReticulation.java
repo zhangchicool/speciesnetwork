@@ -33,7 +33,7 @@ import speciesnetwork.SanityChecks;
 public class AddReticulation extends Operator {
     public final Input<Network> speciesNetworkInput =
             new Input<>("speciesNetwork", "The species network.", Validate.REQUIRED);
-    public final Input<Interger> maxReticulationInput =
+    public final Input<Integer> maxReticulationInput =
             new Input<>("maxReticulation", "Maximum number of reticulation nodes.");
 
     private int maxHybridNodes = -1;
